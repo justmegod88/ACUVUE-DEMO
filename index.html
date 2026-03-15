@@ -10,7 +10,6 @@
       --bg2:#0f5574;
       --card:#1a6b90;
       --card-deep:#165d7d;
-      --line:rgba(8,33,49,.55);
       --line-soft:rgba(255,255,255,.14);
       --text:#ffffff;
       --sub:rgba(255,255,255,.88);
@@ -126,9 +125,9 @@
 
     .card-shell{
       position:relative;
-      min-height:252px;
+      min-height:280px;
       border-radius:34px;
-      padding:28px 22px 26px;
+      padding:28px 22px 28px;
       background:
         linear-gradient(180deg, rgba(255,255,255,.04) 0%, rgba(255,255,255,.02) 100%),
         linear-gradient(180deg, var(--card) 0%, var(--card-deep) 100%);
@@ -166,14 +165,14 @@
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      min-width:52px;
-      height:34px;
-      padding:0 12px;
+      min-width:62px;
+      height:40px;
+      padding:0 14px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,.18);
       background:rgba(255,255,255,.08);
       color:rgba(255,255,255,.92);
-      font-size:15px;
+      font-size:18px;
       font-weight:800;
       letter-spacing:.02em;
       margin-bottom:18px;
@@ -183,12 +182,13 @@
     .card-copy{
       position:relative;
       z-index:1;
-      max-width:66%;
+      max-width:62%;
+      padding-bottom:54px;
     }
 
     .card-title{
       margin:0;
-      font-size:45px;
+      font-size:48px;
       line-height:1.04;
       letter-spacing:-.06em;
       font-weight:900;
@@ -208,35 +208,38 @@
 
     .card-arrow{
       position:absolute;
-      left:22px;
-      bottom:22px;
-      z-index:1;
+      right:22px;
+      bottom:18px;
+      z-index:3;
       display:inline-flex;
       align-items:center;
-      gap:8px;
-      color:rgba(255,255,255,.86);
+      gap:10px;
+      padding:10px 14px 10px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:var(--shadow-soft);
+      color:rgba(255,255,255,.92);
       font-size:14px;
-      font-weight:700;
+      font-weight:800;
       letter-spacing:-.02em;
+      backdrop-filter:blur(8px);
     }
 
     .card-arrow::before{
-      content:"";
-      width:28px;
-      height:28px;
+      content:"→";
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:24px;
+      height:24px;
       border-radius:50%;
       background:rgba(255,255,255,.12);
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow:var(--shadow-soft);
-    }
-
-    .card-arrow::after{
-      content:"→";
-      position:absolute;
-      left:8px;
-      font-size:15px;
+      border:1px solid rgba(255,255,255,.18);
+      font-size:13px;
       font-weight:900;
       line-height:1;
+      flex:0 0 24px;
     }
 
     .product-stack{
@@ -354,19 +357,26 @@
         font-size:14px;
       }
       .card-shell{
-        min-height:228px;
-        padding:22px 18px 22px;
+        min-height:252px;
+        padding:22px 18px 24px;
         border-radius:28px;
       }
       .card-copy{
-        max-width:66%;
+        max-width:62%;
+        padding-bottom:48px;
       }
       .card-title{
-        font-size:37px;
+        font-size:39px;
       }
       .card-sub{
         font-size:18px;
         margin-top:14px;
+      }
+      .card-arrow{
+        right:18px;
+        bottom:16px;
+        font-size:13px;
+        padding:9px 12px 9px 10px;
       }
       .product-stack{
         width:148px;
@@ -416,7 +426,6 @@
 
       <section class="cards">
 
-        <!-- 01 -->
         <a class="card" href="https://justmegod88.github.io/ACUVUE-PRODUCT/">
           <div class="card-shell">
             <div class="card-index">01</div>
@@ -440,7 +449,6 @@
           </div>
         </a>
 
-        <!-- 02 -->
         <a class="card" href="https://justmegod88.github.io/MF-3D/">
           <div class="card-shell">
             <div class="card-index">02</div>
