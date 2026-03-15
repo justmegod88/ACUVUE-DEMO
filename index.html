@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>ACUVUE 체험 랜딩</title>
+  <style>
+    :root{
+      --bg:#185f80;
+      --bg-deep:#145674;
+      --line:rgba(8,35,53,.72);
+      --text:#ffffff;
+      --sub:rgba(255,255,255,.88);
+      --card-shadow:0 18px 34px rgba(0,0,0,.14);
+    }
+
+    *{box-sizing:border-box}
+
+    html,body{
+      margin:0;
+      padding:0;
+      background:#000;
+      font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",Arial,sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+    }
+
+    .screen{
+      width:100%;
+      max-width:430px;
+      min-height:100vh;
+      background:linear-gradient(180deg,var(--bg) 0%, var(--bg-deep) 100%);
+      color:var(--text);
+      padding:42px 20px 40px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .top-copy{
+      text-align:center;
+      font-size:19px;
+      font-weight:500;
+      line-height:1.5;
+      letter-spacing:-.03em;
+      color:rgba(255,255,255,.9);
+      margin-bottom:34px;
+      word-break:keep-all;
+    }
+
+    .cards{
+      display:flex;
+      flex-direction:column;
+      gap:42px;
+      margin-top:8px;
+    }
+
+    .experience-card{
+      position:relative;
+      display:block;
+      text-decoration:none;
+      color:inherit;
+      padding-bottom:34px;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .experience-card:active{
+      transform:scale(.995);
+    }
+
+    .card-main{
+      position:relative;
+      background:transparent;
+      border:4px solid var(--line);
+      border-radius:42px;
+      min-height:300px;
+      padding:42px 28px 34px;
+      box-shadow:var(--card-shadow);
+      overflow:visible;
+    }
+
+    .card-content{
+      width:100%;
+      max-width:72%;
+    }
+
+    .card-title{
+      margin:0;
+      font-size:40px;
+      line-height:1.15;
+      font-weight:800;
+      letter-spacing:-.05em;
+      color:#fff;
+      word-break:keep-all;
+      white-space:pre-line;
+    }
+
+    .card-sub{
+      margin-top:34px;
+      font-size:28px;
+      line-height:1.25;
+      font-weight:400;
+      letter-spacing:-.04em;
+      color:var(--sub);
+      word-break:keep-all;
+    }
+
+    .product-stack{
+      position:absolute;
+      right:-14px;
+      bottom:-18px;
+      width:180px;
+      height:118px;
+      pointer-events:none;
+    }
+
+    .product-back,
+    .product-front{
+      position:absolute;
+      background:#1b6788;
+      border:4px solid var(--line);
+      box-shadow:0 12px 24px rgba(0,0,0,.12);
+    }
+
+    .product-back{
+      width:104px;
+      height:66px;
+      right:44px;
+      bottom:28px;
+    }
+
+    .product-front{
+      width:100px;
+      height:62px;
+      right:0;
+      bottom:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px;
+      overflow:hidden;
+    }
+
+    .product-front img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+    }
+
+    .product-front.placeholder{
+      color:rgba(255,255,255,.94);
+      font-size:22px;
+      line-height:1.1;
+      text-align:center;
+      letter-spacing:-.04em;
+      font-weight:500;
+    }
+
+    .experience-card:hover .card-main{
+      transform:translateY(-2px);
+      transition:.22s ease;
+    }
+
+    .experience-card:hover .product-back,
+    .experience-card:hover .product-front{
+      transform:translateY(-2px);
+      transition:.22s ease;
+    }
+
+    @media (max-width:390px){
+      .screen{
+        padding:36px 16px 34px;
+      }
+      .top-copy{
+        font-size:17px;
+        margin-bottom:28px;
+      }
+      .card-main{
+        min-height:268px;
+        padding:34px 22px 30px;
+        border-radius:34px;
+      }
+      .card-content{
+        max-width:72%;
+      }
+      .card-title{
+        font-size:33px;
+      }
+      .card-sub{
+        margin-top:28px;
+        font-size:22px;
+      }
+      .product-stack{
+        width:156px;
+        height:104px;
+        right:-12px;
+        bottom:-14px;
+      }
+      .product-back{
+        width:92px;
+        height:58px;
+        right:40px;
+        bottom:24px;
+      }
+      .product-front{
+        width:92px;
+        height:58px;
+      }
+      .product-front.placeholder{
+        font-size:19px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="screen">
+    <div class="top-copy">아큐브 기술력을 손으로 직접 체험해 보세요</div>
+
+    <section class="cards">
+
+      <!-- 1번 카드 -->
+      <a class="experience-card" href="https://justmegod88.github.io/ACUVUE-PRODUCT/">
+        <div class="card-main">
+          <div class="card-content">
+            <h2 class="card-title">저녁에도
+선명한 시야</h2>
+            <div class="card-sub">아큐브 난시 기술력</div>
+          </div>
+
+          <div class="product-stack">
+            <div class="product-back"></div>
+
+            <!-- 제품 이미지 넣을 경우 -->
+            <!--
+            <div class="product-front">
+              <img src="product-toric.png" alt="아큐브 난시 제품 이미지" />
+            </div>
+            -->
+
+            <!-- 임시 플레이스홀더 -->
+            <div class="product-front placeholder">제품 이미지</div>
+          </div>
+        </div>
+      </a>
+
+      <!-- 2번 카드 -->
+      <a class="experience-card" href="https://justmegod88.github.io/MF-3D/">
+        <div class="card-main">
+          <div class="card-content">
+            <h2 class="card-title">모든 거리
+선명한 시야</h2>
+            <div class="card-sub">아큐브 멀티포컬 기술력</div>
+          </div>
+
+          <div class="product-stack">
+            <div class="product-back"></div>
+
+            <!-- 제품 이미지 넣을 경우 -->
+            <!--
+            <div class="product-front">
+              <img src="product-mf.png" alt="아큐브 멀티포컬 제품 이미지" />
+            </div>
+            -->
+
+            <!-- 임시 빈 박스 -->
+            <div class="product-front"></div>
+          </div>
+        </div>
+      </a>
+
+    </section>
+  </main>
+</body>
+</html>
