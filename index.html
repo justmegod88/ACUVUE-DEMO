@@ -10,12 +10,12 @@
       --bg2:#0f5574;
       --card:#1a6b90;
       --card-deep:#165d7d;
-      --line-soft:rgba(255,255,255,.14);
+      --line-soft:rgba(255,255,255,.16);
       --text:#ffffff;
-      --sub:rgba(255,255,255,.88);
-      --muted:rgba(255,255,255,.72);
-      --shadow:0 22px 44px rgba(0,0,0,.18);
-      --shadow-soft:0 10px 24px rgba(0,0,0,.12);
+      --sub:rgba(255,255,255,.86);
+      --muted:rgba(255,255,255,.68);
+      --shadow:0 18px 34px rgba(0,0,0,.16);
+      --shadow-soft:0 8px 18px rgba(0,0,0,.12);
     }
 
     *{box-sizing:border-box}
@@ -60,43 +60,43 @@
     .wrap{
       position:relative;
       z-index:1;
-      padding:34px 18px 42px;
+      padding:20px 16px 28px;
     }
 
     .hero{
       text-align:center;
-      margin-bottom:24px;
-      padding:8px 10px 2px;
+      margin-bottom:14px;
+      padding:4px 8px 0;
     }
 
     .hero-kicker{
       display:inline-block;
-      padding:8px 14px;
+      padding:7px 12px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,.18);
       background:rgba(255,255,255,.08);
       color:rgba(255,255,255,.88);
-      font-size:13px;
+      font-size:12px;
       font-weight:700;
       letter-spacing:-.02em;
-      margin-bottom:16px;
+      margin-bottom:12px;
       backdrop-filter:blur(8px);
     }
 
     .hero-title{
       margin:0;
-      font-size:29px;
-      line-height:1.28;
+      font-size:22px;
+      line-height:1.32;
       letter-spacing:-.05em;
       font-weight:800;
       word-break:keep-all;
     }
 
     .hero-desc{
-      margin:12px 0 0;
+      margin:10px 0 0;
       color:var(--muted);
-      font-size:15px;
-      line-height:1.55;
+      font-size:13px;
+      line-height:1.45;
       letter-spacing:-.02em;
       word-break:keep-all;
     }
@@ -104,8 +104,8 @@
     .cards{
       display:flex;
       flex-direction:column;
-      gap:22px;
-      margin-top:22px;
+      gap:14px;
+      margin-top:14px;
     }
 
     .card{
@@ -113,7 +113,7 @@
       display:block;
       text-decoration:none;
       color:inherit;
-      border-radius:34px;
+      border-radius:28px;
       padding:0;
       overflow:visible;
       -webkit-tap-highlight-color:transparent;
@@ -125,9 +125,9 @@
 
     .card-shell{
       position:relative;
-      min-height:280px;
-      border-radius:34px;
-      padding:28px 22px 28px;
+      min-height:208px;
+      border-radius:28px;
+      padding:18px 18px 18px;
       background:
         linear-gradient(180deg, rgba(255,255,255,.04) 0%, rgba(255,255,255,.02) 100%),
         linear-gradient(180deg, var(--card) 0%, var(--card-deep) 100%);
@@ -141,7 +141,7 @@
       position:absolute;
       inset:0;
       background:
-        radial-gradient(circle at 18% 18%, rgba(255,255,255,.12) 0%, rgba(255,255,255,0) 28%),
+        radial-gradient(circle at 18% 18%, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 28%),
         linear-gradient(180deg, rgba(255,255,255,.04) 0%, rgba(255,255,255,0) 38%);
       pointer-events:none;
     }
@@ -149,13 +149,13 @@
     .card-shell::after{
       content:"";
       position:absolute;
-      right:-40px;
-      top:-40px;
-      width:140px;
-      height:140px;
+      right:-34px;
+      top:-34px;
+      width:110px;
+      height:110px;
       border-radius:50%;
-      background:rgba(255,255,255,.05);
-      filter:blur(6px);
+      background:rgba(255,255,255,.04);
+      filter:blur(5px);
       pointer-events:none;
     }
 
@@ -165,31 +165,31 @@
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      min-width:62px;
-      height:40px;
-      padding:0 14px;
+      min-width:54px;
+      height:34px;
+      padding:0 12px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,.18);
       background:rgba(255,255,255,.08);
       color:rgba(255,255,255,.92);
-      font-size:18px;
+      font-size:16px;
       font-weight:800;
       letter-spacing:.02em;
-      margin-bottom:18px;
+      margin-bottom:12px;
       backdrop-filter:blur(8px);
     }
 
     .card-copy{
       position:relative;
       z-index:1;
-      max-width:62%;
-      padding-bottom:54px;
+      max-width:60%;
+      padding-bottom:34px;
     }
 
     .card-title{
       margin:0;
-      font-size:48px;
-      line-height:1.04;
+      font-size:32px;
+      line-height:1.02;
       letter-spacing:-.06em;
       font-weight:900;
       white-space:pre-line;
@@ -198,8 +198,8 @@
     }
 
     .card-sub{
-      margin-top:18px;
-      font-size:20px;
+      margin-top:12px;
+      font-size:14px;
       line-height:1.35;
       letter-spacing:-.03em;
       color:var(--sub);
@@ -208,19 +208,19 @@
 
     .card-arrow{
       position:absolute;
-      right:22px;
-      bottom:18px;
+      right:16px;
+      bottom:14px;
       z-index:3;
       display:inline-flex;
       align-items:center;
-      gap:10px;
-      padding:10px 14px 10px 12px;
+      gap:8px;
+      padding:8px 12px 8px 10px;
       border-radius:999px;
       background:rgba(255,255,255,.12);
       border:1px solid rgba(255,255,255,.18);
       box-shadow:var(--shadow-soft);
       color:rgba(255,255,255,.92);
-      font-size:14px;
+      font-size:12px;
       font-weight:800;
       letter-spacing:-.02em;
       backdrop-filter:blur(8px);
@@ -231,23 +231,23 @@
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      width:24px;
-      height:24px;
+      width:20px;
+      height:20px;
       border-radius:50%;
       background:rgba(255,255,255,.12);
       border:1px solid rgba(255,255,255,.18);
-      font-size:13px;
+      font-size:11px;
       font-weight:900;
       line-height:1;
-      flex:0 0 24px;
+      flex:0 0 20px;
     }
 
     .product-stack{
       position:absolute;
-      right:-8px;
-      bottom:-10px;
-      width:164px;
-      height:132px;
+      right:-6px;
+      bottom:-8px;
+      width:126px;
+      height:100px;
       z-index:2;
       pointer-events:none;
     }
@@ -255,23 +255,23 @@
     .pack-back,
     .pack-front{
       position:absolute;
-      border:2px solid rgba(8,33,49,.48);
-      border-radius:18px;
+      border:2px solid rgba(8,33,49,.40);
+      border-radius:16px;
       background:linear-gradient(180deg,#2f89b1 0%, #1b6789 100%);
-      box-shadow:0 14px 28px rgba(0,0,0,.16);
+      box-shadow:0 12px 22px rgba(0,0,0,.14);
     }
 
     .pack-back{
-      width:102px;
-      height:78px;
-      right:38px;
-      bottom:22px;
+      width:78px;
+      height:60px;
+      right:30px;
+      bottom:18px;
       opacity:.95;
     }
 
     .pack-front{
-      width:118px;
-      height:86px;
+      width:92px;
+      height:68px;
       right:0;
       bottom:0;
       overflow:hidden;
@@ -293,121 +293,116 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      padding:10px;
+      padding:8px;
       color:rgba(255,255,255,.95);
-      font-size:18px;
+      font-size:14px;
       line-height:1.15;
       text-align:center;
       font-weight:700;
       letter-spacing:-.04em;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.08) 0%, rgba(255,255,255,.02) 100%);
+      background:linear-gradient(180deg, rgba(255,255,255,.08) 0%, rgba(255,255,255,.02) 100%);
     }
 
     .lens-orb{
       position:absolute;
-      right:58px;
-      top:44px;
-      width:100px;
-      height:100px;
+      right:48px;
+      top:34px;
+      width:78px;
+      height:78px;
       border-radius:50%;
       background:
         radial-gradient(circle at 50% 50%, rgba(255,255,255,.72) 0%, rgba(255,255,255,.28) 24%, rgba(255,255,255,.12) 45%, rgba(255,255,255,.04) 66%, rgba(255,255,255,0) 72%);
-      filter:blur(.2px);
-      opacity:.88;
+      opacity:.82;
       box-shadow:
-        inset 0 0 14px rgba(255,255,255,.24),
-        0 20px 30px rgba(0,0,0,.12);
+        inset 0 0 12px rgba(255,255,255,.22),
+        0 14px 22px rgba(0,0,0,.10);
       pointer-events:none;
     }
 
     .lens-orb::before{
       content:"";
       position:absolute;
-      inset:16px;
+      inset:14px;
       border-radius:50%;
       background:radial-gradient(circle, rgba(255,255,255,.18) 0%, rgba(255,255,255,.03) 58%, rgba(255,255,255,0) 76%);
     }
 
     .lens-orb.small{
-      width:86px;
-      height:86px;
-      right:62px;
-      top:54px;
-      opacity:.8;
+      width:68px;
+      height:68px;
+      right:52px;
+      top:42px;
+      opacity:.78;
     }
 
     .footer-note{
-      margin-top:28px;
+      margin-top:16px;
       text-align:center;
       color:rgba(255,255,255,.62);
-      font-size:12px;
-      line-height:1.5;
+      font-size:11px;
+      line-height:1.45;
       letter-spacing:-.01em;
     }
 
     @media (max-width:390px){
       .wrap{
-        padding:26px 14px 36px;
+        padding:16px 12px 24px;
       }
       .hero-title{
-        font-size:25px;
+        font-size:20px;
       }
       .hero-desc{
-        font-size:14px;
+        font-size:12px;
       }
       .card-shell{
-        min-height:252px;
-        padding:22px 18px 24px;
-        border-radius:28px;
+        min-height:192px;
+        padding:16px;
+        border-radius:24px;
       }
       .card-copy{
-        max-width:62%;
-        padding-bottom:48px;
+        max-width:60%;
+        padding-bottom:28px;
       }
       .card-title{
-        font-size:39px;
+        font-size:29px;
       }
       .card-sub{
-        font-size:18px;
-        margin-top:14px;
+        font-size:13px;
+        margin-top:10px;
       }
       .card-arrow{
-        right:18px;
-        bottom:16px;
-        font-size:13px;
-        padding:9px 12px 9px 10px;
+        right:14px;
+        bottom:12px;
+        font-size:11px;
       }
       .product-stack{
-        width:148px;
-        height:118px;
-        right:-6px;
-        bottom:-8px;
+        width:116px;
+        height:92px;
       }
       .pack-back{
-        width:92px;
-        height:70px;
-        right:34px;
-        bottom:20px;
+        width:72px;
+        height:56px;
+        right:28px;
+        bottom:16px;
       }
       .pack-front{
-        width:108px;
-        height:78px;
+        width:86px;
+        height:64px;
       }
       .pack-label{
-        font-size:16px;
+        font-size:13px;
       }
       .lens-orb{
-        width:88px;
-        height:88px;
-        right:52px;
-        top:42px;
+        width:70px;
+        height:70px;
+        right:42px;
+        top:32px;
       }
       .lens-orb.small{
-        width:76px;
-        height:76px;
-        right:56px;
-        top:50px;
+        width:62px;
+        height:62px;
+        right:46px;
+        top:38px;
       }
     }
   </style>
