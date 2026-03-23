@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>ACUVUE Product | 183가지 광학부</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    :root{
+      --bg:#f3f6fb;
+      --card:#ffffff;
+      --line:#d8e2ef;
+      --text:#15304b;
+      --sub:#60758a;
+      --blue:#005EB8;
+      --blue-deep:#0d4f96;
+      --shadow:0 14px 34px rgba(16,42,67,.10);
+      --shadow-soft:0 10px 24px rgba(16,42,67,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;
+      padding:0;
+      background:linear-gradient(180deg,#eef4fb 0%, #f7f9fc 60%, #f3f6fb 100%);
+      font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",Arial,sans-serif;
+      color:var(--text);
+    }
+    .wrap{
+      max-width:980px;
+      margin:0 auto;
+      padding:18px 14px 40px;
+    }
+
+    .top-cards{margin-bottom:18px}
+    .menu-card{
+      background:var(--card);
+      border:1.5px solid #dbe5f1;
+      border-radius:22px;
+      padding:20px 18px 18px;
+      box-shadow:var(--shadow);
+      min-height:118px;
+      cursor:pointer;
+      transition:.2s ease;
+      width:100%;
+    }
+    .menu-card.active{
+      border-color:#b8d2f6;
+      background:linear-gradient(180deg,#ffffff 0%, #f5f9ff 100%);
+      box-shadow:0 14px 34px rgba(13,99,198,.10);
+    }
+    .menu-eyebrow{
+      font-size:18px;
+      line-height:1.2;
+      font-weight:700;
+      letter-spacing:-.03em;
+      color:#314962;
+      margin-bottom:6px;
+      word-break:keep-all;
+    }
+    .menu-title{
+      font-size:22px;
+      line-height:1.2;
+      font-weight:900;
+      letter-spacing:-.03em;
+      color:#102a46;
+      margin-bottom:10px;
+      word-break:keep-all;
+    }
+    .menu-sub{
+      font-size:15px;
+      color:#66798e;
+      line-height:1.4;
+    }
+
+    .hero-3d{
+      background:linear-gradient(180deg,#f9fbff 0%, #f2f6fc 100%);
+      border:1.5px solid #dce5f1;
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:18px 18px 22px;
+      margin-bottom:18px;
+      position:relative;
+      z-index:1;
+      overflow:hidden;
+    }
+    .hero-viewer{
+      width:100%;
+      min-height:460px;
+      border-radius:24px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(255,255,255,.96) 0%, rgba(255,255,255,.45) 18%, rgba(255,255,255,0) 34%),
+        linear-gradient(180deg,#fbfcff 0%, #f3f7fd 100%);
+    }
+    model-viewer{
+      width:100%;
+      height:460px;
+      background:transparent;
+      --poster-color:transparent;
+      display:block;
+    }
+
+    .powermap-panel{
+      margin-top:16px;
+      padding:0 10px;
+      transition:.2s ease;
+    }
+    .powermap-title{
+      font-size:17px;
+      font-weight:900;
+      letter-spacing:-.03em;
+      color:#102a46;
+      margin:0 0 10px;
+    }
+    .powermap-row{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:10px;
+      align-items:center;
+    }
+    .powermap-label{
+      font-size:12px;
+      line-height:1;
+      font-weight:800;
+      color:#2b4969;
+      white-space:nowrap;
+      letter-spacing:-.02em;
+    }
+    .powermap-bar-wrap{
+      position:relative;
+      height:22px;
+      display:flex;
+      align-items:center;
+    }
+    .powermap-bar{
+      width:100%;
+      height:14px;
+      border-radius:999px;
+      position:relative;
+      overflow:hidden;
+      border:1.25px solid #28476a;
+      background:
+        linear-gradient(90deg,
+          #4f4ca3 0%,
+          #6d78ba 28%,
+          #93abd0 56%,
+          #88bddc 78%,
+          #77c7e3 100%);
+      box-shadow:
+        inset 0 1px 1px rgba(255,255,255,.24),
+        inset 0 -1px 2px rgba(25,54,89,.10);
+    }
+    .powermap-bar::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(255,255,255,.12) 0%, rgba(255,255,255,0) 60%);
+      pointer-events:none;
+    }
+    .powermap-tick{
+      position:absolute;
+      top:50%;
+      width:1.5px;
+      height:12px;
+      border-radius:999px;
+      background:#36597d;
+      transform:translate(-50%,-50%);
+      opacity:.82;
+    }
+    .tick-1{left:20%}
+    .tick-2{left:55%}
+    .tick-3{left:78%}
+
+    .hero-buttons{
+      display:grid;
+      grid-template-columns:64px 1fr 1fr;
+      gap:10px;
+      margin-top:16px;
+      position:relative;
+      z-index:2;
+      width:100%;
+      align-items:center;
+    }
+    .round-btn,.mode-btn{
+      height:58px;
+      border-radius:20px;
+      border:1.5px solid #d3deec;
+      background:#fff;
+      color:#13314c;
+      font-size:15px;
+      font-weight:900;
+      letter-spacing:-.02em;
+      box-shadow:var(--shadow-soft);
+      cursor:pointer;
+      -webkit-appearance:none;
+      appearance:none;
+      pointer-events:auto;
+      min-width:0;
+    }
+    .round-btn{
+      font-size:26px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:100%;
+    }
+    .mode-btn{
+      width:100%;
+      padding:0 10px;
+      white-space:nowrap;
+    }
+    .mode-btn.active{
+      background:linear-gradient(180deg,var(--blue) 0%, #0b5bb5 100%);
+      color:#fff;
+      border-color:var(--blue);
+      box-shadow:0 14px 28px rgba(13,99,198,.20);
+    }
+
+    @media (max-width:720px){
+      .menu-card{
+        min-height:108px;
+        padding:16px 14px;
+      }
+      .menu-eyebrow{font-size:16px}
+      .menu-title{font-size:19px}
+      .menu-sub{font-size:13px}
+
+      .hero-viewer,model-viewer{
+        min-height:380px;
+        height:380px;
+      }
+
+      .powermap-title{
+        font-size:15px;
+        margin-bottom:8px;
+      }
+      .powermap-label{
+        font-size:11px;
+      }
+      .powermap-bar-wrap{
+        height:20px;
+      }
+      .powermap-bar{
+        height:13px;
+      }
+      .powermap-tick{
+        height:11px;
+        width:1.25px;
+      }
+
+      .hero-buttons{
+        grid-template-columns:60px 1fr 1fr;
+        gap:8px;
+      }
+      .round-btn,.mode-btn{
+        height:54px;
+        border-radius:18px;
+        font-size:13px;
+      }
+      .round-btn{
+        font-size:23px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top-cards">
+      <div class="menu-card" id="card1">
+        <div class="menu-eyebrow">모든 거리 선명한 시야</div>
+        <div class="menu-title">183개 동공 사이즈별 광학부</div>
+        <div class="menu-sub">카드를 눌러 확인</div>
+      </div>
+    </div>
+
+    <section class="hero-3d">
+      <div class="hero-viewer">
+        <model-viewer
+          id="lensViewer"
+          src="lens_clear.glb"
+          camera-controls
+          auto-rotate
+          auto-rotate-delay="0"
+          rotation-per-second="18deg"
+          shadow-intensity="1"
+          exposure="1.1"
+          environment-image="neutral"
+          camera-orbit="0deg 75deg 105%"
+          min-camera-orbit="auto auto 72%"
+          max-camera-orbit="auto auto 170%"
+          interaction-prompt="none"
+          touch-action="pan-y"
+          ar="false">
+        </model-viewer>
+      </div>
+
+      <div class="powermap-panel" id="powermapPanel" style="display:none;">
+        <h3 class="powermap-title">도수 분포</h3>
+        <div class="powermap-row">
+          <div class="powermap-label">근용도수</div>
+          <div class="powermap-bar-wrap">
+            <div class="powermap-bar">
+              <span class="powermap-tick tick-1"></span>
+              <span class="powermap-tick tick-2"></span>
+              <span class="powermap-tick tick-3"></span>
+            </div>
+          </div>
+          <div class="powermap-label">원용도수</div>
+        </div>
+      </div>
+
+      <div class="hero-buttons">
+        <button class="round-btn" id="resetBtn" type="button">↺</button>
+        <button class="mode-btn active" id="transparentBtn" type="button">투명 렌즈 모드</button>
+        <button class="mode-btn" id="powerBtn" type="button">렌즈 파워 MAP</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const viewer = document.getElementById('lensViewer');
+    const resetBtn = document.getElementById('resetBtn');
+    const transparentBtn = document.getElementById('transparentBtn');
+    const powerBtn = document.getElementById('powerBtn');
+    const card1 = document.getElementById('card1');
+    const powermapPanel = document.getElementById('powermapPanel');
+
+    const MODE_CONFIG = {
+      transparent: {
+        src: 'lens_clear.glb',
+        panel: 'none'
+      },
+      power: {
+        src: 'lens_powermap.glb',
+        panel: 'block'
+      }
+    };
+
+    let currentMode = 'transparent';
+    let initialViewByMode = {
+      transparent: null,
+      power: null
+    };
+    let pendingViewForMode = null;
+
+    function readCurrentView() {
+      const orbit = viewer.getCameraOrbit();
+      const target = viewer.getCameraTarget();
+      return {
+        orbitTheta: orbit.theta,
+        orbitPhi: orbit.phi,
+        orbitRadius: orbit.radius,
+        targetX: target.x,
+        targetY: target.y,
+        targetZ: target.z,
+        fov: parseFloat(viewer.fieldOfView)
+      };
+    }
+
+    function applyView(viewState) {
+      if (!viewState) return;
+      viewer.cameraOrbit = `${viewState.orbitTheta}rad ${viewState.orbitPhi}rad ${viewState.orbitRadius}m`;
+      viewer.cameraTarget = `${viewState.targetX}m ${viewState.targetY}m ${viewState.targetZ}m`;
+      viewer.fieldOfView = `${viewState.fov}deg`;
+      if (viewer.jumpCameraToGoal) viewer.jumpCameraToGoal();
+    }
+
+    function buildRelativeView(fromMode, toMode, currentView) {
+      const fromBase = initialViewByMode[fromMode];
+      const toBase = initialViewByMode[toMode];
+      if (!fromBase || !toBase || !currentView) return null;
+
+      const thetaDelta = currentView.orbitTheta - fromBase.orbitTheta;
+      const phiDelta = currentView.orbitPhi - fromBase.orbitPhi;
+      const radiusRatio = fromBase.orbitRadius !== 0 ? (currentView.orbitRadius / fromBase.orbitRadius) : 1;
+      const fovDelta = currentView.fov - fromBase.fov;
+
+      const targetDeltaX = currentView.targetX - fromBase.targetX;
+      const targetDeltaY = currentView.targetY - fromBase.targetY;
+      const targetDeltaZ = currentView.targetZ - fromBase.targetZ;
+
+      return {
+        orbitTheta: toBase.orbitTheta + thetaDelta,
+        orbitPhi: toBase.orbitPhi + phiDelta,
+        orbitRadius: toBase.orbitRadius * radiusRatio,
+        targetX: toBase.targetX + targetDeltaX,
+        targetY: toBase.targetY + targetDeltaY,
+        targetZ: toBase.targetZ + targetDeltaZ,
+        fov: toBase.fov + fovDelta
+      };
+    }
+
+    viewer.addEventListener('load', () => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (!initialViewByMode[currentMode]) {
+            initialViewByMode[currentMode] = readCurrentView();
+          }
+
+          if (pendingViewForMode && pendingViewForMode.mode === currentMode) {
+            applyView(pendingViewForMode.view);
+            pendingViewForMode = null;
+          }
+        });
+      });
+    });
+
+    function setMode(mode){
+      if (mode === currentMode) return;
+
+      const currentView = readCurrentView();
+      const targetMode = mode;
+
+      if (initialViewByMode[currentMode] && initialViewByMode[targetMode]) {
+        const linkedView = buildRelativeView(currentMode, targetMode, currentView);
+        pendingViewForMode = { mode: targetMode, view: linkedView };
+      } else {
+        pendingViewForMode = null;
+      }
+
+      currentMode = targetMode;
+      transparentBtn.classList.toggle('active', targetMode === 'transparent');
+      powerBtn.classList.toggle('active', targetMode === 'power');
+      powermapPanel.style.display = MODE_CONFIG[targetMode].panel;
+      viewer.src = MODE_CONFIG[targetMode].src;
+    }
+
+    function resetViewer(){
+      applyView(initialViewByMode[currentMode]);
+    }
+
+    transparentBtn.addEventListener('click', () => setMode('transparent'));
+    powerBtn.addEventListener('click', () => setMode('power'));
+    resetBtn.addEventListener('click', resetViewer);
+
+    card1.addEventListener('click', () => {
+      window.open('card1.html', '_blank');
+    });
+  </script>
+</body>
+</html>
