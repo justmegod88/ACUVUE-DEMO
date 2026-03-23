@@ -438,8 +438,1104 @@
     resetBtn.addEventListener('click', resetViewer);
 
     card1.addEventListener('click', () => {
-      window.open('card1.html', '_blank');
+      openCard1();
     });
   </script>
+
+<div id="card1Modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;">
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:95%;height:90%;background:#fff;border-radius:16px;overflow:hidden;">
+    <button onclick="closeCard1()" style="position:absolute;top:10px;right:10px;z-index:10;">닫기</button>
+    <iframe style="width:100%;height:100%;border:none;" srcdoc='<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ACUVUE 183 Pupil Optimized Demo</title>
+
+<style>
+  :root{
+    --acuvue-blue:#156bc4;
+    --acuvue-blue-deep:#0f5aa6;
+    --acuvue-navy:#213d63;
+    --bg:#f3f5fa;
+    --card:#ffffff;
+    --line:#d9e2ee;
+    --line-soft:#e8eef7;
+    --text:#234767;
+    --sub:#73839a;
+    --shadow:0 14px 34px rgba(36,68,110,.08);
+  }
+
+  *{box-sizing:border-box}
+
+  body{
+    margin:0;
+    padding:22px 16px 52px;
+    background:linear-gradient(180deg,#f6f8fc 0%, #f3f5fa 52%, #f1f4f9 100%);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",Arial,sans-serif;
+    color:var(--text);
+  }
+
+  .wrap{
+    max-width:980px;
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+
+  .hero,
+  .card,
+  .visionCard,
+  .modalCard{
+    width:100%;
+    background:var(--card);
+    border:1.5px solid var(--line);
+    border-radius:30px;
+    box-shadow:var(--shadow);
+  }
+
+  .hero{
+    padding:22px 24px 24px;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .hero::after{
+    content:"";
+    position:absolute;
+    right:-80px;
+    top:-80px;
+    width:240px;
+    height:240px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(21,107,196,.12) 0%, rgba(21,107,196,.05) 42%, rgba(21,107,196,0) 72%);
+    pointer-events:none;
+  }
+
+  .brand{
+    display:inline-flex;
+    align-items:center;
+    padding:10px 28px;
+    border-radius:999px;
+    border:1.5px solid #d9e6f4;
+    background:linear-gradient(180deg,#eef5fc 0%, #e8f1fb 100%);
+    color:var(--acuvue-blue-deep);
+    font-size:15px;
+    font-weight:900;
+    letter-spacing:-.02em;
+    margin-bottom:16px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
+  }
+
+  .heroTitle{
+    margin:0;
+    font-size:clamp(17px,2vw,22px);
+    line-height:1.42;
+    letter-spacing:-.035em;
+    color:var(--acuvue-navy);
+    font-weight:900;
+    max-width:760px;
+  }
+
+  .heroTitle .accent{color:var(--acuvue-blue-deep)}
+  .heroTitle .titleNote{
+    display:block;
+    margin-top:10px;
+    color:#7d8ca2;
+    font-size:.78em;
+    font-weight:800;
+    line-height:1.5;
+  }
+
+  .card{
+    padding:22px 22px 24px;
+  }
+
+  .sliderCard > h3{display:none}
+
+  .spec{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    margin-top:14px;
+    margin-bottom:10px;
+    width:min(100%,520px);
+  }
+
+  .sliderBlock{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+
+  .sliderTop{
+    display:grid;
+    grid-template-columns:1fr auto;
+    align-items:center;
+    gap:12px;
+  }
+
+  .label{
+    font-size:18px;
+    font-weight:900;
+    color:#5f748f;
+    letter-spacing:-.03em;
+  }
+
+  .value{
+    min-width:108px;
+    text-align:right;
+    font-size:18px;
+    font-weight:900;
+    color:var(--acuvue-blue);
+    letter-spacing:-.03em;
+  }
+
+  input[type="range"]{
+    width:100%;
+    margin:0;
+    accent-color:#1e88f5;
+  }
+
+  .scale{
+    display:flex;
+    justify-content:space-between;
+    padding:0 2px;
+    color:#6f8097;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:-.02em;
+  }
+
+  .visualStage{
+    display:flex;
+    justify-content:center;
+    margin-top:6px;
+  }
+
+  .visualStack{
+    width:min(100%,580px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+  }
+
+  .imagePair{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+  }
+
+  .eyePanel,
+  .lensPanel{
+    position:relative;
+    width:min(100%,440px);
+    border-radius:34px;
+    background:linear-gradient(180deg,#ffffff 0%, #fbfcfe 100%);
+    border:1.5px solid #edf2f8;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.95);
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:10px 10px;
+  }
+
+  .eyeBase,
+  .lensBase{
+    width:100%;
+    max-width:400px;
+    height:auto;
+    display:block;
+  }
+
+  .lensPanel{
+    overflow:visible;
+  }
+
+  .overlaySvg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+  }
+
+  /* 수정된 부분 */
+  .compactControl{
+    width:204px;
+    background:linear-gradient(180deg,#f9fbff 0%, #f4f8fd 100%);
+    border:1.5px solid #dbe5f0;
+    border-radius:22px;
+    padding:6px 7px;
+    box-shadow:0 8px 22px rgba(28,74,128,.06);
+    display:grid;
+    grid-template-columns:1fr 96px;
+    align-items:center;
+    gap:6px;
+    position:absolute;
+    right:14px;
+    bottom:6px;
+    z-index:5;
+  }
+
+  .compactLabel{
+    font-size:12px;
+    font-weight:900;
+    color:var(--acuvue-blue-deep);
+    letter-spacing:-.03em;
+    text-align:left;
+    padding-left:4px;
+    line-height:1.1;
+  }
+
+  .switchWrap{
+    background:#fff;
+    border:1.5px solid #d9e2ee;
+    border-radius:999px;
+    padding:3px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:3px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
+  }
+
+  .pillBtn{
+    border:none;
+    border-radius:999px;
+    height:34px;
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:-.02em;
+    cursor:pointer;
+    color:#647891;
+    background:transparent;
+    transition:.2s ease;
+  }
+
+  .pillBtn.active{
+    background:linear-gradient(180deg,#1a79d8 0%, #0f61b4 100%);
+    color:#fff;
+    box-shadow:0 10px 18px rgba(20,99,180,.20);
+  }
+
+  .messageBox{
+    width:min(100%,520px);
+    border-radius:28px;
+    background:linear-gradient(180deg,#f4f8ff 0%, #edf4ff 100%);
+    border:1.5px solid #d7e2f1;
+    box-shadow:
+      0 10px 24px rgba(36,68,110,.06),
+      inset 0 1px 0 rgba(255,255,255,.95);
+    padding:18px 20px 20px;
+    text-align:center;
+  }
+
+  .messageTitle{
+    margin:0;
+    font-size:22px;
+    line-height:1.48;
+    font-weight:900;
+    color:var(--text);
+    letter-spacing:-.035em;
+  }
+
+  .messageTitle strong{
+    color:var(--acuvue-blue-deep);
+    font-weight:900;
+  }
+
+  .messageTitle .emphasisLine{
+    color:var(--acuvue-blue-deep);
+    font-weight:900;
+  }
+
+  .visionCard{
+    padding:16px 18px;
+    border-radius:28px;
+  }
+
+  .visionTrigger{
+    display:grid;
+    grid-template-columns:1fr 154px;
+    gap:14px;
+    align-items:center;
+  }
+
+  .visionTrigger h3{
+    margin:0 0 4px;
+    font-size:26px;
+    line-height:1.04;
+    letter-spacing:-.04em;
+    color:var(--acuvue-navy);
+    font-weight:900;
+  }
+
+  .muted{
+    color:#6d7e95;
+    font-weight:800;
+    font-size:13px;
+    line-height:1.42;
+  }
+
+  .btn{
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:18px;
+    padding:12px 16px;
+    font-weight:900;
+    cursor:pointer;
+    color:var(--text);
+    font-size:16px;
+  }
+
+  .btn.primary{
+    background:linear-gradient(180deg,#156bc4 0%, #0f61b4 100%);
+    border-color:#0f61b4;
+    color:#fff;
+    box-shadow:0 10px 22px rgba(18,97,180,.20);
+  }
+
+  #openVisionBtn{
+    min-height:82px;
+    white-space:normal;
+    line-height:1.4;
+    font-size:15px;
+  }
+
+  .pageFootnote{
+    text-align:center;
+    color:#73839a;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:-.02em;
+    padding-top:2px;
+  }
+
+  .modalBack{
+    position:fixed;
+    inset:0;
+    background:rgba(11,31,51,.52);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+    z-index:1000;
+  }
+
+  .modalBack.open{display:flex}
+
+  .modalCard{
+    max-width:920px;
+    padding:18px;
+    position:relative;
+  }
+
+  .modalClose{
+    position:absolute;
+    right:16px;
+    top:16px;
+  }
+
+  .visionGrid{
+    display:grid;
+    grid-template-columns:1fr 320px;
+    gap:12px;
+    align-items:start;
+    margin-top:8px;
+  }
+
+  .screen{
+    position:relative;
+    min-height:320px;
+    border:1px solid var(--line);
+    border-radius:18px;
+    overflow:hidden;
+    background:#000;
+    --blur-amt:8px;
+    --blur-opacity:0;
+    --clear-stop:55%;
+    --blur-start:72%;
+  }
+
+  .screen video,
+  .screen img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .layer{position:absolute; inset:0}
+
+  .layer.blurred{
+    filter:blur(var(--blur-amt)) contrast(1.05);
+    opacity:0;
+    transition:opacity .2s ease, filter .2s ease;
+  }
+
+  .mask-overall .layer.blurred{
+    opacity:var(--blur-opacity);
+    -webkit-mask-image:none;
+            mask-image:none;
+  }
+
+  .mask-periphery .layer.blurred{
+    opacity:var(--blur-opacity);
+    -webkit-mask-image:radial-gradient(
+      circle at 50% 50%,
+      rgba(0,0,0,0) 0 var(--clear-stop),
+      rgba(0,0,0,1) var(--blur-start) 100%
+    );
+            mask-image:radial-gradient(
+      circle at 50% 50%,
+      rgba(0,0,0,0) 0 var(--clear-stop),
+      rgba(0,0,0,1) var(--blur-start) 100%
+    );
+  }
+
+  .fishbowl .layer.base{filter:url(#fishbowlFilter)}
+
+  .explain{
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:14px;
+    background:#fafbfc;
+    color:var(--sub);
+    font-weight:900;
+    font-size:13px;
+    line-height:1.55;
+    position:relative;
+  }
+
+  .explain strong{color:var(--text)}
+
+  .explainTopBar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:10px;
+  }
+
+  .inlineCamBtn{
+    margin:0;
+    white-space:nowrap;
+    min-width:128px;
+  }
+
+  .tagRow{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:8px;
+  }
+
+  .tag{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:900;
+  }
+
+  .tagBtn{
+    cursor:pointer;
+    transition:.18s ease;
+    background:#f2f6fb;
+    border:1px solid #dde5ef;
+    color:#67788f;
+    box-shadow:none;
+  }
+
+  .tagBtn.active{
+    background:linear-gradient(180deg,#dcebff 0%, #cfe3ff 100%);
+    border-color:#9dbfed;
+    color:#0f5aa6;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.95);
+  }
+
+  @media (max-width:720px){
+    body{padding:16px 12px 42px}
+
+    .hero,.card,.visionCard,.modalCard{border-radius:26px}
+    .hero{padding:18px 18px 20px}
+    .card{padding:18px 16px 20px}
+    .visionCard{padding:14px 16px}
+
+    .brand{
+      font-size:12px;
+      padding:8px 18px;
+      margin-bottom:14px;
+    }
+
+    .heroTitle{
+      font-size:15px;
+      line-height:1.5;
+    }
+
+    .label,.value{
+      font-size:16px;
+    }
+
+    .eyePanel,.lensPanel{
+      width:min(100%,420px);
+      padding:8px;
+      border-radius:28px;
+    }
+
+    .spec{
+      width:min(100%,100%);
+      margin-top:12px;
+    }
+
+    .compactControl{
+      width:174px;
+      grid-template-columns:1fr 84px;
+      border-radius:18px;
+      padding:5px 5px;
+      gap:5px;
+      right:8px;
+      bottom:4px;
+    }
+
+    .compactLabel{
+      font-size:10px;
+      line-height:1.02;
+      padding-left:2px;
+    }
+
+    .pillBtn{
+      height:30px;
+      font-size:10px;
+    }
+
+    .messageBox{
+      width:min(100%,100%);
+      border-radius:24px;
+      padding:16px 14px 18px;
+      background:linear-gradient(180deg,#f3f8ff 0%, #ebf3ff 100%);
+    }
+
+    .messageTitle{
+      font-size:13px;
+      line-height:1.48;
+    }
+
+    .visionTrigger{
+      grid-template-columns:1fr 118px;
+      gap:12px;
+    }
+
+    .visionTrigger h3{
+      font-size:22px;
+    }
+
+    .muted{
+      font-size:10px;
+      line-height:1.38;
+    }
+
+    #openVisionBtn{
+      min-height:68px;
+      font-size:12px;
+      border-radius:18px;
+      padding:0 10px;
+    }
+
+    .pageFootnote{
+      font-size:11px;
+    }
+
+    .visionGrid{
+      grid-template-columns:1fr;
+    }
+
+    .explainTopBar{
+      align-items:flex-start;
+      flex-direction:row;
+    }
+
+    .inlineCamBtn{
+      min-width:118px;
+      padding:10px 12px;
+      font-size:12px;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <svg width="0" height="0" style="position:absolute">
+    <filter id="fishbowlFilter" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="1" seed="2" result="noise"></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="18" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+    </filter>
+  </svg>
+
+  <section class="hero">
+    <div class="brand">ACUVUE Pupil Optimized Design</div>
+    <h1 class="heroTitle">
+      <span class="accent">원용도수</span>와 <span class="accent">가입도</span>에 따라 달라지는 <span class="accent">동공</span>.
+      그래서 멀티포컬은 <span class="accent">광학부 사이즈</span>가 중요합니다.
+      <span class="titleNote">원용도수와 가입도를 조정하여 동공과 광학부 사이즈 변화를 확인해보세요.</span>
+    </h1>
+  </section>
+
+  <section class="card sliderCard">
+    <h3>도수, 나이(가입도)에 따른 동공 사이즈 변화</h3>
+
+    <div class="visualStage">
+      <div class="visualStack">
+
+        <div class="imagePair">
+          <div class="eyePanel">
+            <img class="eyeBase" src="eye-photo.png" alt="동공 이미지">
+            <svg class="overlaySvg" id="eyeOverlay" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+
+          <div class="lensPanel">
+            <img class="lensBase" src="lens-photo.png" alt="광학부 이미지">
+            <svg class="overlaySvg" id="lensOverlay" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid meet"></svg>
+
+            <div class="compactControl">
+              <div class="compactLabel">183개 광학부</div>
+              <div class="switchWrap">
+                <button class="pillBtn" id="onBtn" type="button">ON</button>
+                <button class="pillBtn active" id="offBtn" type="button">OFF</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec">
+          <div class="sliderBlock">
+            <div class="sliderTop">
+              <div class="label">원용도수</div>
+              <div class="value" id="sphereValue">-3.00</div>
+            </div>
+            <input id="sphereSlider" type="range" min="-9" max="6" step="1" value="-3" aria-label="원용도수 슬라이더">
+            <div class="scale"><span>-9.00</span><span>0.00</span><span>+6.00</span></div>
+          </div>
+
+          <div class="sliderBlock">
+            <div class="sliderTop">
+              <div class="label">가입도</div>
+              <div class="value" id="addValue">Mid</div>
+            </div>
+            <input id="addSlider" type="range" min="0" max="2" step="1" value="1" aria-label="가입도 슬라이더">
+            <div class="scale"><span>Low</span><span>Mid</span><span>High</span></div>
+          </div>
+        </div>
+
+        <div class="messageBox">
+          <p class="messageTitle">
+            아큐브 멀티포컬은<strong>도수와 가입도에 따른 183개 광학부로</strong>으로<br>
+            <span class="emphasisLine">다양한 거리에서 선명한 시야</span>와 편안함을 제공합니다
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="visionCard">
+    <div class="visionTrigger">
+      <div>
+        <h3>Vision Simulator</h3>
+        <div class="muted">버튼을 눌러 시야 시뮬레이션을 확인하세요.</div>
+      </div>
+      <button class="btn primary" id="openVisionBtn" type="button">시뮬레이터<br>열기</button>
+    </div>
+  </section>
+
+  <div class="pageFootnote">*동공사이즈 및 이미지는 이해를 돕기 위한 가상이미지 입니다.</div>
+</div>
+
+<div class="modalBack" id="visionModal">
+  <div class="modalCard">
+    <button class="btn modalClose" id="closeVisionBtn" type="button">닫기</button>
+    <h3>Vision Simulation</h3>
+    <div class="muted">동공과 광학부 사이즈에 따른 시야 시뮬레이션</div>
+
+    <div class="visionGrid">
+      <div class="screen" id="screen">
+        <div class="layer base" id="baseLayer">
+          <video id="cam" playsinline autoplay muted style="display:none"></video>
+          <img id="fallbackImg" alt="sample" src="https://picsum.photos/1200/700?random=7">
+        </div>
+        <div class="layer blurred" id="blurLayer">
+          <video id="camBlur" playsinline autoplay muted style="display:none"></video>
+          <img id="fallbackImgBlur" alt="sample blurred" src="https://picsum.photos/1200/700?random=7">
+        </div>
+      </div>
+
+      <div class="explain" id="explainBox">
+        <div class="explainTopBar">
+          <strong>시뮬레이션 해석</strong>
+          <button class="btn inlineCamBtn" id="camBtn" type="button">카메라 ON</button>
+        </div>
+        <div class="tagRow" id="explainTags"></div>
+        <div class="muted" id="explainConclusion" style="margin-top:12px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const sphereSlider = document.getElementById(&apos;sphereSlider&apos;);
+  const addSlider = document.getElementById(&apos;addSlider&apos;);
+  const sphereValue = document.getElementById(&apos;sphereValue&apos;);
+  const addValue = document.getElementById(&apos;addValue&apos;);
+  const eyeOverlay = document.getElementById(&apos;eyeOverlay&apos;);
+  const lensOverlay = document.getElementById(&apos;lensOverlay&apos;);
+  const onBtn = document.getElementById(&apos;onBtn&apos;);
+  const offBtn = document.getElementById(&apos;offBtn&apos;);
+
+  const openVisionBtn = document.getElementById(&apos;openVisionBtn&apos;);
+  const closeVisionBtn = document.getElementById(&apos;closeVisionBtn&apos;);
+  const visionModal = document.getElementById(&apos;visionModal&apos;);
+
+  const screen = document.getElementById(&apos;screen&apos;);
+  const cam = document.getElementById(&apos;cam&apos;);
+  const camBlur = document.getElementById(&apos;camBlur&apos;);
+  const fallbackImg = document.getElementById(&apos;fallbackImg&apos;);
+  const fallbackImgBlur = document.getElementById(&apos;fallbackImgBlur&apos;);
+  const explainTags = document.getElementById(&apos;explainTags&apos;);
+  const explainConclusion = document.getElementById(&apos;explainConclusion&apos;);
+  const camBtn = document.getElementById(&apos;camBtn&apos;);
+
+  const OFF_OPTIC_MM = 5.0;
+  const MIN_PUPIL_MM = 3.0;
+  const MAX_PUPIL_MM = 7.0;
+  const IRIS_MM = 12.0;
+  const LENS_MM = 12.0;
+  const MATCH_BUFFER_MM = 0.6;
+
+  let designMode = &apos;off&apos;;
+  let lastPupilMM = 0;
+  let lastOpticMM = 0;
+  let modalPreviewState = &apos;match&apos;;
+
+  const PREVIEW_EXAMPLES = {
+    match: { pupilMM: 5.0, opticMM: 5.0 },
+    pupilGreater: { pupilMM: 6.4, opticMM: 5.0 },
+    opticGreater: { pupilMM: 3.6, opticMM: 5.0 }
+  };
+
+  function getSphereValue() {
+    return Number(sphereSlider.value);
+  }
+
+  function getAddIndex() {
+    return Number(addSlider.value);
+  }
+
+  function formatSphere(v) {
+    return `${v > 0 ? &apos;+&apos; : &apos;&apos;}${v.toFixed(2)}`;
+  }
+
+  function formatAdd(idx) {
+    return [&apos;Low&apos;,&apos;Mid&apos;,&apos;High&apos;][idx];
+  }
+
+  function calcPupilMM() {
+    const sphere = getSphereValue();
+    const addIdx = getAddIndex();
+
+    const sphereNorm = (sphere - (-9)) / 15;
+    const addNorm = addIdx / 2;
+    const combined = (sphereNorm + addNorm) / 2;
+    const pupil = MAX_PUPIL_MM - (combined * (MAX_PUPIL_MM - MIN_PUPIL_MM));
+
+    return Math.max(MIN_PUPIL_MM, Math.min(MAX_PUPIL_MM, pupil));
+  }
+
+  function calcOpticZoneMM(pupilMM) {
+    if (designMode === &apos;on&apos;) return pupilMM;
+    return OFF_OPTIC_MM;
+  }
+
+  function mmToDisplayRadius(mm) {
+    const irisRadiusPx = 75;
+    return (mm / IRIS_MM) * irisRadiusPx;
+  }
+
+  function getRelationState(pupilMM, opticMM) {
+    const diff = pupilMM - opticMM;
+    const absDiff = Math.abs(diff);
+
+    if (absDiff <= MATCH_BUFFER_MM) return &apos;match&apos;;
+    if (diff > 0) return &apos;pupilGreater&apos;;
+    return &apos;opticGreater&apos;;
+  }
+
+  function getModalPreviewPair(state) {
+    const actualState = getRelationState(lastPupilMM, lastOpticMM);
+    if (state === actualState) {
+      return { pupilMM: lastPupilMM, opticMM: lastOpticMM };
+    }
+    return PREVIEW_EXAMPLES[state];
+  }
+
+  function renderTagButtons(activeState) {
+    const tagMap = [
+      { key:&apos;match&apos;, label:&apos;동공≈광학부&apos; },
+      { key:&apos;pupilGreater&apos;, label:&apos;동공>광학부&apos; },
+      { key:&apos;opticGreater&apos;, label:&apos;동공<광학부&apos; }
+    ];
+
+    explainTags.innerHTML = &apos;&apos;;
+    tagMap.forEach(item => {
+      const btn = document.createElement(&apos;button&apos;);
+      btn.type = &apos;button&apos;;
+      btn.className = `tag tagBtn${activeState === item.key ? &apos; active&apos; : &apos;&apos;}`;
+      btn.textContent = item.label;
+      btn.addEventListener(&apos;click&apos;, () => {
+        modalPreviewState = item.key;
+        renderModalPreview();
+      });
+      explainTags.appendChild(btn);
+    });
+  }
+
+  function setExplainByState(state) {
+    if (state === &apos;match&apos;) {
+      explainConclusion.textContent = &apos;동공 사이즈와 광학부 사이즈가 유사하여 원~근거리 전반적으로 시력이 양호합니다.&apos;;
+      return;
+    }
+
+    if (state === &apos;pupilGreater&apos;) {
+      explainConclusion.textContent = &apos;동공사이즈가 광학부 사이즈보다 커서 주변부 시야 번짐이나 빛번짐이 발생할 수 있습니다.&apos;;
+      return;
+    }
+
+    explainConclusion.textContent = &apos;원용도수 영역이 충분히 노출되지 않아 원거리에서 흐림이 발생할 수 있습니다.&apos;;
+  }
+
+  function updateVisionEffect(pupilMM, opticMM, forcedState = null) {
+    screen.classList.remove(&apos;mask-overall&apos;,&apos;mask-periphery&apos;,&apos;fishbowl&apos;);
+
+    const actualState = getRelationState(pupilMM, opticMM);
+    const state = forcedState || actualState;
+    const gap = Math.abs(pupilMM - opticMM);
+    const overflow = Math.max(0, gap - MATCH_BUFFER_MM);
+    const strength = Math.max(0, Math.min(1, overflow / 1.4));
+
+    screen.style.setProperty(&apos;--blur-amt&apos;, &apos;8px&apos;);
+    screen.style.setProperty(&apos;--blur-opacity&apos;, &apos;0&apos;);
+    screen.style.setProperty(&apos;--clear-stop&apos;, &apos;55%&apos;);
+    screen.style.setProperty(&apos;--blur-start&apos;, &apos;72%&apos;);
+
+    renderTagButtons(state);
+    setExplainByState(state);
+
+    if (state === &apos;match&apos;) {
+      return;
+    }
+
+    if (state === &apos;pupilGreater&apos;) {
+      screen.classList.add(&apos;mask-periphery&apos;,&apos;fishbowl&apos;);
+      screen.style.setProperty(&apos;--blur-amt&apos;, `${10 + (strength * 10)}px`);
+      screen.style.setProperty(&apos;--blur-opacity&apos;, `${0.55 + (strength * 0.35)}`);
+      screen.style.setProperty(&apos;--clear-stop&apos;, `${56 - (strength * 10)}%`);
+      screen.style.setProperty(&apos;--blur-start&apos;, `${70 - (strength * 8)}%`);
+      return;
+    }
+
+    screen.classList.add(&apos;mask-overall&apos;);
+    screen.style.setProperty(&apos;--blur-amt&apos;, `${8 + (strength * 10)}px`);
+    screen.style.setProperty(&apos;--blur-opacity&apos;, `${0.35 + (strength * 0.45)}`);
+  }
+
+  function renderModalPreview() {
+    const pair = getModalPreviewPair(modalPreviewState);
+    updateVisionEffect(pair.pupilMM, pair.opticMM, modalPreviewState);
+  }
+
+  function drawEyeOverlay(pupilMM, opticMM) {
+    const pupilR = mmToDisplayRadius(pupilMM);
+    const opticR = mmToDisplayRadius(opticMM);
+
+    const centerX = 200;
+    const centerY = 109;
+
+    const pupilLeft = centerX - pupilR;
+    const pupilRight = centerX + pupilR;
+
+    eyeOverlay.innerHTML = `
+      <line x1="${pupilLeft}" y1="${centerY + 6}" x2="${pupilLeft}" y2="205"
+            stroke="#15679c" stroke-width="3" stroke-dasharray="10 9" />
+      <line x1="${pupilRight}" y1="${centerY + 6}" x2="${pupilRight}" y2="205"
+            stroke="#15679c" stroke-width="3" stroke-dasharray="10 9" />
+
+      <circle cx="${centerX}" cy="${centerY}" r="${pupilR}"
+              fill="rgba(5,8,18,0.92)" stroke="#0d62b6" stroke-width="3"></circle>
+
+      <circle cx="${centerX}" cy="${centerY}" r="${opticR}"
+              fill="none" stroke="rgba(13,98,182,0.88)" stroke-width="3"></circle>
+    `;
+  }
+
+  function drawLensOverlay(pupilMM, opticMM) {
+    const pupilR = mmToDisplayRadius(pupilMM);
+    const opticR = mmToDisplayRadius(opticMM);
+
+    const centerX = 200;
+    const centerY = 109;
+
+    const pupilLeft = centerX - pupilR;
+    const pupilRight = centerX + pupilR;
+
+    lensOverlay.innerHTML = `
+      <defs>
+        <radialGradient id="opticCoreGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="rgba(110,95,210,0.88)"></stop>
+          <stop offset="100%" stop-color="rgba(136,122,232,0.78)"></stop>
+        </radialGradient>
+
+        <radialGradient id="opticMidGrad" cx="50%" cy="50%" r="52%">
+          <stop offset="0%" stop-color="rgba(168,158,237,0.56)"></stop>
+          <stop offset="100%" stop-color="rgba(185,176,244,0.46)"></stop>
+        </radialGradient>
+
+        <radialGradient id="opticOuterGrad" cx="50%" cy="50%" r="54%">
+          <stop offset="0%" stop-color="rgba(28,96,191,0.44)"></stop>
+          <stop offset="100%" stop-color="rgba(28,96,191,0.26)"></stop>
+        </radialGradient>
+      </defs>
+
+      <line x1="${pupilLeft}" y1="15" x2="${pupilLeft}" y2="${centerY + 4}"
+            stroke="#15679c" stroke-width="3" stroke-dasharray="10 9" />
+      <line x1="${pupilRight}" y1="15" x2="${pupilRight}" y2="${centerY + 4}"
+            stroke="#15679c" stroke-width="3" stroke-dasharray="10 9" />
+
+      <circle cx="${centerX}" cy="${centerY}" r="${opticR}"
+              fill="url(#opticOuterGrad)" stroke="#1870c9" stroke-width="3"></circle>
+
+      <circle cx="${centerX}" cy="${centerY}" r="${opticR * 0.74}"
+              fill="url(#opticMidGrad)"></circle>
+
+      <circle cx="${centerX}" cy="${centerY}" r="${opticR * 0.42}"
+              fill="url(#opticCoreGrad)"></circle>
+    `;
+  }
+
+  function updateAll() {
+    const pupilMM = calcPupilMM();
+    const opticMM = calcOpticZoneMM(pupilMM);
+
+    lastPupilMM = pupilMM;
+    lastOpticMM = opticMM;
+
+    sphereValue.textContent = formatSphere(getSphereValue());
+    addValue.textContent = formatAdd(getAddIndex());
+
+    drawEyeOverlay(pupilMM, opticMM);
+    drawLensOverlay(pupilMM, opticMM);
+    updateVisionEffect(pupilMM, opticMM);
+
+    onBtn.classList.toggle(&apos;active&apos;, designMode === &apos;on&apos;);
+    offBtn.classList.toggle(&apos;active&apos;, designMode === &apos;off&apos;);
+
+    if (visionModal.classList.contains(&apos;open&apos;)) {
+      modalPreviewState = getRelationState(lastPupilMM, lastOpticMM);
+      renderModalPreview();
+    }
+  }
+
+  sphereSlider.addEventListener(&apos;input&apos;, updateAll);
+  addSlider.addEventListener(&apos;input&apos;, updateAll);
+
+  onBtn.addEventListener(&apos;click&apos;, () => {
+    designMode = &apos;on&apos;;
+    updateAll();
+  });
+
+  offBtn.addEventListener(&apos;click&apos;, () => {
+    designMode = &apos;off&apos;;
+    updateAll();
+  });
+
+  openVisionBtn.addEventListener(&apos;click&apos;, () => {
+    modalPreviewState = getRelationState(lastPupilMM, lastOpticMM);
+    renderModalPreview();
+    visionModal.classList.add(&apos;open&apos;);
+  });
+
+  closeVisionBtn.addEventListener(&apos;click&apos;, () => {
+    visionModal.classList.remove(&apos;open&apos;);
+  });
+
+  visionModal.addEventListener(&apos;click&apos;, (e) => {
+    if (e.target === visionModal) visionModal.classList.remove(&apos;open&apos;);
+  });
+
+  let stream = null;
+
+  async function startCamera() {
+    if (stream) return;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: &apos;environment&apos; },
+        audio: false
+      });
+
+      cam.srcObject = stream;
+      camBlur.srcObject = stream;
+      cam.style.display = &apos;block&apos;;
+      camBlur.style.display = &apos;block&apos;;
+      fallbackImg.style.display = &apos;none&apos;;
+      fallbackImgBlur.style.display = &apos;none&apos;;
+      camBtn.textContent = &apos;카메라 OFF&apos;;
+      camBtn.classList.add(&apos;primary&apos;);
+    } catch (e) {
+      alert(&apos;카메라 권한을 허용하면 실시간 시뮬레이션을 볼 수 있습니다.&apos;);
+    }
+  }
+
+  function stopCamera() {
+    if (!stream) return;
+    stream.getTracks().forEach(t => t.stop());
+    stream = null;
+    cam.srcObject = null;
+    camBlur.srcObject = null;
+    cam.style.display = &apos;none&apos;;
+    camBlur.style.display = &apos;none&apos;;
+    fallbackImg.style.display = &apos;block&apos;;
+    fallbackImgBlur.style.display = &apos;block&apos;;
+    camBtn.textContent = &apos;카메라 ON&apos;;
+    camBtn.classList.remove(&apos;primary&apos;);
+  }
+
+  camBtn.addEventListener(&apos;click&apos;, async () => {
+    if (stream) stopCamera();
+    else await startCamera();
+  });
+
+  updateAll();
+</script>
 </body>
+</html>
+'></iframe>
+  </div>
+</div>
+
+<script>
+function openCard1(){
+  document.getElementById('card1Modal').style.display='block';
+}
+function closeCard1(){
+  document.getElementById('card1Modal').style.display='none';
+}
+</script>
+</body>
+
 </html>
