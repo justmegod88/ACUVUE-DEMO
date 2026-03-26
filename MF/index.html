@@ -14,6 +14,7 @@
       --sub:#60758a;
       --blue:#005EB8;
       --blue-deep:#0d4f96;
+      --navy:#062a72;
       --shadow:0 14px 34px rgba(16,42,67,.10);
       --shadow-soft:0 10px 24px rgba(16,42,67,.08);
     }
@@ -35,11 +36,26 @@
       padding:18px 14px 40px;
     }
 
+    .top-title-box{
+      width:100%;
+      background:linear-gradient(180deg,#082f80 0%, #062a72 100%);
+      color:#fff;
+      border-radius:22px 22px 0 0;
+      padding:14px 18px;
+      text-align:center;
+      font-size:20px;
+      line-height:1.2;
+      font-weight:900;
+      letter-spacing:-.03em;
+      box-shadow:0 10px 24px rgba(6,42,114,.18);
+      margin-bottom:0;
+    }
+
     .top-cards{margin-bottom:18px}
     .menu-card{
       background:var(--card);
       border:1.5px solid #dbe5f1;
-      border-radius:22px;
+      border-radius:0 0 22px 22px;
       padding:20px 18px 18px;
       box-shadow:var(--shadow);
       min-height:118px;
@@ -57,7 +73,7 @@
       line-height:1.2;
       font-weight:700;
       letter-spacing:-.03em;
-      color:#314962;
+      color:#1f63b7;
       margin-bottom:6px;
       word-break:keep-all;
     }
@@ -72,8 +88,9 @@
     }
     .menu-sub{
       font-size:15px;
-      color:#66798e;
+      color:#9aa6b4;
       line-height:1.4;
+      font-weight:700;
     }
 
     .hero-3d{
@@ -82,7 +99,7 @@
       border-radius:28px;
       box-shadow:var(--shadow);
       padding:18px 18px 22px;
-      margin-bottom:18px;
+      margin-bottom:10px;
       position:relative;
       z-index:1;
       overflow:hidden;
@@ -222,6 +239,16 @@
       color:#fff;
       border-color:var(--blue);
       box-shadow:0 14px 28px rgba(13,99,198,.20);
+    }
+
+    .main-footnote{
+      text-align:center;
+      color:#5b6470;
+      font-size:12px;
+      line-height:1.45;
+      font-weight:700;
+      letter-spacing:-.02em;
+      padding:0 10px;
     }
 
     /* detail page */
@@ -555,6 +582,10 @@
     #detailPage .tagBtn.active{background:linear-gradient(180deg,#dcebff 0%, #cfe3ff 100%); border-color:#9dbfed; color:#0f5aa6; box-shadow:inset 0 1px 0 rgba(255,255,255,.95)}
 
     @media (max-width:720px){
+      .top-title-box{
+        font-size:18px;
+        padding:12px 14px;
+      }
       .menu-card{min-height:108px; padding:16px 14px}
       .menu-eyebrow{font-size:16px}
       .menu-title{font-size:19px}
@@ -568,6 +599,7 @@
       .hero-buttons{grid-template-columns:60px 1fr 1fr; gap:8px}
       .round-btn,.mode-btn{height:54px; border-radius:18px; font-size:13px}
       .round-btn{font-size:23px}
+      .main-footnote{font-size:11px}
 
       #detailPage .detail-wrap{padding:16px 12px 42px}
       #detailPage .hero,#detailPage .card,#detailPage .visionCard,#detailPage .modalCard{border-radius:26px}
@@ -598,11 +630,12 @@
 <body>
   <section id="mainPage" class="page active">
     <div class="wrap">
+      <div class="top-title-box">아큐브 멀티포컬 기술력</div>
+
       <div class="top-cards">
         <div class="menu-card" id="card1">
-          <div class="menu-eyebrow">모든 거리 선명한 시야</div>
           <div class="menu-title">183개 동공 사이즈별 광학부</div>
-          <div class="menu-sub">카드를 눌러 확인</div>
+          <div class="menu-sub">자세히 보기 &gt;</div>
         </div>
       </div>
 
@@ -648,6 +681,8 @@
           <button class="mode-btn" id="powerBtn" type="button">렌즈 파워 MAP</button>
         </div>
       </section>
+
+      <div class="main-footnote">해당 이미지는 이해를 돕기 위한 가상 이미지입니다. KR_2026_233</div>
     </div>
   </section>
 
@@ -873,6 +908,7 @@
       mainPage.classList.toggle('active', !isDetail);
       detailPage.classList.toggle('active', isDetail);
       detailPage.setAttribute('aria-hidden', isDetail ? 'false' : 'true');
+
       if (!isDetail) {
         closeVisionModal({ keepHash: true, stopCameraToo: false });
       } else {
@@ -882,6 +918,7 @@
           });
         });
       }
+
       window.scrollTo(0, 0);
     }
 
