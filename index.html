@@ -65,6 +65,41 @@
       padding:18px 14px 28px;
     }
 
+    .top-action{
+      display:flex;
+      justify-content:flex-end;
+      margin-bottom:10px;
+    }
+
+    .search-link{
+      width:64px;
+      height:64px;
+      border-radius:22px;
+      border:2px solid #C9D1DC;
+      background:linear-gradient(180deg, rgba(255,255,255,.96) 0%, rgba(246,250,255,.96) 100%);
+      box-shadow:0 8px 18px rgba(0,74,147,.08);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      -webkit-tap-highlight-color:transparent;
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+
+    .search-link:active{
+      transform:scale(.97);
+    }
+
+    .search-link svg{
+      width:34px;
+      height:34px;
+      stroke:#5F6878;
+      stroke-width:2.7;
+      fill:none;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
     .hero{
       text-align:center;
       padding:2px 6px 0;
@@ -293,6 +328,21 @@
         padding:16px 12px 24px;
       }
 
+      .top-action{
+        margin-bottom:8px;
+      }
+
+      .search-link{
+        width:58px;
+        height:58px;
+        border-radius:20px;
+      }
+
+      .search-link svg{
+        width:30px;
+        height:30px;
+      }
+
       .hero-title{
         font-size:22px;
       }
@@ -345,6 +395,20 @@
 <body>
   <main class="app">
     <div class="wrap">
+
+      <div class="top-action">
+        <a
+          class="search-link"
+          href="https://justmegod88.github.io/Lens-spec/"
+          aria-label="제품 검색"
+          title="제품 검색"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="6.5"></circle>
+            <line x1="16" y1="16" x2="21" y2="21"></line>
+          </svg>
+        </a>
+      </div>
 
       <section class="hero">
         <div class="hero-kicker">ACUVUE Interactive Experience</div>
