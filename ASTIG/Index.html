@@ -1,0 +1,2304 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>ACUVUE GLB Viewer (흰색/ 블루)</title>
+
+  <style>
+    :root{
+      --acuvue-blue:#005EB8;
+      --acuvue-blue-2:#1E78D6;
+      --acuvue-soft:#EAF3FF;
+      --acuvue-soft-2:#F5F9FF;
+      --text-navy:#0B1F33;
+      --text-sub:#30485F;
+      --line:#D9E6F5;
+      --shadow:0 18px 60px rgba(11,31,51,.18);
+      --glass:rgba(255,255,255,.86);
+      --glass-2:rgba(255,255,255,.72);
+
+      --panel-grad: linear-gradient(180deg, rgba(234,243,255,.92) 0%, rgba(255,255,255,.90) 55%, rgba(245,249,255,.86) 100%);
+      --panel-stroke: rgba(0,94,184,.18);
+      --panel-stroke-2: rgba(11,31,51,.10);
+      --panel-glow: 0 16px 50px rgba(0,94,184,.10), 0 18px 60px rgba(11,31,51,.14);
+      --panel-topline: linear-gradient(90deg, rgba(0,94,184,.75), rgba(0,94,184,.12));
+    }
+
+    html,body{
+      height:100%;
+      margin:0;
+      background:linear-gradient(180deg, var(--acuvue-soft-2) 0%, #ffffff 55%, var(--acuvue-soft-2) 100%);
+      overflow:hidden;
+      font-family:-apple-system,system-ui;
+      color:var(--text-navy);
+    }
+
+    model-viewer{
+      width:100vw;
+      height:100vh;
+      background:transparent;
+      display:block;
+      position:fixed;
+      inset:0;
+      z-index:1;
+    }
+
+    /* 상단 미션 카드 */
+    #missionBarWrap{
+      position:fixed;
+      left:12px;
+      right:12px;
+      top:12px;
+      z-index:40;
+      pointer-events:auto;
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow: 0 18px 44px rgba(11,31,51,.12);
+      border:1px solid rgba(0,94,184,.10);
+      background:rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+    }
+    #missionBarHeader{
+      background:linear-gradient(180deg, #123F95 0%, #0A3486 100%);
+      color:#fff;
+      text-align:center;
+      font-weight:900;
+      font-size:18px;
+      letter-spacing:-.2px;
+      padding:16px 18px 17px;
+      box-shadow: inset 0 -1px 0 rgba(255,255,255,.10);
+    }
+    #missionBar{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:0;
+      align-items:stretch;
+      pointer-events:auto;
+      background:rgba(255,255,255,.96);
+    }
+    .missionCard{
+      padding:16px 14px 15px;
+      background:linear-gradient(180deg, rgba(255,255,255,.96) 0%, rgba(248,251,255,.96) 100%);
+      border:none;
+      border-right:1px solid rgba(11,31,51,.08);
+      color:var(--text-navy);
+      min-height:116px;
+      box-sizing:border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select:none;
+      cursor:pointer;
+      transition: transform .08s ease, background .22s ease, box-shadow .22s ease, color .22s ease;
+      position:relative;
+      overflow:hidden;
+    }
+    .missionCard:last-child{ border-right:none; }
+    .missionCard:active{ transform: scale(.99); }
+
+    .missionCard::before{
+      content:"";
+      position:absolute;
+      left:14px;
+      right:14px;
+      bottom:0;
+      height:3px;
+      border-radius:999px 999px 0 0;
+      background:linear-gradient(90deg, rgba(0,94,184,.92), rgba(30,120,214,.55));
+      opacity:0;
+      transform:scaleX(.55);
+      transform-origin:center;
+      transition:opacity .22s ease, transform .22s ease;
+    }
+
+    .missionCard.on{
+      background:linear-gradient(180deg, rgba(234,243,255,.98) 0%, rgba(255,255,255,.98) 100%);
+      box-shadow: inset 0 0 0 1px rgba(0,94,184,.12), 0 10px 22px rgba(0,94,184,.06);
+    }
+    .missionCard.on::before{
+      opacity:1;
+      transform:scaleX(1);
+    }
+
+    .missionCard.done::after{
+      content:"완료";
+      position:absolute;
+      right:10px;
+      top:10px;
+      font-size:11px;
+      font-weight:900;
+      padding:4px 8px;
+      border-radius:999px;
+      background:rgba(0,94,184,.10);
+      border:1px solid rgba(0,94,184,.22);
+      color:var(--acuvue-blue);
+      backdrop-filter: blur(6px);
+    }
+
+    .missionNo{
+      font-weight:900;
+      opacity:.78;
+      font-size:14px;
+      margin-bottom:8px;
+      color:var(--text-sub);
+      letter-spacing:.2px;
+    }
+    .missionTitle{
+      font-weight:900;
+      font-size:16px;
+      line-height:1.24;
+      margin-bottom:10px;
+      color:var(--text-navy);
+      letter-spacing:-.2px;
+      word-break:keep-all;
+    }
+    .missionDesc{
+      font-size:12.5px;
+      line-height:1.35;
+      opacity:.92;
+      white-space:nowrap;
+      color:var(--text-sub);
+      font-weight:700;
+    }
+
+    @media (max-width: 560px){
+      #missionBarHeader{
+        font-size:16px;
+        padding:15px 14px 16px;
+      }
+      .missionCard{
+        min-height:112px;
+        padding:15px 10px 14px;
+      }
+      .missionTitle{
+        font-size:14px;
+      }
+      .missionDesc{
+        font-size:11.5px;
+      }
+    }
+
+    /* 하단 버튼 */
+    #bottomBtns{
+      position:fixed;
+      left:12px;
+      right:12px;
+      bottom:12px;
+      z-index:50;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .btn{
+      flex:1;
+      min-width:140px;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:var(--glass);
+      color:var(--text-navy);
+      font-weight:900;
+      font-size:13px;
+      -webkit-tap-highlight-color: transparent;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 28px rgba(11,31,51,.10);
+    }
+    .btn.primary{
+      background:var(--acuvue-blue);
+      border-color:rgba(0,94,184,.65);
+      color:#ffffff;
+    }
+
+    /* 작은 원형 ↺ 버튼 */
+    #btnReset{
+      width:46px;
+      height:46px;
+      min-width:46px;
+      flex:0 0 auto;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:var(--glass);
+      color:var(--text-navy);
+      font-weight:900;
+      font-size:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      backdrop-filter: blur(10px);
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 10px 28px rgba(11,31,51,.10);
+    }
+
+    /* ✅ 우측 하단 팩샷 */
+    #maxPackshot{
+      position:fixed;
+      right:18px;
+      bottom:72px; /* 조금 더 아래 */
+      width:150px;
+      max-width:34vw;
+      height:auto;
+      z-index:34;
+      pointer-events:none;
+      user-select:none;
+      display:none;
+      object-fit:contain;
+      mix-blend-mode:multiply; /* 흰 배경이 있으면 최대한 자연스럽게 */
+      filter: drop-shadow(0 10px 18px rgba(11,31,51,.12));
+      transform: translateZ(0);
+    }
+
+    /* PVP */
+    @keyframes pvpPop {
+      0%   { transform: translate(-50%,-50%) scale(.94); opacity: 0; }
+      60%  { transform: translate(-50%,-50%) scale(1.02); opacity: 1; }
+      100% { transform: translate(-50%,-50%) scale(1.00); opacity: 1; }
+    }
+
+    #pvpBig{
+      position:fixed;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      width:min(76vw, 560px);
+      height:min(76vw, 560px);
+      border-radius:999px;
+      z-index:56;
+      display:none;
+      pointer-events:none;
+      background:rgba(0,94,184,.04);
+      border:1px solid var(--panel-stroke);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+      box-shadow: var(--panel-glow);
+    }
+    #pvpBig.show{
+      display:block;
+      animation: pvpPop 220ms ease-out both;
+    }
+    #pvpBig img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      border-radius:999px;
+      filter:saturate(1.05) contrast(1.02);
+      transform: scale(1.02);
+      transform-origin:center;
+    }
+
+    #pvpOverlay{
+      position:fixed;
+      left:12px;
+      right:12px;
+      bottom:92px;
+      z-index:60;
+      background: var(--panel-grad);
+      border:1px solid var(--panel-stroke);
+      border-radius:14px;
+      padding:10px 10px;
+      display:none;
+      gap:10px;
+      align-items:center;
+      backdrop-filter: blur(12px);
+      box-shadow: var(--panel-glow);
+      overflow:hidden;
+    }
+    #pvpOverlay.show{ display:flex; }
+    #pvpOverlay img{
+      width:88px;
+      height:88px;
+      object-fit:cover;
+      border-radius:12px;
+      border:1px solid var(--panel-stroke-2);
+      background:rgba(0,94,184,.03);
+      box-shadow: 0 10px 18px rgba(11,31,51,.10);
+    }
+    #pvpText{
+      color:var(--text-sub);
+      font-size:12.5px;
+      line-height:1.35;
+      flex:1 1 auto;
+    }
+    #pvpTitle{
+      font-weight:900;
+      margin-bottom:2px;
+      color:var(--text-navy);
+    }
+    #hint{
+      opacity:.9;
+      color:var(--text-sub);
+    }
+
+    #pvpConfirm{
+      color:#ffffff;
+      font-weight:900;
+      opacity:1;
+      cursor:pointer;
+      user-select:none;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(0,94,184,.65);
+      background:var(--acuvue-blue);
+      backdrop-filter: blur(8px);
+      -webkit-tap-highlight-color: transparent;
+      flex:0 0 auto;
+      white-space:nowrap;
+      display:none;
+      box-shadow: 0 10px 22px rgba(0,94,184,.22);
+    }
+    #pvpConfirm:active{ transform:scale(.98); }
+
+    /* 두께 바 */
+    #thicknessBar{
+      position:fixed;
+      left:12px;
+      right:12px;
+      bottom:92px;
+      z-index:67;
+      display:none;
+      border-radius:14px;
+      border:1px solid var(--panel-stroke);
+      background: var(--panel-grad);
+      backdrop-filter: blur(12px);
+      padding:10px 12px 12px;
+      box-sizing:border-box;
+      box-shadow: var(--panel-glow);
+      overflow:hidden;
+    }
+    #thicknessBar.show{ display:block; }
+
+    #thHeader{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      margin-bottom:8px;
+    }
+    #thTitle{
+      color:var(--text-navy);
+      font-weight:900;
+      font-size:12.5px;
+      letter-spacing:.2px;
+      opacity:.98;
+    }
+    #thUnit{
+      color:rgba(48,72,95,.85);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.1px;
+    }
+
+    #gradRow{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .tickLabel{
+      width:46px;
+      text-align:right;
+      color:rgba(48,72,95,.86);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.1px;
+      flex:0 0 auto;
+    }
+
+    #gradWrap{
+      position:relative;
+      flex:1 1 auto;
+      height:14px;
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid rgba(11,31,51,.12);
+      background:rgba(0,94,184,.03);
+      box-shadow: inset 0 0 12px rgba(11,31,51,.10);
+    }
+
+    #grad{
+      position:absolute;
+      inset:0;
+      background:linear-gradient(90deg,
+        rgba(140,0,255,1) 0%,
+        rgba(0,90,255,1) 17%,
+        rgba(0,200,255,1) 32%,
+        rgba(0,255,150,1) 48%,
+        rgba(150,255,0,1) 64%,
+        rgba(255,220,0,1) 78%,
+        rgba(255,120,0,1) 90%,
+        rgba(255,50,50,1) 100%
+      );
+      opacity:.92;
+      filter:saturate(1.05) contrast(1.05);
+    }
+
+    #gradShine{
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,
+        rgba(255,255,255,.30) 0%,
+        rgba(255,255,255,0) 55%,
+        rgba(11,31,51,.10) 100%
+      );
+      mix-blend-mode: overlay;
+      opacity:.55;
+      pointer-events:none;
+    }
+
+    .mark{
+      position:absolute;
+      top:-6px;
+      width:1px;
+      height:26px;
+      background:rgba(11,31,51,.18);
+    }
+    .mark strong{
+      position:absolute;
+      top:18px;
+      left:50%;
+      transform:translateX(-50%);
+      font-size:10px;
+      color:rgba(48,72,95,.80);
+      font-weight:700;
+      white-space:nowrap;
+    }
+    .m0{ left:0%; }
+    .m25{ left:25%; }
+    .m50{ left:50%; }
+    .m75{ left:75%; }
+    .m100{ left:100%; }
+
+    #thHint{ display:none; }
+
+    /* ASD 오버레이 */
+    #asdOverlay{
+      position:fixed;
+      inset:0;
+      z-index:80;
+      display:none;
+      background:rgba(11,31,51,.22);
+      backdrop-filter: blur(12px);
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      box-sizing:border-box;
+    }
+    #asdOverlay.show{ display:flex; }
+
+    #asdCard{
+      width:min(920px, 96vw);
+      border-radius:18px;
+      border:1px solid var(--panel-stroke);
+      background: var(--panel-grad);
+      overflow:hidden;
+      box-shadow: var(--panel-glow);
+      position:relative;
+    }
+
+    #asdHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 18px;
+      background:#eef3fa;
+      border-bottom:1px solid rgba(11,31,51,.08);
+    }
+    #asdHeaderTitle{
+      font-size:18px;
+      font-weight:900;
+      color:#111;
+      letter-spacing:-.2px;
+    }
+
+    #asdClose{
+      width:34px;
+      height:34px;
+      border:none;
+      background:transparent;
+      color:#111;
+      font-weight:900;
+      font-size:18px;
+      cursor:pointer;
+      box-shadow:none;
+    }
+
+    #asdHint{
+      padding:16px 16px 18px;
+      color:var(--text-navy);
+      font-size:18px;
+      line-height:1.42;
+      font-weight:800;
+      opacity:1;
+      border-top:1px solid rgba(11,31,51,.10);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+      background: linear-gradient(180deg, rgba(234,243,255,.94) 0%, rgba(255,255,255,.84) 100%);
+    }
+    #asdHint button{
+      border:1px solid rgba(0,94,184,.65);
+      background:var(--acuvue-blue);
+      color:#ffffff;
+      font-weight:900;
+      font-size:14px;
+      padding:10px 16px;
+      border-radius:12px;
+      -webkit-tap-highlight-color: transparent;
+      backdrop-filter: blur(8px);
+      cursor:pointer;
+      flex:0 0 auto;
+      white-space:nowrap;
+      box-shadow: 0 10px 22px rgba(0,94,184,.22);
+      align-self:flex-end;
+    }
+    #asdHint .hintText{
+      flex:1 1 auto;
+      word-break:keep-all;
+    }
+    #asdHint .hintTitle{
+      display:block;
+      color:var(--acuvue-blue);
+      font-size:17px;
+      font-weight:900;
+      margin-bottom:8px;
+      letter-spacing:-.2px;
+    }
+    #asdHint .hintStrong{
+      font-weight:900;
+      color:#111;
+    }
+    #asdHint .hintBody{
+      display:block;
+      font-size:20px;
+      line-height:1.38;
+      font-weight:900;
+      color:#111;
+      letter-spacing:-.2px;
+    }
+    #asdHint .hintBody .blue{
+      color:var(--acuvue-blue);
+    }
+
+    #asdScene{
+      position:relative;
+      width:100%;
+      background:rgba(0,94,184,.03);
+      overflow:hidden;
+      aspect-ratio: 1/1;
+      min-height: 360px;
+      --irisX: 13px;
+      --irisY: 26px;
+    }
+
+    #asdEyeMV{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      display:block;
+      background:transparent;
+      pointer-events:none;
+      object-fit:cover;
+      transform: scale(1.55);
+      transform-origin:center;
+      filter: contrast(1.02) saturate(1.02);
+    }
+
+    #asdUpperLid{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      display:block;
+      pointer-events:none;
+      object-fit:cover;
+      transform: scale(1.55) translateY(3px);
+      transform-origin:center;
+      z-index:3;
+      filter: drop-shadow(0 2px 10px rgba(0,0,0,.18));
+    }
+
+    #asdLensImg{
+      position:absolute;
+      left:50%;
+      top:52%;
+      width:80%;
+      transform: translate(calc(-50% - 4px), calc(-50% + 10px)) rotate(20deg);
+      opacity:.70;
+      pointer-events:none;
+      will-change: transform, opacity;
+      mix-blend-mode:normal;
+      filter:saturate(1.08) contrast(1.06);
+    }
+
+    #asdLensRim{
+      position:absolute;
+      left:50%;
+      top:52%;
+      width:80%;
+      height:80%;
+      transform:translate(-50%,-50%);
+      border-radius:999px;
+      pointer-events:none;
+      box-shadow:
+        0 0 0 1px rgba(11,31,51,.10),
+        0 18px 46px rgba(11,31,51,.16),
+        inset 0 0 24px rgba(255,255,255,.18);
+      opacity:.45;
+    }
+
+    #asdMaskShade{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(110% 70% at 50% 18%,
+          rgba(11,31,51,.38) 0%,
+          rgba(11,31,51,.16) 32%,
+          rgba(11,31,51,0) 58%),
+        radial-gradient(110% 70% at 50% 90%,
+          rgba(11,31,51,.34) 0%,
+          rgba(11,31,51,.14) 34%,
+          rgba(11,31,51,0) 60%);
+      opacity:.78;
+      mix-blend-mode:multiply;
+    }
+
+    #asdBlinkLid{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:4;
+    }
+    #asdLidTop,
+    #asdLidBot{
+      position:absolute;
+      left:0;
+      right:0;
+      height:55%;
+      background:
+        radial-gradient(120% 90% at 50% 85%,
+          rgba(165,120,95,.98) 0%,
+          rgba(120,80,62,.98) 46%,
+          rgba(40,25,22,.98) 92%);
+      filter: blur(.2px);
+      opacity:0;
+      transform: translateY(-110%);
+      will-change: transform, opacity;
+    }
+    #asdLidBot{
+      top:auto;
+      bottom:0;
+      background:
+        radial-gradient(120% 90% at 50% 15%,
+          rgba(165,120,95,.98) 0%,
+          rgba(120,80,62,.98) 46%,
+          rgba(40,25,22,.98) 92%);
+      transform: translateY(110%);
+    }
+    #asdLidTop::after,
+    #asdLidBot::after{
+      content:"";
+      position:absolute;
+      left:-10%;
+      right:-10%;
+      height:28px;
+      background: radial-gradient(120% 100% at 50% 50%,
+        rgba(0,0,0,.35) 0%,
+        rgba(0,0,0,.18) 35%,
+        rgba(0,0,0,0) 70%);
+      opacity:.55;
+    }
+    #asdLidTop::after{ bottom:-12px; }
+    #asdLidBot::after{ top:-12px; transform: scaleY(-1); }
+
+    #asdBlinkBtn, #asdRotateBtn{
+      position:absolute;
+      bottom:14px;
+      width:54px;
+      height:54px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:5;
+      -webkit-tap-highlight-color: transparent;
+      user-select:none;
+      cursor:pointer;
+      box-shadow: 0 10px 22px rgba(11,31,51,.12);
+    }
+    #asdBlinkBtn{
+      right:14px;
+      border:1px solid rgba(0,94,184,.55);
+      background:var(--acuvue-blue);
+      color:#fff;
+      box-shadow: 0 12px 26px rgba(0,94,184,.20);
+    }
+    #asdRotateBtn{
+      right:76px;
+      border:1px solid rgba(0,94,184,.35);
+      background:rgba(255,255,255,.92);
+      color:var(--acuvue-blue);
+    }
+
+    #asdAngleBadge{
+      position:absolute;
+      left:14px;
+      bottom:18px;
+      color:var(--acuvue-blue);
+      font-size:12px;
+      font-weight:900;
+      background:rgba(255,255,255,.86);
+      border:1px solid rgba(0,94,184,.35);
+      border-radius:999px;
+      padding:6px 10px;
+      z-index:5;
+      box-shadow: 0 10px 22px rgba(11,31,51,.10);
+    }
+
+    /* 튜토리얼 */
+    #tutorialLayer{
+      position:fixed;
+      inset:0;
+      display:none;
+      z-index:95;
+    }
+    #tutorialLayer.show{
+      display:block;
+    }
+
+    #tutorialMask{
+      position:absolute;
+      inset:0;
+      background:rgba(8,22,37,.42);
+      pointer-events:none;
+    }
+
+    #tutorialFocus{
+      position:absolute;
+      pointer-events:none;
+      background:transparent;
+      border:2px solid rgba(255,255,255,.92);
+      box-shadow:
+        0 0 0 9999px rgba(8,22,37,.42),
+        0 0 0 6px rgba(255,255,255,.12),
+        0 12px 34px rgba(0,0,0,.12);
+      transition: all .22s ease;
+      display:none;
+    }
+
+    .tutBox{
+      position:absolute;
+      width:min(360px, calc(100vw - 40px));
+      max-width:min(360px, calc(100vw - 40px));
+      box-sizing:border-box;
+      background:linear-gradient(180deg, #1E63B8 0%, #0A5FBE 100%);
+      color:#fff;
+      border-radius:24px;
+      padding:18px 18px 16px;
+      box-shadow:
+        0 18px 48px rgba(0,0,0,.20),
+        0 6px 18px rgba(0,94,184,.22);
+      border:1px solid rgba(255,255,255,.20);
+      overflow:hidden;
+    }
+    .tutBox::before{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      top:0;
+      height:2px;
+      background:linear-gradient(90deg, rgba(255,255,255,.85), rgba(255,255,255,0));
+      opacity:.85;
+    }
+    .tutBox::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:24px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+      pointer-events:none;
+    }
+    .tutBox .tutTitle{
+      font-weight:900;
+      margin-bottom:10px;
+      font-size:18px;
+      letter-spacing:-.2px;
+    }
+    .tutBox .tutText{
+      line-height:1.5;
+      font-size:14px;
+      opacity:.96;
+      word-break:keep-all;
+    }
+    .tutBox .tutBtn{
+      margin-top:16px;
+      width:100%;
+      height:50px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.70);
+      background:#fff;
+      color:var(--acuvue-blue);
+      font-weight:900;
+      font-size:15px;
+      cursor:pointer;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,.04);
+    }
+
+    #tutLeft{ left:20px; right:20px; top:50%; transform:translateY(-50%); display:none; }
+    #tutBottom{ left:20px; right:20px; bottom:88px; display:none; }
+    #tutTop{ left:20px; right:20px; top:126px; display:none; }
+  
+
+    /* ASD 편안한 시야 오버레이 */
+    #comfortOverlay{
+      position:fixed;
+      inset:0;
+      z-index:82;
+      display:none;
+      background:rgba(255,255,255,.16);
+      backdrop-filter: blur(8px);
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      box-sizing:border-box;
+    }
+    #comfortOverlay.show{ display:flex; }
+
+    #comfortWrap{
+      width:min(820px, 96vw);
+      border-radius:24px;
+      overflow:hidden;
+      background:#fff;
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 18px 44px rgba(10,30,55,.20);
+    }
+
+    #comfortHead{
+      height:76px;
+      background:#dbe5f1;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 26px;
+      border-bottom:1px solid rgba(10,30,55,.08);
+    }
+    #comfortTitle{
+      font-size:28px;
+      font-weight:900;
+      color:#000;
+      letter-spacing:-.5px;
+    }
+    #comfortClose{
+      border:none;
+      background:transparent;
+      font-size:34px;
+      line-height:1;
+      color:#000;
+      cursor:pointer;
+      padding:0;
+      width:44px;
+      height:44px;
+    }
+
+    #comfortScene{
+      position:relative;
+      height:min(64vw, 540px);
+      min-height:420px;
+      background:#efefef url('face_V2.png') center center / cover no-repeat;
+      overflow:hidden;
+    }
+    #comfortScene::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(120px 150px at 30% 46%, rgba(255,255,255,.18), rgba(255,255,255,0) 62%),
+        radial-gradient(120px 150px at 69% 46%, rgba(255,255,255,.14), rgba(255,255,255,0) 62%);
+      pointer-events:none;
+      z-index:0;
+    }
+
+    #cfTargetStage{
+      position:absolute;
+      width:118px;
+      height:176px;
+      transform:translate(-50%,-50%);
+      z-index:4;
+      pointer-events:none;
+      transition:left .35s ease, top .35s ease, width .35s ease, height .35s ease;
+    }
+    .cf-target-box{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      width:100%;
+      height:100%;
+      border-radius:18px;
+      border:2px solid rgba(255,255,255,.58);
+      backdrop-filter: blur(1px);
+      box-shadow:0 8px 24px rgba(0,0,0,.08);
+      transition: top .45s ease, opacity .35s ease, background .35s ease, transform .45s ease;
+    }
+    .cf-box-top{ z-index:0; background:rgba(251,221,231,.38); }
+    .cf-box-bottom{ z-index:0; background:rgba(245,222,232,.16); }
+
+    .cf-target-a{
+      position:absolute;
+      left:50%;
+      transform:translate(-50%,-50%);
+      font-size:104px;
+      line-height:1;
+      font-weight:300;
+      letter-spacing:-6px;
+      font-family:Georgia, "Times New Roman", serif;
+      user-select:none;
+      transition: top .55s cubic-bezier(.22,.8,.22,1), opacity .35s ease, transform .55s cubic-bezier(.22,.8,.22,1), color .35s ease;
+      z-index:2;
+    }
+    .cf-a-red{ color:#e02020; }
+    .cf-a-blue{ color:#176fd6; }
+
+    #comfortScene.mode-default .cf-box-top,
+    #comfortScene.mode-default .cf-box-bottom{ top:0; opacity:.92; transform:translateX(-50%); }
+    #comfortScene.mode-default .cf-box-top{ background:rgba(245,222,232,.24); }
+    #comfortScene.mode-default .cf-box-bottom{ background:rgba(245,222,232,.14); }
+    #comfortScene.mode-default .cf-a-red{ top:50%; opacity:.16; transform:translate(-50%,-50%); animation:none; color:#b44dc9; }
+    #comfortScene.mode-default .cf-a-blue{ top:50%; opacity:.88; transform:translate(-50%,-50%); animation:none; color:#8b2da0; }
+
+    #comfortScene.mode-off .cf-box-top,
+    #comfortScene.mode-off .cf-box-bottom{ top:0; opacity:.92; transform:translateX(-50%); }
+    #comfortScene.mode-off .cf-box-top{ background:rgba(245,222,232,.28); }
+    #comfortScene.mode-off .cf-box-bottom{ background:rgba(245,222,232,.16); }
+    #comfortScene.mode-off .cf-a-red{ top:50%; opacity:.30; transform:translate(-50%,-50%); animation:none; color:#b44dc9; }
+    #comfortScene.mode-off .cf-a-blue{ top:50%; opacity:.92; transform:translate(-50%,-50%); color:#8b2da0; animation:none; }
+
+    #comfortScene.mode-on .cf-box-top{ top:-14px; opacity:.96; background:rgba(251,221,231,.42); animation:cfPinkFloat 1.45s ease-in-out infinite; }
+    #comfortScene.mode-on .cf-box-bottom{ top:14px; opacity:.82; background:rgba(219,234,255,.28); transform:translateX(-50%); }
+    #comfortScene.mode-on .cf-a-red{ top:33%; opacity:1; transform:translate(-50%,-50%); color:#e02020; animation:cfRedFloat 1.45s ease-in-out infinite; }
+    #comfortScene.mode-on .cf-a-blue{ top:69%; opacity:1; transform:translate(-50%,-50%); color:#176fd6; }
+
+    @keyframes cfRedFloat{
+      0%{ transform:translate(-50%,-50%) translateY(0); }
+      25%{ transform:translate(-50%,-50%) translateY(-4px); }
+      50%{ transform:translate(-50%,-50%) translateY(1px); }
+      75%{ transform:translate(-50%,-50%) translateY(-3px); }
+      100%{ transform:translate(-50%,-50%) translateY(0); }
+    }
+    @keyframes cfPinkFloat{
+      0%{ transform:translateX(-50%) translateY(0); }
+      25%{ transform:translateX(-50%) translateY(-4px); }
+      50%{ transform:translateX(-50%) translateY(1px); }
+      75%{ transform:translateX(-50%) translateY(-3px); }
+      100%{ transform:translateX(-50%) translateY(0); }
+    }
+
+    #cfOptic{
+      position:absolute;
+      width:58px;
+      height:118px;
+      transform:translate(-50%,-50%);
+      z-index:7;
+      transition:left .35s ease, top .35s ease, width .35s ease, height .35s ease;
+      pointer-events:none;
+    }
+    #comfortScene.mode-on .cf-optic-prism{ display:block; }
+    #comfortScene.mode-on .cf-optic-flat{ display:none; }
+    #comfortScene.mode-off .cf-optic-prism{ display:none; }
+    #comfortScene.mode-off .cf-optic-flat{ display:block; }
+    #comfortScene.mode-default .cf-optic-prism,
+    #comfortScene.mode-default .cf-optic-flat{ display:none; }
+    .cf-optic-prism,.cf-optic-flat{ position:absolute; inset:0; }
+    .cf-optic-prism::before{
+      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+      width:0; height:0; border-left:30px solid transparent; border-right:30px solid transparent; border-bottom:100px solid rgba(255,255,255,.46);
+      filter:drop-shadow(0 4px 10px rgba(0,0,0,.10));
+    }
+    .cf-optic-prism::after{
+      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-46%);
+      width:0; height:0; border-left:24px solid transparent; border-right:24px solid transparent; border-bottom:82px solid rgba(214,238,255,.30);
+    }
+    .cf-optic-flat::before{
+      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+      width:34px; height:92px; border-radius:4px;
+      background:linear-gradient(180deg, rgba(255,255,255,.60), rgba(226,236,246,.42));
+      border:1px solid rgba(255,255,255,.72);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.25), 0 4px 10px rgba(0,0,0,.08);
+    }
+
+    .cf-guide-line{
+      position:absolute; height:0; border-top:6px dashed; z-index:5; transform-origin:left center;
+      transition:left .35s ease, top .35s ease, width .35s ease, transform .35s ease, opacity .25s ease;
+      pointer-events:none; opacity:0;
+    }
+    .cf-guide-line.red{ border-color:#e02020; }
+    .cf-guide-line.blue{ border-color:#176fd6; }
+    #comfortScene.mode-default .cf-guide-line{ opacity:0; }
+    #comfortScene.mode-off .cf-guide-line,
+    #comfortScene.mode-on .cf-guide-line{ opacity:1; }
+
+    #cfSegWrap{
+      position:absolute; left:50%; bottom:16px; transform:translateX(-50%); width:min(94%, 760px); z-index:10;
+      padding:0; border-radius:0; background:transparent;
+      border:none; box-shadow:none;
+      display:grid; grid-template-columns: 1fr 1.35fr 1.1fr; gap:8px; align-items:center;
+    }
+    .cf-seg-btn{
+      height:66px; border-radius:999px; border:2px solid #8eb5de; background:#ffffff;
+      color:#143a63; font-size:22px; font-weight:900; letter-spacing:-.4px; cursor:pointer; transition:all .18s ease;
+      box-shadow:none; padding:0 12px; white-space:nowrap; -webkit-appearance:none; appearance:none;
+    }
+    .cf-seg-btn.active{ background:#eaf4ff; color:#0f4f8f; border-color:#8eb5de; box-shadow:none; }
+    .cf-seg-btn.default-active{ background:#eaf4ff; color:#0f4f8f; border-color:#8eb5de; box-shadow:none; }
+    .cf-seg-btn:not(.active):not(.default-active){ color:#4f6781; }
+    .cf-seg-btn:not(.active):active{ transform:scale(.985); }
+
+    #comfortMessage{
+      background:#dbe5f1; padding:28px 34px 30px; display:flex; align-items:flex-end; justify-content:space-between; gap:20px;
+      border-top:1px solid rgba(10,30,55,.08);
+    }
+    #comfortMessageCopy{
+      flex:1 1 auto; font-size:28px; line-height:1.34; font-weight:900; letter-spacing:-.6px; color:#000; word-break:keep-all;
+    }
+    #comfortMessageCopy .blue{ color:#005EB8; }
+    #comfortConfirm{
+      flex:0 0 auto; min-width:120px; height:86px; padding:0 26px; border:none; border-radius:18px; background:#1168d0; color:#fff;
+      font-size:24px; font-weight:900; cursor:pointer; box-shadow:0 10px 22px rgba(17,104,208,.22);
+    }
+
+    @media (max-width: 820px){
+      #comfortTitle{ font-size:20px; }
+      #comfortScene{ height:520px; min-height:360px; }
+      #cfTargetStage{ width:104px; height:158px; }
+      .cf-target-a{ font-size:90px; }
+      #cfOptic{ width:48px; height:98px; }
+      .cf-optic-prism::before{ border-left-width:24px; border-right-width:24px; border-bottom-width:82px; }
+      .cf-optic-prism::after{ border-left-width:20px; border-right-width:20px; border-bottom-width:68px; }
+      .cf-optic-flat::before{ width:28px; height:78px; }
+      .cf-seg-btn{ font-size:19px; height:62px; }
+      #comfortMessage{ padding:22px 18px 22px; gap:14px; }
+      #comfortMessageCopy{ font-size:22px; }
+      #comfortConfirm{ min-width:98px; height:74px; font-size:20px; border-radius:16px; }
+    }
+
+    @media (max-width: 560px){
+      #comfortOverlay{ padding:8px; }
+      #comfortWrap{ width:100%; border-radius:20px; }
+      #comfortHead{ height:60px; padding:0 18px; }
+      #comfortTitle{ font-size:18px; }
+      #comfortClose{ font-size:26px; width:34px; height:34px; }
+      #comfortScene{ height:320px; min-height:320px; }
+      #cfTargetStage{ width:82px; height:126px; }
+      .cf-target-box{ border-radius:16px; }
+      #comfortScene.mode-on .cf-box-top{ top:-10px; }
+      #comfortScene.mode-on .cf-box-bottom{ top:10px; }
+      .cf-target-a{ font-size:72px; letter-spacing:-4px; }
+      #cfOptic{ width:38px; height:76px; }
+      .cf-optic-prism::before{ border-left-width:20px; border-right-width:20px; border-bottom-width:62px; }
+      .cf-optic-prism::after{ border-left-width:16px; border-right-width:16px; border-bottom-width:50px; }
+      .cf-optic-flat::before{ width:24px; height:64px; }
+      .cf-guide-line{ border-top-width:5px; }
+      #cfSegWrap{ width:min(94%, 520px); bottom:10px; padding:0; gap:5px; border:none; background:transparent; box-shadow:none; grid-template-columns: 1fr 1.35fr 1.05fr; }
+      .cf-seg-btn{ height:48px; font-size:12px; border-width:2px; padding:0 6px; }
+      #comfortMessage{ padding:18px 14px 18px; gap:12px; }
+      #comfortMessageCopy{ font-size:17px; line-height:1.38; }
+      #comfortConfirm{ min-width:82px; height:58px; font-size:16px; border-radius:14px; padding:0 18px; }
+    }
+
+
+    /* 맥스 팩샷 블루라이트 체험 */
+    #maxPackshot{
+      pointer-events:auto;
+      cursor:pointer;
+    }
+
+    #blueTintRays{
+      position:fixed;
+      inset:0;
+      z-index:31;
+      pointer-events:none;
+      display:none;
+      overflow:hidden;
+      opacity:0;
+      transition:opacity .24s ease;
+    }
+    #blueTintRays.show{
+      display:block;
+      opacity:1;
+    }
+    #blueTintRays::before{
+      content:"";
+      position:absolute;
+      right:-8vw;
+      top:22%;
+      width:52vw;
+      height:52vw;
+      border-radius:50%;
+      background:
+        radial-gradient(circle at 30% 50%, rgba(125,255,245,.42) 0%, rgba(59,176,255,.24) 34%, rgba(0,94,184,.10) 52%, rgba(0,94,184,0) 72%);
+      filter:blur(2px);
+      transform:translateZ(0);
+    }
+    #blueTintRays::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(160deg,
+          rgba(0,0,0,0) 58%,
+          rgba(92,236,217,.18) 66%,
+          rgba(69,185,255,.18) 72%,
+          rgba(0,0,0,0) 80%);
+      mix-blend-mode:screen;
+      opacity:.9;
+    }
+
+    #blueLightOverlay{
+      position:fixed;
+      left:12px;
+      right:12px;
+      bottom:92px;
+      z-index:68;
+      display:none;
+      gap:10px;
+      align-items:center;
+      background:linear-gradient(180deg, rgba(234,243,255,.96) 0%, rgba(255,255,255,.96) 100%);
+      border:1px solid rgba(0,94,184,.18);
+      border-radius:14px;
+      padding:11px 12px;
+      box-shadow: 0 16px 50px rgba(0,94,184,.10), 0 18px 60px rgba(11,31,51,.14);
+      backdrop-filter: blur(12px);
+    }
+    #blueLightOverlay.show{ display:flex; }
+    #blueLightIcon{
+      width:46px;
+      height:46px;
+      border-radius:999px;
+      flex:0 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:radial-gradient(circle at 35% 35%, rgba(153,255,240,.95), rgba(35,171,255,.92));
+      color:#fff;
+      font-size:20px;
+      box-shadow: 0 10px 22px rgba(0,94,184,.18);
+    }
+    #blueLightText{
+      flex:1 1 auto;
+      min-width:0;
+    }
+    #blueLightTitle{
+      font-weight:900;
+      color:var(--text-navy);
+      margin-bottom:3px;
+    }
+    #blueLightHint{
+      color:var(--text-sub);
+      font-size:12.5px;
+      line-height:1.38;
+      word-break:keep-all;
+    }
+    #blueLightConfirm{
+      flex:0 0 auto;
+      border:1px solid rgba(0,94,184,.65);
+      background:var(--acuvue-blue);
+      color:#fff;
+      font-weight:900;
+      font-size:13px;
+      padding:9px 12px;
+      border-radius:999px;
+      cursor:pointer;
+      box-shadow: 0 10px 22px rgba(0,94,184,.22);
+    }
+
+
+    /* blue light beam / lens response */
+    #blueBeam{
+      position:fixed; inset:0; z-index:28; pointer-events:none; display:none; opacity:0; transition:opacity .24s ease;
+    }
+    #blueBeam.show{ display:block; opacity:1; }
+    #blueBeam::before{
+      content:""; position:absolute; left:-8vw; top:46%; width:62vw; height:5px;
+      background:linear-gradient(90deg, rgba(255,206,77,.96) 0%, rgba(255,196,0,.95) 38%, rgba(255,220,120,.42) 72%, rgba(255,220,120,0) 100%);
+      transform:rotate(25deg); transform-origin:left center; filter:blur(.4px); box-shadow:0 0 14px rgba(255,196,0,.40);
+    }
+    #blueBeam::after{
+      content:""; position:absolute; left:35%; top:22%; width:34vw; height:4px;
+      background:linear-gradient(90deg, rgba(114,188,255,.0) 0%, rgba(114,188,255,.55) 40%, rgba(114,188,255,.92) 84%, rgba(175,245,255,.98) 100%);
+      transform:rotate(-66deg); transform-origin:left center; filter:blur(.3px); box-shadow:0 0 16px rgba(85,168,255,.26);
+    }
+    #lensBlueHighlight{
+      position:fixed; left:50%; top:50%; width:min(38vw, 290px); height:min(38vw, 290px);
+      transform:translate(8vw, -12vh); border-radius:50%; z-index:30; pointer-events:none; display:none; opacity:0;
+      transition:opacity .22s ease, transform .28s ease;
+      background: radial-gradient(circle at 28% 28%, rgba(187,255,245,.55), rgba(82,185,255,.22) 38%, rgba(82,185,255,0) 68%);
+      filter:blur(2px); mix-blend-mode:screen;
+    }
+    #lensBlueHighlight.show{ display:block; opacity:1; transform:translate(7vw, -13vh); }
+  </style>
+</head>
+
+<body>
+  <div id="missionBarWrap">
+    <div id="missionBarHeader">아큐브® 난시 렌즈 기술</div>
+    <div id="missionBar">
+    <div id="missionASD" class="missionCard" role="button" tabindex="0">
+      <div class="missionNo">01</div>
+      <div class="missionTitle">ASD™ 축안정화</div>
+      <div class="missionDesc"> 자세히 보기 > </div>
+    </div>
+    <div id="missionPVP" class="missionCard" role="button" tabindex="0">
+      <div class="missionNo">02</div>
+      <div class="missionTitle">PVP 습윤 인자</div>
+      <div class="missionDesc"> 자세히 보기 ></div>
+    </div>
+    <div id="missionComfort" class="missionCard" role="button" tabindex="0">
+      <div class="missionNo">03</div>
+      <div class="missionTitle">프리즘이 적은 광학부</div>
+      <div class="missionDesc">  자세히 보기 > </div>
+    </div>
+    </div>
+  </div>
+
+  <div id="thicknessBar" aria-hidden="true">
+    <div id="thHeader">
+      <div id="thTitle">두께</div>
+      <div id="thUnit">mm</div>
+    </div>
+    <div id="gradRow">
+      <div class="tickLabel">얇음_0.0</div>
+      <div id="gradWrap">
+        <div id="grad"></div>
+        <div id="gradShine"></div>
+        <div class="mark m0"><strong>0.0</strong></div>
+        <div class="mark m25"><strong>0.1</strong></div>
+        <div class="mark m50"><strong>0.2</strong></div>
+        <div class="mark m75"><strong>0.3</strong></div>
+        <div class="mark m100"><strong>0.4</strong></div>
+      </div>
+      <div class="tickLabel" style="text-align:left;width:46px;">0.4_두껍</div>
+    </div>
+    <div id="thHint"></div>
+  </div>
+
+  <div id="pvpBig">
+    <img id="pvpBigImg" src="PVP.gif" alt="PVP Big" onerror="this.onerror=null; this.src='PVP.jpeg';">
+  </div>
+
+  <div id="pvpOverlay">
+    <img id="pvpThumb" src="PVP.png" alt="PVP" onerror="this.onerror=null; this.src='PVP.jpeg';">
+    <div id="pvpText">
+      <div id="pvpTitle">PVP 습윤 인자</div>
+      <div id="hint">렌즈 내 PVP 습윤인자가 수분을 저녁까지 유지하여 촉촉함과 선명함 제공합니다.</div>
+    </div>
+    <div id="pvpConfirm" role="button" tabindex="0">확인</div>
+  </div>
+
+  <div id="asdOverlay" aria-hidden="true">
+    <div id="asdCard">
+      <div id="asdHeader">
+        <div id="asdHeaderTitle">ASD™ 축안정화</div>
+        <button id="asdClose" type="button">X</button>
+      </div>
+
+      <div id="asdScene">
+        <img id="asdEyeMV" src="a.png" alt="Eye background" onerror="this.onerror=null; this.src='a.gif';">
+        <div id="asdLensRim"></div>
+        <img id="asdLensImg" src="lens.png" alt="Lens overlay"
+             onerror="this.style.display='none'; document.getElementById('asdHint').textContent='lens.png / lens2.png 파일을 같은 폴더에 넣어주세요.';">
+        <div id="asdMaskShade"></div>
+        <img id="asdUpperLid" src="upper_lid.png" alt="Upper eyelid overlay" onerror="this.style.display='none';">
+
+        <div id="asdBlinkLid">
+          <div id="asdLidTop"></div>
+          <div id="asdLidBot"></div>
+        </div>
+
+        <div id="asdAngleBadge">20°</div>
+        <button id="asdRotateBtn" type="button">축이탈</button>
+        <button id="asdBlinkBtn" type="button">깜박임</button>
+      </div>
+
+      <div id="asdHint">
+        <div class="hintText">
+          <span class="hintTitle">체험해보세요!</span>
+          <span class="hintBody"><span class="blue">‘깜박임’ 버튼</span>을 눌러 이탈된 축을 안정화 시켜 보세요.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="comfortOverlay" aria-hidden="true">
+    <div id="comfortWrap" onclick="event.stopPropagation()">
+      <div id="comfortHead">
+        <div id="comfortTitle">프리즘이 적은 광학부</div>
+        <button id="comfortClose" type="button">X</button>
+      </div>
+
+      <div id="comfortScene" class="mode-default">
+        <div id="cfTargetStage">
+          <div class="cf-target-box cf-box-top"></div>
+          <div class="cf-target-box cf-box-bottom"></div>
+          <div class="cf-target-a cf-a-red">A</div>
+          <div class="cf-target-a cf-a-blue">A</div>
+        </div>
+
+        <div id="cfLineRed" class="cf-guide-line red"></div>
+        <div id="cfLineBlue" class="cf-guide-line blue"></div>
+
+        <div id="cfOptic">
+          <div class="cf-optic-prism"></div>
+          <div class="cf-optic-flat"></div>
+        </div>
+
+        <div id="cfSegWrap">
+          <button id="cfBtnDefault" class="cf-seg-btn default-active" type="button">맨눈</button>
+          <button id="cfBtnOn" class="cf-seg-btn" type="button">단안 프리즘 영향</button>
+          <button id="cfBtnOff" class="cf-seg-btn" type="button">프리즘 없음</button>
+        </div>
+      </div>
+
+      <div id="comfortMessage">
+        <div id="comfortMessageCopy">
+          프리즘이 단안 난시 소비자에게 미치는 영향을
+          <span class="blue">버튼을 통해 확인해 보세요</span>
+        </div>
+        <button id="comfortConfirm" type="button">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="tutorialLayer" aria-hidden="true">
+    <div id="tutorialMask"></div>
+    <div id="tutorialFocus"></div>
+
+    <div class="tutBox" id="tutLeft" style="display:none;">
+      <div class="tutTitle">가이드 1</div>
+      <div class="tutText">렌즈를 좌우로 드래그하여 움직여 보세요.<br>확대와 축소를 통해 렌즈 구조를 더 선명하게 확인할 수 있습니다.</div>
+      <button class="tutBtn" id="tutNext1">확인</button>
+    </div>
+
+    <div class="tutBox" id="tutBottom" style="display:none;">
+      <div class="tutTitle">가이드 2</div>
+      <div class="tutText">‘렌즈 두께 MAP’을 클릭하여<br>아큐브® 인피니티 엣지(가장 얇은 보라색 영역)을 확인해 보세요!</div>
+      <button class="tutBtn" id="tutNext2">확인</button>
+    </div>
+
+    <div class="tutBox" id="tutTop" style="display:none;">
+      <div class="tutTitle">가이드 3</div>
+      <div class="tutText">각 카드를 눌러 체험을 진행해 보세요.<br></div>
+      <button class="tutBtn" id="tutDone">확인</button>
+    </div>
+  </div>
+
+  <div id="blueTintRays" aria-hidden="true"></div>
+  <div id="blueBeam" aria-hidden="true"></div>
+  <div id="lensBlueHighlight" aria-hidden="true"></div>
+
+  <div id="blueLightOverlay" aria-hidden="true">
+    <div id="blueLightIcon">✦</div>
+    <div id="blueLightText">
+      <div id="blueLightTitle">블루라이트 필터</div>
+      <div id="blueLightHint">블루-그린 틴트와 광선 효과를 통해 아큐브® MAX의 블루라이트 필터 체험을 확인해 보세요.</div>
+    </div>
+    <button id="blueLightConfirm" type="button">확인</button>
+  </div>
+
+  <!-- ✅ 우측 하단 렌즈 팩샷 -->
+  <img id="maxPackshot" src="MAX.png" alt="아큐브 맥스 난시 팩샷" onerror="this.style.display='none';">
+
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+
+  <model-viewer
+    id="mv"
+    src="lens_clear.glb"
+    camera-controls
+    camera-orbit="0deg 100deg 2.6m"
+    camera-target="0m 0.015m 0m"
+    touch-action="pan-y"
+    exposure="1.35"
+    tone-mapping="aces"
+    environment-image="neutral"
+    shadow-intensity="0">
+  </model-viewer>
+
+  <div id="bottomBtns">
+    <button id="btnReset" title="처음 위치로">↺</button>
+    <button id="modeLens" class="btn primary">투명 렌즈 모드</button>
+    <button id="modeHeat" class="btn">렌즈 두께 MAP</button>
+  </div>
+
+  <script>
+    const mv = document.getElementById('mv');
+    const missionASD = document.getElementById('missionASD');
+    const missionPVP = document.getElementById('missionPVP');
+    const missionComfort = document.getElementById('missionComfort');
+    const modeLens = document.getElementById('modeLens');
+    const modeHeat = document.getElementById('modeHeat');
+    const btnReset = document.getElementById('btnReset');
+    const asdOverlay = document.getElementById('asdOverlay');
+    const asdClose = document.getElementById('asdClose');
+    const pvpOverlay = document.getElementById('pvpOverlay');
+    const pvpBig = document.getElementById('pvpBig');
+    const pvpConfirm = document.getElementById('pvpConfirm');
+    const thicknessBar = document.getElementById('thicknessBar');
+    const asdEyeMV = document.getElementById('asdEyeMV');
+    const asdLensImg = document.getElementById('asdLensImg');
+    const asdBlinkBtn = document.getElementById('asdBlinkBtn');
+    const asdRotateBtn = document.getElementById('asdRotateBtn');
+    const asdAngleBadge = document.getElementById('asdAngleBadge');
+    const asdLensRim = document.getElementById('asdLensRim');
+    const asdHint = document.getElementById('asdHint');
+    const asdLidTop = document.getElementById('asdLidTop');
+    const asdLidBot = document.getElementById('asdLidBot');
+    const maxPackshot = document.getElementById('maxPackshot');
+    const blueTintRays = document.getElementById('blueTintRays');
+    const blueBeam = document.getElementById('blueBeam');
+    const lensBlueHighlight = document.getElementById('lensBlueHighlight');
+    const blueLightOverlay = document.getElementById('blueLightOverlay');
+    const blueLightConfirm = document.getElementById('blueLightConfirm');
+    const comfortOverlay = document.getElementById('comfortOverlay');
+    const comfortClose = document.getElementById('comfortClose');
+    const comfortScene = document.getElementById('comfortScene');
+    const cfBtnDefault = document.getElementById('cfBtnDefault');
+    const cfBtnOn = document.getElementById('cfBtnOn');
+    const cfBtnOff = document.getElementById('cfBtnOff');
+    const comfortMessageCopy = document.getElementById('comfortMessageCopy');
+    const cfTargetStage = document.getElementById('cfTargetStage');
+    const cfOptic = document.getElementById('cfOptic');
+    const cfLineRed = document.getElementById('cfLineRed');
+    const cfLineBlue = document.getElementById('cfLineBlue');
+    const comfortConfirm = document.getElementById('comfortConfirm');
+
+    let currentMode = 'lens';
+    let pvpOn = false;
+    let pvpDone = false;
+    let asdDone = false;
+    let comfortDone = false;
+    let asdAngle = 20;
+    let asdLastDir = -1;
+    let asdBlinkBusy = false;
+    let lastOrbit = null;
+    let lastTarget = null;
+    let defaultFov = null;
+    let pendingCameraPreset = null;
+
+    const ASD_STEP = 5;
+    const ASD_START = 20;
+    const CLEAR_DEFAULT_ORBIT_STR  = '0deg 100deg 2.6m';
+    const CLEAR_DEFAULT_TARGET_STR = '0m 0.015m 0m';
+    const HEAT_DEFAULT_ORBIT_STR   = '0deg 100deg 2.6m';
+    const HEAT_DEFAULT_TARGET_STR  = '0m 0.015m 0m';
+
+    function keepMVPlaying(){
+      try{
+        if(mv && mv.paused) mv.play();
+      }catch(e){}
+    }
+
+    if(mv){
+      ['pointerdown','pointermove','pointerup','touchstart','touchend','mousedown','mouseup'].forEach((ev)=>{
+        try{ mv.addEventListener(ev, keepMVPlaying, { passive:true }); }catch(e){}
+      });
+    }
+
+    document.addEventListener('visibilitychange', ()=>{
+      if(!document.hidden) setTimeout(keepMVPlaying, 60);
+    });
+
+    function getOrbitSafe(){ try{ return mv.getCameraOrbit(); }catch(e){ return null; } }
+    function getTargetSafe(){ try{ return mv.getCameraTarget(); }catch(e){ return null; } }
+
+    function applyOrbit(orbit){
+      if(!orbit) return;
+      try{ mv.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${orbit.radius}m`; }catch(e){}
+    }
+    function applyTarget(target){
+      if(!target) return;
+      try{ mv.cameraTarget = `${target.x}m ${target.y}m ${target.z}m`; }catch(e){}
+    }
+    function applyOrbitStr(s){ try{ mv.cameraOrbit = s; }catch(e){} }
+    function applyTargetStr(s){ try{ mv.cameraTarget = s; }catch(e){} }
+
+    function resetCameraToModeDefault(mode){
+      const orbitStr  = (mode === 'heat') ? HEAT_DEFAULT_ORBIT_STR  : CLEAR_DEFAULT_ORBIT_STR;
+      const targetStr = (mode === 'heat') ? HEAT_DEFAULT_TARGET_STR : CLEAR_DEFAULT_TARGET_STR;
+
+      const applyAll = ()=>{
+        applyTargetStr(targetStr);
+        applyOrbitStr(orbitStr);
+        try{
+          mv.fieldOfView = defaultFov || '45deg';
+        }catch(e){}
+        try{ mv.jumpCameraToGoal?.(); }catch(e){}
+      };
+
+      try{ mv.removeAttribute('camera-controls'); }catch(e){}
+      applyAll();
+
+      requestAnimationFrame(()=>{
+        try{ mv.setAttribute('camera-controls',''); }catch(e){}
+        applyAll();
+        setTimeout(applyAll, 120);
+        setTimeout(applyAll, 260);
+      });
+    }
+
+    function showPVP(show){
+      pvpOverlay.classList.toggle('show', show);
+      pvpBig.classList.toggle('show', show);
+      pvpConfirm.style.display = show ? 'block' : 'none';
+    }
+
+    function showThickness(show){
+      thicknessBar.classList.toggle('show', show);
+      thicknessBar.setAttribute('aria-hidden', show ? 'false' : 'true');
+    }
+
+    function syncPackshot(){
+      if(!maxPackshot) return;
+      maxPackshot.style.display = (currentMode === 'lens') ? 'block' : 'none';
+    }
+
+
+    function closeBlueLightDemo(){
+      if(blueTintRays) blueTintRays.classList.remove('show');
+      if(blueLightOverlay) blueLightOverlay.classList.remove('show');
+      if(mv){
+        mv.style.filter = '';
+      }
+    }
+
+    function openBlueLightDemo(){
+      if(currentMode !== 'lens'){
+        setModel('lens_clear.glb', 'lens', { resetCamera:true }).then(()=>{
+          setTimeout(openBlueLightDemo, 160);
+        });
+        return;
+      }
+      if(asdOverlay.classList.contains('show')) closeASD();
+      if(comfortOverlay.classList.contains('show')) closeComfort();
+      if(pvpOn) forcePVPOff();
+
+      resetCameraToModeDefault('lens');
+
+      setTimeout(()=>{
+        try{
+          mv.style.filter = 'hue-rotate(22deg) saturate(1.22) brightness(1.04)';
+        }catch(e){}
+        if(blueTintRays) blueTintRays.classList.add('show');
+        if(blueLightOverlay) blueLightOverlay.classList.add('show');
+      }, 140);
+    }
+
+    function setASDHintDefault(){
+      asdHint.innerHTML = `
+        <div class="hintText">
+          <span class="hintTitle">체험해보세요!</span>
+          <span class="hintBody"><span class="blue">‘깜박임’ 버튼</span>을 눌러 이탈된 축을 안정화 시켜 보세요.</span>
+        </div>
+      `;
+    }
+
+    function setASDHintSuccess(){
+      asdHint.innerHTML = `
+        <div class="hintText">
+          <span class="hintTitle">기억해주세요!</span>
+          <span class="hintBody"><span class="blue">아큐브® ASD™</span>는 자연스러운 순목(눈 깜박임)을 통해 하루 종일 또렷하게 축을 안정화 합니다.</span>
+        </div>
+        <button id="asdConfirmBtn" type="button">확인</button>
+      `;
+      document.getElementById('asdConfirmBtn')?.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        closeASD();
+        markASDDone(true);
+      });
+    }
+
+    function markASDDone(done){
+      asdDone = !!done;
+      missionASD.classList.toggle('done', asdDone);
+    }
+
+    function pickASDLensSrc(){
+      return (currentMode === 'heat') ? 'lens2.png' : 'lens.png';
+    }
+
+    function setASDLensSrc(){
+      if(!asdLensImg) return;
+      asdLensImg.src = pickASDLensSrc() + '?v=' + Date.now();
+    }
+
+    function renderASDLensTransform(extraX=0){
+      if(!asdLensImg) return;
+      asdLensImg.style.transform =
+        `translate(calc(-50% + ${extraX}px + var(--irisX, 0px)), calc(-50% + var(--irisY, 0px))) rotate(${asdAngle}deg)`;
+
+      if(asdAngleBadge){
+        if(asdAngle > 0) asdAngleBadge.textContent = `좌측으로 ${asdAngle}° 회전`;
+        else if(asdAngle < 0) asdAngleBadge.textContent = `우측으로 ${Math.abs(asdAngle)}° 회전`;
+        else asdAngleBadge.textContent = `축 안정`;
+      }
+    }
+
+    function resetASDState(){
+      asdAngle = ASD_START;
+      asdLastDir = -1;
+      renderASDLensTransform(0);
+    }
+
+    function playBlinkLid(){
+      if(asdBlinkBusy) return;
+      asdBlinkBusy = true;
+
+      const hideLens = ()=>{
+        if(asdLensImg) asdLensImg.style.opacity = '0';
+        if(asdLensRim) asdLensRim.style.opacity = '0';
+      };
+      const showLens = ()=>{
+        if(asdLensImg) asdLensImg.style.opacity = '';
+        if(asdLensRim) asdLensRim.style.opacity = '';
+      };
+
+      if(!asdLidTop || !asdLidBot) {
+        hideLens();
+        setTimeout(()=>{ showLens(); asdBlinkBusy = false; }, 220);
+        return;
+      }
+
+      asdLidTop.style.transition = 'none';
+      asdLidBot.style.transition = 'none';
+      asdLidTop.style.opacity = '0';
+      asdLidBot.style.opacity = '0';
+      asdLidTop.style.transform = 'translateY(-110%)';
+      asdLidBot.style.transform = 'translateY(110%)';
+
+      requestAnimationFrame(()=>{
+        asdLidTop.style.transition = 'transform 120ms ease, opacity 120ms ease';
+        asdLidBot.style.transition = 'transform 120ms ease, opacity 120ms ease';
+        asdLidTop.style.opacity = '1';
+        asdLidBot.style.opacity = '1';
+        asdLidTop.style.transform = 'translateY(0%)';
+        asdLidBot.style.transform = 'translateY(0%)';
+
+        setTimeout(hideLens, 55);
+
+        setTimeout(()=>{
+          asdLidTop.style.transition = 'transform 150ms ease, opacity 150ms ease';
+          asdLidBot.style.transition = 'transform 150ms ease, opacity 150ms ease';
+          asdLidTop.style.transform = 'translateY(-110%)';
+          asdLidBot.style.transform = 'translateY(110%)';
+          asdLidTop.style.opacity = '0';
+          asdLidBot.style.opacity = '0';
+        }, 140);
+
+        setTimeout(()=>{
+          showLens();
+          asdBlinkBusy = false;
+        }, 240);
+      });
+    }
+
+    function overshootAndReturn(){
+      const overshootDeg = asdLastDir * 3;
+      if(!asdLensImg) return;
+
+      asdLensImg.style.transition = 'transform 120ms ease';
+      asdAngle = overshootDeg;
+      renderASDLensTransform(0);
+
+      setTimeout(()=>{
+        asdLensImg.style.transition = 'transform 180ms ease';
+        asdAngle = 0;
+        renderASDLensTransform(0);
+        setTimeout(()=>{
+          if(asdLensImg) asdLensImg.style.transition = '';
+        }, 190);
+      }, 120);
+    }
+
+    function handleASDBlink(){
+      playBlinkLid();
+
+      if(asdAngle > 0){
+        asdLastDir = -1;
+        asdAngle = Math.max(0, asdAngle - ASD_STEP);
+        if(asdLensImg){
+          asdLensImg.style.transition = 'transform 160ms ease';
+          renderASDLensTransform(0);
+          setTimeout(()=>{ if(asdLensImg) asdLensImg.style.transition = ''; }, 170);
+        }
+        if(asdAngle === 0 && !asdDone) setASDHintSuccess();
+      }else if(asdAngle < 0){
+        asdLastDir = +1;
+        asdAngle = Math.min(0, asdAngle + ASD_STEP);
+        if(asdLensImg){
+          asdLensImg.style.transition = 'transform 160ms ease';
+          renderASDLensTransform(0);
+          setTimeout(()=>{ if(asdLensImg) asdLensImg.style.transition = ''; }, 170);
+        }
+        if(asdAngle === 0 && !asdDone) setASDHintSuccess();
+      }else{
+        overshootAndReturn();
+      }
+    }
+
+    asdBlinkBtn?.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      handleASDBlink();
+    });
+
+    function handleASDRotateRandom(){
+      markASDDone(false);
+      setASDHintDefault();
+
+      const mags = [10,15,20];
+      const mag = mags[Math.floor(Math.random() * mags.length)];
+      const dir = (Math.random() < 0.5) ? -1 : 1;
+
+      asdLastDir = dir;
+      asdAngle = dir * mag;
+
+      if(asdLensImg){
+        asdLensImg.style.transition = 'transform 180ms ease';
+        renderASDLensTransform(0);
+        setTimeout(()=>{ if(asdLensImg) asdLensImg.style.transition = ''; }, 190);
+      }
+    }
+
+    asdRotateBtn?.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      handleASDRotateRandom();
+    });
+
+    function tuneClearLensMaterials(){
+      try{
+        const model = mv.model;
+        if(!model || !model.materials) return;
+        model.materials.forEach(mat=>{
+          const pbr = mat.pbrMetallicRoughness;
+          if(!pbr) return;
+          const base = pbr.baseColorFactor ? [...pbr.baseColorFactor] : [1,1,1,1];
+          base[3] = Math.max(base[3], 0.68);
+          pbr.setBaseColorFactor(base);
+          try{ pbr.setRoughnessFactor(0.18); }catch(e){}
+          try{ pbr.setMetallicFactor(0.0); }catch(e){}
+          if(mat.extensions && mat.extensions.KHR_materials_transmission){
+            mat.extensions.KHR_materials_transmission.transmissionFactor = 0.62;
+          }
+          try{
+            if(mat.emissiveFactor){ mat.emissiveFactor = [0.05, 0.07, 0.08]; }
+          }catch(e){}
+          try{ if(mat.setAlphaMode) mat.setAlphaMode('BLEND'); }catch(e){}
+        });
+      }catch(e){}
+    }
+
+    function syncMissionUI(){
+      missionASD.classList.toggle('on', asdOverlay.classList.contains('show'));
+      missionPVP.classList.toggle('on', pvpOn);
+      missionComfort.classList.toggle('on', comfortOverlay.classList.contains('show'));
+      missionASD.classList.toggle('done', asdDone);
+      missionPVP.classList.toggle('done', pvpDone);
+      missionComfort.classList.toggle('done', comfortDone);
+    }
+
+    function closeASD(){
+      asdOverlay.classList.remove('show');
+      asdOverlay.setAttribute('aria-hidden','true');
+      closeBlueLightDemo();
+      resetCameraToModeDefault('lens');
+      syncMissionUI();
+    }
+
+    function setModeButtons(){
+      modeLens.classList.toggle('primary', currentMode === 'lens');
+      modeHeat.classList.toggle('primary', currentMode === 'heat');
+      syncPackshot();
+    }
+
+    function forcePVPOff(){
+      if(!pvpOn) return;
+      pvpOn = false;
+      showPVP(false);
+      syncMissionUI();
+    }
+
+    function openASD(){
+      if(pvpOn) forcePVPOff();
+
+      resetCameraToModeDefault('lens');
+      setASDLensSrc();
+      resetASDState();
+      setASDHintDefault();
+
+      if(asdEyeMV){
+        asdEyeMV.src = 'a.png?v=' + Date.now();
+      }
+
+      asdOverlay.classList.add('show');
+      asdOverlay.setAttribute('aria-hidden','false');
+      syncMissionUI();
+    }
+
+    function setModel(file, mode, options = {}){
+      const { resetCamera = false } = options;
+
+      return new Promise((resolve)=>{
+        pendingCameraPreset = null;
+
+        if(!resetCamera){
+          lastOrbit = getOrbitSafe();
+          lastTarget = getTargetSafe();
+        }else{
+          lastOrbit = null;
+          lastTarget = null;
+          pendingCameraPreset =
+            (mode === 'heat')
+              ? { orbitStr: HEAT_DEFAULT_ORBIT_STR, targetStr: HEAT_DEFAULT_TARGET_STR }
+              : { orbitStr: CLEAR_DEFAULT_ORBIT_STR, targetStr: CLEAR_DEFAULT_TARGET_STR };
+        }
+
+        currentMode = mode;
+        forcePVPOff();
+        showThickness(mode === 'heat');
+        setModeButtons();
+
+        const onLoadOnce = ()=>{
+          mv.removeEventListener('load', onLoadOnce);
+          resolve();
+        };
+        mv.addEventListener('load', onLoadOnce, { once:true });
+
+        mv.src = file + '?v=' + Date.now();
+      });
+    }
+
+    mv.addEventListener('load', ()=>{
+      if(!defaultFov){
+        try{ defaultFov = mv.fieldOfView; }catch(e){ defaultFov = null; }
+      }
+
+      if(pendingCameraPreset){
+        applyTargetStr(pendingCameraPreset.targetStr);
+        applyOrbitStr(pendingCameraPreset.orbitStr);
+
+        setTimeout(()=>{
+          applyTargetStr(pendingCameraPreset.targetStr);
+          applyOrbitStr(pendingCameraPreset.orbitStr);
+        }, 120);
+
+        resetCameraToModeDefault(currentMode);
+        pendingCameraPreset = null;
+      }else{
+        if(lastTarget) applyTarget(lastTarget);
+        if(lastOrbit) applyOrbit(lastOrbit);
+
+        setTimeout(()=>{
+          if(lastTarget) applyTarget(lastTarget);
+          if(lastOrbit) applyOrbit(lastOrbit);
+        }, 120);
+      }
+
+      if(currentMode === 'lens'){
+        tuneClearLensMaterials();
+      }
+
+      setModeButtons();
+      syncMissionUI();
+      syncPackshot();
+      keepMVPlaying();
+      setTimeout(keepMVPlaying, 120);
+    });
+
+    function toggleASD(){
+      if(asdOverlay.classList.contains('show')){
+        closeASD();
+        return;
+      }
+      openASD();
+    }
+
+    missionASD.addEventListener('click', toggleASD);
+    missionASD.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' ') toggleASD();
+    });
+
+    asdClose.addEventListener('click', closeASD);
+    asdOverlay.addEventListener('click', (e)=>{
+      if(e.target === asdOverlay) closeASD();
+    });
+
+    const PVP_ZOOM_FACTOR = 0.70;
+    function zoomInForPVP(){
+      try{
+        const orbit = getOrbitSafe();
+        if(!orbit) return;
+        mv.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${orbit.radius * PVP_ZOOM_FACTOR}m`;
+      }catch(e){}
+    }
+
+    async function togglePVP(){
+      if(currentMode === 'heat'){
+        await setModel('lens_clear.glb', 'lens', { resetCamera:true });
+      }
+      if(currentMode !== 'lens') return;
+
+      if(asdOverlay.classList.contains('show')) closeASD();
+
+      pvpOn = !pvpOn;
+
+      if(pvpOn){
+        resetCameraToModeDefault('lens');
+        setTimeout(()=>{
+          zoomInForPVP();
+          showPVP(true);
+          syncMissionUI();
+        }, 140);
+      }else{
+        showPVP(false);
+        resetCameraToModeDefault('lens');
+        syncMissionUI();
+      }
+    }
+
+    missionPVP.addEventListener('click', togglePVP);
+    missionPVP.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' ') togglePVP();
+    });
+
+    function confirmPVP(){
+      pvpDone = true;
+      pvpOn = false;
+      showPVP(false);
+      resetCameraToModeDefault('lens');
+      syncMissionUI();
+    }
+
+    pvpConfirm.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      confirmPVP();
+    });
+    pvpConfirm.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        confirmPVP();
+      }
+    });
+
+
+
+    function closeComfort(markDone = false){
+      if(markDone) comfortDone = true;
+      comfortOverlay.classList.remove('show');
+      comfortOverlay.setAttribute('aria-hidden','true');
+      closeBlueLightDemo();
+      closeBlueLightDemo();
+      setComfortMode('default');
+      syncMissionUI();
+    }
+
+    function openComfort(){
+      if(asdOverlay.classList.contains('show')) closeASD();
+      if(pvpOn) forcePVPOff();
+      comfortOverlay.classList.add('show');
+      comfortOverlay.setAttribute('aria-hidden','false');
+      setComfortMode('default');
+      requestAnimationFrame(positionComfortInteractiveElements);
+      syncMissionUI();
+    }
+
+    function toggleComfort(){
+      if(comfortOverlay.classList.contains('show')){
+        closeComfort();
+        return;
+      }
+      openComfort();
+    }
+
+    function setComfortMode(mode){
+      comfortScene.classList.remove('mode-default', 'mode-on', 'mode-off');
+      cfBtnDefault.classList.remove('active', 'default-active');
+      cfBtnOn.classList.remove('active');
+      cfBtnOff.classList.remove('active');
+
+      if(mode === 'on'){
+        comfortScene.classList.add('mode-on');
+        cfBtnOn.classList.add('active');
+        comfortMessageCopy.innerHTML = `
+          단안 난시 소비자의 경우, 프리즘의 영향으로
+          <span class="blue">양안의 이미지 위치에 차이가 발생하여 오후 피로감 발생 가능</span>
+        `;
+      }else if(mode === 'off'){
+        comfortScene.classList.add('mode-off');
+        cfBtnOff.classList.add('active');
+        comfortMessageCopy.innerHTML = `
+          단안 난시 소비자의 경우, 프리즘의 영향이 없이
+          <span class="blue">저녁까지 편안함과 선명함 제공</span>
+        `;
+      }else{
+        comfortScene.classList.add('mode-default');
+        cfBtnDefault.classList.add('default-active');
+        comfortMessageCopy.innerHTML = `
+          프리즘이 단안 난시 소비자에게 미치는 영향을
+          <span class="blue">버튼을 통해 확인해 보세요</span>
+        `;
+      }
+      requestAnimationFrame(positionComfortInteractiveElements);
+    }
+
+    function cfSetCenterPercent(el, xPx, yPx, rect){
+      el.style.left = ((xPx / rect.width) * 100) + '%';
+      el.style.top  = ((yPx / rect.height) * 100) + '%';
+    }
+
+    function cfPlaceLine(el, sx, sy, ex, ey, rect){
+      const dx = ex - sx;
+      const dy = ey - sy;
+      const length = Math.sqrt(dx * dx + dy * dy);
+      const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+      el.style.left = (sx / rect.width * 100) + '%';
+      el.style.top = (sy / rect.height * 100) + '%';
+      el.style.width = length + 'px';
+      el.style.transform = `rotate(${angle}deg)`;
+    }
+
+    function positionComfortInteractiveElements(){
+      if(!comfortScene || !comfortOverlay.classList.contains('show')) return;
+      const rect = comfortScene.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+      const mobile = w <= 560;
+      const tablet = w <= 820 && w > 560;
+
+      const eyeLeft = { x: w * 0.552, y: h * 0.408 };
+      const eyeRight = { x: w * 0.811, y: h * 0.410 };
+
+      const cardW = mobile ? 82 : (tablet ? 104 : 118);
+      const cardH = mobile ? 126 : (tablet ? 158 : 176);
+      const cardCx = w * 0.225;
+      const cardCy = h * 0.500;
+
+      cfTargetStage.style.width = cardW + 'px';
+      cfTargetStage.style.height = cardH + 'px';
+      cfSetCenterPercent(cfTargetStage, cardCx, cardCy, rect);
+
+      const opticW = mobile ? 38 : (tablet ? 48 : 58);
+      const opticH = mobile ? 76 : (tablet ? 98 : 118);
+      const opticCx = eyeLeft.x + (mobile ? -1 : -2);
+      const opticCy = eyeLeft.y + (mobile ? -2 : -2);
+
+      cfOptic.style.width = opticW + 'px';
+      cfOptic.style.height = opticH + 'px';
+      cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
+
+      const modeOn = comfortScene.classList.contains('mode-on');
+      const modeOff = comfortScene.classList.contains('mode-off');
+      const startX = cardCx + cardW * 0.47;
+      const offRedEndX = eyeLeft.x - (mobile ? 2 : 4);
+      const offRedEndY = eyeLeft.y + (mobile ? 1 : 2);
+      const offBlueEndX = eyeRight.x - (mobile ? 10 : 12);
+      const offBlueEndY = eyeRight.y + (mobile ? 1 : 2);
+
+      if(modeOn){
+        cfLineRed.style.opacity = '1';
+        cfLineBlue.style.opacity = '1';
+        const onRedStartY = cardCy + cardH * -0.27;
+        const onBlueStartY = cardCy + cardH * 0.20;
+        cfPlaceLine(cfLineRed, startX, onRedStartY, offRedEndX, offRedEndY, rect);
+        cfPlaceLine(cfLineBlue, startX, onBlueStartY, eyeRight.x - (mobile ? 10 : 12), eyeRight.y + (mobile ? 5 : 7), rect);
+      }else if(modeOff){
+        cfLineRed.style.opacity = '1';
+        cfLineBlue.style.opacity = '1';
+        const offRedStartY = cardCy + cardH * 0.18;
+        const offBlueStartY = cardCy + cardH * 0.20;
+        cfPlaceLine(cfLineRed, startX, offRedStartY, offRedEndX, offRedEndY, rect);
+        cfPlaceLine(cfLineBlue, startX, offBlueStartY, offBlueEndX, offBlueEndY, rect);
+      }else{
+        cfLineRed.style.opacity = '0';
+        cfLineBlue.style.opacity = '0';
+      }
+    }
+
+    missionComfort.addEventListener('click', toggleComfort);
+    missionComfort.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' ') toggleComfort();
+    });
+    comfortClose?.addEventListener('click', ()=>closeComfort());
+    comfortConfirm?.addEventListener('click', ()=>closeComfort(true));
+    comfortOverlay?.addEventListener('click', (e)=>{
+      if(e.target === comfortOverlay) closeComfort();
+    });
+    cfBtnDefault?.addEventListener('click', ()=>setComfortMode('default'));
+    cfBtnOn?.addEventListener('click', ()=>setComfortMode('on'));
+    cfBtnOff?.addEventListener('click', ()=>setComfortMode('off'));
+
+    btnReset.addEventListener('click', ()=>{
+      if(asdOverlay.classList.contains('show')) closeASD();
+      if(comfortOverlay.classList.contains('show')) closeComfort();
+      if(pvpOn){
+        pvpOn = false;
+        showPVP(false);
+      }
+      closeBlueLightDemo();
+      showThickness(currentMode === 'heat');
+      resetCameraToModeDefault(currentMode);
+      syncMissionUI();
+      syncPackshot();
+      positionComfortInteractiveElements();
+    });
+
+    modeLens.addEventListener('click', ()=> { closeBlueLightDemo(); setModel('lens_clear.glb', 'lens', { resetCamera:false }); });
+    modeHeat.addEventListener('click', ()=> { closeBlueLightDemo(); setModel('lens_heatmap.glb', 'heat', { resetCamera:false }); });
+
+    maxPackshot?.addEventListener('click', openBlueLightDemo);
+    blueLightConfirm?.addEventListener('click', closeBlueLightDemo);
+
+    setModel('lens_clear.glb', 'lens', { resetCamera:true });
+
+    /* 튜토리얼 */
+    const tutorialLayer = document.getElementById('tutorialLayer');
+    const tutorialMask = document.getElementById('tutorialMask');
+    const tutorialFocus = document.getElementById('tutorialFocus');
+    const tutLeft = document.getElementById('tutLeft');
+    const tutBottom = document.getElementById('tutBottom');
+    const tutTop = document.getElementById('tutTop');
+
+    function applyTutorialHole(rect, radius = 24){
+      if(!rect || !tutorialFocus) return;
+
+      const left = Math.max(8, rect.left - 8);
+      const top = Math.max(8, rect.top - 8);
+      const width = Math.min(window.innerWidth - left - 8, rect.width + 16);
+      const height = Math.min(window.innerHeight - top - 8, rect.height + 16);
+
+      tutorialFocus.style.left = `${left}px`;
+      tutorialFocus.style.top = `${top}px`;
+      tutorialFocus.style.width = `${width}px`;
+      tutorialFocus.style.height = `${height}px`;
+      tutorialFocus.style.borderRadius = `${radius}px`;
+      tutorialFocus.style.display = 'block';
+
+      if(tutorialMask) tutorialMask.style.display = 'none';
+    }
+
+    function positionTutorialBox(box, where){
+      if(!box) return;
+
+      if(where === 'center-left'){
+        box.style.left = '20px';
+        box.style.right = 'auto';
+        box.style.top = '50%';
+        box.style.bottom = 'auto';
+        box.style.transform = 'translateY(-50%)';
+        box.style.width = 'min(360px, calc(100vw - 40px))';
+      }else if(where === 'bottom'){
+        box.style.left = '20px';
+        box.style.right = '20px';
+        box.style.top = 'auto';
+        box.style.bottom = '72px';
+        box.style.transform = 'none';
+        box.style.width = 'min(360px, calc(100vw - 40px))';
+      }else if(where === 'top'){
+        box.style.left = '20px';
+        box.style.right = '20px';
+        box.style.top = '124px';
+        box.style.bottom = 'auto';
+        box.style.transform = 'none';
+        box.style.width = 'min(360px, calc(100vw - 40px))';
+      }
+    }
+
+    function getLensFocusRect(){
+      const r = mv.getBoundingClientRect();
+      const size = Math.min(r.width * 0.70, r.height * 0.70, window.innerWidth - 40);
+      const left = (window.innerWidth - size) / 2;
+      const top = (window.innerHeight - size) / 2 - 12;
+      return { left, top, width:size, height:size };
+    }
+
+    function getBottomFocusRect(){
+      const r = document.getElementById('bottomBtns').getBoundingClientRect();
+      return {
+        left:r.left,
+        top:r.top,
+        width:r.width,
+        height:r.height
+      };
+    }
+
+    function getTopCardFocusRect(){
+      const r = document.getElementById('missionBar').getBoundingClientRect();
+      return {
+        left:r.left,
+        top:r.top,
+        width:r.width,
+        height:r.height
+      };
+    }
+
+    function showTut(step){
+      tutorialLayer.classList.add('show');
+      tutorialLayer.setAttribute('aria-hidden','false');
+
+      tutLeft.style.display = 'none';
+      tutBottom.style.display = 'none';
+      tutTop.style.display = 'none';
+
+      if(step === 1){
+        const rect = getLensFocusRect();
+        applyTutorialHole(rect, Math.round(rect.width / 2));
+        tutLeft.style.display = 'block';
+        positionTutorialBox(tutLeft, 'center-left');
+      }
+
+      if(step === 2){
+        const rect = getBottomFocusRect();
+        applyTutorialHole(rect, 22);
+        tutBottom.style.display = 'block';
+        positionTutorialBox(tutBottom, 'bottom');
+      }
+
+      if(step === 3){
+        const rect = getTopCardFocusRect();
+        applyTutorialHole(rect, 20);
+        tutTop.style.display = 'block';
+        positionTutorialBox(tutTop, 'top');
+      }
+    }
+
+    function hideTut(){
+      tutorialLayer.classList.remove('show');
+      tutorialLayer.setAttribute('aria-hidden','true');
+      tutLeft.style.display = 'none';
+      tutBottom.style.display = 'none';
+      tutTop.style.display = 'none';
+      tutorialFocus.style.display = 'none';
+      if(tutorialMask) tutorialMask.style.display = 'block';
+    }
+
+    document.getElementById('tutNext1')?.addEventListener('click', ()=>showTut(2));
+    document.getElementById('tutNext2')?.addEventListener('click', ()=>showTut(3));
+    document.getElementById('tutDone')?.addEventListener('click', ()=>{
+      hideTut();
+      sessionStorage.setItem('asd_tutorial_done','1');
+    });
+
+    window.addEventListener('load', ()=>{
+      showTut(1);
+    });
+
+    window.addEventListener('resize', ()=>{
+      if(!tutorialLayer.classList.contains('show')) return;
+      if(tutLeft.style.display === 'block') showTut(1);
+      else if(tutBottom.style.display === 'block') showTut(2);
+      else if(tutTop.style.display === 'block') showTut(3);
+      syncPackshot();
+      positionComfortInteractiveElements();
+    });
+  </script>
+</body>
+</html>
