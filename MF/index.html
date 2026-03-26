@@ -291,18 +291,18 @@
       pointer-events:none;
     }
     #detailPage .brand{
-      display:inline-flex;
-      align-items:center;
-      padding:10px 28px;
-      border-radius:999px;
-      border:1.5px solid #d9e6f4;
-      background:linear-gradient(180deg,#eef5fc 0%, #e8f1fb 100%);
-      color:#0f5aa6;
+      display:block;
+      margin:-22px -24px 18px;
+      padding:14px 20px;
+      border-radius:30px 30px 0 0;
+      background:linear-gradient(180deg,#082f80 0%, #062a72 100%);
+      color:#fff;
       font-size:15px;
       font-weight:900;
       letter-spacing:-.02em;
-      margin-bottom:16px;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
+      text-align:center;
+      box-shadow:none;
+      border:none;
     }
     #detailPage .heroTitle{
       margin:0;
@@ -607,9 +607,14 @@
       #detailPage .detail-wrap{padding:16px 12px 42px}
       #detailPage .hero,#detailPage .card,#detailPage .visionCard,#detailPage .modalCard{border-radius:26px}
       #detailPage .hero{padding:18px 18px 20px}
+      #detailPage .brand{
+        margin:-18px -18px 16px;
+        padding:12px 16px;
+        border-radius:26px 26px 0 0;
+        font-size:12px;
+      }
       #detailPage .card{padding:18px 16px 20px}
       #detailPage .visionCard{padding:14px 16px}
-      #detailPage .brand{font-size:12px; padding:8px 18px; margin-bottom:14px}
       #detailPage .heroTitle{font-size:15px; line-height:1.5}
       #detailPage .label,#detailPage .value{font-size:16px}
       #detailPage .eyePanel,#detailPage .lensPanel{width:min(100%,420px); padding:8px; border-radius:28px}
@@ -714,12 +719,12 @@
           <div class="visualStack">
             <div class="imagePair">
               <div class="eyePanel">
-                <img class="eyeBase" src="eye-photo.png" alt="동공 이미지">
+                <img id="eyeBase" class="eyeBase" src="eye-photo.png" alt="동공 이미지">
                 <svg class="overlaySvg" id="eyeOverlay" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid meet"></svg>
               </div>
 
               <div class="lensPanel">
-                <img class="lensBase" src="lens-photo.png" alt="광학부 이미지">
+                <img id="lensBase" class="lensBase" src="lens-photo.png" alt="광학부 이미지">
                 <svg class="overlaySvg" id="lensOverlay" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid meet"></svg>
 
                 <div class="compactControl">
@@ -906,38 +911,14 @@
     powerBtn.addEventListener('click', () => setMode('power'));
     resetBtn.addEventListener('click', resetViewer);
 
-    function syncPageByHash() {
-      const isDetail = location.hash === '#card1';
-      mainPage.classList.toggle('active', !isDetail);
-      detailPage.classList.toggle('active', isDetail);
-      detailPage.setAttribute('aria-hidden', isDetail ? 'false' : 'true');
-
-      if (!isDetail) {
-        closeVisionModal({ keepHash: true, stopCameraToo: false });
-      } else {
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            updateAll();
-          });
-        });
-      }
-
-      window.scrollTo(0, 0);
-    }
-
-    card1.addEventListener('click', () => {
-      location.hash = 'card1';
-    });
-
-    window.addEventListener('hashchange', syncPageByHash);
-    syncPageByHash();
-
     const sphereSlider = document.getElementById('sphereSlider');
     const addSlider = document.getElementById('addSlider');
     const sphereValue = document.getElementById('sphereValue');
     const addValue = document.getElementById('addValue');
     const eyeOverlay = document.getElementById('eyeOverlay');
     const lensOverlay = document.getElementById('lensOverlay');
+    const eyeBase = document.getElementById('eyeBase');
+    const lensBase = document.getElementById('lensBase');
     const onBtn = document.getElementById('onBtn');
     const offBtn = document.getElementById('offBtn');
     const openVisionBtn = document.getElementById('openVisionBtn');
@@ -1141,6 +1122,41 @@
       }
     }
 
+    async function waitForImageReady(imgEl) {
+      if (!imgEl) return;
+      if (imgEl.complete && imgEl.naturalWidth > 0) {
+        if (imgEl.decode) {
+          try { await imgEl.decode(); } catch (e) {}
+        }
+        return;
+      }
+      await new Promise((resolve) => {
+        const done = () => {
+          imgEl.removeEventListener('load', done);
+          imgEl.removeEventListener('error', done);
+          resolve();
+        };
+        imgEl.addEventListener('load', done, { once:true });
+        imgEl.addEventListener('error', done, { once:true });
+      });
+      if (imgEl.decode) {
+        try { await imgEl.decode(); } catch (e) {}
+      }
+    }
+
+    async function refreshDetailOverlays() {
+      await waitForImageReady(eyeBase);
+      await waitForImageReady(lensBase);
+
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      await new Promise(resolve => requestAnimationFrame(resolve));
+
+      eyeOverlay.innerHTML = '';
+      lensOverlay.innerHTML = '';
+
+      updateAll();
+    }
+
     sphereSlider.addEventListener('input', updateAll);
     addSlider.addEventListener('input', updateAll);
     onBtn.addEventListener('click', () => { designMode = 'on'; updateAll(); });
@@ -1158,6 +1174,42 @@
       document.body.classList.remove('page-lock');
       if (stopCameraToo) stopCamera();
     }
+
+    function syncPageByHash() {
+      const isDetail = location.hash === '#card1';
+      mainPage.classList.toggle('active', !isDetail);
+      detailPage.classList.toggle('active', isDetail);
+      detailPage.setAttribute('aria-hidden', isDetail ? 'false' : 'true');
+
+      if (!isDetail) {
+        closeVisionModal({ keepHash: true, stopCameraToo: false });
+      } else {
+        refreshDetailOverlays();
+      }
+
+      window.scrollTo(0, 0);
+    }
+
+    card1.addEventListener('click', () => {
+      location.hash = 'card1';
+      refreshDetailOverlays();
+    });
+
+    window.addEventListener('hashchange', syncPageByHash);
+    window.addEventListener('pageshow', () => {
+      if (location.hash === '#card1') {
+        refreshDetailOverlays();
+      }
+    });
+
+    eyeBase.addEventListener('load', () => {
+      if (location.hash === '#card1') refreshDetailOverlays();
+    });
+    lensBase.addEventListener('load', () => {
+      if (location.hash === '#card1') refreshDetailOverlays();
+    });
+
+    syncPageByHash();
 
     openVisionBtn.addEventListener('click', openVisionModal);
     closeVisionBtn.addEventListener('click', () => closeVisionModal());
