@@ -250,6 +250,18 @@
       letter-spacing:-.02em;
       padding:0 10px;
     }
+    .references-space{
+      margin-top:8px;
+      text-align:center;
+      color:#9aa5b5;
+      font-size:11px;
+      line-height:1.65;
+      font-weight:700;
+      letter-spacing:-.01em;
+      min-height:72px;
+      padding:0 18px 6px;
+      white-space:pre-line;
+    }
 
     /* detail page */
     #detailPage{
@@ -522,7 +534,11 @@
       z-index:1000;
     }
     #detailPage .modalBack.open{display:flex}
-    #detailPage .modalCard{max-width:920px; padding:18px; position:relative}
+    #detailPage .modalCard{
+      max-width:920px;
+      padding:18px;
+      position:relative;
+    }
     #detailPage .modalClose{position:absolute; right:16px; top:16px}
     #detailPage .visionGrid{
       display:grid;
@@ -546,8 +562,16 @@
     #detailPage .screen video,
     #detailPage .screen img{width:100%; height:100%; object-fit:cover; display:block}
     #detailPage .layer{position:absolute; inset:0}
-    #detailPage .layer.blurred{filter:blur(var(--blur-amt)) contrast(1.05); opacity:0; transition:opacity .2s ease, filter .2s ease}
-    #detailPage .mask-overall .layer.blurred{opacity:var(--blur-opacity); -webkit-mask-image:none; mask-image:none}
+    #detailPage .layer.blurred{
+      filter:blur(var(--blur-amt)) contrast(1.05);
+      opacity:0;
+      transition:opacity .2s ease, filter .2s ease;
+    }
+    #detailPage .mask-overall .layer.blurred{
+      opacity:var(--blur-opacity);
+      -webkit-mask-image:none;
+      mask-image:none;
+    }
     #detailPage .mask-periphery .layer.blurred{
       opacity:var(--blur-opacity);
       -webkit-mask-image:radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 0 var(--clear-stop), rgba(0,0,0,1) var(--blur-start) 100%);
@@ -580,6 +604,16 @@
     }
     #detailPage .tagBtn{cursor:pointer; transition:.18s ease; background:#f2f6fb; border:1px solid #dde5ef; color:#67788f; box-shadow:none}
     #detailPage .tagBtn.active{background:linear-gradient(180deg,#dcebff 0%, #cfe3ff 100%); border-color:#9dbfed; color:#0f5aa6; box-shadow:inset 0 1px 0 rgba(255,255,255,.95)}
+    #detailPage .modalFootnote{
+      margin-top:12px;
+      text-align:center;
+      color:#8f9aae;
+      font-size:11px;
+      line-height:1.45;
+      font-weight:700;
+      letter-spacing:-.02em;
+      padding:0 8px;
+    }
 
     @media (max-width:720px){
       .top-title-box{
@@ -603,6 +637,11 @@
       .round-btn,.mode-btn{height:54px; border-radius:18px; font-size:13px}
       .round-btn{font-size:23px}
       .main-footnote{font-size:11px}
+      .references-space{
+        font-size:10px;
+        min-height:64px;
+        padding:0 14px 6px;
+      }
 
       #detailPage .detail-wrap{padding:16px 12px 42px}
       #detailPage .hero,#detailPage .card,#detailPage .visionCard,#detailPage .modalCard{border-radius:26px}
@@ -632,6 +671,10 @@
       #detailPage .visionGrid{grid-template-columns:1fr}
       #detailPage .explainTopBar{align-items:flex-start; flex-direction:row}
       #detailPage .inlineCamBtn{min-width:118px; padding:10px 12px; font-size:12px}
+      #detailPage .modalFootnote{
+        font-size:10px;
+        margin-top:10px;
+      }
     }
   </style>
 </head>
@@ -691,6 +734,10 @@
       </section>
 
       <div class="main-footnote">해당 이미지는 이해를 돕기 위한 가상 이미지입니다. KR_2026_233</div>
+      <div class="references-space">1.
+2.
+3.
+4.</div>
     </div>
   </section>
 
@@ -807,6 +854,8 @@
             <div class="muted" id="explainConclusion" style="margin-top:12px;"></div>
           </div>
         </div>
+
+        <div class="modalFootnote">해당 이미지는 이해를 돕기 위한 가상 이미지입니다. KR_2026_233</div>
       </div>
     </div>
   </section>
@@ -1040,11 +1089,11 @@
 
       if (state === 'match') return;
       if (state === 'pupilGreater') {
-        screen.classList.add('mask-periphery','fishbowl');
-        screen.style.setProperty('--blur-amt', `${10 + (strength * 10)}px`);
-        screen.style.setProperty('--blur-opacity', `${0.55 + (strength * 0.35)}`);
-        screen.style.setProperty('--clear-stop', `${56 - (strength * 10)}%`);
-        screen.style.setProperty('--blur-start', `${70 - (strength * 8)}%`);
+        screen.classList.add('mask-periphery');
+        screen.style.setProperty('--blur-amt', `${10 + (strength * 8)}px`);
+        screen.style.setProperty('--blur-opacity', `${0.50 + (strength * 0.28)}`);
+        screen.style.setProperty('--clear-stop', `${58 - (strength * 8)}%`);
+        screen.style.setProperty('--blur-start', `${72 - (strength * 6)}%`);
         return;
       }
       screen.classList.add('mask-overall');
