@@ -45,39 +45,78 @@
     }
 
     /* 상단 미션 카드 */
-    #missionBar{
+    #missionBarWrap{
       position:fixed;
       left:12px;
       right:12px;
       top:12px;
       z-index:40;
-      display:flex;
-      gap:10px;
+      pointer-events:auto;
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow: 0 18px 44px rgba(11,31,51,.12);
+      border:1px solid rgba(0,94,184,.10);
+      background:rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+    }
+    #missionBarHeader{
+      background:linear-gradient(180deg, #123F95 0%, #0A3486 100%);
+      color:#fff;
+      text-align:center;
+      font-weight:900;
+      font-size:18px;
+      letter-spacing:-.2px;
+      padding:16px 18px 17px;
+      box-shadow: inset 0 -1px 0 rgba(255,255,255,.10);
+    }
+    #missionBar{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:0;
       align-items:stretch;
       pointer-events:auto;
+      background:rgba(255,255,255,.96);
     }
     .missionCard{
-      flex:1;
-      padding:12px 12px;
-      border-radius:16px;
-      background:var(--glass);
-      border:1px solid var(--line);
+      padding:16px 14px 15px;
+      background:linear-gradient(180deg, rgba(255,255,255,.96) 0%, rgba(248,251,255,.96) 100%);
+      border:none;
+      border-right:1px solid rgba(11,31,51,.08);
       color:var(--text-navy);
-      backdrop-filter: blur(10px);
-      min-height:86px;
+      min-height:116px;
       box-sizing:border-box;
       -webkit-tap-highlight-color: transparent;
       user-select:none;
       cursor:pointer;
-      transition: transform .08s ease, background .18s ease, border-color .18s ease;
+      transition: transform .08s ease, background .22s ease, box-shadow .22s ease, color .22s ease;
       position:relative;
-      box-shadow: 0 10px 28px rgba(11,31,51,.08);
+      overflow:hidden;
     }
+    .missionCard:last-child{ border-right:none; }
     .missionCard:active{ transform: scale(.99); }
 
+    .missionCard::before{
+      content:"";
+      position:absolute;
+      left:14px;
+      right:14px;
+      bottom:0;
+      height:3px;
+      border-radius:999px 999px 0 0;
+      background:linear-gradient(90deg, rgba(0,94,184,.92), rgba(30,120,214,.55));
+      opacity:0;
+      transform:scaleX(.55);
+      transform-origin:center;
+      transition:opacity .22s ease, transform .22s ease;
+    }
+
     .missionCard.on{
-      background:rgba(0,94,184,.10);
-      border-color:rgba(0,94,184,.35);
+      background:linear-gradient(180deg, rgba(234,243,255,.98) 0%, rgba(255,255,255,.98) 100%);
+      box-shadow: inset 0 0 0 1px rgba(0,94,184,.12), 0 10px 22px rgba(0,94,184,.06);
+    }
+    .missionCard.on::before{
+      opacity:1;
+      transform:scaleX(1);
     }
 
     .missionCard.done::after{
@@ -89,31 +128,53 @@
       font-weight:900;
       padding:4px 8px;
       border-radius:999px;
-      background:rgba(0,94,184,.12);
-      border:1px solid rgba(0,94,184,.35);
+      background:rgba(0,94,184,.10);
+      border:1px solid rgba(0,94,184,.22);
       color:var(--acuvue-blue);
       backdrop-filter: blur(6px);
     }
 
     .missionNo{
       font-weight:900;
-      opacity:.85;
+      opacity:.78;
       font-size:14px;
-      margin-bottom:6px;
+      margin-bottom:8px;
       color:var(--text-sub);
+      letter-spacing:.2px;
     }
     .missionTitle{
       font-weight:900;
       font-size:16px;
-      margin-bottom:6px;
+      line-height:1.24;
+      margin-bottom:10px;
       color:var(--text-navy);
+      letter-spacing:-.2px;
+      word-break:keep-all;
     }
     .missionDesc{
       font-size:12.5px;
       line-height:1.35;
-      opacity:.9;
-      white-space:pre-line;
+      opacity:.92;
+      white-space:nowrap;
       color:var(--text-sub);
+      font-weight:700;
+    }
+
+    @media (max-width: 560px){
+      #missionBarHeader{
+        font-size:16px;
+        padding:15px 14px 16px;
+      }
+      .missionCard{
+        min-height:112px;
+        padding:15px 10px 14px;
+      }
+      .missionTitle{
+        font-size:14px;
+      }
+      .missionDesc{
+        font-size:11.5px;
+      }
     }
 
     /* 하단 버튼 */
@@ -1046,11 +1107,119 @@
       #comfortConfirm{ min-width:82px; height:58px; font-size:16px; border-radius:14px; padding:0 18px; }
     }
 
+
+    /* 맥스 팩샷 블루라이트 체험 */
+    #maxPackshot{
+      pointer-events:auto;
+      cursor:pointer;
+    }
+
+    #blueTintRays{
+      position:fixed;
+      inset:0;
+      z-index:31;
+      pointer-events:none;
+      display:none;
+      overflow:hidden;
+      opacity:0;
+      transition:opacity .24s ease;
+    }
+    #blueTintRays.show{
+      display:block;
+      opacity:1;
+    }
+    #blueTintRays::before{
+      content:"";
+      position:absolute;
+      right:-8vw;
+      top:22%;
+      width:52vw;
+      height:52vw;
+      border-radius:50%;
+      background:
+        radial-gradient(circle at 30% 50%, rgba(125,255,245,.42) 0%, rgba(59,176,255,.24) 34%, rgba(0,94,184,.10) 52%, rgba(0,94,184,0) 72%);
+      filter:blur(2px);
+      transform:translateZ(0);
+    }
+    #blueTintRays::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(160deg,
+          rgba(0,0,0,0) 58%,
+          rgba(92,236,217,.18) 66%,
+          rgba(69,185,255,.18) 72%,
+          rgba(0,0,0,0) 80%);
+      mix-blend-mode:screen;
+      opacity:.9;
+    }
+
+    #blueLightOverlay{
+      position:fixed;
+      left:12px;
+      right:12px;
+      bottom:92px;
+      z-index:68;
+      display:none;
+      gap:10px;
+      align-items:center;
+      background:linear-gradient(180deg, rgba(234,243,255,.96) 0%, rgba(255,255,255,.96) 100%);
+      border:1px solid rgba(0,94,184,.18);
+      border-radius:14px;
+      padding:11px 12px;
+      box-shadow: 0 16px 50px rgba(0,94,184,.10), 0 18px 60px rgba(11,31,51,.14);
+      backdrop-filter: blur(12px);
+    }
+    #blueLightOverlay.show{ display:flex; }
+    #blueLightIcon{
+      width:46px;
+      height:46px;
+      border-radius:999px;
+      flex:0 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:radial-gradient(circle at 35% 35%, rgba(153,255,240,.95), rgba(35,171,255,.92));
+      color:#fff;
+      font-size:20px;
+      box-shadow: 0 10px 22px rgba(0,94,184,.18);
+    }
+    #blueLightText{
+      flex:1 1 auto;
+      min-width:0;
+    }
+    #blueLightTitle{
+      font-weight:900;
+      color:var(--text-navy);
+      margin-bottom:3px;
+    }
+    #blueLightHint{
+      color:var(--text-sub);
+      font-size:12.5px;
+      line-height:1.38;
+      word-break:keep-all;
+    }
+    #blueLightConfirm{
+      flex:0 0 auto;
+      border:1px solid rgba(0,94,184,.65);
+      background:var(--acuvue-blue);
+      color:#fff;
+      font-weight:900;
+      font-size:13px;
+      padding:9px 12px;
+      border-radius:999px;
+      cursor:pointer;
+      box-shadow: 0 10px 22px rgba(0,94,184,.22);
+    }
+
   </style>
 </head>
 
 <body>
-  <div id="missionBar">
+  <div id="missionBarWrap">
+    <div id="missionBarHeader">아큐브® 난시 렌즈 기술</div>
+    <div id="missionBar">
     <div id="missionASD" class="missionCard" role="button" tabindex="0">
       <div class="missionNo">01</div>
       <div class="missionTitle">ASD™ 축안정화</div>
@@ -1065,6 +1234,7 @@
       <div class="missionNo">03</div>
       <div class="missionTitle">프리즘이 적은 광학부</div>
       <div class="missionDesc">  자세히 보기 > </div>
+    </div>
     </div>
   </div>
 
@@ -1199,6 +1369,17 @@
     </div>
   </div>
 
+  <div id="blueTintRays" aria-hidden="true"></div>
+
+  <div id="blueLightOverlay" aria-hidden="true">
+    <div id="blueLightIcon">✦</div>
+    <div id="blueLightText">
+      <div id="blueLightTitle">블루라이트 필터</div>
+      <div id="blueLightHint">블루-그린 틴트와 광선 효과를 통해 아큐브® MAX의 블루라이트 필터 체험을 확인해 보세요.</div>
+    </div>
+    <button id="blueLightConfirm" type="button">확인</button>
+  </div>
+
   <!-- ✅ 우측 하단 렌즈 팩샷 -->
   <img id="maxPackshot" src="MAX.png" alt="아큐브 맥스 난시 팩샷" onerror="this.style.display='none';">
 
@@ -1248,6 +1429,9 @@
     const asdLidTop = document.getElementById('asdLidTop');
     const asdLidBot = document.getElementById('asdLidBot');
     const maxPackshot = document.getElementById('maxPackshot');
+    const blueTintRays = document.getElementById('blueTintRays');
+    const blueLightOverlay = document.getElementById('blueLightOverlay');
+    const blueLightConfirm = document.getElementById('blueLightConfirm');
     const comfortOverlay = document.getElementById('comfortOverlay');
     const comfortClose = document.getElementById('comfortClose');
     const comfortScene = document.getElementById('comfortScene');
@@ -1349,6 +1533,37 @@
     function syncPackshot(){
       if(!maxPackshot) return;
       maxPackshot.style.display = (currentMode === 'lens') ? 'block' : 'none';
+    }
+
+
+    function closeBlueLightDemo(){
+      if(blueTintRays) blueTintRays.classList.remove('show');
+      if(blueLightOverlay) blueLightOverlay.classList.remove('show');
+      if(mv){
+        mv.style.filter = '';
+      }
+    }
+
+    function openBlueLightDemo(){
+      if(currentMode !== 'lens'){
+        setModel('lens_clear.glb', 'lens', { resetCamera:true }).then(()=>{
+          setTimeout(openBlueLightDemo, 160);
+        });
+        return;
+      }
+      if(asdOverlay.classList.contains('show')) closeASD();
+      if(comfortOverlay.classList.contains('show')) closeComfort();
+      if(pvpOn) forcePVPOff();
+
+      resetCameraToModeDefault('lens');
+
+      setTimeout(()=>{
+        try{
+          mv.style.filter = 'hue-rotate(22deg) saturate(1.22) brightness(1.04)';
+        }catch(e){}
+        if(blueTintRays) blueTintRays.classList.add('show');
+        if(blueLightOverlay) blueLightOverlay.classList.add('show');
+      }, 140);
     }
 
     function setASDHintDefault(){
@@ -1566,6 +1781,7 @@
     function closeASD(){
       asdOverlay.classList.remove('show');
       asdOverlay.setAttribute('aria-hidden','true');
+      closeBlueLightDemo();
       resetCameraToModeDefault('lens');
       syncMissionUI();
     }
@@ -1751,6 +1967,7 @@
       if(markDone) comfortDone = true;
       comfortOverlay.classList.remove('show');
       comfortOverlay.setAttribute('aria-hidden','true');
+      closeBlueLightDemo();
       setComfortMode('default');
       syncMissionUI();
     }
@@ -1897,6 +2114,7 @@
         pvpOn = false;
         showPVP(false);
       }
+      closeBlueLightDemo();
       showThickness(currentMode === 'heat');
       resetCameraToModeDefault(currentMode);
       syncMissionUI();
@@ -1904,8 +2122,11 @@
       positionComfortInteractiveElements();
     });
 
-    modeLens.addEventListener('click', ()=> setModel('lens_clear.glb', 'lens', { resetCamera:false }));
-    modeHeat.addEventListener('click', ()=> setModel('lens_heatmap.glb', 'heat', { resetCamera:false }));
+    modeLens.addEventListener('click', ()=> { closeBlueLightDemo(); setModel('lens_clear.glb', 'lens', { resetCamera:false }); });
+    modeHeat.addEventListener('click', ()=> { closeBlueLightDemo(); setModel('lens_heatmap.glb', 'heat', { resetCamera:false }); });
+
+    maxPackshot?.addEventListener('click', openBlueLightDemo);
+    blueLightConfirm?.addEventListener('click', closeBlueLightDemo);
 
     setModel('lens_clear.glb', 'lens', { resetCamera:true });
 
