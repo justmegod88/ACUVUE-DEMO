@@ -257,38 +257,38 @@
       bottom:calc(env(safe-area-inset-bottom, 0px) + 8px);
       z-index:49;
       text-align:center;
-      font-size:10.5px;
-      line-height:1.35;
-      color:rgba(11,31,51,.72);
-      font-weight:700;
-      letter-spacing:-.1px;
+      font-size:8.8px;
+      line-height:1.28;
+      color:rgba(80,88,99,.92);
+      font-weight:500;
+      letter-spacing:-.06px;
       pointer-events:none;
-      text-shadow:0 1px 0 rgba(255,255,255,.55);
+      text-shadow:0 1px 0 rgba(255,255,255,.52);
     }
     @media (max-width:560px){
       #globalToricDisclaimer{
         bottom:calc(env(safe-area-inset-bottom, 0px) + 6px);
-        font-size:9.5px;
-        line-height:1.32;
+        font-size:8px;
+        line-height:1.24;
       }
     }
 
     .toric-popup-disclaimer{
-      padding:10px 16px 12px;
-      font-size:11px;
-      line-height:1.45;
-      color:rgba(11,31,51,.76);
+      padding:8px 16px 10px;
+      font-size:9.4px;
+      line-height:1.33;
+      color:rgba(80,88,99,.94);
       background:#fff;
     }
     .toric-popup-disclaimer .disc-note{
       display:block;
-      margin-bottom:6px;
-      font-weight:700;
+      margin-bottom:4px;
+      font-weight:500;
     }
     .toric-popup-disclaimer .disc-ref{
       display:block;
-      font-weight:800;
-      color:rgba(11,31,51,.90);
+      font-weight:500;
+      color:rgba(80,88,99,.96);
     }
     .toric-popup-disclaimer em{ font-style:italic; }
     /* PVP */
@@ -1019,10 +1019,10 @@
     #cfOptic{
       transform-style:preserve-3d;
     }
-    #comfortScene.mode-off #cfTargetStage{ transform:translate(-50%,-50%) rotate(-3deg); }
-    #comfortScene.mode-on #cfTargetStage{ transform:translate(-50%,-50%) rotate(9deg); }
-    #comfortScene.mode-default #cfTargetStage{ transform:translate(-50%,-50%) rotate(-1deg); }
-    #comfortScene.mode-on .cf-optic-prism{ transform:rotate(-8deg); }
+    #comfortScene.mode-off #cfTargetStage{ transform:translate(-50%,-50%) rotate(0deg); }
+    #comfortScene.mode-on #cfTargetStage{ transform:translate(-50%,-50%) rotate(0deg); }
+    #comfortScene.mode-default #cfTargetStage{ transform:translate(-50%,-50%) rotate(0deg); }
+    #comfortScene.mode-on .cf-optic-prism{ transform:rotate(0deg); }
     #comfortScene.mode-off .cf-optic-flat{ transform:rotate(0deg); }
 
     #comfortScene.mode-default .cf-box-top,
@@ -1085,15 +1085,11 @@
       width:0; height:0; border-left:24px solid transparent; border-right:24px solid transparent; border-bottom:82px solid rgba(214,238,255,.30);
     }
     .cf-optic-flat::before{
-      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-      width:34px; height:92px; border-radius:4px;
-      background:linear-gradient(180deg, rgba(255,255,255,.60), rgba(226,236,246,.42));
-      border:1px solid rgba(255,255,255,.72);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.25), 0 4px 10px rgba(0,0,0,.08);
+      display:none;
     }
 
     .cf-guide-line{
-      position:absolute; height:0; border-top:6px dashed; z-index:5; transform-origin:left center;
+      position:absolute; height:0; border-top:4px dashed; z-index:5; transform-origin:left center;
       transition:left .35s ease, top .35s ease, width .35s ease, transform .35s ease, opacity .25s ease;
       pointer-events:none; opacity:0;
     }
@@ -1110,13 +1106,23 @@
       display:grid; grid-template-columns:1fr 1fr; gap:8px; align-items:center;
     }
     .cf-seg-btn{
-      height:66px; border-radius:999px; border:2px solid #8eb5de; background:#ffffff;
-      color:#143a63; font-size:22px; font-weight:900; letter-spacing:-.4px; cursor:pointer; transition:all .18s ease;
-      box-shadow:none; padding:0 12px; white-space:nowrap; -webkit-appearance:none; appearance:none;
+      height:66px; border-radius:999px; border:1.5px solid rgba(123,171,221,.72);
+      background:linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+      color:#3f5f80; font-size:21px; font-weight:800; letter-spacing:-.32px; cursor:pointer; transition:all .18s ease;
+      box-shadow:0 8px 18px rgba(17,104,208,.08), inset 0 1px 0 rgba(255,255,255,.96);
+      padding:0 16px; white-space:nowrap; -webkit-appearance:none; appearance:none;
     }
-    .cf-seg-btn.active{ background:#eaf4ff; color:#0f4f8f; border-color:#8eb5de; box-shadow:none; }
-    .cf-seg-btn.default-active{ background:#eaf4ff; color:#0f4f8f; border-color:#8eb5de; box-shadow:none; }
-    .cf-seg-btn:not(.active):not(.default-active){ color:#4f6781; }
+    .cf-seg-btn.active{
+      background:linear-gradient(180deg, #eef7ff 0%, #e2f0ff 100%);
+      color:#0f4f8f; border-color:#7fb1e6;
+      box-shadow:0 10px 24px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98);
+    }
+    .cf-seg-btn.default-active{
+      background:linear-gradient(180deg, #eef7ff 0%, #e2f0ff 100%);
+      color:#0f4f8f; border-color:#7fb1e6;
+      box-shadow:0 10px 24px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98);
+    }
+    .cf-seg-btn:not(.active):not(.default-active){ color:#60758a; }
     .cf-seg-btn:not(.active):active{ transform:scale(.985); }
 
     #comfortMessage{
@@ -1404,15 +1410,24 @@
       display:flex !important;
     }
     #blueLightOverlay::before{
-      display:none;
+      content:"";
+      position:absolute;
+      right:28px;
+      bottom:-6px;
+      width:26px;
+      height:16px;
+      background:linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(246,250,255,.98) 100%);
+      border-bottom-left-radius:14px 10px;
+      border-bottom-right-radius:14px 10px;
+      z-index:0;
     }
     #blueLightOverlay::after{
       content:"";
       position:absolute;
-      right:34px;
-      bottom:-8px;
-      width:16px;
-      height:16px;
+      right:35px;
+      bottom:-7px;
+      width:14px;
+      height:14px;
       background:linear-gradient(135deg, rgba(255,255,255,.99) 0%, rgba(246,250,255,.99) 100%);
       border-right:1px solid rgba(0,94,184,.16);
       border-bottom:1px solid rgba(0,94,184,.16);
@@ -1430,10 +1445,10 @@
         bottom:118px !important;
       }
       #blueLightOverlay::before{
-        display:none !important;
+        right:26px !important;
       }
       #blueLightOverlay::after{
-        right:32px !important;
+        right:33px !important;
         top:auto !important;
       }
     }
@@ -1773,11 +1788,7 @@
 
     function syncPackshot(){
       if(!maxPackshot) return;
-      const cardOpen =
-        (asdOverlay && asdOverlay.classList.contains('show')) ||
-        (comfortOverlay && comfortOverlay.classList.contains('show')) ||
-        pvpOn === true;
-      maxPackshot.style.display = (currentMode === 'lens' && !cardOpen) ? 'block' : 'none';
+      maxPackshot.style.display = (currentMode === 'lens') ? 'block' : 'none';
     }
 
 
@@ -2049,7 +2060,6 @@ function openBlueLightDemo(){
       closeBlueLightDemo();
       resetCameraToModeDefault('lens');
       syncMissionUI();
-      syncPackshot();
     }
 
     function setModeButtons(){
@@ -2063,7 +2073,6 @@ function openBlueLightDemo(){
       pvpOn = false;
       showPVP(false);
       syncMissionUI();
-      syncPackshot();
     }
 
     function openASD(){
@@ -2081,7 +2090,6 @@ function openBlueLightDemo(){
       asdOverlay.classList.add('show');
       asdOverlay.setAttribute('aria-hidden','false');
       syncMissionUI();
-      syncPackshot();
     }
 
     function setModel(file, mode, options = {}){
@@ -2197,13 +2205,11 @@ function openBlueLightDemo(){
           zoomInForPVP();
           showPVP(true);
           syncMissionUI();
-          syncPackshot();
         }, 140);
       }else{
         showPVP(false);
         resetCameraToModeDefault('lens');
         syncMissionUI();
-        syncPackshot();
       }
     }
 
@@ -2218,7 +2224,6 @@ function openBlueLightDemo(){
       showPVP(false);
       resetCameraToModeDefault('lens');
       syncMissionUI();
-      syncPackshot();
     }
 
     pvpConfirm.addEventListener('click', (e)=>{
@@ -2244,7 +2249,6 @@ function openBlueLightDemo(){
       closeBlueLightDemo();
       setComfortMode('off');
       syncMissionUI();
-      syncPackshot();
     }
 
     function openComfort(){
@@ -2255,7 +2259,6 @@ function openBlueLightDemo(){
       setComfortMode('off');
       requestAnimationFrame(positionComfortInteractiveElements);
       syncMissionUI();
-      syncPackshot();
     }
 
     function toggleComfort(){
@@ -2320,7 +2323,7 @@ function openBlueLightDemo(){
       const cardH = mobile ? 126 : (tablet ? 158 : 176);
       const modeOn = comfortScene.classList.contains('mode-on');
       const cardCx = modeOn ? w * 0.188 : w * 0.225;
-      const cardCy = modeOn ? h * 0.358 : h * 0.500;
+      const cardCy = modeOn ? h * 0.430 : ((eyeLeft.y + eyeRight.y) / 2);
 
       cfTargetStage.style.width = cardW + 'px';
       cfTargetStage.style.height = cardH + 'px';
@@ -2337,25 +2340,24 @@ function openBlueLightDemo(){
 
       const modeOff = comfortScene.classList.contains('mode-off');
       const startX = cardCx + cardW * 0.46;
-      const redEndX = eyeLeft.x - (mobile ? 2 : 4);
-      const redEndY = eyeLeft.y + (mobile ? 0 : 1);
+      const offY = (eyeLeft.y + eyeRight.y) / 2;
       const blueEndX = eyeRight.x - (mobile ? 10 : 12);
-      const blueEndY = eyeRight.y + (mobile ? 2 : 3);
+      const redEndX = eyeLeft.x - (mobile ? 2 : 4);
 
       if(modeOn){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
-        const onRedStartY = cardCy - cardH * 0.34;
-        const onBlueStartY = cardCy + cardH * 0.05;
-        cfPlaceLine(cfLineRed, startX, onRedStartY, redEndX, redEndY, rect);
-        cfPlaceLine(cfLineBlue, startX, onBlueStartY, blueEndX, eyeRight.y + (mobile ? 1 : 2), rect);
+        const onRedStartY = cardCy + (mobile ? 0 : 1);
+        const onBlueStartY = offY;
+        const onRedEndY = eyeLeft.y - (mobile ? 24 : 30);
+        const onBlueEndY = offY;
+        cfPlaceLine(cfLineRed, startX, onRedStartY, redEndX, onRedEndY, rect);
+        cfPlaceLine(cfLineBlue, startX, onBlueStartY, blueEndX, onBlueEndY, rect);
       }else if(modeOff){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
-        const offRedStartY = cardCy + cardH * 0.02;
-        const offBlueStartY = cardCy + cardH * 0.04;
-        cfPlaceLine(cfLineRed, startX, offRedStartY, redEndX, redEndY, rect);
-        cfPlaceLine(cfLineBlue, startX, offBlueStartY, blueEndX, blueEndY, rect);
+        cfPlaceLine(cfLineRed, startX, offY, redEndX, offY, rect);
+        cfPlaceLine(cfLineBlue, startX, offY, blueEndX, offY, rect);
       }else{
         cfLineRed.style.opacity = '0';
         cfLineBlue.style.opacity = '0';
