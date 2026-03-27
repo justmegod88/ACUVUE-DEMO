@@ -1403,25 +1403,8 @@
     #blueLightOverlay.show{
       display:flex !important;
     }
-    #blueLightOverlay::before{
-      content:none !important;
-    }
-    #blueLightOverlay::after{
-      content:"";
-      position:absolute;
-      right:90px;
-      bottom:-9px;
-      width:18px;
-      height:18px;
-      background:linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(246,250,255,.98) 100%);
-      border-right:1px solid rgba(0,94,184,.16);
-      border-bottom:1px solid rgba(0,94,184,.16);
-      transform:rotate(45deg);
-      border-radius:0 0 4px 0;
-      z-index:1;
-      top:auto !important;
-      box-shadow:4px 4px 10px rgba(11,31,51,.04);
-    }
+    #blueLightOverlay::before{display:none !important;}
+    #blueLightOverlay::after{content:"";position:absolute;right:34px;bottom:-10px;width:18px;height:18px;background:linear-gradient(135deg, rgba(255,255,255,.99) 0%, rgba(246,250,255,.99) 100%);border-right:1px solid rgba(0,94,184,.16);border-bottom:1px solid rgba(0,94,184,.16);transform:rotate(45deg);border-bottom-right-radius:4px;z-index:1 !important;}
 
     @media (max-width:560px){
       #blueLightOverlay{
@@ -1431,10 +1414,10 @@
         bottom:118px !important;
       }
       #blueLightOverlay::before{
-        content:none !important;
+        right:26px !important;
       }
       #blueLightOverlay::after{
-        right:82px !important;
+        right:33px !important;
         top:auto !important;
       }
     }
@@ -1774,13 +1757,11 @@
 
     function syncPackshot(){
       if(!maxPackshot) return;
-      const shouldShow =
-        currentMode === 'lens' &&
-        !pvpOn &&
-        !asdOverlay.classList.contains('show') &&
-        !comfortOverlay.classList.contains('show') &&
-        !blueLightOverlay.classList.contains('show');
-      maxPackshot.style.display = shouldShow ? 'block' : 'none';
+      const cardOverlayOpen =
+        (asdOverlay && asdOverlay.classList.contains('show')) ||
+        (comfortOverlay && comfortOverlay.classList.contains('show')) ||
+        (pvpOn === true);
+      maxPackshot.style.display = (currentMode === 'lens' && !cardOverlayOpen) ? 'block' : 'none';
     }
 
 
@@ -2067,6 +2048,7 @@ function openBlueLightDemo(){
       pvpOn = false;
       showPVP(false);
       syncMissionUI();
+      syncPackshot();
     }
 
     function openASD(){
