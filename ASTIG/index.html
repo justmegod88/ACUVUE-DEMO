@@ -257,27 +257,27 @@
       bottom:calc(env(safe-area-inset-bottom, 0px) + 8px);
       z-index:49;
       text-align:center;
-      font-size:8.8px;
-      line-height:1.28;
-      color:rgba(80,88,99,.92);
+      font-size:9px;
+      line-height:1.30;
+      color:rgba(72,80,92,.88);
       font-weight:500;
-      letter-spacing:-.06px;
+      letter-spacing:-.08px;
       pointer-events:none;
-      text-shadow:0 1px 0 rgba(255,255,255,.52);
+      text-shadow:0 1px 0 rgba(255,255,255,.55);
     }
     @media (max-width:560px){
       #globalToricDisclaimer{
         bottom:calc(env(safe-area-inset-bottom, 0px) + 6px);
-        font-size:8px;
-        line-height:1.24;
+        font-size:8.2px;
+        line-height:1.26;
       }
     }
 
     .toric-popup-disclaimer{
-      padding:8px 16px 10px;
+      padding:9px 16px 11px;
       font-size:9.4px;
-      line-height:1.33;
-      color:rgba(80,88,99,.94);
+      line-height:1.36;
+      color:rgba(72,80,92,.90);
       background:#fff;
     }
     .toric-popup-disclaimer .disc-note{
@@ -288,7 +288,7 @@
     .toric-popup-disclaimer .disc-ref{
       display:block;
       font-weight:500;
-      color:rgba(80,88,99,.96);
+      color:rgba(72,80,92,.92);
     }
     .toric-popup-disclaimer em{ font-style:italic; }
     /* PVP */
@@ -1084,7 +1084,9 @@
       content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-46%);
       width:0; height:0; border-left:24px solid transparent; border-right:24px solid transparent; border-bottom:82px solid rgba(214,238,255,.30);
     }
-    .cf-optic-flat::before{ display:none; }
+    .cf-optic-flat::before{
+      display:none;
+    }
 
     .cf-guide-line{
       position:absolute; height:0; border-top:3px dashed; z-index:5; transform-origin:left center;
@@ -1103,23 +1105,13 @@
       border:none; box-shadow:none;
       display:grid; grid-template-columns:1fr 1fr; gap:8px; align-items:center;
     }
-        .cf-seg-btn{
-      height:66px; border-radius:999px; border:1.5px solid rgba(110,162,218,.72);
-      background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%);
-      color:#4c6177; font-size:21px; font-weight:800; letter-spacing:-.35px; cursor:pointer;
-      transition:all .18s ease; box-shadow:0 8px 18px rgba(17,104,208,.08), inset 0 1px 0 rgba(255,255,255,.96);
-      padding:0 18px; white-space:nowrap; -webkit-appearance:none; appearance:none;
+    .cf-seg-btn{
+      height:66px; border-radius:999px; border:1.5px solid rgba(110,162,218,.72); background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%);
+      color:#627588; font-size:21px; font-weight:800; letter-spacing:-.35px; cursor:pointer; transition:all .18s ease;
+      box-shadow:0 8px 18px rgba(17,104,208,.08), inset 0 1px 0 rgba(255,255,255,.96); padding:0 18px; white-space:nowrap; -webkit-appearance:none; appearance:none;
     }
-    .cf-seg-btn.active{
-      background:linear-gradient(180deg,#eef7ff 0%,#dceeff 100%);
-      color:#0f4f8f; border-color:#7fb1e6;
-      box-shadow:0 10px 22px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98);
-    }
-    .cf-seg-btn.default-active{
-      background:linear-gradient(180deg,#eef7ff 0%,#dceeff 100%);
-      color:#0f4f8f; border-color:#7fb1e6;
-      box-shadow:0 10px 22px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98);
-    }
+    .cf-seg-btn.active{ background:linear-gradient(180deg,#eef7ff 0%,#dceeff 100%); color:#0f4f8f; border-color:#7fb1e6; box-shadow:0 10px 22px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98); }
+    .cf-seg-btn.default-active{ background:linear-gradient(180deg,#eef7ff 0%,#dceeff 100%); color:#0f4f8f; border-color:#7fb1e6; box-shadow:0 10px 22px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98); }
     .cf-seg-btn:not(.active):not(.default-active){ color:#627588; }
     .cf-seg-btn:not(.active):active{ transform:scale(.985); }
 
@@ -2062,6 +2054,7 @@ function openBlueLightDemo(){
       closeBlueLightDemo();
       resetCameraToModeDefault('lens');
       syncMissionUI();
+      syncPackshot();
     }
 
     function setModeButtons(){
@@ -2093,6 +2086,7 @@ function openBlueLightDemo(){
       asdOverlay.classList.add('show');
       asdOverlay.setAttribute('aria-hidden','false');
       syncMissionUI();
+      syncPackshot();
     }
 
     function setModel(file, mode, options = {}){
@@ -2208,11 +2202,13 @@ function openBlueLightDemo(){
           zoomInForPVP();
           showPVP(true);
           syncMissionUI();
+          syncPackshot();
         }, 140);
       }else{
         showPVP(false);
         resetCameraToModeDefault('lens');
         syncMissionUI();
+        syncPackshot();
       }
     }
 
@@ -2227,6 +2223,7 @@ function openBlueLightDemo(){
       showPVP(false);
       resetCameraToModeDefault('lens');
       syncMissionUI();
+      syncPackshot();
     }
 
     pvpConfirm.addEventListener('click', (e)=>{
@@ -2252,6 +2249,7 @@ function openBlueLightDemo(){
       closeBlueLightDemo();
       setComfortMode('off');
       syncMissionUI();
+      syncPackshot();
     }
 
     function openComfort(){
@@ -2262,6 +2260,7 @@ function openBlueLightDemo(){
       setComfortMode('off');
       requestAnimationFrame(positionComfortInteractiveElements);
       syncMissionUI();
+      syncPackshot();
     }
 
     function toggleComfort(){
@@ -2326,7 +2325,7 @@ function openBlueLightDemo(){
       const cardH = mobile ? 126 : (tablet ? 158 : 176);
       const modeOn = comfortScene.classList.contains('mode-on');
       const cardCx = modeOn ? w * 0.188 : w * 0.225;
-      const cardCy = ((eyeLeft.y + eyeRight.y) / 2);
+      const cardCy = modeOn ? h * 0.358 : h * 0.500;
 
       cfTargetStage.style.width = cardW + 'px';
       cfTargetStage.style.height = cardH + 'px';
@@ -2343,40 +2342,25 @@ function openBlueLightDemo(){
 
       const modeOff = comfortScene.classList.contains('mode-off');
 
-      // 카드 우측면 중앙 고정 시작점
       const startX = cardCx + cardW * 0.46;
       const startY = cardCy;
-
-      // 파란 점선: 항상 수평 180도 유지
       const blueEndX = eyeRight.x - (mobile ? 10 : 12);
-      const blueEndY = startY;
-
-      // 빨간 점선: 프리즘 없는 경우 수평, 프리즘 있는 경우만 좌측 상방(150도 느낌)으로 고정
-      const redOffEndX = eyeLeft.x - (mobile ? 2 : 4);
-      const redOffEndY = startY;
-
-      const redOnEndX = eyeLeft.x - (mobile ? 1 : 2);
-      const redOnEndY = eyeLeft.y - (mobile ? 26 : 32);
+      const redEndX = eyeLeft.x - (mobile ? 2 : 4);
 
       if(modeOn){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
-        cfPlaceLine(cfLineRed, startX, startY, redOnEndX, redOnEndY, rect);
-        cfPlaceLine(cfLineBlue, startX, startY, blueEndX, blueEndY, rect);
+
+        const redStartY = cardCy;
+        const redEndY = eyeLeft.y - (mobile ? 18 : 22);
+
+        cfPlaceLine(cfLineRed, startX, redStartY, redEndX, redEndY, rect);
+        cfPlaceLine(cfLineBlue, startX, startY, blueEndX, startY, rect);
       }else if(modeOff){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
-        cfPlaceLine(cfLineRed, startX, startY, redOffEndX, redOffEndY, rect);
-        cfPlaceLine(cfLineBlue, startX, startY, blueEndX, blueEndY, rect);
-      }else{
-        cfLineRed.style.opacity = '0';
-        cfLineBlue.style.opacity = '0';
-      }
-    }else if(modeOff){
-        cfLineRed.style.opacity = '1';
-        cfLineBlue.style.opacity = '1';
-        cfPlaceLine(cfLineRed, startX, offY, redEndX, offY, rect);
-        cfPlaceLine(cfLineBlue, startX, offY, blueEndX, offY, rect);
+        cfPlaceLine(cfLineRed, startX, startY, redEndX, startY, rect);
+        cfPlaceLine(cfLineBlue, startX, startY, blueEndX, startY, rect);
       }else{
         cfLineRed.style.opacity = '0';
         cfLineBlue.style.opacity = '0';
