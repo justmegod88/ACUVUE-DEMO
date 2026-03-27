@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <title>ACUVUE ASTIG</title>
+  <title>ACUVUE GLB Viewer (흰색/ 블루)</title>
 
   <style>
     :root{
@@ -2349,7 +2349,7 @@ function openBlueLightDemo(){
 
       // 기본 카드(보라/파랑 동일 기준 위치)
       const baseCardCx = w * 0.225;
-      const baseCardCy = (eyeLeft.y + eyeRight.y) / 2+10;
+      const baseCardCy = (eyeLeft.y + eyeRight.y) / 2 + 10;
 
       // 빨간 카드: 왼쪽 눈 기준 170도 느낌으로 조금 덜 위쪽
       let cardCx, cardCy;
@@ -2395,12 +2395,14 @@ function openBlueLightDemo(){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
-        // 빨간선 위치 그대로 유지, 파란선만 카드 쪽에서 아주 살짝 아래
-        const redY = baseCardCy;
-        const blueStartY = baseCardCy + (mobile ? 2 : 3);
-        const blueEndY = eyeRight.y + (mobile ? 2 : 3);
+        // 양안 각각 눈 기준으로 카드가 아주 살짝 좌측 하방에 있도록 3~5도 느낌만 적용
+        const tilt = mobile ? 4 : 6;
+        const redStartY = eyeLeft.y + tilt;
+        const blueStartY = eyeRight.y + tilt;
+        const redEndY = eyeLeft.y;
+        const blueEndY = eyeRight.y;
 
-        cfPlaceLine(cfLineRed, baseStartX, redY, eyeLeft.x - (mobile ? 2 : 4), redY, rect);
+        cfPlaceLine(cfLineRed, baseStartX, redStartY, eyeLeft.x - (mobile ? 2 : 4), redEndY, rect);
         cfPlaceLine(cfLineBlue, baseStartX, blueStartY, eyeRight.x - (mobile ? 10 : 12), blueEndY, rect);
       }else{
         cfLineRed.style.opacity = '0';
@@ -2575,7 +2577,7 @@ function openBlueLightDemo(){
     });
 
     window.addEventListener('load', ()=>{
-      //showTut(1);
+      // showTut(1);
     });
 
     window.addEventListener('resize', ()=>{
