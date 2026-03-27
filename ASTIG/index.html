@@ -1084,12 +1084,10 @@
       content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-46%);
       width:0; height:0; border-left:24px solid transparent; border-right:24px solid transparent; border-bottom:82px solid rgba(214,238,255,.30);
     }
-    .cf-optic-flat::before{
-      display:none;
-    }
+    .cf-optic-flat::before{ display:none; }
 
     .cf-guide-line{
-      position:absolute; height:0; border-top:4px dashed; z-index:5; transform-origin:left center;
+      position:absolute; height:0; border-top:3px dashed; z-index:5; transform-origin:left center;
       transition:left .35s ease, top .35s ease, width .35s ease, transform .35s ease, opacity .25s ease;
       pointer-events:none; opacity:0;
     }
@@ -1105,24 +1103,24 @@
       border:none; box-shadow:none;
       display:grid; grid-template-columns:1fr 1fr; gap:8px; align-items:center;
     }
-    .cf-seg-btn{
-      height:66px; border-radius:999px; border:1.5px solid rgba(123,171,221,.72);
-      background:linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
-      color:#3f5f80; font-size:21px; font-weight:800; letter-spacing:-.32px; cursor:pointer; transition:all .18s ease;
-      box-shadow:0 8px 18px rgba(17,104,208,.08), inset 0 1px 0 rgba(255,255,255,.96);
-      padding:0 16px; white-space:nowrap; -webkit-appearance:none; appearance:none;
+        .cf-seg-btn{
+      height:66px; border-radius:999px; border:1.5px solid rgba(110,162,218,.72);
+      background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%);
+      color:#4c6177; font-size:21px; font-weight:800; letter-spacing:-.35px; cursor:pointer;
+      transition:all .18s ease; box-shadow:0 8px 18px rgba(17,104,208,.08), inset 0 1px 0 rgba(255,255,255,.96);
+      padding:0 18px; white-space:nowrap; -webkit-appearance:none; appearance:none;
     }
     .cf-seg-btn.active{
-      background:linear-gradient(180deg, #eef7ff 0%, #e2f0ff 100%);
+      background:linear-gradient(180deg,#eef7ff 0%,#dceeff 100%);
       color:#0f4f8f; border-color:#7fb1e6;
-      box-shadow:0 10px 24px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98);
+      box-shadow:0 10px 22px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98);
     }
     .cf-seg-btn.default-active{
-      background:linear-gradient(180deg, #eef7ff 0%, #e2f0ff 100%);
+      background:linear-gradient(180deg,#eef7ff 0%,#dceeff 100%);
       color:#0f4f8f; border-color:#7fb1e6;
-      box-shadow:0 10px 24px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98);
+      box-shadow:0 10px 22px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98);
     }
-    .cf-seg-btn:not(.active):not(.default-active){ color:#60758a; }
+    .cf-seg-btn:not(.active):not(.default-active){ color:#627588; }
     .cf-seg-btn:not(.active):active{ transform:scale(.985); }
 
     #comfortMessage{
@@ -1788,7 +1786,11 @@
 
     function syncPackshot(){
       if(!maxPackshot) return;
-      maxPackshot.style.display = (currentMode === 'lens') ? 'block' : 'none';
+      const cardOverlayOpen =
+        (asdOverlay && asdOverlay.classList.contains('show')) ||
+        (comfortOverlay && comfortOverlay.classList.contains('show')) ||
+        (pvpOn === true);
+      maxPackshot.style.display = (currentMode === 'lens' && !cardOverlayOpen) ? 'block' : 'none';
     }
 
 
@@ -2073,6 +2075,7 @@ function openBlueLightDemo(){
       pvpOn = false;
       showPVP(false);
       syncMissionUI();
+      syncPackshot();
     }
 
     function openASD(){
@@ -2323,7 +2326,7 @@ function openBlueLightDemo(){
       const cardH = mobile ? 126 : (tablet ? 158 : 176);
       const modeOn = comfortScene.classList.contains('mode-on');
       const cardCx = modeOn ? w * 0.188 : w * 0.225;
-      const cardCy = modeOn ? h * 0.430 : ((eyeLeft.y + eyeRight.y) / 2);
+      const cardCy = ((eyeLeft.y + eyeRight.y) / 2);
 
       cfTargetStage.style.width = cardW + 'px';
       cfTargetStage.style.height = cardH + 'px';
@@ -2339,21 +2342,37 @@ function openBlueLightDemo(){
       cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
 
       const modeOff = comfortScene.classList.contains('mode-off');
+
+      // 카드 우측면 중앙 고정 시작점
       const startX = cardCx + cardW * 0.46;
-      const offY = (eyeLeft.y + eyeRight.y) / 2;
+      const startY = cardCy;
+
+      // 파란 점선: 항상 수평 180도 유지
       const blueEndX = eyeRight.x - (mobile ? 10 : 12);
-      const redEndX = eyeLeft.x - (mobile ? 2 : 4);
+      const blueEndY = startY;
+
+      // 빨간 점선: 프리즘 없는 경우 수평, 프리즘 있는 경우만 좌측 상방(150도 느낌)으로 고정
+      const redOffEndX = eyeLeft.x - (mobile ? 2 : 4);
+      const redOffEndY = startY;
+
+      const redOnEndX = eyeLeft.x - (mobile ? 1 : 2);
+      const redOnEndY = eyeLeft.y - (mobile ? 26 : 32);
 
       if(modeOn){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
-        const onRedStartY = cardCy + (mobile ? 0 : 1);
-        const onBlueStartY = offY;
-        const onRedEndY = eyeLeft.y - (mobile ? 24 : 30);
-        const onBlueEndY = offY;
-        cfPlaceLine(cfLineRed, startX, onRedStartY, redEndX, onRedEndY, rect);
-        cfPlaceLine(cfLineBlue, startX, onBlueStartY, blueEndX, onBlueEndY, rect);
+        cfPlaceLine(cfLineRed, startX, startY, redOnEndX, redOnEndY, rect);
+        cfPlaceLine(cfLineBlue, startX, startY, blueEndX, blueEndY, rect);
       }else if(modeOff){
+        cfLineRed.style.opacity = '1';
+        cfLineBlue.style.opacity = '1';
+        cfPlaceLine(cfLineRed, startX, startY, redOffEndX, redOffEndY, rect);
+        cfPlaceLine(cfLineBlue, startX, startY, blueEndX, blueEndY, rect);
+      }else{
+        cfLineRed.style.opacity = '0';
+        cfLineBlue.style.opacity = '0';
+      }
+    }else if(modeOff){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
         cfPlaceLine(cfLineRed, startX, offY, redEndX, offY, rect);
