@@ -2273,14 +2273,14 @@ function openBlueLightDemo(){
         cfBtnOn.classList.add('active');
         comfortMessageCopy.innerHTML = `
           단안에 프리즘 영향이 있는 경우
-          <span class="blue">양안 이미지 위치에 차이가 발생할 수 있습니다.</span>
+          <span class="blue">양안 이미지 위치에 차이가 발생하여 피로감이 발생할 수 있습니다.</span>
         `;
       }else{
         comfortScene.classList.add('mode-off');
         cfBtnOff.classList.add('active');
         comfortMessageCopy.innerHTML = `
-          난시 렌즈 광학부의 프리즘은 단안 난시 소비자에게 중요합니다.
-          <span class="blue">프리즘이 적은 광학부는 보다 편안한 시야 이해에 도움이 됩니다.</span>
+          난시 렌즈 광학부의 프리즘은
+          <span class="blue">단안 난시 소비자에게 중요합니다.</span>
         `;
       }
       requestAnimationFrame(positionComfortInteractiveElements);
