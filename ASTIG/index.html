@@ -233,7 +233,7 @@
     #maxPackshot{
       position:fixed;
       right:18px;
-      bottom:70px; /* 조금 더 아래 */
+      bottom:90px; /* 조금 더 아래 */
       width:150px;
       max-width:34vw;
       height:auto;
@@ -1399,33 +1399,8 @@
     #blueLightOverlay.show{
       display:flex !important;
     }
-    #blueLightOverlay::before{
-      content:"";
-      position:absolute;
-      right:28px;
-      bottom:-6px;
-      width:26px;
-      height:16px;
-      background:linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(246,250,255,.98) 100%);
-      border-bottom-left-radius:14px 10px;
-      border-bottom-right-radius:14px 10px;
-      z-index:0;
-    }
-    #blueLightOverlay::after{
-      content:"";
-      position:absolute;
-      right:35px;
-      bottom:-7px;
-      width:14px;
-      height:14px;
-      background:linear-gradient(135deg, rgba(255,255,255,.99) 0%, rgba(246,250,255,.99) 100%);
-      border-right:1px solid rgba(0,94,184,.16);
-      border-bottom:1px solid rgba(0,94,184,.16);
-      transform:rotate(45deg);
-      border-radius:0 0 4px 0;
-      z-index:1;
-      top:auto !important;
-    }
+    #blueLightOverlay::before{ display:none !important; }
+    #blueLightOverlay::after{ display:none !important; }
 
     @media (max-width:560px){
       #blueLightOverlay{
@@ -1463,6 +1438,43 @@
   50%{ margin-top:-6px; }
   100%{ margin-top:0; }
 }
+
+
+    #blueLightOverlay{
+      overflow:visible !important;
+      padding-right:136px !important;
+      min-height:96px;
+    }
+    #blueLightOverlay #overlayPackshot{
+      position:absolute;
+      right:14px;
+      bottom:8px;
+      width:120px;
+      max-width:30vw;
+      height:auto;
+      object-fit:contain;
+      z-index:5;
+      pointer-events:none;
+      user-select:none;
+      display:none;
+      mix-blend-mode:multiply;
+      filter:drop-shadow(0 8px 16px rgba(11,31,51,.12));
+    }
+    #blueLightOverlay.show #overlayPackshot{
+      display:block;
+    }
+    @media (max-width:560px){
+      #blueLightOverlay{
+        padding-right:118px !important;
+        min-height:88px;
+      }
+      #blueLightOverlay #overlayPackshot{
+        right:10px;
+        bottom:8px;
+        width:104px;
+        max-width:27vw;
+      }
+    }
 
 </style>
 </head>
@@ -1635,6 +1647,7 @@
       <div id="blueLightHint">블루-그린 틴트와 광선 효과를 통해 아큐브® MAX의 블루라이트 필터 체험을 확인해 보세요.</div>
     </div>
     <button id="blueLightConfirm" type="button">확인</button>
+    <img id="overlayPackshot" src="MAX.png" alt="아큐브 맥스 난시 팩샷" onerror="this.style.display='none';">
   </div>
 
   <div id="blueBeamStrong" aria-hidden="true"><div class="beam-in"></div><div class="beam-out"></div></div>
@@ -1813,6 +1826,7 @@
       if(mv){
         mv.style.filter = '';
       }
+      syncPackshot();
     }
 
     
@@ -1852,6 +1866,7 @@ function openBlueLightDemo(){
         try{
           mv.style.filter = 'hue-rotate(22deg) saturate(1.22) brightness(1.04)';
         }catch(e){}
+        if(maxPackshot) maxPackshot.style.display = 'none';
         if(blueTintRays) blueTintRays.classList.add('show');
         if(blueLightOverlay) blueLightOverlay.classList.add('show');
       }, 140);
