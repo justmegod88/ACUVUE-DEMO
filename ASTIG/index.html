@@ -1403,8 +1403,24 @@
     #blueLightOverlay.show{
       display:flex !important;
     }
-    #blueLightOverlay::before{display:none !important;}
-    #blueLightOverlay::after{content:"";position:absolute;right:34px;bottom:-10px;width:18px;height:18px;background:linear-gradient(135deg, rgba(255,255,255,.99) 0%, rgba(246,250,255,.99) 100%);border-right:1px solid rgba(0,94,184,.16);border-bottom:1px solid rgba(0,94,184,.16);transform:rotate(45deg);border-bottom-right-radius:4px;z-index:1 !important;}
+    #blueLightOverlay::before{
+      display:none;
+    }
+    #blueLightOverlay::after{
+      content:"";
+      position:absolute;
+      right:34px;
+      bottom:-8px;
+      width:16px;
+      height:16px;
+      background:linear-gradient(135deg, rgba(255,255,255,.99) 0%, rgba(246,250,255,.99) 100%);
+      border-right:1px solid rgba(0,94,184,.16);
+      border-bottom:1px solid rgba(0,94,184,.16);
+      transform:rotate(45deg);
+      border-radius:0 0 4px 0;
+      z-index:1;
+      top:auto !important;
+    }
 
     @media (max-width:560px){
       #blueLightOverlay{
@@ -1414,10 +1430,10 @@
         bottom:118px !important;
       }
       #blueLightOverlay::before{
-        right:26px !important;
+        display:none !important;
       }
       #blueLightOverlay::after{
-        right:33px !important;
+        right:32px !important;
         top:auto !important;
       }
     }
@@ -1757,11 +1773,11 @@
 
     function syncPackshot(){
       if(!maxPackshot) return;
-      const cardOverlayOpen =
+      const cardOpen =
         (asdOverlay && asdOverlay.classList.contains('show')) ||
         (comfortOverlay && comfortOverlay.classList.contains('show')) ||
-        (pvpOn === true);
-      maxPackshot.style.display = (currentMode === 'lens' && !cardOverlayOpen) ? 'block' : 'none';
+        pvpOn === true;
+      maxPackshot.style.display = (currentMode === 'lens' && !cardOpen) ? 'block' : 'none';
     }
 
 
@@ -1771,7 +1787,6 @@
       if(mv){
         mv.style.filter = '';
       }
-      syncPackshot();
     }
 
     
@@ -1813,7 +1828,6 @@ function openBlueLightDemo(){
         }catch(e){}
         if(blueTintRays) blueTintRays.classList.add('show');
         if(blueLightOverlay) blueLightOverlay.classList.add('show');
-        syncPackshot();
       }, 140);
     }
 
@@ -2035,6 +2049,7 @@ function openBlueLightDemo(){
       closeBlueLightDemo();
       resetCameraToModeDefault('lens');
       syncMissionUI();
+      syncPackshot();
     }
 
     function setModeButtons(){
@@ -2066,6 +2081,7 @@ function openBlueLightDemo(){
       asdOverlay.classList.add('show');
       asdOverlay.setAttribute('aria-hidden','false');
       syncMissionUI();
+      syncPackshot();
     }
 
     function setModel(file, mode, options = {}){
@@ -2181,11 +2197,13 @@ function openBlueLightDemo(){
           zoomInForPVP();
           showPVP(true);
           syncMissionUI();
+          syncPackshot();
         }, 140);
       }else{
         showPVP(false);
         resetCameraToModeDefault('lens');
         syncMissionUI();
+        syncPackshot();
       }
     }
 
@@ -2200,6 +2218,7 @@ function openBlueLightDemo(){
       showPVP(false);
       resetCameraToModeDefault('lens');
       syncMissionUI();
+      syncPackshot();
     }
 
     pvpConfirm.addEventListener('click', (e)=>{
@@ -2225,6 +2244,7 @@ function openBlueLightDemo(){
       closeBlueLightDemo();
       setComfortMode('off');
       syncMissionUI();
+      syncPackshot();
     }
 
     function openComfort(){
@@ -2235,6 +2255,7 @@ function openBlueLightDemo(){
       setComfortMode('off');
       requestAnimationFrame(positionComfortInteractiveElements);
       syncMissionUI();
+      syncPackshot();
     }
 
     function toggleComfort(){
