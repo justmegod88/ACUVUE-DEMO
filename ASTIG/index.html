@@ -1443,6 +1443,16 @@
       }
     }
 
+
+#comfortScene.mode-on #cfTargetStage{
+  animation: floatY 2.2s ease-in-out infinite;
+}
+@keyframes floatY{
+  0%{ transform: translate(-50%,-50%) translateY(0px);}
+  50%{ transform: translate(-50%,-50%) translateY(-6px);}
+  100%{ transform: translate(-50%,-50%) translateY(0px);}
+}
+
 </style>
 </head>
 
@@ -2324,8 +2334,17 @@ function openBlueLightDemo(){
       const cardW = mobile ? 82 : (tablet ? 104 : 118);
       const cardH = mobile ? 126 : (tablet ? 158 : 176);
       const modeOn = comfortScene.classList.contains('mode-on');
-      const cardCx = modeOn ? w * 0.188 : w * 0.225;
-      const cardCy = modeOn ? h * 0.358 : h * 0.500;
+
+      // 카드 위치: 프리즘 있는 경우(레드) - 왼쪽 눈보다 좌상방
+      let cardCx, cardCy;
+      if(modeOn){
+        cardCx = eyeLeft.x - (mobile ? 110 : 130);
+        cardCy = eyeLeft.y - (mobile ? 60 : 70);
+      }else{
+        // 없는 경우: 기존 위치 (눈 중앙 라인)
+        cardCx = w * 0.225;
+        cardCy = (eyeLeft.y + eyeRight.y) / 2;
+      }
 
       cfTargetStage.style.width = cardW + 'px';
       cfTargetStage.style.height = cardH + 'px';
@@ -2333,30 +2352,47 @@ function openBlueLightDemo(){
 
       const opticW = mobile ? 38 : (tablet ? 48 : 58);
       const opticH = mobile ? 76 : (tablet ? 98 : 118);
-      const opticCx = eyeLeft.x + (mobile ? -1 : -2);
-      const opticCy = eyeLeft.y + (mobile ? -2 : -2);
+      const opticCx = eyeLeft.x - 2;
+      const opticCy = eyeLeft.y - 2;
 
       cfOptic.style.width = opticW + 'px';
       cfOptic.style.height = opticH + 'px';
       cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
 
-      const modeOff = comfortScene.classList.contains('mode-off');
-
       const startX = cardCx + cardW * 0.46;
-      const startY = cardCy;
-      const blueEndX = eyeRight.x - (mobile ? 10 : 12);
-      const redEndX = eyeLeft.x - (mobile ? 2 : 4);
 
-      if(modeOn){
+      // ===== 프리즘 없는 경우 =====
+      if(comfortScene.classList.contains('mode-off')){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
-        const redStartY = cardCy;
-        const redEndY = eyeLeft.y - (mobile ? 18 : 22);
+        const offset = mobile ? 2 : 3; // 두 선 살짝 분리
+        const yBase = cardCy;
 
-        cfPlaceLine(cfLineRed, startX, redStartY, redEndX, redEndY, rect);
-        cfPlaceLine(cfLineBlue, startX, startY, blueEndX, startY, rect);
-      }else if(modeOff){
+        // 파란선
+        cfPlaceLine(cfLineBlue, startX, yBase - offset, eyeRight.x, yBase - offset, rect);
+        // 빨간선
+        cfPlaceLine(cfLineRed, startX, yBase + offset, eyeLeft.x, yBase + offset, rect);
+      }
+
+      // ===== 프리즘 있는 경우 =====
+      else if(modeOn){
+        cfLineRed.style.opacity = '1';
+        cfLineBlue.style.opacity = '1';
+
+        const startY = cardCy;
+
+        // 파란선 (오른쪽 눈, 수평 유지)
+        cfPlaceLine(cfLineBlue, startX, startY, eyeRight.x, startY, rect);
+
+        // 빨간선 (왼쪽 눈 → 좌상방 카드)
+        cfPlaceLine(cfLineRed, startX, startY, eyeLeft.x, eyeLeft.y, rect);
+      }
+      else{
+        cfLineRed.style.opacity = '0';
+        cfLineBlue.style.opacity = '0';
+      }
+    }else if(modeOff){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
         cfPlaceLine(cfLineRed, startX, startY, redEndX, startY, rect);
