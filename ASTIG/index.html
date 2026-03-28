@@ -2602,14 +2602,19 @@ function openBlueLightDemo(){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
-        // 파란선 현재 유지, 빨간선만 거의 수평으로 파란선과 유사한 레벨 유지
-        const blueStartY = eyeRight.y + (mobile ? 4 : 6);
-        const blueEndY = eyeRight.y;
-        const redStartY = blueStartY - (mobile ? 3 : 4);
-        const redEndY = redStartY - (mobile ? 1 : 1);
+        // mode off: 두 선 모두 왼쪽 눈에서 시작. 파란선은 거의 수평으로 카드 우측면 중앙에 종료.
+        const cardRightX = baseCardCx + cardW * 0.5;
+        const blueEndY = blueCardCenterY;
+        const blueStartX = eyeLeft.x - (mobile ? 2 : 4);
+        const blueStartY = blueEndY + (mobile ? 1 : 1);
 
-        cfPlaceLine(cfLineRed, baseStartX, redStartY, eyeLeft.x - (mobile ? 2 : 4), redEndY, rect);
-        cfPlaceLine(cfLineBlue, baseStartX, blueStartY, eyeRight.x - (mobile ? 10 : 12), blueEndY, rect);
+        // 빨간선은 왼쪽 눈에서 시작하여 카드가 눈보다 좌측 상방에 있어 약 3도 정도 위로 향하는 느낌.
+        const redStartX = eyeLeft.x - (mobile ? 2 : 4);
+        const redStartY = eyeLeft.y - (mobile ? 2 : 2);
+        const redEndY = blueEndY - (mobile ? 8 : 9);
+
+        cfPlaceLine(cfLineRed, redStartX, redStartY, cardRightX, redEndY, rect);
+        cfPlaceLine(cfLineBlue, blueStartX, blueStartY, cardRightX, blueEndY, rect);
       }else{
         cfLineRed.style.opacity = '0';
         cfLineBlue.style.opacity = '0';
