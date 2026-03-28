@@ -130,7 +130,7 @@
       border-radius:999px;
       background:rgba(0,94,184,.10);
       border:1px solid rgba(0,94,184,.22);
-      color:var(--acuvue-blue);
+      color:var(--text-navy);
       backdrop-filter: blur(6px);
     }
 
@@ -518,8 +518,8 @@
       inset:0;
       z-index:80;
       display:none;
-      background:rgba(11,31,51,.22);
-      backdrop-filter: blur(12px);
+      background:rgba(11,31,51,.30);
+      backdrop-filter: blur(18px);
       align-items:center;
       justify-content:center;
       padding:18px;
@@ -542,13 +542,14 @@
       align-items:center;
       justify-content:space-between;
       padding:14px 18px;
-      background:#eef3fa;
-      border-bottom:1px solid rgba(11,31,51,.08);
+      background:linear-gradient(180deg, #123F95 0%, #0A3486 100%);
+      border-bottom:1px solid rgba(255,255,255,.10);
+      box-shadow: inset 0 -1px 0 rgba(255,255,255,.10);
     }
     #asdHeaderTitle{
       font-size:18px;
       font-weight:900;
-      color:#111;
+      color:#fff;
       letter-spacing:-.2px;
     }
 
@@ -557,7 +558,7 @@
       height:34px;
       border:none;
       background:transparent;
-      color:#111;
+      color:#fff;
       font-weight:900;
       font-size:18px;
       cursor:pointer;
@@ -600,7 +601,7 @@
     }
     #asdHint .hintTitle{
       display:block;
-      color:var(--acuvue-blue);
+      color:#0A3486;
       font-size:17px;
       font-weight:900;
       margin-bottom:8px;
@@ -617,6 +618,9 @@
       font-weight:900;
       color:#111;
       letter-spacing:-.2px;
+    }
+    #asdHint .hintBody .blue{
+      color:#0A3486;
     }
     #asdHint .hintBody .blue{
       color:var(--acuvue-blue);
@@ -758,11 +762,12 @@
     #asdBlinkBtn, #asdRotateBtn{
       position:absolute;
       bottom:14px;
-      width:54px;
       height:54px;
+      min-width:112px;
+      padding:0 18px;
       border-radius:999px;
       font-weight:900;
-      font-size:12px;
+      font-size:18px;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -771,26 +776,27 @@
       user-select:none;
       cursor:pointer;
       box-shadow: 0 10px 22px rgba(11,31,51,.12);
+      letter-spacing:-.3px;
     }
     #asdBlinkBtn{
       right:14px;
-      border:1px solid rgba(0,94,184,.55);
-      background:var(--acuvue-blue);
+      border:1px solid rgba(10,52,134,.65);
+      background:linear-gradient(180deg, #123F95 0%, #0A3486 100%);
       color:#fff;
-      box-shadow: 0 12px 26px rgba(0,94,184,.20);
+      box-shadow: 0 12px 26px rgba(10,52,134,.22);
     }
     #asdRotateBtn{
-      right:76px;
-      border:1px solid rgba(0,94,184,.35);
-      background:rgba(255,255,255,.92);
-      color:var(--acuvue-blue);
+      right:132px;
+      border:1px solid rgba(10,52,134,.24);
+      background:rgba(255,255,255,.96);
+      color:var(--text-navy);
     }
 
     #asdAngleBadge{
       position:absolute;
       left:14px;
       bottom:18px;
-      color:var(--acuvue-blue);
+      color:var(--text-navy);
       font-size:12px;
       font-weight:900;
       background:rgba(255,255,255,.86);
@@ -799,6 +805,18 @@
       padding:6px 10px;
       z-index:5;
       box-shadow: 0 10px 22px rgba(11,31,51,.10);
+    }
+
+    @media (max-width: 560px){
+      #asdBlinkBtn, #asdRotateBtn{
+        height:50px;
+        min-width:96px;
+        padding:0 14px;
+        font-size:16px;
+      }
+      #asdRotateBtn{
+        right:116px;
+      }
     }
 
     /* 튜토리얼 */
@@ -902,8 +920,8 @@
       inset:0;
       z-index:82;
       display:none;
-      background:rgba(255,255,255,.16);
-      backdrop-filter: blur(8px);
+      background:rgba(11,31,51,.24);
+      backdrop-filter: blur(16px);
       align-items:center;
       justify-content:center;
       padding:18px;
@@ -922,17 +940,18 @@
 
     #comfortHead{
       height:76px;
-      background:#dbe5f1;
+      background:linear-gradient(180deg, #123F95 0%, #0A3486 100%);
       display:flex;
       align-items:center;
       justify-content:space-between;
       padding:0 26px;
-      border-bottom:1px solid rgba(10,30,55,.08);
+      border-bottom:1px solid rgba(255,255,255,.10);
+      box-shadow: inset 0 -1px 0 rgba(255,255,255,.10);
     }
     #comfortTitle{
       font-size:28px;
       font-weight:900;
-      color:#000;
+      color:#fff;
       letter-spacing:-.5px;
     }
     #comfortClose{
@@ -940,7 +959,7 @@
       background:transparent;
       font-size:34px;
       line-height:1;
-      color:#000;
+      color:#fff;
       cursor:pointer;
       padding:0;
       width:44px;
@@ -1110,8 +1129,8 @@
       color:#627588; font-size:21px; font-weight:800; letter-spacing:-.35px; cursor:pointer; transition:all .18s ease;
       box-shadow:0 8px 18px rgba(17,104,208,.08), inset 0 1px 0 rgba(255,255,255,.96); padding:0 18px; white-space:nowrap; -webkit-appearance:none; appearance:none;
     }
-    .cf-seg-btn.active{ background:linear-gradient(180deg,#eef7ff 0%,#dceeff 100%); color:#0f4f8f; border-color:#7fb1e6; box-shadow:0 10px 22px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98); }
-    .cf-seg-btn.default-active{ background:linear-gradient(180deg,#eef7ff 0%,#dceeff 100%); color:#0f4f8f; border-color:#7fb1e6; box-shadow:0 10px 22px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98); }
+    .cf-seg-btn.active{ background:linear-gradient(180deg,#eef7ff 0%,#dceeff 100%); color:#0A3486; border-color:#7fb1e6; box-shadow:0 10px 22px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98); }
+    .cf-seg-btn.default-active{ background:linear-gradient(180deg,#eef7ff 0%,#dceeff 100%); color:#0A3486; border-color:#7fb1e6; box-shadow:0 10px 22px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98); }
     .cf-seg-btn:not(.active):not(.default-active){ color:#627588; }
     .cf-seg-btn:not(.active):active{ transform:scale(.985); }
 
@@ -1122,7 +1141,7 @@
     #comfortMessageCopy{
       flex:1 1 auto; font-size:28px; line-height:1.34; font-weight:900; letter-spacing:-.6px; color:#000; word-break:keep-all;
     }
-    #comfortMessageCopy .blue{ color:#005EB8; }
+    #comfortMessageCopy .blue{ color:#0A3486; }
     #comfortConfirm{
       flex:0 0 auto; min-width:120px; height:86px; padding:0 26px; border:none; border-radius:18px; background:#1168d0; color:#fff;
       font-size:24px; font-weight:900; cursor:pointer; box-shadow:0 10px 22px rgba(17,104,208,.22);
@@ -2612,6 +2631,18 @@ function openBlueLightDemo(){
     blueLightConfirm?.addEventListener('click', closeBlueLightDemo);
 
     setModel('lens_clear.glb', 'lens', { resetCamera:true });
+
+    @media (max-width: 560px){
+      #asdBlinkBtn, #asdRotateBtn{
+        height:50px;
+        min-width:96px;
+        padding:0 14px;
+        font-size:16px;
+      }
+      #asdRotateBtn{
+        right:116px;
+      }
+    }
 
     /* 튜토리얼 */
     const tutorialLayer = document.getElementById('tutorialLayer');
