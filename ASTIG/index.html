@@ -273,6 +273,29 @@
       }
     }
 
+
+    /* 첫 페이지 참고문헌 */
+    #defaultReferenceArea{
+      position:fixed;
+      left:12px;
+      bottom:calc(env(safe-area-inset-bottom, 0px) + 8px);
+      z-index:49;
+      text-align:left;
+      font-size:9px;
+      line-height:1.30;
+      color:rgba(72,80,92,.95);
+      font-weight:500;
+      letter-spacing:-.08px;
+      pointer-events:none;
+    }
+    @media (max-width:560px){
+      #defaultReferenceArea{
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 6px);
+        font-size:8.2px;
+        line-height:1.26;
+      }
+    }
+
     .toric-popup-disclaimer{
       padding:9px 16px 11px;
       font-size:9.4px;
@@ -334,7 +357,7 @@
       position:fixed;
       left:12px;
       right:12px;
-      bottom:92px;
+      bottom:22px;
       z-index:60;
       background: var(--panel-grad);
       border:1px solid var(--panel-stroke);
@@ -1380,7 +1403,7 @@
     #blueLightOverlay{
       position:fixed !important;
       right:18px !important;
-      bottom:120px !important;
+      bottom:22px !important;
       left:auto !important;
       width:min(430px, calc(100vw - 28px)) !important;
       max-width:calc(100vw - 28px) !important;
@@ -1407,7 +1430,7 @@
         left:12px !important;
         right:12px !important;
         width:auto !important;
-        bottom:118px !important;
+        bottom:20px !important;
       }
       #blueLightOverlay::before{
         right:26px !important;
@@ -1580,7 +1603,7 @@
     left:12px !important;
     right:12px !important;
     width:auto !important;
-    bottom:118px !important;
+    bottom:20px !important;
     gap:12px !important;
     padding:16px 16px !important;
     border-radius:22px !important;
@@ -1613,42 +1636,6 @@
     transform:translateY(1px);
   }
 }
-
-
-    /* === Requested adjustments === */
-    #pvpOverlay{
-      bottom:calc(env(safe-area-inset-bottom, 0px) + 80px) !important;
-    }
-    #blueLightOverlay{
-      bottom:calc(env(safe-area-inset-bottom, 0px) + 80px) !important;
-    }
-    @media (max-width:560px){
-      #pvpOverlay{
-        bottom:calc(env(safe-area-inset-bottom, 0px) + 80px) !important;
-      }
-      #blueLightOverlay{
-        bottom:calc(env(safe-area-inset-bottom, 0px) + 80px) !important;
-      }
-    }
-
-    #globalToricDisclaimer{
-      text-align:left !important;
-      font-size:8px !important;
-      line-height:1.25 !important;
-      color:rgba(72,80,92,.95) !important;
-      font-weight:500 !important;
-      letter-spacing:-.08px;
-      right:12px;
-      left:12px;
-    }
-    #globalToricDisclaimer .global-disc-note{
-      display:block;
-      text-align:center;
-    }
-    #globalToricDisclaimer .global-disc-ref{
-      display:block;
-      text-align:left;
-    }
 
 </style>
 </head>
@@ -1859,11 +1846,8 @@
     <button id="modeLens" class="btn primary">투명 렌즈 모드</button>
     <button id="modeHeat" class="btn">렌즈 두께 MAP</button>
   </div>
-  <div id="globalToricDisclaimer">
-    <div class="global-disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</div>
-    <div class="global-disc-ref">1.</div>
-    <div class="global-disc-ref">2.</div>
-  </div>
+  <div id="globalToricDisclaimer">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</div>
+  <div id="defaultReferenceArea">1.<br>2.</div>
 
   <script>
     const mv = document.getElementById('mv');
@@ -2533,19 +2517,19 @@ function openBlueLightDemo(){
       if(mode === 'on'){
         comfortScene.classList.add('mode-on');
         cfBtnOn.classList.add('active');
-        if(comfortConfirm) comfortConfirm.style.display = 'block';
         comfortMessageCopy.innerHTML = `
           단안에 프리즘 영향이 있는 경우
           <span class="blue">양안 이미지 위치에 차이가 발생하여 피로감이 발생할 수 있습니다.</span>
         `;
+        if(comfortConfirm) comfortConfirm.style.display = '';
       }else{
         comfortScene.classList.add('mode-off');
         cfBtnOff.classList.add('active');
-        if(comfortConfirm) comfortConfirm.style.display = 'none';
         comfortMessageCopy.innerHTML = `
           난시 렌즈 광학부의 프리즘은
           <span class="blue">단안 난시 소비자에게 중요합니다.</span>
         `;
+        if(comfortConfirm) comfortConfirm.style.display = 'none';
       }
       requestAnimationFrame(()=>positionComfortInteractiveElements(0));
       if(mode === 'on') startComfortModeOnMotion();
