@@ -2324,29 +2324,32 @@ function openBlueLightDemo(){
       cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
 
       const rightEdgeX = cardCx + cardW * 0.50 - 2;
-      const cardCenterY = cardCy;
-      const redCardCenterY = cardCy - cardH * 0.19;
       const offRedEndX = eyeLeft.x - (mobile ? 2 : 4);
       const offRedEndY = eyeLeft.y;
-      const blueStartX = eyeRight.x - (mobile ? 10 : 12);
-      const blueStartY = eyeRight.y;
+      const offBlueEndX = eyeRight.x - (mobile ? 10 : 12);
+      const offBlueEndY = eyeRight.y;
 
       if(modeOn){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
+        const onRedStartY = cardCy - cardH * 0.19;
+        const onBlueStartY = cardCy + cardH * 0.11;
         const onRedEndX = eyeLeft.x - (mobile ? 2 : 4);
         const onRedEndY = eyeLeft.y;
+        const onBlueEndX = eyeRight.x - (mobile ? 10 : 12);
+        const onBlueEndY = eyeRight.y;
 
-        cfPlaceLine(cfLineRed, rightEdgeX, redCardCenterY, onRedEndX, onRedEndY, rect);
-        cfPlaceLine(cfLineBlue, blueStartX, blueStartY, rightEdgeX, cardCenterY, rect);
+        cfPlaceLine(cfLineRed, rightEdgeX, onRedStartY, onRedEndX, onRedEndY, rect);
+        cfPlaceLine(cfLineBlue, rightEdgeX, onBlueStartY, onBlueEndX, onBlueEndY, rect);
       }else if(modeOff){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
         const offRedStartY = cardCy - cardH * 0.02;
+        const offBlueStartY = cardCy + cardH * 0.13;
         cfPlaceLine(cfLineRed, rightEdgeX, offRedStartY, offRedEndX, offRedEndY, rect);
-        cfPlaceLine(cfLineBlue, blueStartX, blueStartY, rightEdgeX, cardCenterY, rect);
+        cfPlaceLine(cfLineBlue, rightEdgeX, offBlueStartY, offBlueEndX, offBlueEndY, rect);
       }else{
         cfLineRed.style.opacity = '0';
         cfLineBlue.style.opacity = '0';
