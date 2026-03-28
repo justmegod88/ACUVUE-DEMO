@@ -2512,19 +2512,12 @@ function openBlueLightDemo(){
       const modeOn = comfortScene.classList.contains('mode-on');
       const modeOff = comfortScene.classList.contains('mode-off');
 
-      // 기본 카드(보라/파랑 동일 기준 위치)
       const baseCardCx = w * 0.225;
       const baseCardCy = (eyeLeft.y + eyeRight.y) / 2 + 10;
 
-      // 빨간 카드: 왼쪽 눈 기준 170도 느낌으로 조금 덜 위쪽
-      let cardCx, cardCy;
-      if(modeOn){
-        cardCx = eyeLeft.x - (mobile ? 108 : 128);
-        cardCy = eyeLeft.y - (mobile ? 26 : 32);
-      }else{
-        cardCx = baseCardCx;
-        cardCy = baseCardCy;
-      }
+      // 파란/빨간 카드는 보라 카드와 동일한 x축 기준을 사용
+      const cardCx = baseCardCx;
+      const cardCy = baseCardCy;
 
       cfTargetStage.style.width = cardW + 'px';
       cfTargetStage.style.height = cardH + 'px';
@@ -2539,36 +2532,30 @@ function openBlueLightDemo(){
       cfOptic.style.height = opticH + 'px';
       cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
 
-      const startX = cardCx + cardW * 0.46;
-      const baseStartX = baseCardCx + cardW * 0.46;
+      const cardRightX = baseCardCx + cardW * 0.50;
+      const cardCenterY = baseCardCy;
+      const redStartY = baseCardCy - (mobile ? 22 : (tablet ? 26 : 30));
 
       if(modeOn){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
-        // 파란 카드는 보라 카드와 동일 위치 / 움직임 없음 / 수평 유지
-        const blueY = baseCardCy;
-        const blueEndX = eyeRight.x - (mobile ? 10 : 12);
-
-        // 빨간 카드와 빨간 점선만 같이 움직임
-        const redStartY = cardCy;
-        const redEndY = eyeLeft.y;
-
-        cfPlaceLine(cfLineBlue, baseStartX, blueY, blueEndX, blueY, rect);
-        cfPlaceLine(cfLineRed, startX, redStartY, eyeLeft.x - (mobile ? 2 : 4), redEndY, rect);
+        // 파란 선: 눈에서 시작해서 카드 우측면 중앙에서 종료
+        cfPlaceLine(cfLineBlue, eyeRight.x - (mobile ? 10 : 12), eyeRight.y, cardRightX, cardCenterY, rect);
+        // 빨간 카드는 같은 x축, 더 위쪽에 보이도록 시작점만 위로 조정
+        cfPlaceLine(cfLineRed, eyeLeft.x - (mobile ? 2 : 4), eyeLeft.y, cardRightX, redStartY, rect);
       }else if(modeOff){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
-        // 양안 각각 눈 기준으로 카드가 아주 살짝 좌측 하방에 있도록 3~5도 느낌만 적용
         const tilt = mobile ? 4 : 6;
-        const redStartY = eyeLeft.y + tilt;
-        const blueStartY = eyeRight.y + tilt;
         const redEndY = eyeLeft.y;
-        const blueEndY = eyeRight.y;
+        const blueStartX = eyeRight.x - (mobile ? 10 : 12);
+        const blueStartY = eyeRight.y + tilt;
 
-        cfPlaceLine(cfLineRed, baseStartX, redStartY, eyeLeft.x - (mobile ? 2 : 4), redEndY, rect);
-        cfPlaceLine(cfLineBlue, baseStartX, blueStartY, eyeRight.x - (mobile ? 10 : 12), blueEndY, rect);
+        cfPlaceLine(cfLineRed, cardRightX, redStartY, eyeLeft.x - (mobile ? 2 : 4), redEndY, rect);
+        // 파란 선: 눈에서 시작해서 카드 우측면 중앙에서 종료
+        cfPlaceLine(cfLineBlue, blueStartX, blueStartY, cardRightX, cardCenterY, rect);
       }else{
         cfLineRed.style.opacity = '0';
         cfLineBlue.style.opacity = '0';
