@@ -2584,17 +2584,17 @@ function openBlueLightDemo(){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
-        // 파란선/파란카드는 현재 유지: 고정
-        const blueStartX = baseStartX;
-        const blueStartY = blueCardCenterY;
-        const blueEndX = eyeRight.x - (mobile ? 10 : 12);
-        const blueEndY = blueStartY;
+        // 파란선: 오른쪽 눈에서 시작해서 파란 카드 우측면 중앙으로 거의 수평 연결
+        const blueStartX = eyeRight.x;
+        const blueStartY = eyeRight.y;
+        const blueEndX = baseCardCx + cardW * 0.50;
+        const blueEndY = blueCardCenterY;
 
-        // 빨간선은 눈 쪽은 고정, 카드 쪽은 빨간 카드 흔들림을 따라 이동
-        const redStartX = baseStartX;
-        const redStartY = redCardCenterY;
-        const redEndX = eyeLeft.x - (mobile ? 2 : 4);
-        const redEndY = eyeLeft.y;
+        // 빨간선: 왼쪽 눈에서 시작, 빨간 카드 쪽 접점은 카드 흔들림을 따라가며 살짝 상방으로 연결
+        const redStartX = eyeLeft.x;
+        const redStartY = eyeLeft.y;
+        const redEndX = baseCardCx + cardW * 0.50;
+        const redEndY = redCardCenterY;
 
         cfPlaceLine(cfLineBlue, blueStartX, blueStartY, blueEndX, blueEndY, rect);
         cfPlaceLine(cfLineRed, redStartX, redStartY, redEndX, redEndY, rect);
@@ -2602,19 +2602,14 @@ function openBlueLightDemo(){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
-        // mode off: 두 선 모두 왼쪽 눈에서 시작. 파란선은 거의 수평으로 카드 우측면 중앙에 종료.
-        const cardRightX = baseCardCx + cardW * 0.5;
-        const blueEndY = blueCardCenterY;
-        const blueStartX = eyeLeft.x - (mobile ? 2 : 4);
-        const blueStartY = blueEndY + (mobile ? 1 : 1);
+        // 파란선 현재 유지, 빨간선만 거의 수평으로 파란선과 유사한 레벨 유지
+        const blueStartY = eyeRight.y + (mobile ? 4 : 6);
+        const blueEndY = eyeRight.y;
+        const redStartY = blueStartY - (mobile ? 3 : 4);
+        const redEndY = redStartY - (mobile ? 1 : 1);
 
-        // 빨간선은 왼쪽 눈에서 시작하여 카드가 눈보다 좌측 상방에 있어 약 3도 정도 위로 향하는 느낌.
-        const redStartX = eyeLeft.x - (mobile ? 2 : 4);
-        const redStartY = eyeLeft.y - (mobile ? 2 : 2);
-        const redEndY = blueEndY - (mobile ? 8 : 9);
-
-        cfPlaceLine(cfLineRed, redStartX, redStartY, cardRightX, redEndY, rect);
-        cfPlaceLine(cfLineBlue, blueStartX, blueStartY, cardRightX, blueEndY, rect);
+        cfPlaceLine(cfLineRed, baseStartX, redStartY, eyeLeft.x - (mobile ? 2 : 4), redEndY, rect);
+        cfPlaceLine(cfLineBlue, baseStartX, blueStartY, eyeRight.x - (mobile ? 10 : 12), blueEndY, rect);
       }else{
         cfLineRed.style.opacity = '0';
         cfLineBlue.style.opacity = '0';
