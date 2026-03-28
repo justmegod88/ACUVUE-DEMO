@@ -2547,9 +2547,10 @@ function openBlueLightDemo(){
       const baseCardCx = w * 0.225;
       const baseCardCy = (eyeLeft.y + eyeRight.y) / 2 + 10;
 
-      // mode on/off 모두 카드 x축은 동일, mode on에서 빨간 카드만 상단 카드로 보이도록 위아래 분리
+      // mode on/off 모두 카드 x축은 동일
       const cardCx = baseCardCx;
-      const cardCy = baseCardCy;
+      const offCardYOffset = mobile ? 4 : 6;
+      const cardCy = modeOff ? (baseCardCy + offCardYOffset) : baseCardCy;
       const redCardCenterY = baseCardCy - 14 + redFloatOffset;
       const blueCardCenterY = baseCardCy + 14;
 
@@ -2578,6 +2579,7 @@ function openBlueLightDemo(){
       cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
 
       const startX = cardCx + cardW * 0.46;
+      const cardRightCenterX = cardCx + cardW * 0.50;
       const baseStartX = baseCardCx + cardW * 0.46;
 
       if(modeOn){
@@ -2593,7 +2595,7 @@ function openBlueLightDemo(){
         // 빨간선: 왼쪽 눈에서 시작, 빨간 카드 쪽 접점은 카드 흔들림을 따라가며 살짝 상방으로 연결
         const redStartX = eyeLeft.x;
         const redStartY = eyeLeft.y;
-        const redEndX = baseCardCx + cardW * 0.50;
+        const redEndX = cardRightCenterX;
         const redEndY = redCardCenterY;
 
         cfPlaceLine(cfLineBlue, blueStartX, blueStartY, blueEndX, blueEndY, rect);
@@ -2602,14 +2604,16 @@ function openBlueLightDemo(){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
-        // 파란선 현재 유지, 빨간선만 거의 수평으로 파란선과 유사한 레벨 유지
+        // mode off: 카드만 살짝 아래로, 카드 쪽 접점만 함께 아래로 이동 / 눈 쪽 시작점은 고정
+        const offLineYOffset = mobile ? 4 : 6;
         const blueStartY = eyeRight.y + (mobile ? 4 : 6);
         const blueEndY = eyeRight.y;
-        const redStartY = blueStartY - (mobile ? 3 : 4);
-        const redEndY = redStartY - (mobile ? 1 : 1);
+        const redStartY = blueStartY - (mobile ? 3 : 4) + offLineYOffset;
+        const redEndY = redStartY - 1;
+        const blueCardAttachY = blueStartY + offLineYOffset;
 
-        cfPlaceLine(cfLineRed, baseStartX, redStartY, eyeLeft.x - (mobile ? 2 : 4), redEndY, rect);
-        cfPlaceLine(cfLineBlue, baseStartX, blueStartY, eyeRight.x - (mobile ? 10 : 12), blueEndY, rect);
+        cfPlaceLine(cfLineRed, cardRightCenterX, redStartY, eyeLeft.x - (mobile ? 2 : 4), redEndY, rect);
+        cfPlaceLine(cfLineBlue, cardRightCenterX, blueCardAttachY, eyeRight.x - (mobile ? 10 : 12), blueEndY, rect);
       }else{
         cfLineRed.style.opacity = '0';
         cfLineBlue.style.opacity = '0';
