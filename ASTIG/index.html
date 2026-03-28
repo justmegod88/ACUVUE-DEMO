@@ -1041,8 +1041,8 @@
 
     #comfortScene.mode-on .cf-box-top{ top:-14px; opacity:.96; background:rgba(251,221,231,.42); animation:cfPinkFloat 1.45s ease-in-out infinite; }
     #comfortScene.mode-on .cf-box-bottom{ top:14px; opacity:.82; background:rgba(219,234,255,.28); transform:translateX(-50%); }
-    #comfortScene.mode-on .cf-a-red{ top:50%; opacity:1; transform:translate(-50%,-50%); color:#e02020; animation:cfRedFloat 1.45s ease-in-out infinite; }
-    #comfortScene.mode-on .cf-a-blue{ top:50%; opacity:1; transform:translate(-50%,-50%); color:#176fd6; }
+    #comfortScene.mode-on .cf-a-red{ top:33%; opacity:1; transform:translate(-50%,-50%); color:#e02020; animation:cfRedFloat 1.45s ease-in-out infinite; }
+    #comfortScene.mode-on .cf-a-blue{ top:69%; opacity:1; transform:translate(-50%,-50%); color:#176fd6; }
 
     @keyframes cfRedFloat{
       0%{ transform:translate(-50%,-50%) translateY(0); }
@@ -2560,7 +2560,7 @@ function openBlueLightDemo(){
       const offCardYOffset = mobile ? 12 : 14;
       const cardCy = modeOff ? (baseCardCy + offCardYOffset) : baseCardCy;
 
-      const redCardCenterY = baseCardCy - 60 + redFloatOffset;
+      const redCardCenterY = baseCardCy - 14 + redFloatOffset;
       const blueCardCenterY = baseCardCy + 14;
 
       cfTargetStage.style.width = cardW + 'px';
@@ -2568,8 +2568,8 @@ function openBlueLightDemo(){
       cfSetCenterPercent(cfTargetStage, cardCx, cardCy, rect);
 
       if(modeOn){
-        if(cfBoxTop) cfBoxTop.style.top = '-14px';
-        if(cfBoxBottom) cfBoxBottom.style.top = '14px';
+        if(cfBoxTop) cfBoxTop.style.top = '-20px';
+        if(cfBoxBottom) cfBoxBottom.style.top = '20px';
         if(cfARed){ cfARed.style.top = '50%'; cfARed.style.left = '50%'; }
         if(cfABlue){ cfABlue.style.top = '50%'; cfABlue.style.left = '50%'; }
       }else if(modeOff){
