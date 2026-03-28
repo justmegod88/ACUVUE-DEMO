@@ -1475,9 +1475,9 @@
       const dx = ex - sx; const dy = ey - sy; const length = Math.sqrt(dx * dx + dy * dy); const angle = Math.atan2(dy, dx) * 180 / Math.PI;
       el.style.left = (sx / rect.width * 100) + '%'; el.style.top = (sy / rect.height * 100) + '%'; el.style.width = length + 'px'; el.style.transform = `rotate(${angle}deg)`;
     }
-
 function positionComfortInteractiveElements(redFloatOffset = 0){
   if(!comfortScene || !comfortOverlay.classList.contains('show')) return;
+
   const rect = comfortScene.getBoundingClientRect();
   const w = rect.width;
   const h = rect.height;
@@ -1489,44 +1489,67 @@ function positionComfortInteractiveElements(redFloatOffset = 0){
 
   const cardW = mobile ? 82 : (tablet ? 104 : 118);
   const cardH = mobile ? 126 : (tablet ? 158 : 176);
+
   const modeOn = comfortScene.classList.contains('mode-on');
   const modeOff = comfortScene.classList.contains('mode-off');
 
-  const baseCardCx = w * 0.225;
+  /* ✅ 카드 그룹 위치: 너무 왼쪽으로 안 가게 보정 */
+  const baseCardCx = mobile ? w * 0.23 : w * 0.225;
   const baseCardCy = (eyeLeft.y + eyeRight.y) / 2 + 4;
 
   const cardCx = baseCardCx;
   const offCardYOffset = mobile ? 12 : 14;
   const cardCy = modeOff ? (baseCardCy + offCardYOffset) : baseCardCy;
 
-  /* ✅ 레드 더 위 */
-  const redCardCenterY = baseCardCy - 26 + redFloatOffset;
-  const blueCardCenterY = baseCardCy + 20;
+  /* ✅ 각 카드의 실제 중심 */
+  const redCardCenterY = baseCardCy - 14 + redFloatOffset;
+  const blueCardCenterY = baseCardCy + 14;
 
   cfTargetStage.style.width = cardW + 'px';
   cfTargetStage.style.height = cardH + 'px';
   cfSetCenterPercent(cfTargetStage, cardCx, cardCy, rect);
 
-  /* ✅ A 완전 중앙 */
-  if(cfARed){
-    cfARed.style.position = 'absolute';
-    cfARed.style.top = '50%';
-    cfARed.style.left = '50%';
-    cfARed.style.transform = 'translate(-50%, -50%)';
-  }
-  if(cfABlue){
-    cfABlue.style.position = 'absolute';
-    cfABlue.style.top = '50%';
-    cfABlue.style.left = '50%';
-    cfABlue.style.transform = 'translate(-50%, -50%)';
-  }
-
   if(modeOn){
-    if(cfBoxTop) cfBoxTop.style.top = '-20px';
-    if(cfBoxBottom) cfBoxBottom.style.top = '20px';
+    if(cfBoxTop){
+      cfBoxTop.style.top = '-20px';
+      cfBoxTop.style.transform = 'translateX(-50%)';
+    }
+    if(cfBoxBottom){
+      cfBoxBottom.style.top = '20px';
+      cfBoxBottom.style.transform = 'translateX(-50%)';
+    }
+
+    /* ✅ 각각 자기 카드 정중앙 */
+    if(cfARed){
+      cfARed.style.left = '50%';
+      cfARed.style.top = '50%';
+      cfARed.style.transform = 'translate(-50%,-50%)';
+    }
+    if(cfABlue){
+      cfABlue.style.left = '50%';
+      cfABlue.style.top = '50%';
+      cfABlue.style.transform = 'translate(-50%,-50%)';
+    }
   }else if(modeOff){
-    if(cfBoxTop) cfBoxTop.style.top = '0px';
-    if(cfBoxBottom) cfBoxBottom.style.top = '0px';
+    if(cfBoxTop){
+      cfBoxTop.style.top = '0px';
+      cfBoxTop.style.transform = 'translateX(-50%)';
+    }
+    if(cfBoxBottom){
+      cfBoxBottom.style.top = '0px';
+      cfBoxBottom.style.transform = 'translateX(-50%)';
+    }
+
+    if(cfARed){
+      cfARed.style.left = '50%';
+      cfARed.style.top = '50%';
+      cfARed.style.transform = 'translate(-50%,-50%)';
+    }
+    if(cfABlue){
+      cfABlue.style.left = '50%';
+      cfABlue.style.top = '50%';
+      cfABlue.style.transform = 'translate(-50%,-50%)';
+    }
   }
 
   const opticW = mobile ? 38 : (tablet ? 48 : 58);
@@ -1544,27 +1567,20 @@ function positionComfortInteractiveElements(redFloatOffset = 0){
     cfLineRed.style.opacity = '1';
     cfLineBlue.style.opacity = '1';
 
+    /* ✅ 파란선 */
     const blueStartX = eyeRight.x;
     const blueStartY = eyeRight.y;
-    const blueEndX = baseCardCx + cardW * 0.50;
+    const blueEndX = cardRightCenterX;
     const blueEndY = blueCardCenterY;
 
+    /* ✅ 빨간선: 지금보다 더 위쪽으로 */
     const redStartX = eyeLeft.x;
     const redStartY = eyeLeft.y;
     const redEndX = cardRightCenterX;
-    const redEndY = redCardCenterY;
+    const redEndY = redCardCenterY - (mobile ? 8 : 10);
 
     cfPlaceLine(cfLineBlue, blueStartX, blueStartY, blueEndX, blueEndY, rect);
-
-    const dx = redEndX - redStartX;
-    const dy = redEndY - redStartY;
-    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-    const length = Math.sqrt(dx * dx + dy * dy);
-
-    cfLineRed.style.left = (redStartX / rect.width * 100) + '%';
-    cfLineRed.style.top = (redStartY / rect.height * 100) + '%';
-    cfLineRed.style.width = length + 'px';
-    cfLineRed.style.transform = `rotate(${angle}deg)`;
+    cfPlaceLine(cfLineRed, redStartX, redStartY, redEndX, redEndY, rect);
 
   }else if(modeOff){
     cfLineRed.style.opacity = '1';
@@ -1574,13 +1590,30 @@ function positionComfortInteractiveElements(redFloatOffset = 0){
     const redCardAttachY = offAttachY - (mobile ? 3 : 4);
     const blueCardAttachY = offAttachY;
 
-    cfPlaceLine(cfLineRed, cardRightCenterX, redCardAttachY, eyeLeft.x - (mobile ? 2 : 4), eyeLeft.y, rect);
-    cfPlaceLine(cfLineBlue, cardRightCenterX, blueCardAttachY, eyeRight.x - (mobile ? 10 : 12), eyeRight.y, rect);
+    cfPlaceLine(
+      cfLineRed,
+      cardRightCenterX,
+      redCardAttachY,
+      eyeLeft.x - (mobile ? 2 : 4),
+      eyeLeft.y,
+      rect
+    );
+
+    cfPlaceLine(
+      cfLineBlue,
+      cardRightCenterX,
+      blueCardAttachY,
+      eyeRight.x - (mobile ? 10 : 12),
+      eyeRight.y,
+      rect
+    );
   }else{
     cfLineRed.style.opacity = '0';
     cfLineBlue.style.opacity = '0';
   }
 }
+
+
   
 
     missionComfort.addEventListener('click', toggleComfort);
