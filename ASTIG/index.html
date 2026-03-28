@@ -273,6 +273,31 @@
       }
     }
 
+
+
+    #globalReferenceArea{
+      position:fixed;
+      left:12px;
+      right:12px;
+      bottom:calc(env(safe-area-inset-bottom, 0px) + 0px);
+      z-index:48;
+      text-align:left;
+      font-size:8.6px;
+      line-height:1.3;
+      color:rgba(72,80,92,.96);
+      font-weight:500;
+      letter-spacing:-.05px;
+      pointer-events:none;
+      white-space:pre-line;
+    }
+    @media (max-width:560px){
+      #globalReferenceArea{
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 6px);
+        font-size:7.8px;
+        line-height:1.25;
+      }
+    }
+
     .toric-popup-disclaimer{
       padding:9px 16px 11px;
       font-size:9.4px;
@@ -334,7 +359,7 @@
       position:fixed;
       left:12px;
       right:12px;
-      bottom:92px;
+      bottom:34px;
       z-index:60;
       background: var(--panel-grad);
       border:1px solid var(--panel-stroke);
@@ -1386,7 +1411,7 @@
     #blueLightOverlay{
       position:fixed !important;
       right:18px !important;
-      bottom:120px !important;
+      bottom:34px !important;
       left:auto !important;
       width:min(430px, calc(100vw - 28px)) !important;
       max-width:calc(100vw - 28px) !important;
@@ -1413,7 +1438,7 @@
         left:12px !important;
         right:12px !important;
         width:auto !important;
-        bottom:118px !important;
+        bottom:34px !important;
       }
       #blueLightOverlay::before{
         right:26px !important;
@@ -1586,7 +1611,7 @@
     left:12px !important;
     right:12px !important;
     width:auto !important;
-    bottom:118px !important;
+    bottom:34px !important;
     gap:12px !important;
     padding:16px 16px !important;
     border-radius:22px !important;
@@ -1754,7 +1779,6 @@
       </div>
       <div class="toric-popup-disclaimer">
         <span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span>
-        <span class="disc-ref">Sulley A, Hawke R, Osborn Lorenz K, et al. Resultant vertical prism in toric soft contact lenses. <em>Cont Lens Anterior Eye.</em> 2015;38(4):253–257.</span>
       </div>
     </div>
   </div>
@@ -1831,6 +1855,8 @@
     <button id="modeHeat" class="btn">렌즈 두께 MAP</button>
   </div>
   <div id="globalToricDisclaimer">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</div>
+  <div id="globalReferenceArea">1.
+2.</div>
 
   <script>
     const mv = document.getElementById('mv');
@@ -2504,6 +2530,7 @@ function openBlueLightDemo(){
           단안에 프리즘 영향이 있는 경우
           <span class="blue">양안 이미지 위치에 차이가 발생하여 피로감이 발생할 수 있습니다.</span>
         `;
+        if(comfortConfirm) comfortConfirm.style.display = '';
       }else{
         comfortScene.classList.add('mode-off');
         cfBtnOff.classList.add('active');
@@ -2511,6 +2538,7 @@ function openBlueLightDemo(){
           난시 렌즈 광학부의 프리즘은
           <span class="blue">단안 난시 소비자에게 중요합니다.</span>
         `;
+        if(comfortConfirm) comfortConfirm.style.display = 'none';
       }
       requestAnimationFrame(()=>positionComfortInteractiveElements(0));
       if(mode === 'on') startComfortModeOnMotion();
