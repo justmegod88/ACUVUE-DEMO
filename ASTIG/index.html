@@ -1041,8 +1041,8 @@
 
     #comfortScene.mode-on .cf-box-top{ top:-14px; opacity:.96; background:rgba(251,221,231,.42); animation:cfPinkFloat 1.45s ease-in-out infinite; }
     #comfortScene.mode-on .cf-box-bottom{ top:14px; opacity:.82; background:rgba(219,234,255,.28); transform:translateX(-50%); }
-    #comfortScene.mode-on .cf-a-red{ top:42%; opacity:1; transform:translate(-50%,-50%); color:#e02020; animation:cfRedFloat 1.45s ease-in-out infinite; }
-    #comfortScene.mode-on .cf-a-blue{ top:58%; opacity:1; transform:translate(-50%,-50%); color:#176fd6; }
+    #comfortScene.mode-on .cf-a-red{ top:33%; opacity:1; transform:translate(-50%,-50%); color:#e02020; animation:cfRedFloat 1.45s ease-in-out infinite; }
+    #comfortScene.mode-on .cf-a-blue{ top:69%; opacity:1; transform:translate(-50%,-50%); color:#176fd6; }
 
     @keyframes cfRedFloat{
       0%{ transform:translate(-50%,-50%) translateY(0); }
@@ -1420,18 +1420,13 @@
 
 
 #comfortScene.mode-on #cfTargetStage{
-  animation:none !important;
+  animation:none;
 }
 #comfortScene.mode-on #cfLineRed{
-  animation:floatRedLine 2.2s ease-in-out infinite;
+  animation:none;
 }
 #comfortScene.mode-on #cfLineBlue{
   animation:none !important;
-}
-@keyframes floatRedLine{
-  0%{ transform:translateY(0); }
-  50%{ transform:translateY(-6px); }
-  100%{ transform:translateY(0); }
 }
 
 
@@ -1868,6 +1863,10 @@
     const cfOptic = document.getElementById('cfOptic');
     const cfLineRed = document.getElementById('cfLineRed');
     const cfLineBlue = document.getElementById('cfLineBlue');
+    const cfBoxTop = document.querySelector('.cf-box-top');
+    const cfBoxBottom = document.querySelector('.cf-box-bottom');
+    const cfARed = document.querySelector('.cf-a-red');
+    const cfABlue = document.querySelector('.cf-a-blue');
     const comfortConfirm = document.getElementById('comfortConfirm');
 
     let currentMode = 'lens';
@@ -1882,6 +1881,9 @@
     let lastTarget = null;
     let defaultFov = null;
     let pendingCameraPreset = null;
+    let comfortMotionRaf = null;
+    const COMFORT_FLOAT_AMPLITUDE = 6;
+    const COMFORT_FLOAT_PERIOD = 2200;
 
     const ASD_STEP = 5;
     const ASD_START = 20;
@@ -2428,6 +2430,7 @@ function openBlueLightDemo(){
       closeBlueLightDemo();
       closeBlueLightDemo();
       closeBlueLightDemo();
+      stopComfortModeOnMotion();
       setComfortMode('off');
       syncMissionUI();
       syncPackshot();
@@ -2436,6 +2439,7 @@ function openBlueLightDemo(){
     function openComfort(){
       if(asdOverlay.classList.contains('show')) closeASD();
       if(pvpOn) forcePVPOff();
+      stopComfortModeOnMotion();
       comfortOverlay.classList.add('show');
       comfortOverlay.setAttribute('aria-hidden','false');
       setComfortMode('off');
@@ -2450,6 +2454,36 @@ function openBlueLightDemo(){
         return;
       }
       openComfort();
+    }
+
+    function stopComfortModeOnMotion(){
+      if(comfortMotionRaf){
+        cancelAnimationFrame(comfortMotionRaf);
+        comfortMotionRaf = null;
+      }
+      if(cfBoxTop) cfBoxTop.style.transform = 'translateX(-50%)';
+      if(cfBoxBottom) cfBoxBottom.style.transform = 'translateX(-50%)';
+      if(cfARed) cfARed.style.transform = 'translate(-50%,-50%)';
+      if(cfABlue) cfABlue.style.transform = 'translate(-50%,-50%)';
+    }
+
+    function startComfortModeOnMotion(){
+      stopComfortModeOnMotion();
+      const animate = (ts)=>{
+        if(!comfortOverlay.classList.contains('show') || !comfortScene.classList.contains('mode-on')){
+          stopComfortModeOnMotion();
+          return;
+        }
+        const wave = Math.sin((ts % COMFORT_FLOAT_PERIOD) / COMFORT_FLOAT_PERIOD * Math.PI * 2);
+        const offset = wave * COMFORT_FLOAT_AMPLITUDE;
+        if(cfBoxTop) cfBoxTop.style.transform = `translateX(-50%) translateY(${offset}px)`;
+        if(cfARed) cfARed.style.transform = `translate(-50%,-50%) translateY(${offset}px)`;
+        if(cfBoxBottom) cfBoxBottom.style.transform = 'translateX(-50%)';
+        if(cfABlue) cfABlue.style.transform = 'translate(-50%,-50%)';
+        positionComfortInteractiveElements(offset);
+        comfortMotionRaf = requestAnimationFrame(animate);
+      };
+      comfortMotionRaf = requestAnimationFrame(animate);
     }
 
     function setComfortMode(mode){
@@ -2472,7 +2506,9 @@ function openBlueLightDemo(){
           <span class="blue">단안 난시 소비자에게 중요합니다.</span>
         `;
       }
-      requestAnimationFrame(positionComfortInteractiveElements);
+      requestAnimationFrame(()=>positionComfortInteractiveElements(0));
+      if(mode === 'on') startComfortModeOnMotion();
+      else stopComfortModeOnMotion();
     }
 
     function cfSetCenterPercent(el, xPx, yPx, rect){
@@ -2491,7 +2527,7 @@ function openBlueLightDemo(){
       el.style.transform = `rotate(${angle}deg)`;
     }
 
-    function positionComfortInteractiveElements(){
+    function positionComfortInteractiveElements(redFloatOffset = 0){
       if(!comfortScene || !comfortOverlay.classList.contains('show')) return;
       const rect = comfortScene.getBoundingClientRect();
       const w = rect.width;
@@ -2507,15 +2543,30 @@ function openBlueLightDemo(){
       const modeOn = comfortScene.classList.contains('mode-on');
       const modeOff = comfortScene.classList.contains('mode-off');
 
+      // 기본 카드(보라/파랑 동일 기준 위치)
       const baseCardCx = w * 0.225;
       const baseCardCy = (eyeLeft.y + eyeRight.y) / 2 + 10;
 
+      // mode on/off 모두 카드 x축은 동일, mode on에서 빨간 카드만 상단 카드로 보이도록 위아래 분리
       const cardCx = baseCardCx;
       const cardCy = baseCardCy;
+      const redCardCenterY = baseCardCy - 14 + redFloatOffset;
+      const blueCardCenterY = baseCardCy + 14;
 
       cfTargetStage.style.width = cardW + 'px';
       cfTargetStage.style.height = cardH + 'px';
       cfSetCenterPercent(cfTargetStage, cardCx, cardCy, rect);
+      if(modeOn){
+        if(cfBoxTop) cfBoxTop.style.top = '-14px';
+        if(cfBoxBottom) cfBoxBottom.style.top = '14px';
+        if(cfARed){ cfARed.style.top = '50%'; cfARed.style.left = '50%'; }
+        if(cfABlue){ cfABlue.style.top = '50%'; cfABlue.style.left = '50%'; }
+      }else if(modeOff){
+        if(cfBoxTop) cfBoxTop.style.top = '0px';
+        if(cfBoxBottom) cfBoxBottom.style.top = '0px';
+        if(cfARed){ cfARed.style.top = '50%'; cfARed.style.left = '50%'; }
+        if(cfABlue){ cfABlue.style.top = '50%'; cfABlue.style.left = '50%'; }
+      }
 
       const opticW = mobile ? 38 : (tablet ? 48 : 58);
       const opticH = mobile ? 76 : (tablet ? 98 : 118);
@@ -2526,59 +2577,39 @@ function openBlueLightDemo(){
       cfOptic.style.height = opticH + 'px';
       cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
 
-      const cardRightX = baseCardCx + cardW * 0.50;
-      const cardCenterY = baseCardCy;
+      const startX = cardCx + cardW * 0.46;
+      const baseStartX = baseCardCx + cardW * 0.46;
 
       if(modeOn){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
-        const blueCardY = cardCenterY + (mobile ? 10 : (tablet ? 12 : 14));
-        const redCardY = cardCenterY - (mobile ? 10 : (tablet ? 12 : 14));
+        // 파란선/파란카드는 현재 유지: 고정
+        const blueStartX = baseStartX;
+        const blueStartY = blueCardCenterY;
+        const blueEndX = eyeRight.x - (mobile ? 10 : 12);
+        const blueEndY = blueStartY;
 
-        // blue card/line fixed
-        cfPlaceLine(
-          cfLineBlue,
-          eyeRight.x - (mobile ? 10 : 12),
-          eyeRight.y,
-          cardRightX,
-          blueCardY,
-          rect
-        );
+        // 빨간선은 눈 쪽은 고정, 카드 쪽은 빨간 카드 흔들림을 따라 이동
+        const redStartX = baseStartX;
+        const redStartY = redCardCenterY;
+        const redEndX = eyeLeft.x - (mobile ? 2 : 4);
+        const redEndY = eyeLeft.y;
 
-        // red card shakes visually, line follows the card-attached end
-        cfPlaceLine(
-          cfLineRed,
-          eyeLeft.x - (mobile ? 2 : 4),
-          eyeLeft.y,
-          cardRightX,
-          redCardY,
-          rect
-        );
+        cfPlaceLine(cfLineBlue, blueStartX, blueStartY, blueEndX, blueEndY, rect);
+        cfPlaceLine(cfLineRed, redStartX, redStartY, redEndX, redEndY, rect);
       }else if(modeOff){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
-        const redLineY = eyeLeft.y - (mobile ? 4 : 5);
-        const blueLineY = eyeRight.y + (mobile ? 2 : 3);
+        // 파란선 현재 유지, 빨간선만 거의 수평으로 파란선과 유사한 레벨 유지
+        const blueStartY = eyeRight.y + (mobile ? 4 : 6);
+        const blueEndY = eyeRight.y;
+        const redStartY = blueStartY - (mobile ? 3 : 4);
+        const redEndY = redStartY - (mobile ? 1 : 1);
 
-        // almost horizontal stable lines, separated just enough not to overlap
-        cfPlaceLine(
-          cfLineRed,
-          cardRightX,
-          redLineY,
-          eyeLeft.x - (mobile ? 2 : 4),
-          redLineY,
-          rect
-        );
-        cfPlaceLine(
-          cfLineBlue,
-          eyeRight.x - (mobile ? 10 : 12),
-          blueLineY,
-          cardRightX,
-          cardCenterY + (mobile ? 2 : 3),
-          rect
-        );
+        cfPlaceLine(cfLineRed, baseStartX, redStartY, eyeLeft.x - (mobile ? 2 : 4), redEndY, rect);
+        cfPlaceLine(cfLineBlue, baseStartX, blueStartY, eyeRight.x - (mobile ? 10 : 12), blueEndY, rect);
       }else{
         cfLineRed.style.opacity = '0';
         cfLineBlue.style.opacity = '0';
@@ -2612,7 +2643,7 @@ function openBlueLightDemo(){
       resetCameraToModeDefault(currentMode);
       syncMissionUI();
       syncPackshot();
-      positionComfortInteractiveElements();
+      positionComfortInteractiveElements(0);
     });
 
     modeLens.addEventListener('click', ()=> { closeBlueLightDemo(); setModel('lens_clear.glb', 'lens', { resetCamera:false }); });
@@ -2761,7 +2792,7 @@ function openBlueLightDemo(){
       else if(tutBottom.style.display === 'block') showTut(2);
       else if(tutTop.style.display === 'block') showTut(3);
       syncPackshot();
-      positionComfortInteractiveElements();
+      positionComfortInteractiveElements(0);
     });
   </script>
 </body>
