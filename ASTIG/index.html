@@ -2549,14 +2549,14 @@ function openBlueLightDemo(){
 
       // mode on/off 모두 카드 x축은 동일
       const cardCx = baseCardCx;
-      const offCardYOffset = mobile ? 4 : 6;
-      const cardCy = modeOff ? (baseCardCy + offCardYOffset) : baseCardCy;
-      const redCardCenterY = baseCardCy - 14 + redFloatOffset;
       const blueCardCenterY = baseCardCy + 14;
+      const cardCy = modeOff ? blueCardCenterY : baseCardCy;
+      const redCardCenterY = baseCardCy - 14 + redFloatOffset;
 
       cfTargetStage.style.width = cardW + 'px';
       cfTargetStage.style.height = cardH + 'px';
       cfSetCenterPercent(cfTargetStage, cardCx, cardCy, rect);
+
       if(modeOn){
         if(cfBoxTop) cfBoxTop.style.top = '-14px';
         if(cfBoxBottom) cfBoxBottom.style.top = '14px';
@@ -2578,21 +2578,19 @@ function openBlueLightDemo(){
       cfOptic.style.height = opticH + 'px';
       cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
 
-      const startX = cardCx + cardW * 0.46;
       const cardRightCenterX = cardCx + cardW * 0.50;
-      const baseStartX = baseCardCx + cardW * 0.46;
 
       if(modeOn){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
-        // 파란선: 오른쪽 눈에서 시작해서 파란 카드 우측면 중앙으로 거의 수평 연결
+        // 파란선: 현재 유지
         const blueStartX = eyeRight.x;
         const blueStartY = eyeRight.y;
         const blueEndX = baseCardCx + cardW * 0.50;
         const blueEndY = blueCardCenterY;
 
-        // 빨간선: 왼쪽 눈에서 시작, 빨간 카드 쪽 접점은 카드 흔들림을 따라가며 살짝 상방으로 연결
+        // 빨간선: 눈과 카드에 고정, 빨간 카드 움직임에 따라 카드 쪽 접점만 함께 움직임
         const redStartX = eyeLeft.x;
         const redStartY = eyeLeft.y;
         const redEndX = cardRightCenterX;
@@ -2604,16 +2602,26 @@ function openBlueLightDemo(){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
-        // mode off: 카드만 살짝 아래로, 카드 쪽 접점만 함께 아래로 이동 / 눈 쪽 시작점은 고정
-        const offLineYOffset = mobile ? 4 : 6;
-        const blueStartY = eyeRight.y + (mobile ? 4 : 6);
-        const blueEndY = eyeRight.y;
-        const redStartY = blueStartY - (mobile ? 3 : 4) + offLineYOffset;
-        const redEndY = redStartY - 1;
-        const blueCardAttachY = blueStartY + offLineYOffset;
+        // mode off: 카드와 카드 쪽 접점만 mode on 파란 카드 위치로 아래 이동 / 눈 쪽 접점은 고정
+        const blueCardAttachY = blueCardCenterY;
+        const redCardAttachY = blueCardCenterY - (mobile ? 3 : 4);
 
-        cfPlaceLine(cfLineRed, cardRightCenterX, redStartY, eyeLeft.x - (mobile ? 2 : 4), redEndY, rect);
-        cfPlaceLine(cfLineBlue, cardRightCenterX, blueCardAttachY, eyeRight.x - (mobile ? 10 : 12), blueEndY, rect);
+        cfPlaceLine(
+          cfLineRed,
+          cardRightCenterX,
+          redCardAttachY,
+          eyeLeft.x - (mobile ? 2 : 4),
+          eyeLeft.y,
+          rect
+        );
+        cfPlaceLine(
+          cfLineBlue,
+          cardRightCenterX,
+          blueCardAttachY,
+          eyeRight.x - (mobile ? 10 : 12),
+          eyeRight.y,
+          rect
+        );
       }else{
         cfLineRed.style.opacity = '0';
         cfLineBlue.style.opacity = '0';
