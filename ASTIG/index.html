@@ -44,7 +44,6 @@
       z-index:1;
     }
 
-    /* 상단 미션 카드 */
     #missionBarWrap{
       position:fixed;
       left:12px;
@@ -177,7 +176,6 @@
       }
     }
 
-    /* 하단 버튼 */
     #bottomBtns{
       position:fixed;
       left:12px;
@@ -209,7 +207,6 @@
       color:#ffffff;
     }
 
-    /* 작은 원형 ↺ 버튼 */
     #btnReset{
       width:46px;
       height:46px;
@@ -229,27 +226,30 @@
       box-shadow: 0 10px 28px rgba(11,31,51,.10);
     }
 
-    /* ✅ 우측 하단 팩샷 */
     #maxPackshot{
       position:fixed;
       right:18px;
-      bottom:90px; /* 조금 더 아래 */
+      bottom:90px;
       width:150px;
       max-width:34vw;
       height:auto;
-      z-index:34;
-      pointer-events:none;
+      z-index:72 !important;
+      pointer-events:auto !important;
+      cursor:pointer !important;
       user-select:none;
       display:none;
       object-fit:contain;
-      mix-blend-mode:multiply; /* 흰 배경이 있으면 최대한 자연스럽게 */
+      mix-blend-mode:multiply;
       filter: drop-shadow(0 10px 18px rgba(11,31,51,.12));
       transform: translateZ(0);
+      transition:transform .26s ease, filter .26s ease, opacity .26s ease !important;
+      transform-origin:center bottom;
+    }
+    #maxPackshot.active{
+      transform:translateY(-10px) scale(1.16) !important;
+      filter:drop-shadow(0 24px 40px rgba(0,94,184,.36)) !important;
     }
 
-
-
-    /* 난시 페이지 공통 디스클레이머 */
     #globalToricDisclaimer{
       position:fixed;
       left:12px;
@@ -272,8 +272,6 @@
         line-height:1.26;
       }
     }
-
-
 
     #globalReferenceArea{
       position:fixed;
@@ -305,18 +303,10 @@
       color:rgba(72,80,92,.90);
       background:#fff;
     }
-    .toric-popup-disclaimer .disc-note{
-      display:block;
-      margin-bottom:4px;
-      font-weight:500;
-    }
-    .toric-popup-disclaimer .disc-ref{
-      display:block;
-      font-weight:500;
-      color:rgba(72,80,92,.92);
-    }
+    .toric-popup-disclaimer .disc-note{ display:block; margin-bottom:4px; font-weight:500; }
+    .toric-popup-disclaimer .disc-ref{ display:block; font-weight:500; color:rgba(72,80,92,.92); }
     .toric-popup-disclaimer em{ font-style:italic; }
-    /* PVP */
+
     @keyframes pvpPop {
       0%   { transform: translate(-50%,-50%) scale(.94); opacity: 0; }
       60%  { transform: translate(-50%,-50%) scale(1.02); opacity: 1; }
@@ -382,21 +372,9 @@
       background:rgba(0,94,184,.03);
       box-shadow: 0 10px 18px rgba(11,31,51,.10);
     }
-    #pvpText{
-      color:var(--text-sub);
-      font-size:12.5px;
-      line-height:1.35;
-      flex:1 1 auto;
-    }
-    #pvpTitle{
-      font-weight:900;
-      margin-bottom:2px;
-      color:var(--text-navy);
-    }
-    #hint{
-      opacity:.9;
-      color:var(--text-sub);
-    }
+    #pvpText{ color:var(--text-sub); font-size:12.5px; line-height:1.35; flex:1 1 auto; }
+    #pvpTitle{ font-weight:900; margin-bottom:2px; color:var(--text-navy); }
+    #hint{ opacity:.9; color:var(--text-sub); }
 
     #pvpConfirm{
       color:#ffffff;
@@ -417,7 +395,6 @@
     }
     #pvpConfirm:active{ transform:scale(.98); }
 
-    /* 두께 바 */
     #thicknessBar{
       position:fixed;
       left:12px;
@@ -435,32 +412,10 @@
       overflow:hidden;
     }
     #thicknessBar.show{ display:block; }
-
-    #thHeader{
-      display:flex;
-      align-items:baseline;
-      justify-content:space-between;
-      margin-bottom:8px;
-    }
-    #thTitle{
-      color:var(--text-navy);
-      font-weight:900;
-      font-size:12.5px;
-      letter-spacing:.2px;
-      opacity:.98;
-    }
-    #thUnit{
-      color:rgba(48,72,95,.85);
-      font-size:11px;
-      font-weight:700;
-      letter-spacing:.1px;
-    }
-
-    #gradRow{
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
+    #thHeader{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:8px; }
+    #thTitle{ color:var(--text-navy); font-weight:900; font-size:12.5px; letter-spacing:.2px; opacity:.98; }
+    #thUnit{ color:rgba(48,72,95,.85); font-size:11px; font-weight:700; letter-spacing:.1px; }
+    #gradRow{ display:flex; align-items:center; gap:10px; }
     .tickLabel{
       width:46px;
       text-align:right;
@@ -470,7 +425,6 @@
       letter-spacing:.1px;
       flex:0 0 auto;
     }
-
     #gradWrap{
       position:relative;
       flex:1 1 auto;
@@ -481,7 +435,6 @@
       background:rgba(0,94,184,.03);
       box-shadow: inset 0 0 12px rgba(11,31,51,.10);
     }
-
     #grad{
       position:absolute;
       inset:0;
@@ -498,10 +451,8 @@
       opacity:.92;
       filter:saturate(1.05) contrast(1.05);
     }
-
     #gradShine{
-      position:absolute;
-      inset:0;
+      position:absolute; inset:0;
       background:linear-gradient(180deg,
         rgba(255,255,255,.30) 0%,
         rgba(255,255,255,0) 55%,
@@ -511,44 +462,18 @@
       opacity:.55;
       pointer-events:none;
     }
-
-    .mark{
-      position:absolute;
-      top:-6px;
-      width:1px;
-      height:26px;
-      background:rgba(11,31,51,.18);
-    }
+    .mark{ position:absolute; top:-6px; width:1px; height:26px; background:rgba(11,31,51,.18); }
     .mark strong{
-      position:absolute;
-      top:18px;
-      left:50%;
-      transform:translateX(-50%);
-      font-size:10px;
-      color:rgba(48,72,95,.80);
-      font-weight:700;
-      white-space:nowrap;
+      position:absolute; top:18px; left:50%; transform:translateX(-50%);
+      font-size:10px; color:rgba(48,72,95,.80); font-weight:700; white-space:nowrap;
     }
-    .m0{ left:0%; }
-    .m25{ left:25%; }
-    .m50{ left:50%; }
-    .m75{ left:75%; }
-    .m100{ left:100%; }
-
+    .m0{ left:0%; } .m25{ left:25%; } .m50{ left:50%; } .m75{ left:75%; } .m100{ left:100%; }
     #thHint{ display:none; }
 
-    /* ASD 오버레이 */
     #asdOverlay{
-      position:fixed;
-      inset:0;
-      z-index:80;
-      display:none;
-      background:rgba(11,31,51,.22);
-      backdrop-filter: blur(12px);
-      align-items:center;
-      justify-content:center;
-      padding:18px;
-      box-sizing:border-box;
+      position:fixed; inset:0; z-index:80; display:none;
+      background:rgba(11,31,51,.22); backdrop-filter: blur(12px);
+      align-items:center; justify-content:center; padding:18px; box-sizing:border-box;
     }
     #asdOverlay.show{ display:flex; }
 
@@ -561,33 +486,9 @@
       box-shadow: var(--panel-glow);
       position:relative;
     }
-
-    #asdHeader{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:14px 18px;
-      background:#eef3fa;
-      border-bottom:1px solid rgba(11,31,51,.08);
-    }
-    #asdHeaderTitle{
-      font-size:18px;
-      font-weight:900;
-      color:#111;
-      letter-spacing:-.2px;
-    }
-
-    #asdClose{
-      width:34px;
-      height:34px;
-      border:none;
-      background:transparent;
-      color:#111;
-      font-weight:900;
-      font-size:18px;
-      cursor:pointer;
-      box-shadow:none;
-    }
+    #asdHeader{ display:flex; align-items:center; justify-content:space-between; padding:14px 18px; background:#eef3fa; border-bottom:1px solid rgba(11,31,51,.08); }
+    #asdHeaderTitle{ font-size:18px; font-weight:900; color:#111; letter-spacing:-.2px; }
+    #asdClose{ width:34px; height:34px; border:none; background:transparent; color:#111; font-weight:900; font-size:18px; cursor:pointer; box-shadow:none; }
 
     #asdHint{
       padding:16px 16px 18px;
@@ -619,456 +520,158 @@
       box-shadow: 0 10px 22px rgba(0,94,184,.22);
       align-self:flex-end;
     }
-    #asdHint .hintText{
-      flex:1 1 auto;
-      word-break:keep-all;
-    }
-    #asdHint .hintTitle{
-      display:block;
-      color:var(--acuvue-blue);
-      font-size:17px;
-      font-weight:900;
-      margin-bottom:8px;
-      letter-spacing:-.2px;
-    }
-    #asdHint .hintStrong{
-      font-weight:900;
-      color:#111;
-    }
-    #asdHint .hintBody{
-      display:block;
-      font-size:20px;
-      line-height:1.38;
-      font-weight:900;
-      color:#111;
-      letter-spacing:-.2px;
-    }
-    #asdHint .hintBody .blue{
-      color:var(--acuvue-blue);
-    }
+    #asdHint .hintText{ flex:1 1 auto; word-break:keep-all; }
+    #asdHint .hintTitle{ display:block; color:var(--acuvue-blue); font-size:17px; font-weight:900; margin-bottom:8px; letter-spacing:-.2px; }
+    #asdHint .hintBody{ display:block; font-size:20px; line-height:1.38; font-weight:900; color:#111; letter-spacing:-.2px; }
+    #asdHint .hintBody .blue{ color:var(--acuvue-blue); }
 
     #asdScene{
-      position:relative;
-      width:100%;
-      background:rgba(0,94,184,.03);
-      overflow:hidden;
-      aspect-ratio: 1/1;
-      min-height: 360px;
-      --irisX: 13px;
-      --irisY: 26px;
+      position:relative; width:100%; background:rgba(0,94,184,.03); overflow:hidden;
+      aspect-ratio: 1/1; min-height: 360px; --irisX: 13px; --irisY: 26px;
     }
-
     #asdEyeMV{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      display:block;
-      background:transparent;
-      pointer-events:none;
-      object-fit:cover;
-      transform: scale(1.55);
-      transform-origin:center;
+      position:absolute; inset:0; width:100%; height:100%; display:block; background:transparent;
+      pointer-events:none; object-fit:cover; transform: scale(1.55); transform-origin:center;
       filter: contrast(1.02) saturate(1.02);
     }
-
     #asdUpperLid{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      display:block;
-      pointer-events:none;
-      object-fit:cover;
-      transform: scale(1.55) translateY(3px);
-      transform-origin:center;
-      z-index:3;
+      position:absolute; inset:0; width:100%; height:100%; display:block; pointer-events:none;
+      object-fit:cover; transform: scale(1.55) translateY(3px); transform-origin:center; z-index:3;
       filter: drop-shadow(0 2px 10px rgba(0,0,0,.18));
     }
-
     #asdLensImg{
-      position:absolute;
-      left:50%;
-      top:52%;
-      width:80%;
+      position:absolute; left:50%; top:52%; width:80%;
       transform: translate(calc(-50% - 4px), calc(-50% + 10px)) rotate(20deg);
-      opacity:.70;
-      pointer-events:none;
-      will-change: transform, opacity;
-      mix-blend-mode:normal;
-      filter:saturate(1.08) contrast(1.06);
+      opacity:.70; pointer-events:none; will-change: transform, opacity; mix-blend-mode:normal; filter:saturate(1.08) contrast(1.06);
     }
-
     #asdLensRim{
-      position:absolute;
-      left:50%;
-      top:52%;
-      width:80%;
-      height:80%;
-      transform:translate(-50%,-50%);
-      border-radius:999px;
-      pointer-events:none;
-      box-shadow:
-        0 0 0 1px rgba(11,31,51,.10),
-        0 18px 46px rgba(11,31,51,.16),
-        inset 0 0 24px rgba(255,255,255,.18);
+      position:absolute; left:50%; top:52%; width:80%; height:80%; transform:translate(-50%,-50%);
+      border-radius:999px; pointer-events:none;
+      box-shadow: 0 0 0 1px rgba(11,31,51,.10), 0 18px 46px rgba(11,31,51,.16), inset 0 0 24px rgba(255,255,255,.18);
       opacity:.45;
     }
-
     #asdMaskShade{
-      position:absolute;
-      inset:0;
-      pointer-events:none;
+      position:absolute; inset:0; pointer-events:none;
       background:
-        radial-gradient(110% 70% at 50% 18%,
-          rgba(11,31,51,.38) 0%,
-          rgba(11,31,51,.16) 32%,
-          rgba(11,31,51,0) 58%),
-        radial-gradient(110% 70% at 50% 90%,
-          rgba(11,31,51,.34) 0%,
-          rgba(11,31,51,.14) 34%,
-          rgba(11,31,51,0) 60%);
-      opacity:.78;
-      mix-blend-mode:multiply;
+        radial-gradient(110% 70% at 50% 18%, rgba(11,31,51,.38) 0%, rgba(11,31,51,.16) 32%, rgba(11,31,51,0) 58%),
+        radial-gradient(110% 70% at 50% 90%, rgba(11,31,51,.34) 0%, rgba(11,31,51,.14) 34%, rgba(11,31,51,0) 60%);
+      opacity:.78; mix-blend-mode:multiply;
     }
 
-    #asdBlinkLid{
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      z-index:4;
-    }
-    #asdLidTop,
-    #asdLidBot{
-      position:absolute;
-      left:0;
-      right:0;
-      height:55%;
-      background:
-        radial-gradient(120% 90% at 50% 85%,
-          rgba(165,120,95,.98) 0%,
-          rgba(120,80,62,.98) 46%,
-          rgba(40,25,22,.98) 92%);
-      filter: blur(.2px);
-      opacity:0;
-      transform: translateY(-110%);
-      will-change: transform, opacity;
+    #asdBlinkLid{ position:absolute; inset:0; pointer-events:none; z-index:4; }
+    #asdLidTop, #asdLidBot{
+      position:absolute; left:0; right:0; height:55%;
+      background: radial-gradient(120% 90% at 50% 85%, rgba(165,120,95,.98) 0%, rgba(120,80,62,.98) 46%, rgba(40,25,22,.98) 92%);
+      filter: blur(.2px); opacity:0; transform: translateY(-110%); will-change: transform, opacity;
     }
     #asdLidBot{
-      top:auto;
-      bottom:0;
-      background:
-        radial-gradient(120% 90% at 50% 15%,
-          rgba(165,120,95,.98) 0%,
-          rgba(120,80,62,.98) 46%,
-          rgba(40,25,22,.98) 92%);
+      top:auto; bottom:0;
+      background: radial-gradient(120% 90% at 50% 15%, rgba(165,120,95,.98) 0%, rgba(120,80,62,.98) 46%, rgba(40,25,22,.98) 92%);
       transform: translateY(110%);
     }
-    #asdLidTop::after,
-    #asdLidBot::after{
-      content:"";
-      position:absolute;
-      left:-10%;
-      right:-10%;
-      height:28px;
-      background: radial-gradient(120% 100% at 50% 50%,
-        rgba(0,0,0,.35) 0%,
-        rgba(0,0,0,.18) 35%,
-        rgba(0,0,0,0) 70%);
+    #asdLidTop::after, #asdLidBot::after{
+      content:""; position:absolute; left:-10%; right:-10%; height:28px;
+      background: radial-gradient(120% 100% at 50% 50%, rgba(0,0,0,.35) 0%, rgba(0,0,0,.18) 35%, rgba(0,0,0,0) 70%);
       opacity:.55;
     }
     #asdLidTop::after{ bottom:-12px; }
     #asdLidBot::after{ top:-12px; transform: scaleY(-1); }
 
     #asdBlinkBtn, #asdRotateBtn{
-      position:absolute;
-      bottom:14px;
-      width:54px;
-      height:54px;
-      border-radius:999px;
-      font-weight:900;
-      font-size:12px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      z-index:5;
-      -webkit-tap-highlight-color: transparent;
-      user-select:none;
-      cursor:pointer;
-      box-shadow: 0 10px 22px rgba(11,31,51,.12);
+      position:absolute; bottom:14px; width:54px; height:54px; border-radius:999px;
+      font-weight:900; font-size:12px; display:flex; align-items:center; justify-content:center; z-index:5;
+      -webkit-tap-highlight-color: transparent; user-select:none; cursor:pointer; box-shadow: 0 10px 22px rgba(11,31,51,.12);
     }
-    #asdBlinkBtn{
-      right:14px;
-      border:1px solid rgba(0,94,184,.55);
-      background:var(--acuvue-blue);
-      color:#fff;
-      box-shadow: 0 12px 26px rgba(0,94,184,.20);
-    }
-    #asdRotateBtn{
-      right:76px;
-      border:1px solid rgba(0,94,184,.35);
-      background:rgba(255,255,255,.92);
-      color:var(--acuvue-blue);
-    }
+    #asdBlinkBtn{ right:14px; border:1px solid rgba(0,94,184,.55); background:var(--acuvue-blue); color:#fff; box-shadow: 0 12px 26px rgba(0,94,184,.20); }
+    #asdRotateBtn{ right:76px; border:1px solid rgba(0,94,184,.35); background:rgba(255,255,255,.92); color:var(--acuvue-blue); }
 
     #asdAngleBadge{
-      position:absolute;
-      left:14px;
-      bottom:18px;
-      color:var(--acuvue-blue);
-      font-size:12px;
-      font-weight:900;
-      background:rgba(255,255,255,.86);
-      border:1px solid rgba(0,94,184,.35);
-      border-radius:999px;
-      padding:6px 10px;
-      z-index:5;
+      position:absolute; left:14px; bottom:18px; color:var(--acuvue-blue); font-size:12px; font-weight:900;
+      background:rgba(255,255,255,.86); border:1px solid rgba(0,94,184,.35); border-radius:999px; padding:6px 10px; z-index:5;
       box-shadow: 0 10px 22px rgba(11,31,51,.10);
     }
 
-    /* 튜토리얼 */
-    #tutorialLayer{
-      position:fixed;
-      inset:0;
-      display:none;
-      z-index:95;
-    }
-    #tutorialLayer.show{
-      display:block;
-    }
-
-    #tutorialMask{
-      position:absolute;
-      inset:0;
-      background:rgba(8,22,37,.42);
-      pointer-events:none;
-    }
-
+    #tutorialLayer{ position:fixed; inset:0; display:none; z-index:95; }
+    #tutorialLayer.show{ display:block; }
+    #tutorialMask{ position:absolute; inset:0; background:rgba(8,22,37,.42); pointer-events:none; }
     #tutorialFocus{
-      position:absolute;
-      pointer-events:none;
-      background:transparent;
-      border:2px solid rgba(255,255,255,.92);
-      box-shadow:
-        0 0 0 9999px rgba(8,22,37,.42),
-        0 0 0 6px rgba(255,255,255,.12),
-        0 12px 34px rgba(0,0,0,.12);
-      transition: all .22s ease;
-      display:none;
+      position:absolute; pointer-events:none; background:transparent; border:2px solid rgba(255,255,255,.92);
+      box-shadow: 0 0 0 9999px rgba(8,22,37,.42), 0 0 0 6px rgba(255,255,255,.12), 0 12px 34px rgba(0,0,0,.12);
+      transition: all .22s ease; display:none;
     }
-
     .tutBox{
-      position:absolute;
-      width:min(360px, calc(100vw - 40px));
-      max-width:min(360px, calc(100vw - 40px));
-      box-sizing:border-box;
-      background:linear-gradient(180deg, #1E63B8 0%, #0A5FBE 100%);
-      color:#fff;
-      border-radius:24px;
-      padding:18px 18px 16px;
-      box-shadow:
-        0 18px 48px rgba(0,0,0,.20),
-        0 6px 18px rgba(0,94,184,.22);
-      border:1px solid rgba(255,255,255,.20);
-      overflow:hidden;
+      position:absolute; width:min(360px, calc(100vw - 40px)); max-width:min(360px, calc(100vw - 40px)); box-sizing:border-box;
+      background:linear-gradient(180deg, #1E63B8 0%, #0A5FBE 100%); color:#fff; border-radius:24px; padding:18px 18px 16px;
+      box-shadow: 0 18px 48px rgba(0,0,0,.20), 0 6px 18px rgba(0,94,184,.22); border:1px solid rgba(255,255,255,.20); overflow:hidden;
     }
-    .tutBox::before{
-      content:"";
-      position:absolute;
-      left:0;
-      right:0;
-      top:0;
-      height:2px;
-      background:linear-gradient(90deg, rgba(255,255,255,.85), rgba(255,255,255,0));
-      opacity:.85;
-    }
-    .tutBox::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      border-radius:24px;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
-      pointer-events:none;
-    }
-    .tutBox .tutTitle{
-      font-weight:900;
-      margin-bottom:10px;
-      font-size:18px;
-      letter-spacing:-.2px;
-    }
-    .tutBox .tutText{
-      line-height:1.5;
-      font-size:14px;
-      opacity:.96;
-      word-break:keep-all;
-    }
+    .tutBox::before{ content:""; position:absolute; left:0; right:0; top:0; height:2px; background:linear-gradient(90deg, rgba(255,255,255,.85), rgba(255,255,255,0)); opacity:.85; }
+    .tutBox::after{ content:""; position:absolute; inset:0; border-radius:24px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); pointer-events:none; }
+    .tutBox .tutTitle{ font-weight:900; margin-bottom:10px; font-size:18px; letter-spacing:-.2px; }
+    .tutBox .tutText{ line-height:1.5; font-size:14px; opacity:.96; word-break:keep-all; }
     .tutBox .tutBtn{
-      margin-top:16px;
-      width:100%;
-      height:50px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.70);
-      background:#fff;
-      color:var(--acuvue-blue);
-      font-weight:900;
-      font-size:15px;
-      cursor:pointer;
-      box-shadow: inset 0 -2px 0 rgba(0,0,0,.04);
+      margin-top:16px; width:100%; height:50px; border-radius:16px; border:1px solid rgba(255,255,255,.70);
+      background:#fff; color:var(--acuvue-blue); font-weight:900; font-size:15px; cursor:pointer; box-shadow: inset 0 -2px 0 rgba(0,0,0,.04);
     }
-
     #tutLeft{ left:20px; right:20px; top:50%; transform:translateY(-50%); display:none; }
     #tutBottom{ left:20px; right:20px; bottom:88px; display:none; }
     #tutTop{ left:20px; right:20px; top:126px; display:none; }
-  
 
-    /* ASD 편안한 시야 오버레이 */
     #comfortOverlay{
-      position:fixed;
-      inset:0;
-      z-index:82;
-      display:none;
-      background:rgba(255,255,255,.16);
-      backdrop-filter: blur(8px);
-      align-items:center;
-      justify-content:center;
-      padding:18px;
-      box-sizing:border-box;
+      position:fixed; inset:0; z-index:82; display:none; background:rgba(255,255,255,.16); backdrop-filter: blur(8px);
+      align-items:center; justify-content:center; padding:18px; box-sizing:border-box;
     }
     #comfortOverlay.show{ display:flex; }
-
     #comfortWrap{
-      width:min(820px, 96vw);
-      border-radius:24px;
-      overflow:hidden;
-      background:#fff;
-      border:1px solid rgba(255,255,255,.18);
-      box-shadow:0 18px 44px rgba(10,30,55,.20);
+      width:min(820px, 96vw); border-radius:24px; overflow:hidden; background:#fff; border:1px solid rgba(255,255,255,.18); box-shadow:0 18px 44px rgba(10,30,55,.20);
     }
-
     #comfortHead{
-      height:76px;
-      background:#dbe5f1;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 26px;
+      height:76px; background:#dbe5f1; display:flex; align-items:center; justify-content:space-between; padding:0 26px;
       border-bottom:1px solid rgba(10,30,55,.08);
     }
-    #comfortTitle{
-      font-size:28px;
-      font-weight:900;
-      color:#000;
-      letter-spacing:-.5px;
-    }
-    #comfortClose{
-      border:none;
-      background:transparent;
-      font-size:34px;
-      line-height:1;
-      color:#000;
-      cursor:pointer;
-      padding:0;
-      width:44px;
-      height:44px;
-    }
-
+    #comfortTitle{ font-size:28px; font-weight:900; color:#000; letter-spacing:-.5px; }
+    #comfortClose{ border:none; background:transparent; font-size:34px; line-height:1; color:#000; cursor:pointer; padding:0; width:44px; height:44px; }
     #comfortScene{
-      position:relative;
-      height:min(64vw, 540px);
-      min-height:420px;
-      background:#efefef url('face_V2.png') center center / cover no-repeat;
-      overflow:hidden;
+      position:relative; height:min(64vw, 540px); min-height:420px; background:#efefef url('face_V2.png') center center / cover no-repeat; overflow:hidden;
     }
     #comfortScene::before{
-      content:"";
-      position:absolute;
-      inset:0;
+      content:""; position:absolute; inset:0;
       background:
         radial-gradient(120px 150px at 30% 46%, rgba(255,255,255,.18), rgba(255,255,255,0) 62%),
         radial-gradient(120px 150px at 69% 46%, rgba(255,255,255,.14), rgba(255,255,255,0) 62%);
-      pointer-events:none;
-      z-index:0;
+      pointer-events:none; z-index:0;
     }
-
     #cfTargetStage{
-      position:absolute;
-      width:118px;
-      height:176px;
-      transform:translate(-50%,-50%);
-      z-index:4;
-      pointer-events:none;
+      position:absolute; width:118px; height:176px; transform:translate(-50%,-50%); z-index:4; pointer-events:none;
       transition:left .35s ease, top .35s ease, width .35s ease, height .35s ease;
     }
     .cf-target-box{
-      position:absolute;
-      left:50%;
-      transform:translateX(-50%);
-      width:100%;
-      height:100%;
-      border-radius:18px;
-      border:2px solid rgba(255,255,255,.58);
-      backdrop-filter: blur(1px);
-      box-shadow:0 8px 24px rgba(0,0,0,.08);
-      transition: top .45s ease, opacity .35s ease, background .35s ease, transform .45s ease;
+      position:absolute; left:50%; transform:translateX(-50%); width:100%; height:100%; border-radius:18px; border:2px solid rgba(255,255,255,.58);
+      backdrop-filter: blur(1px); box-shadow:0 8px 24px rgba(0,0,0,.08); transition: top .45s ease, opacity .35s ease, background .35s ease, transform .45s ease;
     }
     .cf-box-top{ z-index:0; background:rgba(251,221,231,.38); }
     .cf-box-bottom{ z-index:0; background:rgba(245,222,232,.16); }
-
     .cf-target-a{
-      position:absolute;
-      left:50%;
-      transform:translate(-50%,-50%);
-      font-size:104px;
-      line-height:1;
-      font-weight:300;
-      letter-spacing:-6px;
-      font-family:Georgia, "Times New Roman", serif;
-      user-select:none;
-      transition: top .55s cubic-bezier(.22,.8,.22,1), opacity .35s ease, transform .55s cubic-bezier(.22,.8,.22,1), color .35s ease;
-      z-index:2;
+      position:absolute; left:50%; transform:translate(-50%,-50%); font-size:104px; line-height:1; font-weight:300; letter-spacing:-6px;
+      font-family:Georgia, "Times New Roman", serif; user-select:none; transition: top .55s cubic-bezier(.22,.8,.22,1), opacity .35s ease, transform .55s cubic-bezier(.22,.8,.22,1), color .35s ease; z-index:2;
     }
-    .cf-a-red{ color:#e02020; }
-    .cf-a-blue{ color:#176fd6; }
-
-    .cf-target-box::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      border-radius:inherit;
-      background:linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0));
-      pointer-events:none;
-    }
-    #cfTargetStage,
-    .cf-target-box,
-    .cf-target-a,
-    #cfOptic{
-      transform-style:preserve-3d;
-    }
-    #comfortScene.mode-off #cfTargetStage{ transform:translate(-50%,-50%) rotate(0deg); }
-    #comfortScene.mode-on #cfTargetStage{ transform:translate(-50%,-50%) rotate(0deg); }
-    #comfortScene.mode-default #cfTargetStage{ transform:translate(-50%,-50%) rotate(0deg); }
-    #comfortScene.mode-on .cf-optic-prism{ transform:rotate(0deg); }
-    #comfortScene.mode-off .cf-optic-flat{ transform:rotate(0deg); }
-
-    #comfortScene.mode-default .cf-box-top,
-    #comfortScene.mode-default .cf-box-bottom{ top:0; opacity:.92; transform:translateX(-50%); }
+    .cf-a-red{ color:#e02020; } .cf-a-blue{ color:#176fd6; }
+    .cf-target-box::before{ content:""; position:absolute; inset:0; border-radius:inherit; background:linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0)); pointer-events:none; }
+    #cfTargetStage, .cf-target-box, .cf-target-a, #cfOptic{ transform-style:preserve-3d; }
+    #comfortScene.mode-off #cfTargetStage, #comfortScene.mode-on #cfTargetStage, #comfortScene.mode-default #cfTargetStage{ transform:translate(-50%,-50%) rotate(0deg); }
+    #comfortScene.mode-on .cf-optic-prism{ transform:rotate(0deg); } #comfortScene.mode-off .cf-optic-flat{ transform:rotate(0deg); }
+    #comfortScene.mode-default .cf-box-top, #comfortScene.mode-default .cf-box-bottom{ top:0; opacity:.92; transform:translateX(-50%); }
     #comfortScene.mode-default .cf-box-top{ background:rgba(245,222,232,.24); }
     #comfortScene.mode-default .cf-box-bottom{ background:rgba(245,222,232,.14); }
     #comfortScene.mode-default .cf-a-red{ top:50%; opacity:.16; transform:translate(-50%,-50%); animation:none; color:#b44dc9; }
     #comfortScene.mode-default .cf-a-blue{ top:50%; opacity:.88; transform:translate(-50%,-50%); animation:none; color:#8b2da0; }
-
-    #comfortScene.mode-off .cf-box-top,
-    #comfortScene.mode-off .cf-box-bottom{ top:0; opacity:.92; transform:translateX(-50%); }
-    #comfortScene.mode-off .cf-box-top{ background:rgba(245,222,232,.28); }
-    #comfortScene.mode-off .cf-box-bottom{ background:rgba(245,222,232,.16); }
+    #comfortScene.mode-off .cf-box-top, #comfortScene.mode-off .cf-box-bottom{ top:0; opacity:.92; transform:translateX(-50%); }
+    #comfortScene.mode-off .cf-box-top{ background:rgba(245,222,232,.28); } #comfortScene.mode-off .cf-box-bottom{ background:rgba(245,222,232,.16); }
     #comfortScene.mode-off .cf-a-red{ top:50%; opacity:.30; transform:translate(-50%,-50%); animation:none; color:#b44dc9; }
     #comfortScene.mode-off .cf-a-blue{ top:50%; opacity:.92; transform:translate(-50%,-50%); color:#8b2da0; animation:none; }
-
     #comfortScene.mode-on .cf-box-top{ top:-14px; opacity:.96; background:rgba(251,221,231,.42); animation:cfPinkFloat 1.45s ease-in-out infinite; }
     #comfortScene.mode-on .cf-box-bottom{ top:14px; opacity:.82; background:rgba(219,234,255,.28); transform:translateX(-50%); }
     #comfortScene.mode-on .cf-a-red{ top:33%; opacity:1; transform:translate(-50%,-50%); color:#e02020; animation:cfRedFloat 1.45s ease-in-out infinite; }
     #comfortScene.mode-on .cf-a-blue{ top:69%; opacity:1; transform:translate(-50%,-50%); color:#176fd6; }
-
     @keyframes cfRedFloat{
       0%{ transform:translate(-50%,-50%) translateY(0); }
       25%{ transform:translate(-50%,-50%) translateY(-4px); }
@@ -1083,76 +686,48 @@
       75%{ transform:translateX(-50%) translateY(-3px); }
       100%{ transform:translateX(-50%) translateY(0); }
     }
-
     #cfOptic{
-      position:absolute;
-      width:58px;
-      height:118px;
-      transform:translate(-50%,-50%);
-      z-index:7;
-      transition:left .35s ease, top .35s ease, width .35s ease, height .35s ease;
-      pointer-events:none;
+      position:absolute; width:58px; height:118px; transform:translate(-50%,-50%); z-index:7; transition:left .35s ease, top .35s ease, width .35s ease, height .35s ease; pointer-events:none;
     }
-    #comfortScene.mode-on .cf-optic-prism{ display:block; }
-    #comfortScene.mode-on .cf-optic-flat{ display:none; }
-    #comfortScene.mode-off .cf-optic-prism{ display:none; }
-    #comfortScene.mode-off .cf-optic-flat{ display:block; }
-    #comfortScene.mode-default .cf-optic-prism,
-    #comfortScene.mode-default .cf-optic-flat{ display:none; }
+    #comfortScene.mode-on .cf-optic-prism{ display:block; } #comfortScene.mode-on .cf-optic-flat{ display:none; }
+    #comfortScene.mode-off .cf-optic-prism{ display:none; } #comfortScene.mode-off .cf-optic-flat{ display:block; }
+    #comfortScene.mode-default .cf-optic-prism, #comfortScene.mode-default .cf-optic-flat{ display:none; }
     .cf-optic-prism,.cf-optic-flat{ position:absolute; inset:0; }
     .cf-optic-prism::before{
-      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-      width:0; height:0; border-left:30px solid transparent; border-right:30px solid transparent; border-bottom:100px solid rgba(255,255,255,.46);
-      filter:drop-shadow(0 4px 10px rgba(0,0,0,.10));
+      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:0; height:0;
+      border-left:30px solid transparent; border-right:30px solid transparent; border-bottom:100px solid rgba(255,255,255,.46); filter:drop-shadow(0 4px 10px rgba(0,0,0,.10));
     }
     .cf-optic-prism::after{
-      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-46%);
-      width:0; height:0; border-left:24px solid transparent; border-right:24px solid transparent; border-bottom:82px solid rgba(214,238,255,.30);
+      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-46%); width:0; height:0;
+      border-left:24px solid transparent; border-right:24px solid transparent; border-bottom:82px solid rgba(214,238,255,.30);
     }
-    .cf-optic-flat::before{
-      display:none;
-    }
-
+    .cf-optic-flat::before{ display:none; }
     .cf-guide-line{
-      position:absolute; height:0; border-top:3px dashed; z-index:5; transform-origin:left center;
-
-      pointer-events:none; opacity:0;
+      position:absolute; height:0; border-top:3px dashed; z-index:5; transform-origin:left center; pointer-events:none; opacity:0;
     }
-    #cfLineBlue{
-      transition:none  !important;
-    }
-    #cfLineRed{
-      transition:top .35s ease, width .35s ease, opacity .25s ease;
-    }  
-    .cf-guide-line.red{ border-color:#e02020; }
-    .cf-guide-line.blue{ border-color:#176fd6; }
+    #cfLineBlue{ transition:none !important; }
+    #cfLineRed{ transition:top .35s ease, width .35s ease, opacity .25s ease; }
+    .cf-guide-line.red{ border-color:#e02020; } .cf-guide-line.blue{ border-color:#176fd6; }
     #comfortScene.mode-default .cf-guide-line{ opacity:0; }
-    #comfortScene.mode-off .cf-guide-line,
-    #comfortScene.mode-on .cf-guide-line{ opacity:1; }
-
+    #comfortScene.mode-off .cf-guide-line, #comfortScene.mode-on .cf-guide-line{ opacity:1; }
     #cfSegWrap{
       position:absolute; left:50%; bottom:16px; transform:translateX(-50%); width:min(94%, 760px); z-index:10;
-      padding:0; border-radius:0; background:transparent;
-      border:none; box-shadow:none;
-      display:grid; grid-template-columns:1fr 1fr; gap:8px; align-items:center;
+      padding:0; border-radius:0; background:transparent; border:none; box-shadow:none; display:grid; grid-template-columns:1fr 1fr; gap:8px; align-items:center;
     }
     .cf-seg-btn{
       height:66px; border-radius:999px; border:1.5px solid rgba(110,162,218,.72); background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%);
       color:#627588; font-size:21px; font-weight:800; letter-spacing:-.35px; cursor:pointer; transition:all .18s ease;
       box-shadow:0 8px 18px rgba(17,104,208,.08), inset 0 1px 0 rgba(255,255,255,.96); padding:0 18px; white-space:nowrap; -webkit-appearance:none; appearance:none;
     }
-    .cf-seg-btn.active{ background:linear-gradient(180deg,#eef7ff 0%,#dceeff 100%); color:#0f4f8f; border-color:#7fb1e6; box-shadow:0 10px 22px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98); }
-    .cf-seg-btn.default-active{ background:linear-gradient(180deg,#eef7ff 0%,#dceeff 100%); color:#0f4f8f; border-color:#7fb1e6; box-shadow:0 10px 22px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98); }
+    .cf-seg-btn.active, .cf-seg-btn.default-active{
+      background:linear-gradient(180deg,#eef7ff 0%,#dceeff 100%); color:#0f4f8f; border-color:#7fb1e6; box-shadow:0 10px 22px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98);
+    }
     .cf-seg-btn:not(.active):not(.default-active){ color:#627588; }
     .cf-seg-btn:not(.active):active{ transform:scale(.985); }
-
     #comfortMessage{
-      background:#dbe5f1; padding:28px 34px 30px; display:flex; align-items:flex-end; justify-content:space-between; gap:20px;
-      border-top:1px solid rgba(10,30,55,.08);
+      background:#dbe5f1; padding:28px 34px 30px; display:flex; align-items:flex-end; justify-content:space-between; gap:20px; border-top:1px solid rgba(10,30,55,.08);
     }
-    #comfortMessageCopy{
-      flex:1 1 auto; font-size:28px; line-height:1.34; font-weight:900; letter-spacing:-.6px; color:#000; word-break:keep-all;
-    }
+    #comfortMessageCopy{ flex:1 1 auto; font-size:28px; line-height:1.34; font-weight:900; letter-spacing:-.6px; color:#000; word-break:keep-all; }
     #comfortMessageCopy .blue{ color:#005EB8; }
     #comfortConfirm{
       flex:0 0 auto; min-width:120px; height:86px; padding:0 26px; border:none; border-radius:18px; background:#1168d0; color:#fff;
@@ -1167,13 +742,11 @@
       #cfOptic{ width:48px; height:98px; }
       .cf-optic-prism::before{ border-left-width:24px; border-right-width:24px; border-bottom-width:82px; }
       .cf-optic-prism::after{ border-left-width:20px; border-right-width:20px; border-bottom-width:68px; }
-      .cf-optic-flat::before{ width:28px; height:78px; }
       .cf-seg-btn{ font-size:19px; height:62px; }
       #comfortMessage{ padding:22px 18px 22px; gap:14px; }
       #comfortMessageCopy{ font-size:22px; }
       #comfortConfirm{ min-width:98px; height:74px; font-size:20px; border-radius:16px; }
     }
-
     @media (max-width: 560px){
       #comfortOverlay{ padding:8px; }
       #comfortWrap{ width:100%; border-radius:20px; }
@@ -1189,225 +762,78 @@
       #cfOptic{ width:38px; height:76px; }
       .cf-optic-prism::before{ border-left-width:20px; border-right-width:20px; border-bottom-width:62px; }
       .cf-optic-prism::after{ border-left-width:16px; border-right-width:16px; border-bottom-width:50px; }
-      .cf-optic-flat::before{ width:24px; height:64px; }
       .cf-guide-line{ border-top-width:5px; }
       #cfSegWrap{ width:min(94%, 520px); bottom:10px; padding:0; gap:5px; border:none; background:transparent; box-shadow:none; grid-template-columns:1fr 1fr; }
       .cf-seg-btn{ height:48px; font-size:12px; border-width:2px; padding:0 6px; }
       #comfortMessage{ padding:18px 14px 18px; gap:12px; }
       #comfortMessageCopy{ font-size:17px; line-height:1.38; }
       #comfortConfirm{ min-width:82px; height:58px; font-size:16px; border-radius:14px; padding:0 18px; }
+      #maxPackshot.active{ transform:translateY(-8px) scale(1.12) !important; }
     }
 
-
-    /* 맥스 팩샷 블루라이트 체험 */
-    #maxPackshot{
-      pointer-events:auto;
-      cursor:pointer;
-    }
-
-    
-
-    
-    
     #blueLightIcon{
-      width:46px;
-      height:46px;
+      width:58px !important;
+      height:58px !important;
+      align-self:flex-start !important;
+      margin-top:2px;
+      border:1px solid rgba(255,255,255,.55);
+      background: radial-gradient(circle at 30% 30%, rgba(168,245,255,.98), rgba(74,206,255,.95) 58%, rgba(36,175,232,.92) 100%) !important;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.65), 0 12px 26px rgba(0,94,184,.16) !important;
+      font-size:24px !important;
       border-radius:999px;
       flex:0 0 auto;
       display:flex;
       align-items:center;
       justify-content:center;
-      background:radial-gradient(circle at 35% 35%, rgba(153,255,240,.95), rgba(35,171,255,.92));
       color:#fff;
-      font-size:20px;
-      box-shadow: 0 10px 22px rgba(0,94,184,.18);
     }
-    #blueLightText{
+    #blueLightBody{
       flex:1 1 auto;
       min-width:0;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap:10px;
     }
     #blueLightTitle{
-      font-weight:900;
-      color:var(--text-navy);
-      margin-bottom:3px;
+      margin:0 0 2px 0 !important;
+      color:#0b1f33 !important;
+      font-size:17px !important;
+      line-height:1.15 !important;
+      font-weight:900 !important;
+      letter-spacing:-.35px !important;
     }
     #blueLightHint{
-      color:var(--text-sub);
-      font-size:12.5px;
-      line-height:1.38;
+      margin:0 !important;
+      color:#35506b !important;
+      font-size:12.8px !important;
+      line-height:1.48 !important;
+      letter-spacing:-.15px;
+      max-width:unset !important;
       word-break:keep-all;
     }
+    #blueLightBottomRow{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:2px;
+    }
     #blueLightConfirm{
-      flex:0 0 auto;
-      border:1px solid rgba(0,94,184,.65);
-      background:var(--acuvue-blue);
-      color:#fff;
-      font-weight:900;
-      font-size:13px;
-      padding:9px 12px;
-      border-radius:999px;
+      flex:0 0 auto !important;
+      min-width:88px;
+      height:48px;
+      padding:0 18px !important;
+      border-radius:999px !important;
+      border:1px solid rgba(0,94,184,.62) !important;
+      background:linear-gradient(180deg, #1775df 0%, #0f62c5 100%) !important;
+      color:#fff !important;
+      font-size:14px !important;
+      font-weight:900 !important;
+      letter-spacing:-.2px;
+      box-shadow: 0 12px 24px rgba(17,104,208,.20), inset 0 1px 0 rgba(255,255,255,.24) !important;
       cursor:pointer;
-      box-shadow: 0 10px 22px rgba(0,94,184,.22);
     }
-
-  
-    /* ===== MAX blue-light demo: clearly visible version ===== */
-    body.blue-demo-on model-viewer{
-      filter:hue-rotate(52deg) saturate(1.75) brightness(1.08) !important;
-      transform:translate(26px,-16px) rotateY(-18deg) scale(1.045) !important;
-      transition:filter .34s ease, transform .34s ease !important;
-    }
-
-    #maxPackshot{
-      pointer-events:auto !important;
-      cursor:pointer !important;
-      transition:transform .26s ease, filter .26s ease, opacity .26s ease !important;
-      transform-origin:center bottom;
-      z-index:72 !important;
-    }
-    #maxPackshot.active{
-      transform:translateY(-10px) scale(1.16) !important;
-      filter:drop-shadow(0 24px 40px rgba(0,94,184,.36)) !important;
-    }
-
-    
-
-    
-
-    
-
-    /* speech bubble anchored to MAX packshot */
-    
-    
-    
-
-    @media (max-width:560px){
-      
-      
-
-      body.blue-demo-on model-viewer{
-        transform:translate(18px,-12px) rotateY(-15deg) scale(1.035) !important;
-      }
-      
-      
-      #maxPackshot.active{
-        transform:translateY(-8px) scale(1.12) !important;
-      }
-    }
-
-
-/* ===== FIX: speech bubble attached to packshot ===== */
-
-
-
-/* ===== reduce weird big blue blob ===== */
-#lensTintGlow{
-  width:min(28vw, 200px) !important;
-  height:min(28vw, 200px) !important;
-  transform:translate(6vw, -10vh) !important;
-  opacity:.7;
-}
-
-
-    
-
-
-    /* ===== requested OptiBlue beam effect ===== */
-    #optiBeamLayer{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index:22;
-      display:none;
-    }
-    body.blue-demo-on #optiBeamLayer{ display:block; }
-
-    .beamLine{
-      position:absolute;
-      height:6px;
-      border-radius:999px;
-      transform-origin:left center;
-      filter:blur(.1px);
-    }
-
-    /* incoming yellow beam toward lens center */
-    #beamIn{
-      left:-8vw;
-      top:56.2%;
-      width:48vw;
-      background:linear-gradient(90deg,
-        rgba(255,210,77,1) 0%,
-        rgba(255,198,0,1) 40%,
-        rgba(255,225,140,.86) 72%,
-        rgba(255,225,140,0) 100%);
-      transform:rotate(23deg);
-      box-shadow:0 0 18px rgba(255,196,0,.50);
-    }
-
-    /* outgoing blue beam from same lens center point */
-    #beamOut{
-      left:31.4%;
-      top:48.8%;
-      width:25vw;
-      background:linear-gradient(90deg,
-        rgba(105,182,255,0) 0%,
-        rgba(105,182,255,.42) 24%,
-        rgba(105,182,255,.92) 74%,
-        rgba(168,245,255,1) 100%);
-      transform:rotate(-67deg);
-      box-shadow:0 0 16px rgba(89,180,255,.42);
-    }
-
-    #beamHitGlow{
-      position:absolute;
-      left:31.1%;
-      top:48.6%;
-      width:16px;
-      height:16px;
-      border-radius:50%;
-      background:radial-gradient(circle,
-        rgba(255,245,210,.96) 0%,
-        rgba(255,214,82,.70) 28%,
-        rgba(105,182,255,.18) 60%,
-        rgba(105,182,255,0) 100%);
-      filter:blur(.15px);
-      box-shadow:0 0 10px rgba(255,210,77,.28);
-    }
-
-    /* strong blue-green tint + angled lens */
-    body.blue-demo-on model-viewer{
-      filter:hue-rotate(62deg) saturate(1.88) brightness(1.08) !important;
-      transform:translate(20px,-12px) rotateY(-15deg) scale(1.035) !important;
-      transition:filter .34s ease, transform .34s ease !important;
-    }
-
-    @media (max-width:560px){
-      .beamLine{ height:5px; }
-      #beamIn{
-        left:-10vw;
-        top:55.9%;
-        width:51vw;
-        transform:rotate(24deg);
-      }
-      #beamOut{
-        left:33.2%;
-        top:47.7%;
-        width:27vw;
-        transform:rotate(-66deg);
-      }
-      #beamHitGlow{
-        left:33.0%;
-        top:47.5%;
-        width:14px;
-        height:14px;
-      }
-      body.blue-demo-on model-viewer{
-        transform:translate(16px,-10px) rotateY(-13deg) scale(1.03) !important;
-      }
-    }
-
-
-    /* corrected popup with natural tail */
     #blueLightOverlay{
       position:fixed !important;
       right:18px !important;
@@ -1417,269 +843,110 @@
       max-width:calc(100vw - 28px) !important;
       z-index:74 !important;
       display:none !important;
-      gap:12px;
-      align-items:center;
-      background:linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(246,250,255,.98) 100%) !important;
-      border:1px solid rgba(0,94,184,.18) !important;
-      border-radius:20px !important;
-      padding:14px 16px !important;
-      box-shadow:0 20px 48px rgba(0,94,184,.10), 0 18px 60px rgba(11,31,51,.16) !important;
+      align-items:stretch !important;
+      gap:14px !important;
+      padding:18px 18px !important;
+      border-radius:24px !important;
+      background: linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(248,251,255,.98) 100%) !important;
+      border:1px solid rgba(0,94,184,.16) !important;
+      box-shadow: 0 24px 56px rgba(0,94,184,.10), 0 18px 60px rgba(11,31,51,.14), inset 0 1px 0 rgba(255,255,255,.9) !important;
+      overflow:hidden !important;
       backdrop-filter:blur(12px);
-      overflow:visible !important;
     }
-    #blueLightOverlay.show{
-      display:flex !important;
-    }
-    #blueLightOverlay::before{ display:none !important; }
-    #blueLightOverlay::after{ display:none !important; }
-
-    @media (max-width:560px){
-      #blueLightOverlay{
-        left:12px !important;
-        right:12px !important;
-        width:auto !important;
-        bottom:34px !important;
-      }
-      #blueLightOverlay::before{
-        right:26px !important;
-      }
-      #blueLightOverlay::after{
-        right:33px !important;
-        top:auto !important;
-      }
-    }
-
-
-#comfortScene.mode-on #cfTargetStage{
-  animation:none;
-}
-#comfortScene.mode-on #cfLineRed{
-  animation:none;
-}
-#comfortScene.mode-on #cfLineBlue{
-  animation:none !important;
-}
-
-
-    #blueLightOverlay{
-      overflow:visible !important;
-      padding-right:136px !important;
-      min-height:96px;
-    }
+    #blueLightOverlay.show{ display:flex !important; }
     #blueLightOverlay #overlayPackshot{
-      position:absolute;
-      right:14px;
-      bottom:8px;
-      width:120px;
-      max-width:30vw;
-      height:auto;
-      object-fit:contain;
-      z-index:5;
-      pointer-events:none;
-      user-select:none;
-      display:none;
+      position:static !important;
+      display:block !important;
+      width:126px !important;
+      max-width:34vw !important;
+      height:auto !important;
+      object-fit:contain !important;
+      flex:0 0 auto;
+      pointer-events:none !important;
+      user-select:none !important;
       mix-blend-mode:multiply;
-      filter:drop-shadow(0 8px 16px rgba(11,31,51,.12));
+      filter:drop-shadow(0 10px 18px rgba(11,31,51,.12)) !important;
+      transform:translateY(2px);
     }
-    #blueLightOverlay.show #overlayPackshot{
-      display:block;
+
+    body.blue-demo-on model-viewer{
+      filter:hue-rotate(62deg) saturate(1.88) brightness(1.08) !important;
+      transform:translate(20px,-12px) rotateY(-15deg) scale(1.035) !important;
+      transition:filter .34s ease, transform .34s ease !important;
+    }
+    #optiBeamLayer{
+      position:fixed; inset:0; pointer-events:none; z-index:22; display:none;
+    }
+    body.blue-demo-on #optiBeamLayer{ display:block; }
+    .beamLine{
+      position:absolute; height:6px; border-radius:999px; transform-origin:left center; filter:blur(.1px);
+    }
+    #beamIn{
+      left:-8vw; top:56.2%; width:48vw;
+      background:linear-gradient(90deg, rgba(255,210,77,1) 0%, rgba(255,198,0,1) 40%, rgba(255,225,140,.86) 72%, rgba(255,225,140,0) 100%);
+      transform:rotate(23deg); box-shadow:0 0 18px rgba(255,196,0,.50);
+    }
+    #beamOut{
+      left:31.4%; top:48.8%; width:25vw;
+      background:linear-gradient(90deg, rgba(105,182,255,0) 0%, rgba(105,182,255,.42) 24%, rgba(105,182,255,.92) 74%, rgba(168,245,255,1) 100%);
+      transform:rotate(-67deg); box-shadow:0 0 16px rgba(89,180,255,.42);
+    }
+    #beamHitGlow{
+      position:absolute; left:31.1%; top:48.6%; width:16px; height:16px; border-radius:50%;
+      background:radial-gradient(circle, rgba(255,245,210,.96) 0%, rgba(255,214,82,.70) 28%, rgba(105,182,255,.18) 60%, rgba(105,182,255,0) 100%);
+      filter:blur(.15px); box-shadow:0 0 10px rgba(255,210,77,.28);
     }
     @media (max-width:560px){
+      .beamLine{ height:5px; }
+      #beamIn{ left:-10vw; top:55.9%; width:51vw; transform:rotate(24deg); }
+      #beamOut{ left:33.2%; top:47.7%; width:27vw; transform:rotate(-66deg); }
+      #beamHitGlow{ left:33.0%; top:47.5%; width:14px; height:14px; }
+      body.blue-demo-on model-viewer{ transform:translate(16px,-10px) rotateY(-13deg) scale(1.03) !important; }
       #blueLightOverlay{
-        padding-right:118px !important;
-        min-height:88px;
+        left:12px !important; right:12px !important; width:auto !important; bottom:34px !important;
+        gap:12px !important; padding:16px 16px !important; border-radius:22px !important;
       }
-      #blueLightOverlay #overlayPackshot{
-        right:10px;
-        bottom:8px;
-        width:104px;
-        max-width:27vw;
-      }
+      #blueLightIcon{ width:52px !important; height:52px !important; font-size:22px !important; }
+      #blueLightTitle{ font-size:15px !important; }
+      #blueLightHint{ font-size:12px !important; line-height:1.42 !important; }
+      #blueLightBottomRow{ gap:10px; margin-top:0; }
+      #blueLightConfirm{ min-width:78px; height:44px; padding:0 16px !important; font-size:13px !important; }
+      #blueLightOverlay #overlayPackshot{ width:110px !important; max-width:30vw !important; transform:translateY(1px); }
     }
 
-
-/* ===== premium blue-light overlay refinement ===== */
-#blueLightOverlay{
-  display:none !important;
-  align-items:stretch !important;
-  gap:14px !important;
-  padding:18px 18px !important;
-  border-radius:24px !important;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(248,251,255,.98) 100%) !important;
-  border:1px solid rgba(0,94,184,.16) !important;
-  box-shadow:
-    0 24px 56px rgba(0,94,184,.10),
-    0 18px 60px rgba(11,31,51,.14),
-    inset 0 1px 0 rgba(255,255,255,.9) !important;
-  overflow:hidden !important;
-}
-#blueLightOverlay.show{
-  display:flex !important;
-}
-#blueLightOverlay::before,
-#blueLightOverlay::after{
-  display:none !important;
-}
-#blueLightOverlay::selection{
-  background:rgba(0,94,184,.10);
-}
-
-#blueLightIcon{
-  width:58px !important;
-  height:58px !important;
-  align-self:flex-start !important;
-  margin-top:2px;
-  border:1px solid rgba(255,255,255,.55);
-  background:
-    radial-gradient(circle at 30% 30%, rgba(168,245,255,.98), rgba(74,206,255,.95) 58%, rgba(36,175,232,.92) 100%) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.65),
-    0 12px 26px rgba(0,94,184,.16) !important;
-  font-size:24px !important;
-}
-
-#blueLightBody{
-  flex:1 1 auto;
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  gap:10px;
-}
-
-#blueLightTitle{
-  margin:0 0 2px 0 !important;
-  color:#0b1f33 !important;
-  font-size:17px !important;
-  line-height:1.15 !important;
-  font-weight:900 !important;
-  letter-spacing:-.35px !important;
-}
-
-#blueLightHint{
-  margin:0 !important;
-  color:#35506b !important;
-  font-size:12.8px !important;
-  line-height:1.48 !important;
-  letter-spacing:-.15px;
-  max-width:unset !important;
-}
-
-#blueLightBottomRow{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap:12px;
-  margin-top:2px;
-}
-
-#blueLightConfirm{
-  flex:0 0 auto !important;
-  min-width:88px;
-  height:48px;
-  padding:0 18px !important;
-  border-radius:999px !important;
-  border:1px solid rgba(0,94,184,.62) !important;
-  background:linear-gradient(180deg, #1775df 0%, #0f62c5 100%) !important;
-  color:#fff !important;
-  font-size:14px !important;
-  font-weight:900 !important;
-  letter-spacing:-.2px;
-  box-shadow:
-    0 12px 24px rgba(17,104,208,.20),
-    inset 0 1px 0 rgba(255,255,255,.24) !important;
-}
-
-#blueLightOverlay #overlayPackshot{
-  position:static !important;
-  display:block !important;
-  width:126px !important;
-  max-width:34vw !important;
-  height:auto !important;
-  object-fit:contain !important;
-  flex:0 0 auto;
-  pointer-events:none !important;
-  user-select:none !important;
-  mix-blend-mode:multiply;
-  filter:drop-shadow(0 10px 18px rgba(11,31,51,.12)) !important;
-  transform:translateY(2px);
-}
-
-@media (max-width:560px){
-  #blueLightOverlay{
-    left:12px !important;
-    right:12px !important;
-    width:auto !important;
-    bottom:34px !important;
-    gap:12px !important;
-    padding:16px 16px !important;
-    border-radius:22px !important;
-  }
-  #blueLightIcon{
-    width:52px !important;
-    height:52px !important;
-    font-size:22px !important;
-  }
-  #blueLightTitle{
-    font-size:15px !important;
-  }
-  #blueLightHint{
-    font-size:12px !important;
-    line-height:1.42 !important;
-  }
-  #blueLightBottomRow{
-    gap:10px;
-    margin-top:0;
-  }
-  #blueLightConfirm{
-    min-width:78px;
-    height:44px;
-    padding:0 16px !important;
-    font-size:13px !important;
-  }
-  #blueLightOverlay #overlayPackshot{
-    width:110px !important;
-    max-width:30vw !important;
-    transform:translateY(1px);
-  }
-}
-
-</style>
+    #blueTintRays{display:none !important;}
+    #lensTintGlow{ display:none !important; }
+    #maxPackshotHalo{ display:none !important; }
+  </style>
 </head>
-
 <body>
   <div id="missionBarWrap">
     <div id="missionBarHeader">아큐브® 난시 렌즈 기술</div>
     <div id="missionBar">
-    <div id="missionASD" class="missionCard" role="button" tabindex="0">
-      <div class="missionNo">01</div>
-      <div class="missionTitle">ASD™ 축안정화</div>
-      <div class="missionDesc"> 자세히 보기 > </div>
-    </div>
-    <div id="missionPVP" class="missionCard" role="button" tabindex="0">
-      <div class="missionNo">02</div>
-      <div class="missionTitle">PVP 습윤 인자</div>
-      <div class="missionDesc"> 자세히 보기 ></div>
-    </div>
-    <div id="missionComfort" class="missionCard" role="button" tabindex="0">
-      <div class="missionNo">03</div>
-      <div class="missionTitle">프리즘이 적은 광학부</div>
-      <div class="missionDesc">  자세히 보기 > </div>
-    </div>
+      <div id="missionASD" class="missionCard" role="button" tabindex="0">
+        <div class="missionNo">01</div>
+        <div class="missionTitle">ASD™ 축안정화</div>
+        <div class="missionDesc"> 자세히 보기 > </div>
+      </div>
+      <div id="missionPVP" class="missionCard" role="button" tabindex="0">
+        <div class="missionNo">02</div>
+        <div class="missionTitle">PVP 습윤 인자</div>
+        <div class="missionDesc"> 자세히 보기 ></div>
+      </div>
+      <div id="missionComfort" class="missionCard" role="button" tabindex="0">
+        <div class="missionNo">03</div>
+        <div class="missionTitle">프리즘이 적은 광학부</div>
+        <div class="missionDesc">  자세히 보기 > </div>
+      </div>
     </div>
   </div>
 
   <div id="thicknessBar" aria-hidden="true">
-    <div id="thHeader">
-      <div id="thTitle">두께</div>
-      <div id="thUnit">mm</div>
-    </div>
+    <div id="thHeader"><div id="thTitle">두께</div><div id="thUnit">mm</div></div>
     <div id="gradRow">
       <div class="tickLabel">얇음_0.0</div>
       <div id="gradWrap">
-        <div id="grad"></div>
-        <div id="gradShine"></div>
+        <div id="grad"></div><div id="gradShine"></div>
         <div class="mark m0"><strong>0.0</strong></div>
         <div class="mark m25"><strong>0.1</strong></div>
         <div class="mark m50"><strong>0.2</strong></div>
@@ -1710,34 +977,24 @@
         <div id="asdHeaderTitle">ASD™ 축안정화</div>
         <button id="asdClose" type="button">X</button>
       </div>
-
       <div id="asdScene">
         <img id="asdEyeMV" src="a.png" alt="Eye background" onerror="this.onerror=null; this.src='a.gif';">
         <div id="asdLensRim"></div>
-        <img id="asdLensImg" src="lens.png" alt="Lens overlay"
-             onerror="this.style.display='none'; document.getElementById('asdHint').textContent='lens.png / lens2.png 파일을 같은 폴더에 넣어주세요.';">
+        <img id="asdLensImg" src="lens.png" alt="Lens overlay" onerror="this.style.display='none'; document.getElementById('asdHint').textContent='lens.png / lens2.png 파일을 같은 폴더에 넣어주세요.';">
         <div id="asdMaskShade"></div>
         <img id="asdUpperLid" src="upper_lid.png" alt="Upper eyelid overlay" onerror="this.style.display='none';">
-
-        <div id="asdBlinkLid">
-          <div id="asdLidTop"></div>
-          <div id="asdLidBot"></div>
-        </div>
-
+        <div id="asdBlinkLid"><div id="asdLidTop"></div><div id="asdLidBot"></div></div>
         <div id="asdAngleBadge">20°</div>
         <button id="asdRotateBtn" type="button">축이탈</button>
         <button id="asdBlinkBtn" type="button">깜박임</button>
       </div>
-
       <div id="asdHint">
         <div class="hintText">
-          <span class="hintTitle"난시렌즈는 축이 회전하면 시야가 흐려집니다. </span>
+          <span class="hintTitle">난시렌즈는 축이 회전하면 시야가 흐려집니다.</span>
           <span class="hintBody"><span class="blue">‘깜박임’ 버튼</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span>
         </div>
       </div>
-      <div class="toric-popup-disclaimer">
-        <span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span>
-      </div>
+      <div class="toric-popup-disclaimer"><span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span></div>
     </div>
   </div>
 
@@ -1747,7 +1004,6 @@
         <div id="comfortTitle">프리즘이 적은 광학부</div>
         <button id="comfortClose" type="button">X</button>
       </div>
-
       <div id="comfortScene" class="mode-off">
         <div id="cfTargetStage">
           <div class="cf-target-box cf-box-top"></div>
@@ -1755,58 +1011,30 @@
           <div class="cf-target-a cf-a-red">A</div>
           <div class="cf-target-a cf-a-blue">A</div>
         </div>
-
         <div id="cfLineRed" class="cf-guide-line red"></div>
         <div id="cfLineBlue" class="cf-guide-line blue"></div>
-
-        <div id="cfOptic">
-          <div class="cf-optic-prism"></div>
-          <div class="cf-optic-flat"></div>
-        </div>
-
+        <div id="cfOptic"><div class="cf-optic-prism"></div><div class="cf-optic-flat"></div></div>
         <div id="cfSegWrap">
           <button id="cfBtnOff" class="cf-seg-btn active" type="button">프리즘 없는 경우</button>
           <button id="cfBtnOn" class="cf-seg-btn" type="button">프리즘 있는 경우</button>
         </div>
       </div>
-
       <div id="comfortMessage">
-        <div id="comfortMessageCopy">
-          난시 렌즈 광학부의 프리즘은 단안 난시 소비자에게 중요합니다.
-          <span class="blue">프리즘이 적은 광학부는 보다 편안한 시야 이해에 도움이 됩니다.</span>
-        </div>
+        <div id="comfortMessageCopy">난시 렌즈 광학부의 프리즘은 단안 난시 소비자에게 중요합니다. <span class="blue">프리즘이 적은 광학부는 보다 편안한 시야 이해에 도움이 됩니다.</span></div>
         <button id="comfortConfirm" type="button">확인</button>
       </div>
-      <div class="toric-popup-disclaimer">
-        <span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span>
-      </div>
+      <div class="toric-popup-disclaimer"><span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span></div>
     </div>
   </div>
 
   <div id="tutorialLayer" aria-hidden="true">
-    <div id="tutorialMask"></div>
-    <div id="tutorialFocus"></div>
-
-    <div class="tutBox" id="tutLeft" style="display:none;">
-      <div class="tutTitle">가이드 1</div>
-      <div class="tutText">렌즈를 좌우로 드래그하여 움직여 보세요.<br>확대와 축소를 통해 렌즈 구조를 더 선명하게 확인할 수 있습니다.</div>
-      <button class="tutBtn" id="tutNext1">확인</button>
-    </div>
-
-    <div class="tutBox" id="tutBottom" style="display:none;">
-      <div class="tutTitle">가이드 2</div>
-      <div class="tutText">‘렌즈 두께 MAP’을 클릭하여<br>아큐브® 인피니티 엣지(가장 얇은 보라색 영역)을 확인해 보세요!</div>
-      <button class="tutBtn" id="tutNext2">확인</button>
-    </div>
-
-    <div class="tutBox" id="tutTop" style="display:none;">
-      <div class="tutTitle">가이드 3</div>
-      <div class="tutText">각 카드를 눌러 체험을 진행해 보세요.<br></div>
-      <button class="tutBtn" id="tutDone">확인</button>
-    </div>
+    <div id="tutorialMask"></div><div id="tutorialFocus"></div>
+    <div class="tutBox" id="tutLeft" style="display:none;"><div class="tutTitle">가이드 1</div><div class="tutText">렌즈를 좌우로 드래그하여 움직여 보세요.<br>확대와 축소를 통해 렌즈 구조를 더 선명하게 확인할 수 있습니다.</div><button class="tutBtn" id="tutNext1">확인</button></div>
+    <div class="tutBox" id="tutBottom" style="display:none;"><div class="tutTitle">가이드 2</div><div class="tutText">‘렌즈 두께 MAP’을 클릭하여<br>아큐브® 인피니티 엣지(가장 얇은 보라색 영역)을 확인해 보세요!</div><button class="tutBtn" id="tutNext2">확인</button></div>
+    <div class="tutBox" id="tutTop" style="display:none;"><div class="tutTitle">가이드 3</div><div class="tutText">각 카드를 눌러 체험을 진행해 보세요.<br></div><button class="tutBtn" id="tutDone">확인</button></div>
   </div>
 
-  <div id="blueTintRays" aria-hidden="true" style="display:none !important;"></div>
+  <div id="blueTintRays" aria-hidden="true"></div>
 
   <div id="blueLightOverlay" aria-hidden="true">
     <div id="blueLightIcon">✦</div>
@@ -1821,16 +1049,15 @@
   </div>
 
   <div id="blueBeamStrong" aria-hidden="true"><div class="beam-in"></div><div class="beam-out"></div></div>
-<div id="lensTintGlow" aria-hidden="true" style="display:none !important;"></div>
-<div id="maxPackshotHalo" aria-hidden="true" style="display:none !important;"></div>
+  <div id="lensTintGlow" aria-hidden="true"></div>
+  <div id="maxPackshotHalo" aria-hidden="true"></div>
 
-<div id="optiBeamLayer" aria-hidden="true">
-  <div id="beamIn" class="beamLine"></div>
-  <div id="beamOut" class="beamLine"></div>
-  <div id="beamHitGlow"></div>
-</div>
+  <div id="optiBeamLayer" aria-hidden="true">
+    <div id="beamIn" class="beamLine"></div>
+    <div id="beamOut" class="beamLine"></div>
+    <div id="beamHitGlow"></div>
+  </div>
 
-<!-- ✅ 우측 하단 렌즈 팩샷 -->
   <img id="maxPackshot" src="MAX.png" alt="아큐브 맥스 난시 팩샷" onerror="this.style.display='none';">
 
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
@@ -1855,7 +1082,11 @@
     <button id="modeHeat" class="btn">렌즈 두께 MAP</button>
   </div>
   <div id="globalToricDisclaimer">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</div>
-  <div id="globalReferenceArea"> 
+  <div id="globalReferenceArea"> 1.Reducing Friction in the Eye: A Comparative Study of Lubrication by Surface Anchored Synthetic and Natural Ocular Mucin Analogues O. Sterner, C. Karageorgaki, M. Zürcher, S. Zürcher, C. Scales, Z. Fadli, N. Spencer, and S. Tosatti ,ACS APPLIED MATERIALS & INTERFACES (SCIE) 2017 9 (23), 20150 20160
+2.Sulley A, Hawke R, Osborn Lorenz K, et al.
+Resultant vertical prism in toric soft contact lenses.
+Cont Lens Anterior Eye. 2015;38(4):253–257.
+</div>
 
   <script>
     const mv = document.getElementById('mv');
@@ -1881,7 +1112,6 @@
     const asdLidTop = document.getElementById('asdLidTop');
     const asdLidBot = document.getElementById('asdLidBot');
     const maxPackshot = document.getElementById('maxPackshot');
-    const blueTintRays = document.getElementById('blueTintRays');
     const blueLightOverlay = document.getElementById('blueLightOverlay');
     const blueLightConfirm = document.getElementById('blueLightConfirm');
     const comfortOverlay = document.getElementById('comfortOverlay');
@@ -1905,6 +1135,7 @@
     let pvpDone = false;
     let asdDone = false;
     let comfortDone = false;
+    let blueDemoOn = false;
     let asdAngle = 20;
     let asdLastDir = -1;
     let asdBlinkBusy = false;
@@ -1924,56 +1155,35 @@
     const HEAT_DEFAULT_TARGET_STR  = '0m 0.015m 0m';
 
     function keepMVPlaying(){
-      try{
-        if(mv && mv.paused) mv.play();
-      }catch(e){}
+      try{ if(mv && mv.paused) mv.play(); }catch(e){}
     }
-
     if(mv){
       ['pointerdown','pointermove','pointerup','touchstart','touchend','mousedown','mouseup'].forEach((ev)=>{
         try{ mv.addEventListener(ev, keepMVPlaying, { passive:true }); }catch(e){}
       });
     }
-
-    document.addEventListener('visibilitychange', ()=>{
-      if(!document.hidden) setTimeout(keepMVPlaying, 60);
-    });
+    document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) setTimeout(keepMVPlaying, 60); });
 
     function getOrbitSafe(){ try{ return mv.getCameraOrbit(); }catch(e){ return null; } }
     function getTargetSafe(){ try{ return mv.getCameraTarget(); }catch(e){ return null; } }
-
-    function applyOrbit(orbit){
-      if(!orbit) return;
-      try{ mv.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${orbit.radius}m`; }catch(e){}
-    }
-    function applyTarget(target){
-      if(!target) return;
-      try{ mv.cameraTarget = `${target.x}m ${target.y}m ${target.z}m`; }catch(e){}
-    }
+    function applyOrbit(orbit){ if(!orbit) return; try{ mv.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${orbit.radius}m`; }catch(e){} }
+    function applyTarget(target){ if(!target) return; try{ mv.cameraTarget = `${target.x}m ${target.y}m ${target.z}m`; }catch(e){} }
     function applyOrbitStr(s){ try{ mv.cameraOrbit = s; }catch(e){} }
     function applyTargetStr(s){ try{ mv.cameraTarget = s; }catch(e){} }
 
     function resetCameraToModeDefault(mode){
       const orbitStr  = (mode === 'heat') ? HEAT_DEFAULT_ORBIT_STR  : CLEAR_DEFAULT_ORBIT_STR;
       const targetStr = (mode === 'heat') ? HEAT_DEFAULT_TARGET_STR : CLEAR_DEFAULT_TARGET_STR;
-
       const applyAll = ()=>{
-        applyTargetStr(targetStr);
-        applyOrbitStr(orbitStr);
-        try{
-          mv.fieldOfView = defaultFov || '45deg';
-        }catch(e){}
+        applyTargetStr(targetStr); applyOrbitStr(orbitStr);
+        try{ mv.fieldOfView = defaultFov || '45deg'; }catch(e){}
         try{ mv.jumpCameraToGoal?.(); }catch(e){}
       };
-
       try{ mv.removeAttribute('camera-controls'); }catch(e){}
       applyAll();
-
       requestAnimationFrame(()=>{
         try{ mv.setAttribute('camera-controls',''); }catch(e){}
-        applyAll();
-        setTimeout(applyAll, 120);
-        setTimeout(applyAll, 260);
+        applyAll(); setTimeout(applyAll, 120); setTimeout(applyAll, 260);
       });
     }
 
@@ -1982,7 +1192,6 @@
       pvpBig.classList.toggle('show', show);
       pvpConfirm.style.display = show ? 'block' : 'none';
     }
-
     function showThickness(show){
       thicknessBar.classList.toggle('show', show);
       thicknessBar.setAttribute('aria-hidden', show ? 'false' : 'true');
@@ -1990,48 +1199,38 @@
 
     function syncPackshot(){
       if(!maxPackshot) return;
-      const cardOverlayOpen =
-        (asdOverlay && asdOverlay.classList.contains('show')) ||
-        (comfortOverlay && comfortOverlay.classList.contains('show')) ||
-        (pvpOn === true);
+      const cardOverlayOpen = (asdOverlay && asdOverlay.classList.contains('show')) || (comfortOverlay && comfortOverlay.classList.contains('show')) || (pvpOn === true);
       maxPackshot.style.display = (currentMode === 'lens' && !cardOverlayOpen) ? 'block' : 'none';
     }
 
+    function applyLensBlueEffect(){
+      try{
+        if(!mv) return;
+        document.body.classList.add('blue-demo-on');
+        mv.style.filter = '';
+        mv.style.transform = '';
+      }catch(e){}
+    }
+    function resetLensBlueEffect(){
+      try{
+        document.body.classList.remove('blue-demo-on');
+        if(!mv) return;
+        mv.style.filter = '';
+        mv.style.transform = '';
+      }catch(e){}
+    }
 
     function closeBlueLightDemo(){
-      if(blueTintRays) blueTintRays.classList.remove('show');
+      blueDemoOn = false;
+      resetLensBlueEffect();
       if(blueLightOverlay) blueLightOverlay.classList.remove('show');
-      if(mv){
-        mv.style.filter = '';
-      }
+      if(maxPackshot) maxPackshot.classList.remove('active');
       syncPackshot();
     }
 
-    
-/* ===== FORCE lens visual change ===== */
-function applyLensBlueEffect(){
-  try{
-    const mvEl = document.getElementById('mv');
-    if(!mvEl) return;
-    mvEl.style.filter = 'hue-rotate(60deg) saturate(1.8) brightness(1.1)';
-    mvEl.style.transform = 'translate(30px,-18px) rotateY(-20deg) scale(1.06)';
-    mvEl.style.transition = 'all .35s ease';
-  }catch(e){}
-}
-function resetLensBlueEffect(){
-  try{
-    const mvEl = document.getElementById('mv');
-    if(!mvEl) return;
-    mvEl.style.filter = '';
-    mvEl.style.transform = '';
-  }catch(e){}
-}
-
-function openBlueLightDemo(){
+    function openBlueLightDemo(){
       if(currentMode !== 'lens'){
-        setModel('lens_clear.glb', 'lens', { resetCamera:true }).then(()=>{
-          setTimeout(openBlueLightDemo, 160);
-        });
+        setModel('lens_clear.glb', 'lens', { resetCamera:true }).then(()=>{ setTimeout(openBlueLightDemo, 160); });
         return;
       }
       if(asdOverlay.classList.contains('show')) closeASD();
@@ -2041,213 +1240,106 @@ function openBlueLightDemo(){
       resetCameraToModeDefault('lens');
 
       setTimeout(()=>{
-        try{
-          mv.style.filter = 'hue-rotate(22deg) saturate(1.22) brightness(1.04)';
-        }catch(e){}
-        if(maxPackshot) maxPackshot.style.display = 'none';
-        if(blueTintRays) blueTintRays.classList.add('show');
+        blueDemoOn = true;
+        applyLensBlueEffect();
+        if(maxPackshot){ maxPackshot.style.display = 'none'; maxPackshot.classList.add('active'); }
         if(blueLightOverlay) blueLightOverlay.classList.add('show');
       }, 140);
     }
 
     function setASDHintDefault(){
-      asdHint.innerHTML = `
-        <div class="hintText">
-          <span class="hintTitle">난시렌즈는 축이 회전되면 시야가 흐려집니다.</span>
-          <span class="hintBody"><span class="blue">‘깜박임’ 버튼</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span>
-        </div>
-      `;
+      asdHint.innerHTML = `<div class="hintText"><span class="hintTitle">난시렌즈는 축이 회전되면 시야가 흐려집니다.</span><span class="hintBody"><span class="blue">‘깜박임’ 버튼</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
     }
-
     function setASDHintSuccess(){
-      asdHint.innerHTML = `
-        <div class="hintText">
-          <span class="hintTitle">기억해주세요!</span>
-          <span class="hintBody"><span class="blue">아큐브® ASD™</span>는 자연스러운 순목(눈 깜박임)으로 렌즈 움직임을 안정화하여 선명한 시야를 제공합니다.</span>
-        </div>
-        <button id="asdConfirmBtn" type="button">확인</button>
-      `;
-      document.getElementById('asdConfirmBtn')?.addEventListener('click', (e)=>{
-        e.stopPropagation();
-        closeASD();
-        markASDDone(true);
-      });
+      asdHint.innerHTML = `<div class="hintText"><span class="hintTitle">기억해주세요!</span><span class="hintBody"><span class="blue">아큐브® ASD™</span>는 자연스러운 순목(눈 깜박임)으로 렌즈 움직임을 안정화하여 선명한 시야를 제공합니다.</span></div><button id="asdConfirmBtn" type="button">확인</button>`;
+      document.getElementById('asdConfirmBtn')?.addEventListener('click', (e)=>{ e.stopPropagation(); closeASD(); markASDDone(true); });
     }
-
-    function markASDDone(done){
-      asdDone = !!done;
-      missionASD.classList.toggle('done', asdDone);
-    }
-
-    function pickASDLensSrc(){
-      return (currentMode === 'heat') ? 'lens2.png' : 'lens.png';
-    }
-
-    function setASDLensSrc(){
-      if(!asdLensImg) return;
-      asdLensImg.src = pickASDLensSrc() + '?v=' + Date.now();
-    }
-
+    function markASDDone(done){ asdDone = !!done; missionASD.classList.toggle('done', asdDone); }
+    function pickASDLensSrc(){ return (currentMode === 'heat') ? 'lens2.png' : 'lens.png'; }
+    function setASDLensSrc(){ if(!asdLensImg) return; asdLensImg.src = pickASDLensSrc() + '?v=' + Date.now(); }
     function renderASDLensTransform(extraX=0){
       if(!asdLensImg) return;
-      asdLensImg.style.transform =
-        `translate(calc(-50% + ${extraX}px + var(--irisX, 0px)), calc(-50% + var(--irisY, 0px))) rotate(${asdAngle}deg)`;
-
+      asdLensImg.style.transform = `translate(calc(-50% + ${extraX}px + var(--irisX, 0px)), calc(-50% + var(--irisY, 0px))) rotate(${asdAngle}deg)`;
       if(asdAngleBadge){
         if(asdAngle > 0) asdAngleBadge.textContent = `좌측으로 ${asdAngle}° 회전`;
         else if(asdAngle < 0) asdAngleBadge.textContent = `우측으로 ${Math.abs(asdAngle)}° 회전`;
         else asdAngleBadge.textContent = `축 안정`;
       }
     }
-
-    function resetASDState(){
-      asdAngle = ASD_START;
-      asdLastDir = -1;
-      renderASDLensTransform(0);
-    }
+    function resetASDState(){ asdAngle = ASD_START; asdLastDir = -1; renderASDLensTransform(0); }
 
     function playBlinkLid(){
       if(asdBlinkBusy) return;
       asdBlinkBusy = true;
-
-      const hideLens = ()=>{
-        if(asdLensImg) asdLensImg.style.opacity = '0';
-        if(asdLensRim) asdLensRim.style.opacity = '0';
-      };
-      const showLens = ()=>{
-        if(asdLensImg) asdLensImg.style.opacity = '';
-        if(asdLensRim) asdLensRim.style.opacity = '';
-      };
-
-      if(!asdLidTop || !asdLidBot) {
-        hideLens();
-        setTimeout(()=>{ showLens(); asdBlinkBusy = false; }, 220);
-        return;
-      }
-
-      asdLidTop.style.transition = 'none';
-      asdLidBot.style.transition = 'none';
-      asdLidTop.style.opacity = '0';
-      asdLidBot.style.opacity = '0';
-      asdLidTop.style.transform = 'translateY(-110%)';
-      asdLidBot.style.transform = 'translateY(110%)';
-
+      const hideLens = ()=>{ if(asdLensImg) asdLensImg.style.opacity = '0'; if(asdLensRim) asdLensRim.style.opacity = '0'; };
+      const showLens = ()=>{ if(asdLensImg) asdLensImg.style.opacity = ''; if(asdLensRim) asdLensRim.style.opacity = ''; };
+      if(!asdLidTop || !asdLidBot) { hideLens(); setTimeout(()=>{ showLens(); asdBlinkBusy = false; }, 220); return; }
+      asdLidTop.style.transition = 'none'; asdLidBot.style.transition = 'none';
+      asdLidTop.style.opacity = '0'; asdLidBot.style.opacity = '0';
+      asdLidTop.style.transform = 'translateY(-110%)'; asdLidBot.style.transform = 'translateY(110%)';
       requestAnimationFrame(()=>{
         asdLidTop.style.transition = 'transform 120ms ease, opacity 120ms ease';
         asdLidBot.style.transition = 'transform 120ms ease, opacity 120ms ease';
-        asdLidTop.style.opacity = '1';
-        asdLidBot.style.opacity = '1';
-        asdLidTop.style.transform = 'translateY(0%)';
-        asdLidBot.style.transform = 'translateY(0%)';
-
+        asdLidTop.style.opacity = '1'; asdLidBot.style.opacity = '1';
+        asdLidTop.style.transform = 'translateY(0%)'; asdLidBot.style.transform = 'translateY(0%)';
         setTimeout(hideLens, 55);
-
         setTimeout(()=>{
           asdLidTop.style.transition = 'transform 150ms ease, opacity 150ms ease';
           asdLidBot.style.transition = 'transform 150ms ease, opacity 150ms ease';
-          asdLidTop.style.transform = 'translateY(-110%)';
-          asdLidBot.style.transform = 'translateY(110%)';
-          asdLidTop.style.opacity = '0';
-          asdLidBot.style.opacity = '0';
+          asdLidTop.style.transform = 'translateY(-110%)'; asdLidBot.style.transform = 'translateY(110%)';
+          asdLidTop.style.opacity = '0'; asdLidBot.style.opacity = '0';
         }, 140);
-
-        setTimeout(()=>{
-          showLens();
-          asdBlinkBusy = false;
-        }, 240);
+        setTimeout(()=>{ showLens(); asdBlinkBusy = false; }, 240);
       });
     }
 
     function overshootAndReturn(){
       const overshootDeg = asdLastDir * 3;
       if(!asdLensImg) return;
-
       asdLensImg.style.transition = 'transform 120ms ease';
-      asdAngle = overshootDeg;
-      renderASDLensTransform(0);
-
+      asdAngle = overshootDeg; renderASDLensTransform(0);
       setTimeout(()=>{
         asdLensImg.style.transition = 'transform 180ms ease';
-        asdAngle = 0;
-        renderASDLensTransform(0);
-        setTimeout(()=>{
-          if(asdLensImg) asdLensImg.style.transition = '';
-        }, 190);
+        asdAngle = 0; renderASDLensTransform(0);
+        setTimeout(()=>{ if(asdLensImg) asdLensImg.style.transition = ''; }, 190);
       }, 120);
     }
 
     function handleASDBlink(){
       playBlinkLid();
-
       if(asdAngle > 0){
-        asdLastDir = -1;
-        asdAngle = Math.max(0, asdAngle - ASD_STEP);
-        if(asdLensImg){
-          asdLensImg.style.transition = 'transform 160ms ease';
-          renderASDLensTransform(0);
-          setTimeout(()=>{ if(asdLensImg) asdLensImg.style.transition = ''; }, 170);
-        }
+        asdLastDir = -1; asdAngle = Math.max(0, asdAngle - ASD_STEP);
+        if(asdLensImg){ asdLensImg.style.transition = 'transform 160ms ease'; renderASDLensTransform(0); setTimeout(()=>{ if(asdLensImg) asdLensImg.style.transition = ''; }, 170); }
         if(asdAngle === 0 && !asdDone) setASDHintSuccess();
       }else if(asdAngle < 0){
-        asdLastDir = +1;
-        asdAngle = Math.min(0, asdAngle + ASD_STEP);
-        if(asdLensImg){
-          asdLensImg.style.transition = 'transform 160ms ease';
-          renderASDLensTransform(0);
-          setTimeout(()=>{ if(asdLensImg) asdLensImg.style.transition = ''; }, 170);
-        }
+        asdLastDir = +1; asdAngle = Math.min(0, asdAngle + ASD_STEP);
+        if(asdLensImg){ asdLensImg.style.transition = 'transform 160ms ease'; renderASDLensTransform(0); setTimeout(()=>{ if(asdLensImg) asdLensImg.style.transition = ''; }, 170); }
         if(asdAngle === 0 && !asdDone) setASDHintSuccess();
       }else{
         overshootAndReturn();
       }
     }
-
-    asdBlinkBtn?.addEventListener('click', (e)=>{
-      e.stopPropagation();
-      handleASDBlink();
-    });
+    asdBlinkBtn?.addEventListener('click', (e)=>{ e.stopPropagation(); handleASDBlink(); });
 
     function handleASDRotateRandom(){
-      markASDDone(false);
-      setASDHintDefault();
-
-      const mags = [10,15,20];
-      const mag = mags[Math.floor(Math.random() * mags.length)];
-      const dir = (Math.random() < 0.5) ? -1 : 1;
-
-      asdLastDir = dir;
-      asdAngle = dir * mag;
-
-      if(asdLensImg){
-        asdLensImg.style.transition = 'transform 180ms ease';
-        renderASDLensTransform(0);
-        setTimeout(()=>{ if(asdLensImg) asdLensImg.style.transition = ''; }, 190);
-      }
+      markASDDone(false); setASDHintDefault();
+      const mags = [10,15,20]; const mag = mags[Math.floor(Math.random() * mags.length)]; const dir = (Math.random() < 0.5) ? -1 : 1;
+      asdLastDir = dir; asdAngle = dir * mag;
+      if(asdLensImg){ asdLensImg.style.transition = 'transform 180ms ease'; renderASDLensTransform(0); setTimeout(()=>{ if(asdLensImg) asdLensImg.style.transition = ''; }, 190); }
     }
-
-    asdRotateBtn?.addEventListener('click', (e)=>{
-      e.stopPropagation();
-      handleASDRotateRandom();
-    });
+    asdRotateBtn?.addEventListener('click', (e)=>{ e.stopPropagation(); handleASDRotateRandom(); });
 
     function tuneClearLensMaterials(){
       try{
-        const model = mv.model;
-        if(!model || !model.materials) return;
+        const model = mv.model; if(!model || !model.materials) return;
         model.materials.forEach(mat=>{
-          const pbr = mat.pbrMetallicRoughness;
-          if(!pbr) return;
+          const pbr = mat.pbrMetallicRoughness; if(!pbr) return;
           const base = pbr.baseColorFactor ? [...pbr.baseColorFactor] : [1,1,1,1];
-          base[3] = Math.max(base[3], 0.68);
-          pbr.setBaseColorFactor(base);
+          base[3] = Math.max(base[3], 0.68); pbr.setBaseColorFactor(base);
           try{ pbr.setRoughnessFactor(0.18); }catch(e){}
           try{ pbr.setMetallicFactor(0.0); }catch(e){}
-          if(mat.extensions && mat.extensions.KHR_materials_transmission){
-            mat.extensions.KHR_materials_transmission.transmissionFactor = 0.62;
-          }
-          try{
-            if(mat.emissiveFactor){ mat.emissiveFactor = [0.05, 0.07, 0.08]; }
-          }catch(e){}
+          if(mat.extensions && mat.extensions.KHR_materials_transmission){ mat.extensions.KHR_materials_transmission.transmissionFactor = 0.62; }
+          try{ if(mat.emissiveFactor){ mat.emissiveFactor = [0.05, 0.07, 0.08]; } }catch(e){}
           try{ if(mat.setAlphaMode) mat.setAlphaMode('BLEND'); }catch(e){}
         });
       }catch(e){}
@@ -2262,249 +1354,99 @@ function openBlueLightDemo(){
       missionComfort.classList.toggle('done', comfortDone);
     }
 
-    function closeASD(){
-      asdOverlay.classList.remove('show');
-      asdOverlay.setAttribute('aria-hidden','true');
-      closeBlueLightDemo();
-      resetCameraToModeDefault('lens');
-      syncMissionUI();
-      syncPackshot();
-    }
-
-    function setModeButtons(){
-      modeLens.classList.toggle('primary', currentMode === 'lens');
-      modeHeat.classList.toggle('primary', currentMode === 'heat');
-      syncPackshot();
-    }
-
-    function forcePVPOff(){
-      if(!pvpOn) return;
-      pvpOn = false;
-      showPVP(false);
-      syncMissionUI();
-      syncPackshot();
-    }
+    function closeASD(){ asdOverlay.classList.remove('show'); asdOverlay.setAttribute('aria-hidden','true'); closeBlueLightDemo(); resetCameraToModeDefault('lens'); syncMissionUI(); syncPackshot(); }
+    function setModeButtons(){ modeLens.classList.toggle('primary', currentMode === 'lens'); modeHeat.classList.toggle('primary', currentMode === 'heat'); syncPackshot(); }
+    function forcePVPOff(){ if(!pvpOn) return; pvpOn = false; showPVP(false); syncMissionUI(); syncPackshot(); }
 
     function openASD(){
       if(pvpOn) forcePVPOff();
-
-      resetCameraToModeDefault('lens');
-      setASDLensSrc();
-      resetASDState();
-      setASDHintDefault();
-
-      if(asdEyeMV){
-        asdEyeMV.src = 'a.png?v=' + Date.now();
-      }
-
-      asdOverlay.classList.add('show');
-      asdOverlay.setAttribute('aria-hidden','false');
-      syncMissionUI();
-      syncPackshot();
+      resetCameraToModeDefault('lens'); setASDLensSrc(); resetASDState(); setASDHintDefault();
+      if(asdEyeMV){ asdEyeMV.src = 'a.png?v=' + Date.now(); }
+      asdOverlay.classList.add('show'); asdOverlay.setAttribute('aria-hidden','false'); syncMissionUI(); syncPackshot();
     }
 
     function setModel(file, mode, options = {}){
       const { resetCamera = false } = options;
-
       return new Promise((resolve)=>{
         pendingCameraPreset = null;
-
-        if(!resetCamera){
-          lastOrbit = getOrbitSafe();
-          lastTarget = getTargetSafe();
-        }else{
-          lastOrbit = null;
-          lastTarget = null;
-          pendingCameraPreset =
-            (mode === 'heat')
-              ? { orbitStr: HEAT_DEFAULT_ORBIT_STR, targetStr: HEAT_DEFAULT_TARGET_STR }
-              : { orbitStr: CLEAR_DEFAULT_ORBIT_STR, targetStr: CLEAR_DEFAULT_TARGET_STR };
+        if(!resetCamera){ lastOrbit = getOrbitSafe(); lastTarget = getTargetSafe(); }
+        else{
+          lastOrbit = null; lastTarget = null;
+          pendingCameraPreset = (mode === 'heat') ? { orbitStr: HEAT_DEFAULT_ORBIT_STR, targetStr: HEAT_DEFAULT_TARGET_STR } : { orbitStr: CLEAR_DEFAULT_ORBIT_STR, targetStr: CLEAR_DEFAULT_TARGET_STR };
         }
-
-        currentMode = mode;
-        forcePVPOff();
-        showThickness(mode === 'heat');
-        setModeButtons();
-
-        const onLoadOnce = ()=>{
-          mv.removeEventListener('load', onLoadOnce);
-          resolve();
-        };
+        currentMode = mode; forcePVPOff(); showThickness(mode === 'heat'); setModeButtons();
+        const onLoadOnce = ()=>{ mv.removeEventListener('load', onLoadOnce); resolve(); };
         mv.addEventListener('load', onLoadOnce, { once:true });
-
         mv.src = file + '?v=' + Date.now();
       });
     }
 
     mv.addEventListener('load', ()=>{
-      if(!defaultFov){
-        try{ defaultFov = mv.fieldOfView; }catch(e){ defaultFov = null; }
-      }
-
+      if(!defaultFov){ try{ defaultFov = mv.fieldOfView; }catch(e){ defaultFov = null; } }
       if(pendingCameraPreset){
-        applyTargetStr(pendingCameraPreset.targetStr);
-        applyOrbitStr(pendingCameraPreset.orbitStr);
-
-        setTimeout(()=>{
-          applyTargetStr(pendingCameraPreset.targetStr);
-          applyOrbitStr(pendingCameraPreset.orbitStr);
-        }, 120);
-
-        resetCameraToModeDefault(currentMode);
-        pendingCameraPreset = null;
+        applyTargetStr(pendingCameraPreset.targetStr); applyOrbitStr(pendingCameraPreset.orbitStr);
+        setTimeout(()=>{ applyTargetStr(pendingCameraPreset.targetStr); applyOrbitStr(pendingCameraPreset.orbitStr); }, 120);
+        resetCameraToModeDefault(currentMode); pendingCameraPreset = null;
       }else{
-        if(lastTarget) applyTarget(lastTarget);
-        if(lastOrbit) applyOrbit(lastOrbit);
-
-        setTimeout(()=>{
-          if(lastTarget) applyTarget(lastTarget);
-          if(lastOrbit) applyOrbit(lastOrbit);
-        }, 120);
+        if(lastTarget) applyTarget(lastTarget); if(lastOrbit) applyOrbit(lastOrbit);
+        setTimeout(()=>{ if(lastTarget) applyTarget(lastTarget); if(lastOrbit) applyOrbit(lastOrbit); }, 120);
       }
-
-      if(currentMode === 'lens'){
-        tuneClearLensMaterials();
-      }
-
-      setModeButtons();
-      syncMissionUI();
-      syncPackshot();
-      keepMVPlaying();
-      setTimeout(keepMVPlaying, 120);
+      if(currentMode === 'lens'){ tuneClearLensMaterials(); }
+      setModeButtons(); syncMissionUI(); syncPackshot(); keepMVPlaying(); setTimeout(keepMVPlaying, 120);
     });
 
-    function toggleASD(){
-      if(asdOverlay.classList.contains('show')){
-        closeASD();
-        return;
-      }
-      openASD();
-    }
-
+    function toggleASD(){ if(asdOverlay.classList.contains('show')){ closeASD(); return; } openASD(); }
     missionASD.addEventListener('click', toggleASD);
-    missionASD.addEventListener('keydown', (e)=>{
-      if(e.key === 'Enter' || e.key === ' ') toggleASD();
-    });
-
+    missionASD.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') toggleASD(); });
     asdClose.addEventListener('click', closeASD);
-    asdOverlay.addEventListener('click', (e)=>{
-      if(e.target === asdOverlay) closeASD();
-    });
+    asdOverlay.addEventListener('click', (e)=>{ if(e.target === asdOverlay) closeASD(); });
 
     const PVP_ZOOM_FACTOR = 0.70;
-    function zoomInForPVP(){
-      try{
-        const orbit = getOrbitSafe();
-        if(!orbit) return;
-        mv.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${orbit.radius * PVP_ZOOM_FACTOR}m`;
-      }catch(e){}
-    }
+    function zoomInForPVP(){ try{ const orbit = getOrbitSafe(); if(!orbit) return; mv.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${orbit.radius * PVP_ZOOM_FACTOR}m`; }catch(e){} }
 
     async function togglePVP(){
-      if(currentMode === 'heat'){
-        await setModel('lens_clear.glb', 'lens', { resetCamera:true });
-      }
+      if(currentMode === 'heat'){ await setModel('lens_clear.glb', 'lens', { resetCamera:true }); }
       if(currentMode !== 'lens') return;
-
       if(asdOverlay.classList.contains('show')) closeASD();
-
       pvpOn = !pvpOn;
-
       if(pvpOn){
         resetCameraToModeDefault('lens');
-        setTimeout(()=>{
-          zoomInForPVP();
-          showPVP(true);
-          syncMissionUI();
-          syncPackshot();
-        }, 140);
+        setTimeout(()=>{ zoomInForPVP(); showPVP(true); syncMissionUI(); syncPackshot(); }, 140);
       }else{
-        showPVP(false);
-        resetCameraToModeDefault('lens');
-        syncMissionUI();
-        syncPackshot();
+        showPVP(false); resetCameraToModeDefault('lens'); syncMissionUI(); syncPackshot();
       }
     }
-
     missionPVP.addEventListener('click', togglePVP);
-    missionPVP.addEventListener('keydown', (e)=>{
-      if(e.key === 'Enter' || e.key === ' ') togglePVP();
-    });
+    missionPVP.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') togglePVP(); });
 
-    function confirmPVP(){
-      pvpDone = true;
-      pvpOn = false;
-      showPVP(false);
-      resetCameraToModeDefault('lens');
-      syncMissionUI();
-      syncPackshot();
-    }
-
-    pvpConfirm.addEventListener('click', (e)=>{
-      e.stopPropagation();
-      confirmPVP();
-    });
-    pvpConfirm.addEventListener('keydown', (e)=>{
-      if(e.key === 'Enter' || e.key === ' '){
-        e.preventDefault();
-        confirmPVP();
-      }
-    });
-
-
+    function confirmPVP(){ pvpDone = true; pvpOn = false; showPVP(false); resetCameraToModeDefault('lens'); syncMissionUI(); syncPackshot(); }
+    pvpConfirm.addEventListener('click', (e)=>{ e.stopPropagation(); confirmPVP(); });
+    pvpConfirm.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); confirmPVP(); } });
 
     function closeComfort(markDone = false){
       if(markDone) comfortDone = true;
-      comfortOverlay.classList.remove('show');
-      comfortOverlay.setAttribute('aria-hidden','true');
-      closeBlueLightDemo();
-      closeBlueLightDemo();
-      closeBlueLightDemo();
-      closeBlueLightDemo();
-      stopComfortModeOnMotion();
-      setComfortMode('off');
-      syncMissionUI();
-      syncPackshot();
+      comfortOverlay.classList.remove('show'); comfortOverlay.setAttribute('aria-hidden','true');
+      closeBlueLightDemo(); stopComfortModeOnMotion(); setComfortMode('off'); syncMissionUI(); syncPackshot();
     }
-
     function openComfort(){
       if(asdOverlay.classList.contains('show')) closeASD();
       if(pvpOn) forcePVPOff();
-      stopComfortModeOnMotion();
-      comfortOverlay.classList.add('show');
-      comfortOverlay.setAttribute('aria-hidden','false');
-      setComfortMode('off');
-      requestAnimationFrame(positionComfortInteractiveElements);
-      syncMissionUI();
-      syncPackshot();
+      stopComfortModeOnMotion(); comfortOverlay.classList.add('show'); comfortOverlay.setAttribute('aria-hidden','false');
+      setComfortMode('off'); requestAnimationFrame(positionComfortInteractiveElements); syncMissionUI(); syncPackshot();
     }
-
-    function toggleComfort(){
-      if(comfortOverlay.classList.contains('show')){
-        closeComfort();
-        return;
-      }
-      openComfort();
-    }
+    function toggleComfort(){ if(comfortOverlay.classList.contains('show')){ closeComfort(); return; } openComfort(); }
 
     function stopComfortModeOnMotion(){
-      if(comfortMotionRaf){
-        cancelAnimationFrame(comfortMotionRaf);
-        comfortMotionRaf = null;
-      }
+      if(comfortMotionRaf){ cancelAnimationFrame(comfortMotionRaf); comfortMotionRaf = null; }
       if(cfBoxTop) cfBoxTop.style.transform = 'translateX(-50%)';
       if(cfBoxBottom) cfBoxBottom.style.transform = 'translateX(-50%)';
       if(cfARed) cfARed.style.transform = 'translate(-50%,-50%)';
       if(cfABlue) cfABlue.style.transform = 'translate(-50%,-50%)';
     }
-
     function startComfortModeOnMotion(){
       stopComfortModeOnMotion();
       const animate = (ts)=>{
-        if(!comfortOverlay.classList.contains('show') || !comfortScene.classList.contains('mode-on')){
-          stopComfortModeOnMotion();
-          return;
-        }
+        if(!comfortOverlay.classList.contains('show') || !comfortScene.classList.contains('mode-on')){ stopComfortModeOnMotion(); return; }
         const wave = Math.sin((ts % COMFORT_FLOAT_PERIOD) / COMFORT_FLOAT_PERIOD * Math.PI * 2);
         const offset = wave * COMFORT_FLOAT_AMPLITUDE;
         if(cfBoxTop) cfBoxTop.style.transform = `translateX(-50%) translateY(${offset}px)`;
@@ -2518,193 +1460,104 @@ function openBlueLightDemo(){
     }
 
     function setComfortMode(mode){
-      comfortScene.classList.remove('mode-default', 'mode-on', 'mode-off');
-      cfBtnOn.classList.remove('active');
-      cfBtnOff.classList.remove('active');
-
+      comfortScene.classList.remove('mode-default', 'mode-on', 'mode-off'); cfBtnOn.classList.remove('active'); cfBtnOff.classList.remove('active');
       if(mode === 'on'){
-        comfortScene.classList.add('mode-on');
-        cfBtnOn.classList.add('active');
-        comfortMessageCopy.innerHTML = `
-          단안에 프리즘 영향이 있는 경우
-          <span class="blue">양안 이미지 위치에 차이가 발생하여 피로감이 발생할 수 있습니다.</span>
-        `;
+        comfortScene.classList.add('mode-on'); cfBtnOn.classList.add('active');
+        comfortMessageCopy.innerHTML = `단안에 프리즘 영향이 있는 경우 <span class="blue">양안 이미지 위치에 차이가 발생하여 피로감이 발생할 수 있습니다.</span>`;
         if(comfortConfirm) comfortConfirm.style.display = '';
       }else{
-        comfortScene.classList.add('mode-off');
-        cfBtnOff.classList.add('active');
-        comfortMessageCopy.innerHTML = `
-          난시 렌즈 광학부의 프리즘은
-          <span class="blue">단안 난시 소비자에게 중요합니다.</span>
-        `;
+        comfortScene.classList.add('mode-off'); cfBtnOff.classList.add('active');
+        comfortMessageCopy.innerHTML = `난시 렌즈 광학부의 프리즘은 <span class="blue">단안 난시 소비자에게 중요합니다.</span>`;
         if(comfortConfirm) comfortConfirm.style.display = 'none';
       }
       requestAnimationFrame(()=>positionComfortInteractiveElements(0));
-      if(mode === 'on') startComfortModeOnMotion();
-      else stopComfortModeOnMotion();
+      if(mode === 'on') startComfortModeOnMotion(); else stopComfortModeOnMotion();
     }
 
-    function cfSetCenterPercent(el, xPx, yPx, rect){
-      el.style.left = ((xPx / rect.width) * 100) + '%';
-      el.style.top  = ((yPx / rect.height) * 100) + '%';
-    }
-
+    function cfSetCenterPercent(el, xPx, yPx, rect){ el.style.left = ((xPx / rect.width) * 100) + '%'; el.style.top  = ((yPx / rect.height) * 100) + '%'; }
     function cfPlaceLine(el, sx, sy, ex, ey, rect){
-      const dx = ex - sx;
-      const dy = ey - sy;
-      const length = Math.sqrt(dx * dx + dy * dy);
-      const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-      el.style.left = (sx / rect.width * 100) + '%';
-      el.style.top = (sy / rect.height * 100) + '%';
-      el.style.width = length + 'px';
-      el.style.transform = `rotate(${angle}deg)`;
+      const dx = ex - sx; const dy = ey - sy; const length = Math.sqrt(dx * dx + dy * dy); const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+      el.style.left = (sx / rect.width * 100) + '%'; el.style.top = (sy / rect.height * 100) + '%'; el.style.width = length + 'px'; el.style.transform = `rotate(${angle}deg)`;
     }
 
     function positionComfortInteractiveElements(redFloatOffset = 0){
       if(!comfortScene || !comfortOverlay.classList.contains('show')) return;
       const rect = comfortScene.getBoundingClientRect();
-      const w = rect.width;
-      const h = rect.height;
-      const mobile = w <= 560;
-      const tablet = w <= 820 && w > 560;
-
+      const w = rect.width, h = rect.height;
+      const mobile = w <= 560, tablet = w <= 820 && w > 560;
       const eyeLeft = { x: w * 0.552, y: h * 0.408 };
       const eyeRight = { x: w * 0.811, y: h * 0.410 };
-
       const cardW = mobile ? 82 : (tablet ? 104 : 118);
       const cardH = mobile ? 126 : (tablet ? 158 : 176);
       const modeOn = comfortScene.classList.contains('mode-on');
       const modeOff = comfortScene.classList.contains('mode-off');
-
-      // 기본 카드(보라/파랑 동일 기준 위치)
       const baseCardCx = w * 0.225;
       const baseCardCy = (eyeLeft.y + eyeRight.y) / 2 + 4;
-
-      // mode on/off 모두 카드 x축은 동일
       const cardCx = baseCardCx;
-
-      // 프리즘 없는 경우: 프리즘 있는 경우의 파란 카드 위치와 유사하게 살짝 아래
       const offCardYOffset = mobile ? 12 : 14;
       const cardCy = modeOff ? (baseCardCy + offCardYOffset) : baseCardCy;
-
       const redCardCenterY = baseCardCy - 14 + redFloatOffset;
       const blueCardCenterY = baseCardCy + 14;
 
-      cfTargetStage.style.width = cardW + 'px';
-      cfTargetStage.style.height = cardH + 'px';
-      cfSetCenterPercent(cfTargetStage, cardCx, cardCy, rect);
-
+      cfTargetStage.style.width = cardW + 'px'; cfTargetStage.style.height = cardH + 'px'; cfSetCenterPercent(cfTargetStage, cardCx, cardCy, rect);
       if(modeOn){
-        if(cfBoxTop) cfBoxTop.style.top = '-20px';
-        if(cfBoxBottom) cfBoxBottom.style.top = '20px';
-        if(cfARed){ cfARed.style.top = '50%'; cfARed.style.left = '50%'; }
-        if(cfABlue){ cfABlue.style.top = '50%'; cfABlue.style.left = '50%'; }
+        if(cfBoxTop) cfBoxTop.style.top = '-20px'; if(cfBoxBottom) cfBoxBottom.style.top = '20px';
+        if(cfARed){ cfARed.style.top = '50%'; cfARed.style.left = '50%'; } if(cfABlue){ cfABlue.style.top = '50%'; cfABlue.style.left = '50%'; }
       }else if(modeOff){
-        if(cfBoxTop) cfBoxTop.style.top = '0px';
-        if(cfBoxBottom) cfBoxBottom.style.top = '0px';
-        if(cfARed){ cfARed.style.top = '50%'; cfARed.style.left = '50%'; }
-        if(cfABlue){ cfABlue.style.top = '50%'; cfABlue.style.left = '50%'; }
+        if(cfBoxTop) cfBoxTop.style.top = '0px'; if(cfBoxBottom) cfBoxBottom.style.top = '0px';
+        if(cfARed){ cfARed.style.top = '50%'; cfARed.style.left = '50%'; } if(cfABlue){ cfABlue.style.top = '50%'; cfABlue.style.left = '50%'; }
       }
 
       const opticW = mobile ? 38 : (tablet ? 48 : 58);
       const opticH = mobile ? 76 : (tablet ? 98 : 118);
       const opticCx = eyeLeft.x + (mobile ? -1 : -2);
       const opticCy = eyeLeft.y - 20;
-
-      cfOptic.style.width = opticW + 'px';
-      cfOptic.style.height = opticH + 'px';
-      cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
-
+      cfOptic.style.width = opticW + 'px'; cfOptic.style.height = opticH + 'px'; cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
       const cardRightCenterX = cardCx + cardW * 0.50;
 
       if(modeOn){
-        cfLineRed.style.opacity = '1';
-        cfLineBlue.style.opacity = '1';
-
-        // 파란선: 오른쪽 눈에서 시작해서 파란 카드 우측면 중앙으로 거의 수평 연결
-        const blueStartX = eyeRight.x;
-        const blueStartY = eyeRight.y;
-        const blueEndX = baseCardCx + cardW * 0.50;
-        const blueEndY = blueCardCenterY;
-
-        // 빨간선: 눈과 카드에 고정, 카드 흔들림에 따라 길이만 변하고 별도 회전 애니메이션은 없음
-        const redStartX = eyeLeft.x;
-        const redStartY = eyeLeft.y;
-        const redEndX = cardRightCenterX;
-        const redEndY = redCardCenterY;
-
+        cfLineRed.style.opacity = '1'; cfLineBlue.style.opacity = '1';
+        const blueStartX = eyeRight.x, blueStartY = eyeRight.y, blueEndX = baseCardCx + cardW * 0.50, blueEndY = blueCardCenterY;
+        const redStartX = eyeLeft.x, redStartY = eyeLeft.y, redEndX = cardRightCenterX, redEndY = redCardCenterY;
         cfPlaceLine(cfLineBlue, blueStartX, blueStartY, blueEndX, blueEndY, rect);
-
-        const baseRedEndX = cardRightCenterX;
-        const baseRedEndY = baseCardCy - 14;
-        const fixedDx = baseRedEndX - redStartX;
-        const fixedDy = baseRedEndY - redStartY;
-        const fixedAngle = Math.atan2(fixedDy, fixedDx) * 180 / Math.PI;
-
-        const liveDx = redEndX - redStartX;
-        const liveDy = redEndY - redStartY;
-        const liveLength = Math.sqrt(liveDx * liveDx + liveDy * liveDy);
-
-        cfLineRed.style.left = (redStartX / rect.width * 100) + '%';
-        cfLineRed.style.top = (redStartY / rect.height * 100) + '%';
-        cfLineRed.style.width = liveLength + 'px';
-        cfLineRed.style.transform = `rotate(${fixedAngle}deg)`;
+        const baseRedEndX = cardRightCenterX, baseRedEndY = baseCardCy - 14;
+        const fixedDx = baseRedEndX - redStartX, fixedDy = baseRedEndY - redStartY, fixedAngle = Math.atan2(fixedDy, fixedDx) * 180 / Math.PI;
+        const liveDx = redEndX - redStartX, liveDy = redEndY - redStartY, liveLength = Math.sqrt(liveDx * liveDx + liveDy * liveDy);
+        cfLineRed.style.left = (redStartX / rect.width * 100) + '%'; cfLineRed.style.top = (redStartY / rect.height * 100) + '%'; cfLineRed.style.width = liveLength + 'px'; cfLineRed.style.transform = `rotate(${fixedAngle}deg)`;
       }else if(modeOff){
-        cfLineRed.style.opacity = '1';
-        cfLineBlue.style.opacity = '1';
-
-        // 프리즘 없는 경우: 카드와 카드쪽 접점만 살짝 아래, 눈쪽 접점은 그대로 고정
-        const offAttachY = cardCy;
-        const redCardAttachY = offAttachY - (mobile ? 3 : 4);
-        const blueCardAttachY = offAttachY;
-
+        cfLineRed.style.opacity = '1'; cfLineBlue.style.opacity = '1';
+        const offAttachY = cardCy, redCardAttachY = offAttachY - (mobile ? 3 : 4), blueCardAttachY = offAttachY;
         cfPlaceLine(cfLineRed, cardRightCenterX, redCardAttachY, eyeLeft.x - (mobile ? 2 : 4), eyeLeft.y, rect);
         cfPlaceLine(cfLineBlue, cardRightCenterX, blueCardAttachY, eyeRight.x - (mobile ? 10 : 12), eyeRight.y, rect);
       }else{
-        cfLineRed.style.opacity = '0';
-        cfLineBlue.style.opacity = '0';
+        cfLineRed.style.opacity = '0'; cfLineBlue.style.opacity = '0';
       }
     }
 
     missionComfort.addEventListener('click', toggleComfort);
-    missionComfort.addEventListener('keydown', (e)=>{
-      if(e.key === 'Enter' || e.key === ' ') toggleComfort();
-    });
+    missionComfort.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') toggleComfort(); });
     comfortClose?.addEventListener('click', ()=>closeComfort());
     comfortConfirm?.addEventListener('click', ()=>closeComfort(true));
-    comfortOverlay?.addEventListener('click', (e)=>{
-      if(e.target === comfortOverlay) closeComfort();
-    });
+    comfortOverlay?.addEventListener('click', (e)=>{ if(e.target === comfortOverlay) closeComfort(); });
     cfBtnOn?.addEventListener('click', ()=>setComfortMode('on'));
     cfBtnOff?.addEventListener('click', ()=>setComfortMode('off'));
 
     btnReset.addEventListener('click', ()=>{
       if(asdOverlay.classList.contains('show')) closeASD();
       if(comfortOverlay.classList.contains('show')) closeComfort();
-      if(pvpOn){
-        pvpOn = false;
-        showPVP(false);
-      }
+      if(pvpOn){ pvpOn = false; showPVP(false); }
       closeBlueLightDemo();
-      closeBlueLightDemo();
-      closeBlueLightDemo();
-      closeBlueLightDemo();
-      showThickness(currentMode === 'heat');
-      resetCameraToModeDefault(currentMode);
-      syncMissionUI();
-      syncPackshot();
-      positionComfortInteractiveElements(0);
+      showThickness(currentMode === 'heat'); resetCameraToModeDefault(currentMode); syncMissionUI(); syncPackshot(); positionComfortInteractiveElements(0);
     });
 
     modeLens.addEventListener('click', ()=> { closeBlueLightDemo(); setModel('lens_clear.glb', 'lens', { resetCamera:false }); });
     modeHeat.addEventListener('click', ()=> { closeBlueLightDemo(); setModel('lens_heatmap.glb', 'heat', { resetCamera:false }); });
 
-    maxPackshot?.addEventListener('click', openBlueLightDemo);
-    blueLightConfirm?.addEventListener('click', closeBlueLightDemo);
+    maxPackshot?.addEventListener('click', (e)=>{ e.stopPropagation(); openBlueLightDemo(); });
+    blueLightConfirm?.addEventListener('click', (e)=>{ e.stopPropagation(); closeBlueLightDemo(); });
 
     setModel('lens_clear.glb', 'lens', { resetCamera:true });
 
-    /* 튜토리얼 */
     const tutorialLayer = document.getElementById('tutorialLayer');
     const tutorialMask = document.getElementById('tutorialMask');
     const tutorialFocus = document.getElementById('tutorialFocus');
@@ -2714,138 +1567,40 @@ function openBlueLightDemo(){
 
     function applyTutorialHole(rect, radius = 24){
       if(!rect || !tutorialFocus) return;
-
-      const left = Math.max(8, rect.left - 8);
-      const top = Math.max(8, rect.top - 8);
-      const width = Math.min(window.innerWidth - left - 8, rect.width + 16);
-      const height = Math.min(window.innerHeight - top - 8, rect.height + 16);
-
-      tutorialFocus.style.left = `${left}px`;
-      tutorialFocus.style.top = `${top}px`;
-      tutorialFocus.style.width = `${width}px`;
-      tutorialFocus.style.height = `${height}px`;
-      tutorialFocus.style.borderRadius = `${radius}px`;
-      tutorialFocus.style.display = 'block';
-
+      const left = Math.max(8, rect.left - 8), top = Math.max(8, rect.top - 8);
+      const width = Math.min(window.innerWidth - left - 8, rect.width + 16), height = Math.min(window.innerHeight - top - 8, rect.height + 16);
+      tutorialFocus.style.left = `${left}px`; tutorialFocus.style.top = `${top}px`; tutorialFocus.style.width = `${width}px`; tutorialFocus.style.height = `${height}px`; tutorialFocus.style.borderRadius = `${radius}px`; tutorialFocus.style.display = 'block';
       if(tutorialMask) tutorialMask.style.display = 'none';
     }
-
     function positionTutorialBox(box, where){
       if(!box) return;
-
-      if(where === 'center-left'){
-        box.style.left = '20px';
-        box.style.right = 'auto';
-        box.style.top = '50%';
-        box.style.bottom = 'auto';
-        box.style.transform = 'translateY(-50%)';
-        box.style.width = 'min(360px, calc(100vw - 40px))';
-      }else if(where === 'bottom'){
-        box.style.left = '20px';
-        box.style.right = '20px';
-        box.style.top = 'auto';
-        box.style.bottom = '72px';
-        box.style.transform = 'none';
-        box.style.width = 'min(360px, calc(100vw - 40px))';
-      }else if(where === 'top'){
-        box.style.left = '20px';
-        box.style.right = '20px';
-        box.style.top = '124px';
-        box.style.bottom = 'auto';
-        box.style.transform = 'none';
-        box.style.width = 'min(360px, calc(100vw - 40px))';
-      }
+      if(where === 'center-left'){ box.style.left = '20px'; box.style.right = 'auto'; box.style.top = '50%'; box.style.bottom = 'auto'; box.style.transform = 'translateY(-50%)'; box.style.width = 'min(360px, calc(100vw - 40px))'; }
+      else if(where === 'bottom'){ box.style.left = '20px'; box.style.right = '20px'; box.style.top = 'auto'; box.style.bottom = '72px'; box.style.transform = 'none'; box.style.width = 'min(360px, calc(100vw - 40px))'; }
+      else if(where === 'top'){ box.style.left = '20px'; box.style.right = '20px'; box.style.top = '124px'; box.style.bottom = 'auto'; box.style.transform = 'none'; box.style.width = 'min(360px, calc(100vw - 40px))'; }
     }
-
-    function getLensFocusRect(){
-      const r = mv.getBoundingClientRect();
-      const size = Math.min(r.width * 0.70, r.height * 0.70, window.innerWidth - 40);
-      const left = (window.innerWidth - size) / 2;
-      const top = (window.innerHeight - size) / 2 - 12;
-      return { left, top, width:size, height:size };
-    }
-
-    function getBottomFocusRect(){
-      const r = document.getElementById('bottomBtns').getBoundingClientRect();
-      return {
-        left:r.left,
-        top:r.top,
-        width:r.width,
-        height:r.height
-      };
-    }
-
-    function getTopCardFocusRect(){
-      const r = document.getElementById('missionBar').getBoundingClientRect();
-      return {
-        left:r.left,
-        top:r.top,
-        width:r.width,
-        height:r.height
-      };
-    }
-
+    function getLensFocusRect(){ const r = mv.getBoundingClientRect(); const size = Math.min(r.width * 0.70, r.height * 0.70, window.innerWidth - 40); const left = (window.innerWidth - size) / 2; const top = (window.innerHeight - size) / 2 - 12; return { left, top, width:size, height:size }; }
+    function getBottomFocusRect(){ const r = document.getElementById('bottomBtns').getBoundingClientRect(); return { left:r.left, top:r.top, width:r.width, height:r.height }; }
+    function getTopCardFocusRect(){ const r = document.getElementById('missionBar').getBoundingClientRect(); return { left:r.left, top:r.top, width:r.width, height:r.height }; }
     function showTut(step){
-      tutorialLayer.classList.add('show');
-      tutorialLayer.setAttribute('aria-hidden','false');
-
-      tutLeft.style.display = 'none';
-      tutBottom.style.display = 'none';
-      tutTop.style.display = 'none';
-
-      if(step === 1){
-        const rect = getLensFocusRect();
-        applyTutorialHole(rect, Math.round(rect.width / 2));
-        tutLeft.style.display = 'block';
-        positionTutorialBox(tutLeft, 'center-left');
-      }
-
-      if(step === 2){
-        const rect = getBottomFocusRect();
-        applyTutorialHole(rect, 22);
-        tutBottom.style.display = 'block';
-        positionTutorialBox(tutBottom, 'bottom');
-      }
-
-      if(step === 3){
-        const rect = getTopCardFocusRect();
-        applyTutorialHole(rect, 20);
-        tutTop.style.display = 'block';
-        positionTutorialBox(tutTop, 'top');
-      }
+      tutorialLayer.classList.add('show'); tutorialLayer.setAttribute('aria-hidden','false'); tutLeft.style.display = 'none'; tutBottom.style.display = 'none'; tutTop.style.display = 'none';
+      if(step === 1){ const rect = getLensFocusRect(); applyTutorialHole(rect, Math.round(rect.width / 2)); tutLeft.style.display = 'block'; positionTutorialBox(tutLeft, 'center-left'); }
+      if(step === 2){ const rect = getBottomFocusRect(); applyTutorialHole(rect, 22); tutBottom.style.display = 'block'; positionTutorialBox(tutBottom, 'bottom'); }
+      if(step === 3){ const rect = getTopCardFocusRect(); applyTutorialHole(rect, 20); tutTop.style.display = 'block'; positionTutorialBox(tutTop, 'top'); }
     }
-
     function hideTut(){
-      tutorialLayer.classList.remove('show');
-      tutorialLayer.setAttribute('aria-hidden','true');
-      tutLeft.style.display = 'none';
-      tutBottom.style.display = 'none';
-      tutTop.style.display = 'none';
-      tutorialFocus.style.display = 'none';
-      if(tutorialMask) tutorialMask.style.display = 'block';
+      tutorialLayer.classList.remove('show'); tutorialLayer.setAttribute('aria-hidden','true'); tutLeft.style.display = 'none'; tutBottom.style.display = 'none'; tutTop.style.display = 'none'; tutorialFocus.style.display = 'none'; if(tutorialMask) tutorialMask.style.display = 'block';
     }
-
     document.getElementById('tutNext1')?.addEventListener('click', ()=>showTut(2));
     document.getElementById('tutNext2')?.addEventListener('click', ()=>showTut(3));
-    document.getElementById('tutDone')?.addEventListener('click', ()=>{
-      hideTut();
-      sessionStorage.setItem('asd_tutorial_done','1');
-    });
-
-    window.addEventListener('load', ()=>{
-      // showTut(1);
-    });
-
+    document.getElementById('tutDone')?.addEventListener('click', ()=>{ hideTut(); sessionStorage.setItem('asd_tutorial_done','1'); });
+    window.addEventListener('load', ()=>{});
     window.addEventListener('resize', ()=>{
       if(!tutorialLayer.classList.contains('show')) return;
       if(tutLeft.style.display === 'block') showTut(1);
       else if(tutBottom.style.display === 'block') showTut(2);
       else if(tutTop.style.display === 'block') showTut(3);
-      syncPackshot();
-      positionComfortInteractiveElements(0);
+      syncPackshot(); positionComfortInteractiveElements(0);
     });
   </script>
-
-
 </body>
 </html>
