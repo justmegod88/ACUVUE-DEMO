@@ -1090,9 +1090,15 @@
 
     .cf-guide-line{
       position:absolute; height:0; border-top:3px dashed; z-index:5; transform-origin:left center;
-      transition:none;
+
       pointer-events:none; opacity:0;
     }
+    #cfLineBlue{
+      transition:none  !important;
+    }
+    #cfLineRed{
+      transition:Left .35s ease, top .35s ease, width .35s ease, transform .35s ease, opacity .25s ease;
+    }  
     .cf-guide-line.red{ border-color:#e02020; }
     .cf-guide-line.blue{ border-color:#176fd6; }
     #comfortScene.mode-default .cf-guide-line{ opacity:0; }
