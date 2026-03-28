@@ -1478,55 +1478,108 @@
 
     function positionComfortInteractiveElements(redFloatOffset = 0){
       if(!comfortScene || !comfortOverlay.classList.contains('show')) return;
+
       const rect = comfortScene.getBoundingClientRect();
       const w = rect.width, h = rect.height;
       const mobile = w <= 560, tablet = w <= 820 && w > 560;
+
       const eyeLeft = { x: w * 0.552, y: h * 0.408 };
       const eyeRight = { x: w * 0.811, y: h * 0.410 };
+
       const cardW = mobile ? 82 : (tablet ? 104 : 118);
       const cardH = mobile ? 126 : (tablet ? 158 : 176);
       const modeOn = comfortScene.classList.contains('mode-on');
       const modeOff = comfortScene.classList.contains('mode-off');
+
       const baseCardCx = w * 0.225;
       const baseCardCy = (eyeLeft.y + eyeRight.y) / 2 + 4;
+
       const cardCx = baseCardCx;
       const offCardYOffset = mobile ? 12 : 14;
       const cardCy = modeOff ? (baseCardCy + offCardYOffset) : baseCardCy;
-      const redCardCenterY = baseCardCy - 14 + redFloatOffset;
-      const blueCardCenterY = baseCardCy + 14;
 
-      cfTargetStage.style.width = cardW + 'px'; cfTargetStage.style.height = cardH + 'px'; cfSetCenterPercent(cfTargetStage, cardCx, cardCy, rect);
+      const redCardCenterY = baseCardCy - 20 + redFloatOffset;
+      const blueCardCenterY = baseCardCy + 20;
+
+      cfTargetStage.style.width = cardW + 'px';
+      cfTargetStage.style.height = cardH + 'px';
+      cfSetCenterPercent(cfTargetStage, cardCx, cardCy, rect);
+
       if(modeOn){
-        if(cfBoxTop) cfBoxTop.style.top = '-20px'; if(cfBoxBottom) cfBoxBottom.style.top = '20px';
-        if(cfARed){ cfARed.style.top = '50%'; cfARed.style.left = '50%'; } if(cfABlue){ cfABlue.style.top = '50%'; cfABlue.style.left = '50%'; }
+        if(cfBoxTop) cfBoxTop.style.top = '-20px';
+        if(cfBoxBottom) cfBoxBottom.style.top = '20px';
+
+        if(cfARed){
+          cfARed.style.top = '50%';
+          cfARed.style.left = '50%';
+        }
+        if(cfABlue){
+          cfABlue.style.top = '50%';
+          cfABlue.style.left = '50%';
+        }
       }else if(modeOff){
-        if(cfBoxTop) cfBoxTop.style.top = '0px'; if(cfBoxBottom) cfBoxBottom.style.top = '0px';
-        if(cfARed){ cfARed.style.top = '50%'; cfARed.style.left = '50%'; } if(cfABlue){ cfABlue.style.top = '50%'; cfABlue.style.left = '50%'; }
+        if(cfBoxTop) cfBoxTop.style.top = '0px';
+        if(cfBoxBottom) cfBoxBottom.style.top = '0px';
+
+        if(cfARed){
+          cfARed.style.top = '50%';
+          cfARed.style.left = '50%';
+        }
+        if(cfABlue){
+          cfABlue.style.top = '50%';
+          cfABlue.style.left = '50%';
+        }
       }
 
       const opticW = mobile ? 38 : (tablet ? 48 : 58);
       const opticH = mobile ? 76 : (tablet ? 98 : 118);
       const opticCx = eyeLeft.x + (mobile ? -1 : -2);
       const opticCy = eyeLeft.y - 20;
-      cfOptic.style.width = opticW + 'px'; cfOptic.style.height = opticH + 'px'; cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
+
+      cfOptic.style.width = opticW + 'px';
+      cfOptic.style.height = opticH + 'px';
+      cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
+
       const cardRightCenterX = cardCx + cardW * 0.50;
 
       if(modeOn){
-        cfLineRed.style.opacity = '1'; cfLineBlue.style.opacity = '1';
-        const blueStartX = eyeRight.x, blueStartY = eyeRight.y, blueEndX = baseCardCx + cardW * 0.50, blueEndY = blueCardCenterY;
-        const redStartX = eyeLeft.x, redStartY = eyeLeft.y, redEndX = cardRightCenterX, redEndY = redCardCenterY;
+        cfLineRed.style.opacity = '1';
+        cfLineBlue.style.opacity = '1';
+
+        const blueStartX = eyeRight.x;
+        const blueStartY = eyeRight.y;
+        const blueEndX = baseCardCx + cardW * 0.50;
+        const blueEndY = blueCardCenterY;
+
+        const redStartX = eyeLeft.x;
+        const redStartY = eyeLeft.y;
+        const redEndX = cardRightCenterX;
+        const redEndY = redCardCenterY;
+
         cfPlaceLine(cfLineBlue, blueStartX, blueStartY, blueEndX, blueEndY, rect);
-        const baseRedEndX = cardRightCenterX, baseRedEndY = baseCardCy - 14;
-        const fixedDx = baseRedEndX - redStartX, fixedDy = baseRedEndY - redStartY, fixedAngle = Math.atan2(fixedDy, fixedDx) * 180 / Math.PI;
-        const liveDx = redEndX - redStartX, liveDy = redEndY - redStartY, liveLength = Math.sqrt(liveDx * liveDx + liveDy * liveDy);
-        cfLineRed.style.left = (redStartX / rect.width * 100) + '%'; cfLineRed.style.top = (redStartY / rect.height * 100) + '%'; cfLineRed.style.width = liveLength + 'px'; cfLineRed.style.transform = `rotate(${fixedAngle}deg)`;
+
+        const fixedDx = redEndX - redStartX;
+        const fixedDy = redEndY - redStartY;
+        const fixedAngle = Math.atan2(fixedDy, fixedDx) * 180 / Math.PI;
+        const liveLength = Math.sqrt(fixedDx * fixedDx + fixedDy * fixedDy);
+
+        cfLineRed.style.left = (redStartX / rect.width * 100) + '%';
+        cfLineRed.style.top = (redStartY / rect.height * 100) + '%';
+        cfLineRed.style.width = liveLength + 'px';
+        cfLineRed.style.transform = `rotate(${fixedAngle}deg)`;
       }else if(modeOff){
-        cfLineRed.style.opacity = '1'; cfLineBlue.style.opacity = '1';
-        const offAttachY = cardCy, redCardAttachY = offAttachY - (mobile ? 3 : 4), blueCardAttachY = offAttachY;
+        cfLineRed.style.opacity = '1';
+        cfLineBlue.style.opacity = '1';
+
+        const offAttachY = cardCy;
+        const redCardAttachY = offAttachY - (mobile ? 3 : 4);
+        const blueCardAttachY = offAttachY;
+
         cfPlaceLine(cfLineRed, cardRightCenterX, redCardAttachY, eyeLeft.x - (mobile ? 2 : 4), eyeLeft.y, rect);
         cfPlaceLine(cfLineBlue, cardRightCenterX, blueCardAttachY, eyeRight.x - (mobile ? 10 : 12), eyeRight.y, rect);
       }else{
-        cfLineRed.style.opacity = '0'; cfLineBlue.style.opacity = '0';
+        cfLineRed.style.opacity = '0';
+        cfLineBlue.style.opacity = '0';
       }
     }
 
