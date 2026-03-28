@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <title>ACUVUE GLB Viewer (흰색/ 블루)</title>
+  <title>ACUVUE ASTIG</title>
 
   <style>
     :root{
@@ -44,7 +44,7 @@
       z-index:1;
     }
 
-    /* 상단 미션 카드 */
+    /* ìë¨ ë¯¸ì ì¹´ë */
     #missionBarWrap{
       position:fixed;
       left:12px;
@@ -120,7 +120,7 @@
     }
 
     .missionCard.done::after{
-      content:"완료";
+      content:"ìë£";
       position:absolute;
       right:10px;
       top:10px;
@@ -177,12 +177,12 @@
       }
     }
 
-    /* 하단 버튼 */
+    /* íë¨ ë²í¼ */
     #bottomBtns{
       position:fixed;
       left:12px;
       right:12px;
-      bottom:12px;
+      bottom:calc(env(safe-area-inset-bottom, 0px) + 34px);
       z-index:50;
       display:flex;
       gap:8px;
@@ -209,7 +209,7 @@
       color:#ffffff;
     }
 
-    /* 작은 원형 ↺ 버튼 */
+    /* ìì ìí âº ë²í¼ */
     #btnReset{
       width:46px;
       height:46px;
@@ -229,11 +229,11 @@
       box-shadow: 0 10px 28px rgba(11,31,51,.10);
     }
 
-    /* ✅ 우측 하단 팩샷 */
+    /* â ì°ì¸¡ íë¨ í©ì· */
     #maxPackshot{
       position:fixed;
       right:18px;
-      bottom:72px; /* 조금 더 아래 */
+      bottom:90px; /* ì¡°ê¸ ë ìë */
       width:150px;
       max-width:34vw;
       height:auto;
@@ -242,11 +242,55 @@
       user-select:none;
       display:none;
       object-fit:contain;
-      mix-blend-mode:multiply; /* 흰 배경이 있으면 최대한 자연스럽게 */
+      mix-blend-mode:multiply; /* í° ë°°ê²½ì´ ìì¼ë©´ ìµëí ìì°ì¤ë½ê² */
       filter: drop-shadow(0 10px 18px rgba(11,31,51,.12));
       transform: translateZ(0);
     }
 
+
+
+    /* ëì íì´ì§ ê³µíµ ëì¤í´ë ì´ë¨¸ */
+    #globalToricDisclaimer{
+      position:fixed;
+      left:12px;
+      right:12px;
+      bottom:calc(env(safe-area-inset-bottom, 0px) + 8px);
+      z-index:49;
+      text-align:center;
+      font-size:9px;
+      line-height:1.30;
+      color:rgba(72,80,92,.88);
+      font-weight:500;
+      letter-spacing:-.08px;
+      pointer-events:none;
+      text-shadow:0 1px 0 rgba(255,255,255,.55);
+    }
+    @media (max-width:560px){
+      #globalToricDisclaimer{
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 6px);
+        font-size:8.2px;
+        line-height:1.26;
+      }
+    }
+
+    .toric-popup-disclaimer{
+      padding:9px 16px 11px;
+      font-size:9.4px;
+      line-height:1.36;
+      color:rgba(72,80,92,.90);
+      background:#fff;
+    }
+    .toric-popup-disclaimer .disc-note{
+      display:block;
+      margin-bottom:4px;
+      font-weight:500;
+    }
+    .toric-popup-disclaimer .disc-ref{
+      display:block;
+      font-weight:500;
+      color:rgba(72,80,92,.92);
+    }
+    .toric-popup-disclaimer em{ font-style:italic; }
     /* PVP */
     @keyframes pvpPop {
       0%   { transform: translate(-50%,-50%) scale(.94); opacity: 0; }
@@ -348,7 +392,7 @@
     }
     #pvpConfirm:active{ transform:scale(.98); }
 
-    /* 두께 바 */
+    /* ëê» ë° */
     #thicknessBar{
       position:fixed;
       left:12px;
@@ -468,7 +512,7 @@
 
     #thHint{ display:none; }
 
-    /* ASD 오버레이 */
+    /* ASD ì¤ë²ë ì´ */
     #asdOverlay{
       position:fixed;
       inset:0;
@@ -757,7 +801,7 @@
       box-shadow: 0 10px 22px rgba(11,31,51,.10);
     }
 
-    /* 튜토리얼 */
+    /* íí ë¦¬ì¼ */
     #tutorialLayer{
       position:fixed;
       inset:0;
@@ -852,7 +896,7 @@
     #tutTop{ left:20px; right:20px; top:126px; display:none; }
   
 
-    /* ASD 편안한 시야 오버레이 */
+    /* ASD í¸ìí ìì¼ ì¤ë²ë ì´ */
     #comfortOverlay{
       position:fixed;
       inset:0;
@@ -961,6 +1005,26 @@
     .cf-a-red{ color:#e02020; }
     .cf-a-blue{ color:#176fd6; }
 
+    .cf-target-box::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:inherit;
+      background:linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0));
+      pointer-events:none;
+    }
+    #cfTargetStage,
+    .cf-target-box,
+    .cf-target-a,
+    #cfOptic{
+      transform-style:preserve-3d;
+    }
+    #comfortScene.mode-off #cfTargetStage{ transform:translate(-50%,-50%) rotate(0deg); }
+    #comfortScene.mode-on #cfTargetStage{ transform:translate(-50%,-50%) rotate(0deg); }
+    #comfortScene.mode-default #cfTargetStage{ transform:translate(-50%,-50%) rotate(0deg); }
+    #comfortScene.mode-on .cf-optic-prism{ transform:rotate(0deg); }
+    #comfortScene.mode-off .cf-optic-flat{ transform:rotate(0deg); }
+
     #comfortScene.mode-default .cf-box-top,
     #comfortScene.mode-default .cf-box-bottom{ top:0; opacity:.92; transform:translateX(-50%); }
     #comfortScene.mode-default .cf-box-top{ background:rgba(245,222,232,.24); }
@@ -975,10 +1039,10 @@
     #comfortScene.mode-off .cf-a-red{ top:50%; opacity:.30; transform:translate(-50%,-50%); animation:none; color:#b44dc9; }
     #comfortScene.mode-off .cf-a-blue{ top:50%; opacity:.92; transform:translate(-50%,-50%); color:#8b2da0; animation:none; }
 
-    #comfortScene.mode-on .cf-box-top{ top:-18px; opacity:.96; background:rgba(251,221,231,.42); animation:cfPinkFloat 1.45s ease-in-out infinite; }
-    #comfortScene.mode-on .cf-box-bottom{ top:0; opacity:.88; background:rgba(219,234,255,.28); transform:translateX(-50%); }
-    #comfortScene.mode-on .cf-a-red{ top:27%; opacity:1; transform:translate(-50%,-50%); color:#e02020; animation:cfRedFloat 1.45s ease-in-out infinite; }
-    #comfortScene.mode-on .cf-a-blue{ top:50%; opacity:1; transform:translate(-50%,-50%); color:#176fd6; }
+    #comfortScene.mode-on .cf-box-top{ top:-14px; opacity:.96; background:rgba(251,221,231,.42); animation:cfPinkFloat 1.45s ease-in-out infinite; }
+    #comfortScene.mode-on .cf-box-bottom{ top:14px; opacity:.82; background:rgba(219,234,255,.28); transform:translateX(-50%); }
+    #comfortScene.mode-on .cf-a-red{ top:33%; opacity:1; transform:translate(-50%,-50%); color:#e02020; animation:cfRedFloat 1.45s ease-in-out infinite; }
+    #comfortScene.mode-on .cf-a-blue{ top:69%; opacity:1; transform:translate(-50%,-50%); color:#176fd6; }
 
     @keyframes cfRedFloat{
       0%{ transform:translate(-50%,-50%) translateY(0); }
@@ -1021,15 +1085,11 @@
       width:0; height:0; border-left:24px solid transparent; border-right:24px solid transparent; border-bottom:82px solid rgba(214,238,255,.30);
     }
     .cf-optic-flat::before{
-      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-      width:34px; height:92px; border-radius:4px;
-      background:linear-gradient(180deg, rgba(255,255,255,.60), rgba(226,236,246,.42));
-      border:1px solid rgba(255,255,255,.72);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.25), 0 4px 10px rgba(0,0,0,.08);
+      display:none;
     }
 
     .cf-guide-line{
-      position:absolute; height:0; border-top:6px dashed; z-index:5; transform-origin:left center;
+      position:absolute; height:0; border-top:3px dashed; z-index:5; transform-origin:left center;
       transition:left .35s ease, top .35s ease, width .35s ease, transform .35s ease, opacity .25s ease;
       pointer-events:none; opacity:0;
     }
@@ -1043,16 +1103,16 @@
       position:absolute; left:50%; bottom:16px; transform:translateX(-50%); width:min(94%, 760px); z-index:10;
       padding:0; border-radius:0; background:transparent;
       border:none; box-shadow:none;
-      display:grid; grid-template-columns: 1fr 1.35fr 1.1fr; gap:8px; align-items:center;
+      display:grid; grid-template-columns:1fr 1fr; gap:8px; align-items:center;
     }
     .cf-seg-btn{
-      height:66px; border-radius:999px; border:2px solid #8eb5de; background:#ffffff;
-      color:#143a63; font-size:22px; font-weight:900; letter-spacing:-.4px; cursor:pointer; transition:all .18s ease;
-      box-shadow:none; padding:0 12px; white-space:nowrap; -webkit-appearance:none; appearance:none;
+      height:66px; border-radius:999px; border:1.5px solid rgba(110,162,218,.72); background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%);
+      color:#627588; font-size:21px; font-weight:800; letter-spacing:-.35px; cursor:pointer; transition:all .18s ease;
+      box-shadow:0 8px 18px rgba(17,104,208,.08), inset 0 1px 0 rgba(255,255,255,.96); padding:0 18px; white-space:nowrap; -webkit-appearance:none; appearance:none;
     }
-    .cf-seg-btn.active{ background:#eaf4ff; color:#0f4f8f; border-color:#8eb5de; box-shadow:none; }
-    .cf-seg-btn.default-active{ background:#eaf4ff; color:#0f4f8f; border-color:#8eb5de; box-shadow:none; }
-    .cf-seg-btn:not(.active):not(.default-active){ color:#4f6781; }
+    .cf-seg-btn.active{ background:linear-gradient(180deg,#eef7ff 0%,#dceeff 100%); color:#0f4f8f; border-color:#7fb1e6; box-shadow:0 10px 22px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98); }
+    .cf-seg-btn.default-active{ background:linear-gradient(180deg,#eef7ff 0%,#dceeff 100%); color:#0f4f8f; border-color:#7fb1e6; box-shadow:0 10px 22px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98); }
+    .cf-seg-btn:not(.active):not(.default-active){ color:#627588; }
     .cf-seg-btn:not(.active):active{ transform:scale(.985); }
 
     #comfortMessage{
@@ -1092,15 +1152,15 @@
       #comfortScene{ height:320px; min-height:320px; }
       #cfTargetStage{ width:82px; height:126px; }
       .cf-target-box{ border-radius:16px; }
-      #comfortScene.mode-on .cf-box-top{ top:-14px; }
-      #comfortScene.mode-on .cf-box-bottom{ top:0; }
+      #comfortScene.mode-on .cf-box-top{ top:-10px; }
+      #comfortScene.mode-on .cf-box-bottom{ top:10px; }
       .cf-target-a{ font-size:72px; letter-spacing:-4px; }
       #cfOptic{ width:38px; height:76px; }
       .cf-optic-prism::before{ border-left-width:20px; border-right-width:20px; border-bottom-width:62px; }
       .cf-optic-prism::after{ border-left-width:16px; border-right-width:16px; border-bottom-width:50px; }
       .cf-optic-flat::before{ width:24px; height:64px; }
       .cf-guide-line{ border-top-width:5px; }
-      #cfSegWrap{ width:min(94%, 520px); bottom:10px; padding:0; gap:5px; border:none; background:transparent; box-shadow:none; grid-template-columns: 1fr 1.35fr 1.05fr; }
+      #cfSegWrap{ width:min(94%, 520px); bottom:10px; padding:0; gap:5px; border:none; background:transparent; box-shadow:none; grid-template-columns:1fr 1fr; }
       .cf-seg-btn{ height:48px; font-size:12px; border-width:2px; padding:0 6px; }
       #comfortMessage{ padding:18px 14px 18px; gap:12px; }
       #comfortMessageCopy{ font-size:17px; line-height:1.38; }
@@ -1108,7 +1168,7 @@
     }
 
 
-    /* 맥스 팩샷 블루라이트 체험 */
+    /* ë§¥ì¤ í©ì· ë¸ë£¨ë¼ì´í¸ ì²´í */
     #maxPackshot{
       pointer-events:auto;
       cursor:pointer;
@@ -1339,33 +1399,8 @@
     #blueLightOverlay.show{
       display:flex !important;
     }
-    #blueLightOverlay::before{
-      content:"";
-      position:absolute;
-      right:28px;
-      bottom:-6px;
-      width:26px;
-      height:16px;
-      background:linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(246,250,255,.98) 100%);
-      border-bottom-left-radius:14px 10px;
-      border-bottom-right-radius:14px 10px;
-      z-index:0;
-    }
-    #blueLightOverlay::after{
-      content:"";
-      position:absolute;
-      right:35px;
-      bottom:-7px;
-      width:14px;
-      height:14px;
-      background:linear-gradient(135deg, rgba(255,255,255,.99) 0%, rgba(246,250,255,.99) 100%);
-      border-right:1px solid rgba(0,94,184,.16);
-      border-bottom:1px solid rgba(0,94,184,.16);
-      transform:rotate(45deg);
-      border-radius:0 0 4px 0;
-      z-index:1;
-      top:auto !important;
-    }
+    #blueLightOverlay::before{ display:none !important; }
+    #blueLightOverlay::after{ display:none !important; }
 
     @media (max-width:560px){
       #blueLightOverlay{
@@ -1384,49 +1419,208 @@
     }
 
 
-
-/* ===== requested precise fixes ===== */
-#blueLightOverlay{
-  right:18px !important;
-  bottom:100px !important;
-  left:auto !important;
-  align-items:flex-start !important;
-  padding:16px 132px 16px 16px !important;
-  min-height:94px !important;
+#comfortScene.mode-on #cfTargetStage{
+  animation:floatRedCard 2.2s ease-in-out infinite;
 }
+#comfortScene.mode-on #cfLineRed{
+  animation:floatRedLine 2.2s ease-in-out infinite;
+}
+#comfortScene.mode-on #cfLineBlue{
+  animation:none !important;
+}
+@keyframes floatRedCard{
+  0%{ transform:translate(-50%,-50%) translateY(0); }
+  50%{ transform:translate(-50%,-50%) translateY(-6px); }
+  100%{ transform:translate(-50%,-50%) translateY(0); }
+}
+@keyframes floatRedLine{
+  0%{ margin-top:0; }
+  50%{ margin-top:-6px; }
+  100%{ margin-top:0; }
+}
+
+
+    #blueLightOverlay{
+      overflow:visible !important;
+      padding-right:136px !important;
+      min-height:96px;
+    }
+    #blueLightOverlay #overlayPackshot{
+      position:absolute;
+      right:14px;
+      bottom:8px;
+      width:120px;
+      max-width:30vw;
+      height:auto;
+      object-fit:contain;
+      z-index:5;
+      pointer-events:none;
+      user-select:none;
+      display:none;
+      mix-blend-mode:multiply;
+      filter:drop-shadow(0 8px 16px rgba(11,31,51,.12));
+    }
+    #blueLightOverlay.show #overlayPackshot{
+      display:block;
+    }
+    @media (max-width:560px){
+      #blueLightOverlay{
+        padding-right:118px !important;
+        min-height:88px;
+      }
+      #blueLightOverlay #overlayPackshot{
+        right:10px;
+        bottom:8px;
+        width:104px;
+        max-width:27vw;
+      }
+    }
+
+
+/* ===== premium blue-light overlay refinement ===== */
+#blueLightOverlay{
+  display:none !important;
+  align-items:stretch !important;
+  gap:14px !important;
+  padding:18px 18px !important;
+  border-radius:24px !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(248,251,255,.98) 100%) !important;
+  border:1px solid rgba(0,94,184,.16) !important;
+  box-shadow:
+    0 24px 56px rgba(0,94,184,.10),
+    0 18px 60px rgba(11,31,51,.14),
+    inset 0 1px 0 rgba(255,255,255,.9) !important;
+  overflow:hidden !important;
+}
+#blueLightOverlay.show{
+  display:flex !important;
+}
+#blueLightOverlay::before,
+#blueLightOverlay::after{
+  display:none !important;
+}
+#blueLightOverlay::selection{
+  background:rgba(0,94,184,.10);
+}
+
+#blueLightIcon{
+  width:58px !important;
+  height:58px !important;
+  align-self:flex-start !important;
+  margin-top:2px;
+  border:1px solid rgba(255,255,255,.55);
+  background:
+    radial-gradient(circle at 30% 30%, rgba(168,245,255,.98), rgba(74,206,255,.95) 58%, rgba(36,175,232,.92) 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.65),
+    0 12px 26px rgba(0,94,184,.16) !important;
+  font-size:24px !important;
+}
+
+#blueLightBody{
+  flex:1 1 auto;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:10px;
+}
+
+#blueLightTitle{
+  margin:0 0 2px 0 !important;
+  color:#0b1f33 !important;
+  font-size:17px !important;
+  line-height:1.15 !important;
+  font-weight:900 !important;
+  letter-spacing:-.35px !important;
+}
+
+#blueLightHint{
+  margin:0 !important;
+  color:#35506b !important;
+  font-size:12.8px !important;
+  line-height:1.48 !important;
+  letter-spacing:-.15px;
+  max-width:unset !important;
+}
+
+#blueLightBottomRow{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:2px;
+}
+
+#blueLightConfirm{
+  flex:0 0 auto !important;
+  min-width:88px;
+  height:48px;
+  padding:0 18px !important;
+  border-radius:999px !important;
+  border:1px solid rgba(0,94,184,.62) !important;
+  background:linear-gradient(180deg, #1775df 0%, #0f62c5 100%) !important;
+  color:#fff !important;
+  font-size:14px !important;
+  font-weight:900 !important;
+  letter-spacing:-.2px;
+  box-shadow:
+    0 12px 24px rgba(17,104,208,.20),
+    inset 0 1px 0 rgba(255,255,255,.24) !important;
+}
+
 #blueLightOverlay #overlayPackshot{
-  position:absolute !important;
-  top:12px !important;
-  right:12px !important;
-  bottom:auto !important;
-  width:112px !important;
-  max-width:28vw !important;
-  height:auto !important;
+  position:static !important;
   display:block !important;
+  width:126px !important;
+  max-width:34vw !important;
+  height:auto !important;
+  object-fit:contain !important;
+  flex:0 0 auto;
   pointer-events:none !important;
   user-select:none !important;
-  object-fit:contain !important;
   mix-blend-mode:multiply;
-  filter:drop-shadow(0 8px 16px rgba(11,31,51,.12)) !important;
+  filter:drop-shadow(0 10px 18px rgba(11,31,51,.12)) !important;
+  transform:translateY(2px);
 }
-#blueLightConfirm{
-  align-self:flex-end !important;
-  margin-top:10px !important;
-}
+
 @media (max-width:560px){
   #blueLightOverlay{
     left:12px !important;
     right:12px !important;
-    bottom:98px !important;
     width:auto !important;
-    padding:14px 116px 14px 14px !important;
-    min-height:88px !important;
+    bottom:118px !important;
+    gap:12px !important;
+    padding:16px 16px !important;
+    border-radius:22px !important;
+  }
+  #blueLightIcon{
+    width:52px !important;
+    height:52px !important;
+    font-size:22px !important;
+  }
+  #blueLightTitle{
+    font-size:15px !important;
+  }
+  #blueLightHint{
+    font-size:12px !important;
+    line-height:1.42 !important;
+  }
+  #blueLightBottomRow{
+    gap:10px;
+    margin-top:0;
+  }
+  #blueLightConfirm{
+    min-width:78px;
+    height:44px;
+    padding:0 16px !important;
+    font-size:13px !important;
   }
   #blueLightOverlay #overlayPackshot{
-    top:10px !important;
-    right:10px !important;
-    width:96px !important;
-    max-width:25vw !important;
+    width:110px !important;
+    max-width:30vw !important;
+    transform:translateY(1px);
   }
 }
 
@@ -1435,33 +1629,33 @@
 
 <body>
   <div id="missionBarWrap">
-    <div id="missionBarHeader">아큐브® 난시 렌즈 기술</div>
+    <div id="missionBarHeader">ìíë¸Â® ëì ë ì¦ ê¸°ì </div>
     <div id="missionBar">
     <div id="missionASD" class="missionCard" role="button" tabindex="0">
       <div class="missionNo">01</div>
-      <div class="missionTitle">ASD™ 축안정화</div>
-      <div class="missionDesc"> 자세히 보기 > </div>
+      <div class="missionTitle">ASDâ¢ ì¶ìì í</div>
+      <div class="missionDesc"> ìì¸í ë³´ê¸° > </div>
     </div>
     <div id="missionPVP" class="missionCard" role="button" tabindex="0">
       <div class="missionNo">02</div>
-      <div class="missionTitle">PVP 습윤 인자</div>
-      <div class="missionDesc"> 자세히 보기 ></div>
+      <div class="missionTitle">PVP ìµì¤ ì¸ì</div>
+      <div class="missionDesc"> ìì¸í ë³´ê¸° ></div>
     </div>
     <div id="missionComfort" class="missionCard" role="button" tabindex="0">
       <div class="missionNo">03</div>
-      <div class="missionTitle">프리즘이 적은 광학부</div>
-      <div class="missionDesc">  자세히 보기 > </div>
+      <div class="missionTitle">íë¦¬ì¦ì´ ì ì ê´íë¶</div>
+      <div class="missionDesc">  ìì¸í ë³´ê¸° > </div>
     </div>
     </div>
   </div>
 
   <div id="thicknessBar" aria-hidden="true">
     <div id="thHeader">
-      <div id="thTitle">두께</div>
+      <div id="thTitle">ëê»</div>
       <div id="thUnit">mm</div>
     </div>
     <div id="gradRow">
-      <div class="tickLabel">얇음_0.0</div>
+      <div class="tickLabel">ìì_0.0</div>
       <div id="gradWrap">
         <div id="grad"></div>
         <div id="gradShine"></div>
@@ -1471,7 +1665,7 @@
         <div class="mark m75"><strong>0.3</strong></div>
         <div class="mark m100"><strong>0.4</strong></div>
       </div>
-      <div class="tickLabel" style="text-align:left;width:46px;">0.4_두껍</div>
+      <div class="tickLabel" style="text-align:left;width:46px;">0.4_ëê»</div>
     </div>
     <div id="thHint"></div>
   </div>
@@ -1483,16 +1677,16 @@
   <div id="pvpOverlay">
     <img id="pvpThumb" src="PVP.png" alt="PVP" onerror="this.onerror=null; this.src='PVP.jpeg';">
     <div id="pvpText">
-      <div id="pvpTitle">PVP 습윤 인자</div>
-      <div id="hint">렌즈 내 PVP 습윤인자가 수분을 저녁까지 유지하여 촉촉함과 선명함 제공합니다.</div>
+      <div id="pvpTitle">PVP ìµì¤ ì¸ì</div>
+      <div id="hint">ë ì¦ ë´ PVP ìµì¤ì¸ìê° ìë¶ì ì ëê¹ì§ ì ì§íì¬ ì´ì´í¨ê³¼ ì ëªí¨ ì ê³µí©ëë¤.</div>
     </div>
-    <div id="pvpConfirm" role="button" tabindex="0">확인</div>
+    <div id="pvpConfirm" role="button" tabindex="0">íì¸</div>
   </div>
 
   <div id="asdOverlay" aria-hidden="true">
     <div id="asdCard">
       <div id="asdHeader">
-        <div id="asdHeaderTitle">ASD™ 축안정화</div>
+        <div id="asdHeaderTitle">ASDâ¢ ì¶ìì í</div>
         <button id="asdClose" type="button">X</button>
       </div>
 
@@ -1500,7 +1694,7 @@
         <img id="asdEyeMV" src="a.png" alt="Eye background" onerror="this.onerror=null; this.src='a.gif';">
         <div id="asdLensRim"></div>
         <img id="asdLensImg" src="lens.png" alt="Lens overlay"
-             onerror="this.style.display='none'; document.getElementById('asdHint').textContent='lens.png / lens2.png 파일을 같은 폴더에 넣어주세요.';">
+             onerror="this.style.display='none'; document.getElementById('asdHint').textContent='lens.png / lens2.png íì¼ì ê°ì í´ëì ë£ì´ì£¼ì¸ì.';">
         <div id="asdMaskShade"></div>
         <img id="asdUpperLid" src="upper_lid.png" alt="Upper eyelid overlay" onerror="this.style.display='none';">
 
@@ -1509,16 +1703,19 @@
           <div id="asdLidBot"></div>
         </div>
 
-        <div id="asdAngleBadge">20°</div>
-        <button id="asdRotateBtn" type="button">축이탈</button>
-        <button id="asdBlinkBtn" type="button">깜박임</button>
+        <div id="asdAngleBadge">20Â°</div>
+        <button id="asdRotateBtn" type="button">ì¶ì´í</button>
+        <button id="asdBlinkBtn" type="button">ê¹ë°ì</button>
       </div>
 
       <div id="asdHint">
         <div class="hintText">
-          <span class="hintTitle">체험해보세요!</span>
-          <span class="hintBody"><span class="blue">‘깜박임’ 버튼</span>을 눌러 이탈된 축을 안정화 시켜 보세요.</span>
+          <span class="hintTitle"ëìë ì¦ë ì¶ì´ íì íë©´ ìì¼ê° íë ¤ì§ëë¤. </span>
+          <span class="hintBody"><span class="blue">âê¹ë°ìâ ë²í¼</span>ì ëë¬ íì ë ì¶ì ìì í ìì¼ ë³´ì¸ì.</span>
         </div>
+      </div>
+      <div class="toric-popup-disclaimer">
+        <span class="disc-note">í´ë¹ ì´ë¯¸ì§ë ì´í´ë¥¼ ëê¸° ìí ê°ì ì´ë¯¸ì§ ìëë¤. KR_2026_233</span>
       </div>
     </div>
   </div>
@@ -1526,11 +1723,11 @@
   <div id="comfortOverlay" aria-hidden="true">
     <div id="comfortWrap" onclick="event.stopPropagation()">
       <div id="comfortHead">
-        <div id="comfortTitle">프리즘이 적은 광학부</div>
+        <div id="comfortTitle">íë¦¬ì¦ì´ ì ì ê´íë¶</div>
         <button id="comfortClose" type="button">X</button>
       </div>
 
-      <div id="comfortScene" class="mode-default">
+      <div id="comfortScene" class="mode-off">
         <div id="cfTargetStage">
           <div class="cf-target-box cf-box-top"></div>
           <div class="cf-target-box cf-box-bottom"></div>
@@ -1547,18 +1744,21 @@
         </div>
 
         <div id="cfSegWrap">
-          <button id="cfBtnDefault" class="cf-seg-btn default-active" type="button">맨눈</button>
-          <button id="cfBtnOn" class="cf-seg-btn" type="button">단안 프리즘 영향</button>
-          <button id="cfBtnOff" class="cf-seg-btn" type="button">프리즘 없음</button>
+          <button id="cfBtnOff" class="cf-seg-btn active" type="button">íë¦¬ì¦ ìë ê²½ì°</button>
+          <button id="cfBtnOn" class="cf-seg-btn" type="button">íë¦¬ì¦ ìë ê²½ì°</button>
         </div>
       </div>
 
       <div id="comfortMessage">
         <div id="comfortMessageCopy">
-          프리즘이 단안 난시 소비자에게 미치는 영향을
-          <span class="blue">버튼을 통해 확인해 보세요</span>
+          ëì ë ì¦ ê´íë¶ì íë¦¬ì¦ì ë¨ì ëì ìë¹ììê² ì¤ìí©ëë¤.
+          <span class="blue">íë¦¬ì¦ì´ ì ì ê´íë¶ë ë³´ë¤ í¸ìí ìì¼ ì´í´ì ëìì´ ë©ëë¤.</span>
         </div>
-        <button id="comfortConfirm" type="button">확인</button>
+        <button id="comfortConfirm" type="button">íì¸</button>
+      </div>
+      <div class="toric-popup-disclaimer">
+        <span class="disc-note">í´ë¹ ì´ë¯¸ì§ë ì´í´ë¥¼ ëê¸° ìí ê°ì ì´ë¯¸ì§ ìëë¤. KR_2026_233</span>
+        <span class="disc-ref">Sulley A, Hawke R, Osborn Lorenz K, et al. Resultant vertical prism in toric soft contact lenses. <em>Cont Lens Anterior Eye.</em> 2015;38(4):253â257.</span>
       </div>
     </div>
   </div>
@@ -1568,34 +1768,36 @@
     <div id="tutorialFocus"></div>
 
     <div class="tutBox" id="tutLeft" style="display:none;">
-      <div class="tutTitle">가이드 1</div>
-      <div class="tutText">렌즈를 좌우로 드래그하여 움직여 보세요.<br>확대와 축소를 통해 렌즈 구조를 더 선명하게 확인할 수 있습니다.</div>
-      <button class="tutBtn" id="tutNext1">확인</button>
+      <div class="tutTitle">ê°ì´ë 1</div>
+      <div class="tutText">ë ì¦ë¥¼ ì¢ì°ë¡ ëëê·¸íì¬ ìì§ì¬ ë³´ì¸ì.<br>íëì ì¶ìë¥¼ íµí´ ë ì¦ êµ¬ì¡°ë¥¼ ë ì ëªíê² íì¸í  ì ììµëë¤.</div>
+      <button class="tutBtn" id="tutNext1">íì¸</button>
     </div>
 
     <div class="tutBox" id="tutBottom" style="display:none;">
-      <div class="tutTitle">가이드 2</div>
-      <div class="tutText">‘렌즈 두께 MAP’을 클릭하여<br>아큐브® 인피니티 엣지(가장 얇은 보라색 영역)을 확인해 보세요!</div>
-      <button class="tutBtn" id="tutNext2">확인</button>
+      <div class="tutTitle">ê°ì´ë 2</div>
+      <div class="tutText">âë ì¦ ëê» MAPâì í´ë¦­íì¬<br>ìíë¸Â® ì¸í¼ëí° ì£ì§(ê°ì¥ ìì ë³´ë¼ì ìì­)ì íì¸í´ ë³´ì¸ì!</div>
+      <button class="tutBtn" id="tutNext2">íì¸</button>
     </div>
 
     <div class="tutBox" id="tutTop" style="display:none;">
-      <div class="tutTitle">가이드 3</div>
-      <div class="tutText">각 카드를 눌러 체험을 진행해 보세요.<br></div>
-      <button class="tutBtn" id="tutDone">확인</button>
+      <div class="tutTitle">ê°ì´ë 3</div>
+      <div class="tutText">ê° ì¹´ëë¥¼ ëë¬ ì²´íì ì§íí´ ë³´ì¸ì.<br></div>
+      <button class="tutBtn" id="tutDone">íì¸</button>
     </div>
   </div>
 
   <div id="blueTintRays" aria-hidden="true" style="display:none !important;"></div>
 
   <div id="blueLightOverlay" aria-hidden="true">
-    <div id="blueLightIcon">✦</div>
-    <div id="blueLightText">
-      <div id="blueLightTitle">블루라이트 필터</div>
-      <div id="blueLightHint">블루-그린 틴트와 광선 효과를 통해 아큐브® MAX의 블루라이트 필터 체험을 확인해 보세요.</div>
+    <div id="blueLightIcon">â¦</div>
+    <div id="blueLightBody">
+      <div id="blueLightTitle">ë¸ë£¨ë¼ì´í¸ íí°</div>
+      <div id="blueLightHint">ë¸ë£¨-ê·¸ë¦° í´í¸ì ê´ì  í¨ê³¼ë¥¼ íµí´ ìíë¸Â® MAXì ë¸ë£¨ë¼ì´í¸ íí° ì²´íì íì¸í´ ë³´ì¸ì.</div>
+      <div id="blueLightBottomRow">
+        <button id="blueLightConfirm" type="button">íì¸</button>
+        <img id="overlayPackshot" src="MAX.png" alt="ìíë¸ ë§¥ì¤ ëì í©ì·" onerror="this.style.display='none';">
+      </div>
     </div>
-    <button id="blueLightConfirm" type="button">확인</button>
-    <img id="overlayPackshot" src="MAX.png" alt="아큐브 맥스 난시 팩샷" onerror="this.style.display='none';">
   </div>
 
   <div id="blueBeamStrong" aria-hidden="true"><div class="beam-in"></div><div class="beam-out"></div></div>
@@ -1608,8 +1810,8 @@
   <div id="beamHitGlow"></div>
 </div>
 
-<!-- ✅ 우측 하단 렌즈 팩샷 -->
-  <img id="maxPackshot" src="MAX.png" alt="아큐브 맥스 난시 팩샷" onerror="this.style.display='none';">
+<!-- â ì°ì¸¡ íë¨ ë ì¦ í©ì· -->
+  <img id="maxPackshot" src="MAX.png" alt="ìíë¸ ë§¥ì¤ ëì í©ì·" onerror="this.style.display='none';">
 
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
@@ -1628,10 +1830,11 @@
   </model-viewer>
 
   <div id="bottomBtns">
-    <button id="btnReset" title="처음 위치로">↺</button>
-    <button id="modeLens" class="btn primary">투명 렌즈 모드</button>
-    <button id="modeHeat" class="btn">렌즈 두께 MAP</button>
+    <button id="btnReset" title="ì²ì ìì¹ë¡">âº</button>
+    <button id="modeLens" class="btn primary">í¬ëª ë ì¦ ëª¨ë</button>
+    <button id="modeHeat" class="btn">ë ì¦ ëê» MAP</button>
   </div>
+  <div id="globalToricDisclaimer">í´ë¹ ì´ë¯¸ì§ë ì´í´ë¥¼ ëê¸° ìí ê°ì ì´ë¯¸ì§ ìëë¤. KR_2026_233</div>
 
   <script>
     const mv = document.getElementById('mv');
@@ -1663,7 +1866,6 @@
     const comfortOverlay = document.getElementById('comfortOverlay');
     const comfortClose = document.getElementById('comfortClose');
     const comfortScene = document.getElementById('comfortScene');
-    const cfBtnDefault = document.getElementById('cfBtnDefault');
     const cfBtnOn = document.getElementById('cfBtnOn');
     const cfBtnOff = document.getElementById('cfBtnOff');
     const comfortMessageCopy = document.getElementById('comfortMessageCopy');
@@ -1760,7 +1962,11 @@
 
     function syncPackshot(){
       if(!maxPackshot) return;
-      maxPackshot.style.display = (currentMode === 'lens') ? 'block' : 'none';
+      const cardOverlayOpen =
+        (asdOverlay && asdOverlay.classList.contains('show')) ||
+        (comfortOverlay && comfortOverlay.classList.contains('show')) ||
+        (pvpOn === true);
+      maxPackshot.style.display = (currentMode === 'lens' && !cardOverlayOpen) ? 'block' : 'none';
     }
 
 
@@ -1770,6 +1976,7 @@
       if(mv){
         mv.style.filter = '';
       }
+      syncPackshot();
     }
 
     
@@ -1809,6 +2016,7 @@ function openBlueLightDemo(){
         try{
           mv.style.filter = 'hue-rotate(22deg) saturate(1.22) brightness(1.04)';
         }catch(e){}
+        if(maxPackshot) maxPackshot.style.display = 'none';
         if(blueTintRays) blueTintRays.classList.add('show');
         if(blueLightOverlay) blueLightOverlay.classList.add('show');
       }, 140);
@@ -1817,8 +2025,8 @@ function openBlueLightDemo(){
     function setASDHintDefault(){
       asdHint.innerHTML = `
         <div class="hintText">
-          <span class="hintTitle">체험해보세요!</span>
-          <span class="hintBody"><span class="blue">‘깜박임’ 버튼</span>을 눌러 이탈된 축을 안정화 시켜 보세요.</span>
+          <span class="hintTitle">ëìë ì¦, ì¶ íì ì´ëë©´ ìì¼ê° íë ¤ì§ëë¤.</span>
+          <span class="hintBody"><span class="blue">âê¹ë°ìâ ë²í¼</span>ì ëë¬ íì ë ì¶ì ìì í ìì¼ ë³´ì¸ì.</span>
         </div>
       `;
     }
@@ -1826,10 +2034,10 @@ function openBlueLightDemo(){
     function setASDHintSuccess(){
       asdHint.innerHTML = `
         <div class="hintText">
-          <span class="hintTitle">기억해주세요!</span>
-          <span class="hintBody"><span class="blue">아큐브® ASD™</span>는 자연스러운 순목(눈 깜박임)으로 렌즈 움직임을 안정화하여 선명한 시야를 제공합니다.</span>
+          <span class="hintTitle">ê¸°ìµí´ì£¼ì¸ì!</span>
+          <span class="hintBody"><span class="blue">ìíë¸Â® ASDâ¢</span>ë ìì°ì¤ë¬ì´ ìëª©(ë ê¹ë°ì)ì¼ë¡ ë ì¦ ìì§ìì ìì ííì¬ ì ëªí ìì¼ë¥¼ ì ê³µí©ëë¤.</span>
         </div>
-        <button id="asdConfirmBtn" type="button">확인</button>
+        <button id="asdConfirmBtn" type="button">íì¸</button>
       `;
       document.getElementById('asdConfirmBtn')?.addEventListener('click', (e)=>{
         e.stopPropagation();
@@ -1858,9 +2066,9 @@ function openBlueLightDemo(){
         `translate(calc(-50% + ${extraX}px + var(--irisX, 0px)), calc(-50% + var(--irisY, 0px))) rotate(${asdAngle}deg)`;
 
       if(asdAngleBadge){
-        if(asdAngle > 0) asdAngleBadge.textContent = `좌측으로 ${asdAngle}° 회전`;
-        else if(asdAngle < 0) asdAngleBadge.textContent = `우측으로 ${Math.abs(asdAngle)}° 회전`;
-        else asdAngleBadge.textContent = `축 안정`;
+        if(asdAngle > 0) asdAngleBadge.textContent = `ì¢ì¸¡ì¼ë¡ ${asdAngle}Â° íì `;
+        else if(asdAngle < 0) asdAngleBadge.textContent = `ì°ì¸¡ì¼ë¡ ${Math.abs(asdAngle)}Â° íì `;
+        else asdAngleBadge.textContent = `ì¶ ìì `;
       }
     }
 
@@ -2032,6 +2240,7 @@ function openBlueLightDemo(){
       closeBlueLightDemo();
       resetCameraToModeDefault('lens');
       syncMissionUI();
+      syncPackshot();
     }
 
     function setModeButtons(){
@@ -2045,6 +2254,7 @@ function openBlueLightDemo(){
       pvpOn = false;
       showPVP(false);
       syncMissionUI();
+      syncPackshot();
     }
 
     function openASD(){
@@ -2062,6 +2272,7 @@ function openBlueLightDemo(){
       asdOverlay.classList.add('show');
       asdOverlay.setAttribute('aria-hidden','false');
       syncMissionUI();
+      syncPackshot();
     }
 
     function setModel(file, mode, options = {}){
@@ -2177,11 +2388,13 @@ function openBlueLightDemo(){
           zoomInForPVP();
           showPVP(true);
           syncMissionUI();
+          syncPackshot();
         }, 140);
       }else{
         showPVP(false);
         resetCameraToModeDefault('lens');
         syncMissionUI();
+        syncPackshot();
       }
     }
 
@@ -2196,6 +2409,7 @@ function openBlueLightDemo(){
       showPVP(false);
       resetCameraToModeDefault('lens');
       syncMissionUI();
+      syncPackshot();
     }
 
     pvpConfirm.addEventListener('click', (e)=>{
@@ -2219,8 +2433,9 @@ function openBlueLightDemo(){
       closeBlueLightDemo();
       closeBlueLightDemo();
       closeBlueLightDemo();
-      setComfortMode('default');
+      setComfortMode('off');
       syncMissionUI();
+      syncPackshot();
     }
 
     function openComfort(){
@@ -2228,9 +2443,10 @@ function openBlueLightDemo(){
       if(pvpOn) forcePVPOff();
       comfortOverlay.classList.add('show');
       comfortOverlay.setAttribute('aria-hidden','false');
-      setComfortMode('default');
+      setComfortMode('off');
       requestAnimationFrame(positionComfortInteractiveElements);
       syncMissionUI();
+      syncPackshot();
     }
 
     function toggleComfort(){
@@ -2243,7 +2459,6 @@ function openBlueLightDemo(){
 
     function setComfortMode(mode){
       comfortScene.classList.remove('mode-default', 'mode-on', 'mode-off');
-      cfBtnDefault.classList.remove('active', 'default-active');
       cfBtnOn.classList.remove('active');
       cfBtnOff.classList.remove('active');
 
@@ -2251,22 +2466,15 @@ function openBlueLightDemo(){
         comfortScene.classList.add('mode-on');
         cfBtnOn.classList.add('active');
         comfortMessageCopy.innerHTML = `
-          단안 난시 소비자의 경우, 프리즘의 영향으로
-          <span class="blue">양안의 이미지 위치에 차이가 발생하여 오후 피로감 발생 가능</span>
+          ë¨ìì íë¦¬ì¦ ìí¥ì´ ìë ê²½ì°
+          <span class="blue">ìì ì´ë¯¸ì§ ìì¹ì ì°¨ì´ê° ë°ìíì¬ í¼ë¡ê°ì´ ë°ìí  ì ììµëë¤.</span>
         `;
-      }else if(mode === 'off'){
+      }else{
         comfortScene.classList.add('mode-off');
         cfBtnOff.classList.add('active');
         comfortMessageCopy.innerHTML = `
-          난시 렌즈 광학부의 프리즘은 단안 난시 소비자에게 중요합니다.
-          <span class="blue">저녁까지 편안함과 선명함 제공</span>
-        `;
-      }else{
-        comfortScene.classList.add('mode-default');
-        cfBtnDefault.classList.add('default-active');
-        comfortMessageCopy.innerHTML = `
-          프리즘이 단안 난시 소비자에게 미치는 영향을
-          <span class="blue">버튼을 통해 확인해 보세요</span>
+          ëì ë ì¦ ê´íë¶ì íë¦¬ì¦ì
+          <span class="blue">ë¨ì ëì ìë¹ììê² ì¤ìí©ëë¤.</span>
         `;
       }
       requestAnimationFrame(positionComfortInteractiveElements);
@@ -2301,14 +2509,22 @@ function openBlueLightDemo(){
 
       const cardW = mobile ? 82 : (tablet ? 104 : 118);
       const cardH = mobile ? 126 : (tablet ? 158 : 176);
-
-      const baseCardCx = w * (mobile ? 0.205 : 0.215);
-      const baseCardCy = h * 0.500;
       const modeOn = comfortScene.classList.contains('mode-on');
       const modeOff = comfortScene.classList.contains('mode-off');
 
-      const cardCx = baseCardCx;
-      const cardCy = baseCardCy;
+      // ê¸°ë³¸ ì¹´ë(ë³´ë¼/íë ëì¼ ê¸°ì¤ ìì¹)
+      const baseCardCx = w * 0.225;
+      const baseCardCy = (eyeLeft.y + eyeRight.y) / 2 + 10;
+
+      // ë¹¨ê° ì¹´ë: ì¼ìª½ ë ê¸°ì¤ 170ë ëëì¼ë¡ ì¡°ê¸ ë ììª½
+      let cardCx, cardCy;
+      if(modeOn){
+        cardCx = eyeLeft.x - (mobile ? 108 : 128);
+        cardCy = eyeLeft.y - (mobile ? 26 : 32);
+      }else{
+        cardCx = baseCardCx;
+        cardCy = baseCardCy;
+      }
 
       cfTargetStage.style.width = cardW + 'px';
       cfTargetStage.style.height = cardH + 'px';
@@ -2317,39 +2533,42 @@ function openBlueLightDemo(){
       const opticW = mobile ? 38 : (tablet ? 48 : 58);
       const opticH = mobile ? 76 : (tablet ? 98 : 118);
       const opticCx = eyeLeft.x + (mobile ? -1 : -2);
-      const opticCy = eyeLeft.y - (mobile ? 12 : 14);
+      const opticCy = eyeLeft.y + (mobile ? -2 : -2);
 
       cfOptic.style.width = opticW + 'px';
       cfOptic.style.height = opticH + 'px';
       cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
 
-      const rightEdgeX = cardCx + cardW * 0.50 - 2;
-      const offRedEndX = eyeLeft.x - (mobile ? 2 : 4);
-      const offRedEndY = eyeLeft.y;
-      const offBlueEndX = eyeRight.x - (mobile ? 10 : 12);
-      const offBlueEndY = eyeRight.y;
+      const startX = cardCx + cardW * 0.46;
+      const baseStartX = baseCardCx + cardW * 0.46;
 
       if(modeOn){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
-        const onRedStartY = cardCy - cardH * 0.19;
-        const onBlueStartY = cardCy + cardH * 0.11;
-        const onRedEndX = eyeLeft.x - (mobile ? 2 : 4);
-        const onRedEndY = eyeLeft.y;
-        const onBlueEndX = eyeRight.x - (mobile ? 10 : 12);
-        const onBlueEndY = eyeRight.y;
+        // íë ì¹´ëë ë³´ë¼ ì¹´ëì ëì¼ ìì¹ / ìì§ì ìì / ìí ì ì§
+        const blueY = baseCardCy;
+        const blueEndX = eyeRight.x - (mobile ? 10 : 12);
 
-        cfPlaceLine(cfLineRed, rightEdgeX, onRedStartY, onRedEndX, onRedEndY, rect);
-        cfPlaceLine(cfLineBlue, rightEdgeX, onBlueStartY, onBlueEndX, onBlueEndY, rect);
+        // ë¹¨ê° ì¹´ëì ë¹¨ê° ì ì ë§ ê°ì´ ìì§ì
+        const redStartY = cardCy;
+        const redEndY = eyeLeft.y;
+
+        cfPlaceLine(cfLineBlue, baseStartX, blueY, blueEndX, blueY, rect);
+        cfPlaceLine(cfLineRed, startX, redStartY, eyeLeft.x - (mobile ? 2 : 4), redEndY, rect);
       }else if(modeOff){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
-        const offRedStartY = cardCy - cardH * 0.02;
-        const offBlueStartY = cardCy + cardH * 0.13;
-        cfPlaceLine(cfLineRed, rightEdgeX, offRedStartY, offRedEndX, offRedEndY, rect);
-        cfPlaceLine(cfLineBlue, rightEdgeX, offBlueStartY, offBlueEndX, offBlueEndY, rect);
+        // ìì ê°ê° ë ê¸°ì¤ì¼ë¡ ì¹´ëê° ìì£¼ ì´ì§ ì¢ì¸¡ íë°©ì ìëë¡ 3~5ë ëëë§ ì ì©
+        const tilt = mobile ? 4 : 6;
+        const redStartY = eyeLeft.y + tilt;
+        const blueStartY = eyeRight.y + tilt;
+        const redEndY = eyeLeft.y;
+        const blueEndY = eyeRight.y;
+
+        cfPlaceLine(cfLineRed, baseStartX, redStartY, eyeLeft.x - (mobile ? 2 : 4), redEndY, rect);
+        cfPlaceLine(cfLineBlue, baseStartX, blueStartY, eyeRight.x - (mobile ? 10 : 12), blueEndY, rect);
       }else{
         cfLineRed.style.opacity = '0';
         cfLineBlue.style.opacity = '0';
@@ -2365,7 +2584,6 @@ function openBlueLightDemo(){
     comfortOverlay?.addEventListener('click', (e)=>{
       if(e.target === comfortOverlay) closeComfort();
     });
-    cfBtnDefault?.addEventListener('click', ()=>setComfortMode('default'));
     cfBtnOn?.addEventListener('click', ()=>setComfortMode('on'));
     cfBtnOff?.addEventListener('click', ()=>setComfortMode('off'));
 
@@ -2395,7 +2613,7 @@ function openBlueLightDemo(){
 
     setModel('lens_clear.glb', 'lens', { resetCamera:true });
 
-    /* 튜토리얼 */
+    /* íí ë¦¬ì¼ */
     const tutorialLayer = document.getElementById('tutorialLayer');
     const tutorialMask = document.getElementById('tutorialMask');
     const tutorialFocus = document.getElementById('tutorialFocus');
@@ -2524,7 +2742,7 @@ function openBlueLightDemo(){
     });
 
     window.addEventListener('load', ()=>{
-      showTut(1);
+      // showTut(1);
     });
 
     window.addEventListener('resize', ()=>{
