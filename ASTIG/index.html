@@ -1090,15 +1090,9 @@
 
     .cf-guide-line{
       position:absolute; height:0; border-top:3px dashed; z-index:5; transform-origin:left center;
-
+      transition:left .35s ease, top .35s ease, width .35s ease, transform .35s ease, opacity .25s ease;
       pointer-events:none; opacity:0;
     }
-    #cfLineBlue{
-      transition:none  !important;
-    }
-    #cfLineRed{
-      transition:top .35s ease, width .35s ease, opacity .25s ease;
-    }  
     .cf-guide-line.red{ border-color:#e02020; }
     .cf-guide-line.blue{ border-color:#176fd6; }
     #comfortScene.mode-default .cf-guide-line{ opacity:0; }
@@ -1620,6 +1614,42 @@
   }
 }
 
+
+    /* === Requested adjustments === */
+    #pvpOverlay{
+      bottom:calc(env(safe-area-inset-bottom, 0px) + 80px) !important;
+    }
+    #blueLightOverlay{
+      bottom:calc(env(safe-area-inset-bottom, 0px) + 80px) !important;
+    }
+    @media (max-width:560px){
+      #pvpOverlay{
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 80px) !important;
+      }
+      #blueLightOverlay{
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 80px) !important;
+      }
+    }
+
+    #globalToricDisclaimer{
+      text-align:left !important;
+      font-size:8px !important;
+      line-height:1.25 !important;
+      color:rgba(72,80,92,.95) !important;
+      font-weight:500 !important;
+      letter-spacing:-.08px;
+      right:12px;
+      left:12px;
+    }
+    #globalToricDisclaimer .global-disc-note{
+      display:block;
+      text-align:center;
+    }
+    #globalToricDisclaimer .global-disc-ref{
+      display:block;
+      text-align:left;
+    }
+
 </style>
 </head>
 
@@ -1674,7 +1704,7 @@
     <img id="pvpThumb" src="PVP.png" alt="PVP" onerror="this.onerror=null; this.src='PVP.jpeg';">
     <div id="pvpText">
       <div id="pvpTitle">PVP 습윤 인자</div>
-      <div id="hint">렌즈 내 PVP 습윤인자가 수분을 유지하여 촉촉함과 선명함 제공합니다.</div>
+      <div id="hint">렌즈 내 PVP 습윤인자가 수분을 저녁까지 유지하여 촉촉함과 선명함 제공합니다.</div>
     </div>
     <div id="pvpConfirm" role="button" tabindex="0">확인</div>
   </div>
@@ -1754,7 +1784,6 @@
       </div>
       <div class="toric-popup-disclaimer">
         <span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span>
-        <span class="disc-ref">Sulley A, Hawke R, Osborn Lorenz K, et al. Resultant vertical prism in toric soft contact lenses. <em>Cont Lens Anterior Eye.</em> 2015;38(4):253–257.</span>
       </div>
     </div>
   </div>
@@ -1830,7 +1859,11 @@
     <button id="modeLens" class="btn primary">투명 렌즈 모드</button>
     <button id="modeHeat" class="btn">렌즈 두께 MAP</button>
   </div>
-  <div id="globalToricDisclaimer">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</div>
+  <div id="globalToricDisclaimer">
+    <div class="global-disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</div>
+    <div class="global-disc-ref">1.</div>
+    <div class="global-disc-ref">2.</div>
+  </div>
 
   <script>
     const mv = document.getElementById('mv');
@@ -2028,7 +2061,7 @@ function openBlueLightDemo(){
     function setASDHintDefault(){
       asdHint.innerHTML = `
         <div class="hintText">
-          <span class="hintTitle">난시렌즈는 축이 회전되면 시야가 흐려집니다.</span>
+          <span class="hintTitle">난시렌즈, 축 회전이되면 시야가 흐려집니다.</span>
           <span class="hintBody"><span class="blue">‘깜박임’ 버튼</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span>
         </div>
       `;
@@ -2500,6 +2533,7 @@ function openBlueLightDemo(){
       if(mode === 'on'){
         comfortScene.classList.add('mode-on');
         cfBtnOn.classList.add('active');
+        if(comfortConfirm) comfortConfirm.style.display = 'block';
         comfortMessageCopy.innerHTML = `
           단안에 프리즘 영향이 있는 경우
           <span class="blue">양안 이미지 위치에 차이가 발생하여 피로감이 발생할 수 있습니다.</span>
@@ -2507,6 +2541,7 @@ function openBlueLightDemo(){
       }else{
         comfortScene.classList.add('mode-off');
         cfBtnOff.classList.add('active');
+        if(comfortConfirm) comfortConfirm.style.display = 'none';
         comfortMessageCopy.innerHTML = `
           난시 렌즈 광학부의 프리즘은
           <span class="blue">단안 난시 소비자에게 중요합니다.</span>
@@ -2551,25 +2586,21 @@ function openBlueLightDemo(){
 
       // 기본 카드(보라/파랑 동일 기준 위치)
       const baseCardCx = w * 0.225;
-      const baseCardCy = (eyeLeft.y + eyeRight.y) / 2 + 4;
+      const baseCardCy = (eyeLeft.y + eyeRight.y) / 2 + 10;
 
       // mode on/off 모두 카드 x축은 동일
       const cardCx = baseCardCx;
-
-      // 프리즘 없는 경우: 프리즘 있는 경우의 파란 카드 위치와 유사하게 살짝 아래
-      const offCardYOffset = mobile ? 12 : 14;
+      const offCardYOffset = mobile ? 4 : 6;
       const cardCy = modeOff ? (baseCardCy + offCardYOffset) : baseCardCy;
-
       const redCardCenterY = baseCardCy - 14 + redFloatOffset;
       const blueCardCenterY = baseCardCy + 14;
 
       cfTargetStage.style.width = cardW + 'px';
       cfTargetStage.style.height = cardH + 'px';
       cfSetCenterPercent(cfTargetStage, cardCx, cardCy, rect);
-
       if(modeOn){
-        if(cfBoxTop) cfBoxTop.style.top = '-20px';
-        if(cfBoxBottom) cfBoxBottom.style.top = '20px';
+        if(cfBoxTop) cfBoxTop.style.top = '-14px';
+        if(cfBoxBottom) cfBoxBottom.style.top = '14px';
         if(cfARed){ cfARed.style.top = '50%'; cfARed.style.left = '50%'; }
         if(cfABlue){ cfABlue.style.top = '50%'; cfABlue.style.left = '50%'; }
       }else if(modeOff){
@@ -2582,13 +2613,15 @@ function openBlueLightDemo(){
       const opticW = mobile ? 38 : (tablet ? 48 : 58);
       const opticH = mobile ? 76 : (tablet ? 98 : 118);
       const opticCx = eyeLeft.x + (mobile ? -1 : -2);
-      const opticCy = eyeLeft.y - 20;
+      const opticCy = eyeLeft.y + (mobile ? -2 : -2);
 
       cfOptic.style.width = opticW + 'px';
       cfOptic.style.height = opticH + 'px';
       cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
 
+      const startX = cardCx + cardW * 0.46;
       const cardRightCenterX = cardCx + cardW * 0.50;
+      const baseStartX = baseCardCx + cardW * 0.46;
 
       if(modeOn){
         cfLineRed.style.opacity = '1';
@@ -2600,39 +2633,28 @@ function openBlueLightDemo(){
         const blueEndX = baseCardCx + cardW * 0.50;
         const blueEndY = blueCardCenterY;
 
-        // 빨간선: 눈과 카드에 고정, 카드 흔들림에 따라 길이만 변하고 별도 회전 애니메이션은 없음
+        // 빨간선: 왼쪽 눈에서 시작, 빨간 카드 쪽 접점은 카드 흔들림을 따라가며 살짝 상방으로 연결
         const redStartX = eyeLeft.x;
         const redStartY = eyeLeft.y;
         const redEndX = cardRightCenterX;
         const redEndY = redCardCenterY;
 
         cfPlaceLine(cfLineBlue, blueStartX, blueStartY, blueEndX, blueEndY, rect);
-
-        const baseRedEndX = cardRightCenterX;
-        const baseRedEndY = baseCardCy - 14;
-        const fixedDx = baseRedEndX - redStartX;
-        const fixedDy = baseRedEndY - redStartY;
-        const fixedAngle = Math.atan2(fixedDy, fixedDx) * 180 / Math.PI;
-
-        const liveDx = redEndX - redStartX;
-        const liveDy = redEndY - redStartY;
-        const liveLength = Math.sqrt(liveDx * liveDx + liveDy * liveDy);
-
-        cfLineRed.style.left = (redStartX / rect.width * 100) + '%';
-        cfLineRed.style.top = (redStartY / rect.height * 100) + '%';
-        cfLineRed.style.width = liveLength + 'px';
-        cfLineRed.style.transform = `rotate(${fixedAngle}deg)`;
+        cfPlaceLine(cfLineRed, redStartX, redStartY, redEndX, redEndY, rect);
       }else if(modeOff){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
-        // 프리즘 없는 경우: 카드와 카드쪽 접점만 살짝 아래, 눈쪽 접점은 그대로 고정
-        const offAttachY = cardCy;
-        const redCardAttachY = offAttachY - (mobile ? 3 : 4);
-        const blueCardAttachY = offAttachY;
+        // mode off: 카드만 살짝 아래로, 카드 쪽 접점만 함께 아래로 이동 / 눈 쪽 시작점은 고정
+        const offLineYOffset = mobile ? 4 : 6;
+        const blueStartY = eyeRight.y + (mobile ? 4 : 6);
+        const blueEndY = eyeRight.y;
+        const redStartY = blueStartY - (mobile ? 3 : 4) + offLineYOffset;
+        const redEndY = redStartY - 1;
+        const blueCardAttachY = blueStartY + offLineYOffset;
 
-        cfPlaceLine(cfLineRed, cardRightCenterX, redCardAttachY, eyeLeft.x - (mobile ? 2 : 4), eyeLeft.y, rect);
-        cfPlaceLine(cfLineBlue, cardRightCenterX, blueCardAttachY, eyeRight.x - (mobile ? 10 : 12), eyeRight.y, rect);
+        cfPlaceLine(cfLineRed, cardRightCenterX, redStartY, eyeLeft.x - (mobile ? 2 : 4), redEndY, rect);
+        cfPlaceLine(cfLineBlue, cardRightCenterX, blueCardAttachY, eyeRight.x - (mobile ? 10 : 12), blueEndY, rect);
       }else{
         cfLineRed.style.opacity = '0';
         cfLineBlue.style.opacity = '0';
