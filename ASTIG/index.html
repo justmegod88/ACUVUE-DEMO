@@ -1041,8 +1041,8 @@
 
     #comfortScene.mode-on .cf-box-top{ top:-14px; opacity:.96; background:rgba(251,221,231,.42); animation:cfPinkFloat 1.45s ease-in-out infinite; }
     #comfortScene.mode-on .cf-box-bottom{ top:14px; opacity:.82; background:rgba(219,234,255,.28); transform:translateX(-50%); }
-    #comfortScene.mode-on .cf-a-red{ top:33%; opacity:1; transform:translate(-50%,-50%); color:#e02020; animation:cfRedFloat 1.45s ease-in-out infinite; }
-    #comfortScene.mode-on .cf-a-blue{ top:69%; opacity:1; transform:translate(-50%,-50%); color:#176fd6; }
+    #comfortScene.mode-on .cf-a-red{ top:42%; opacity:1; transform:translate(-50%,-50%); color:#e02020; animation:cfRedFloat 1.45s ease-in-out infinite; }
+    #comfortScene.mode-on .cf-a-blue{ top:58%; opacity:1; transform:translate(-50%,-50%); color:#176fd6; }
 
     @keyframes cfRedFloat{
       0%{ transform:translate(-50%,-50%) translateY(0); }
@@ -1420,7 +1420,7 @@
 
 
 #comfortScene.mode-on #cfTargetStage{
-  animation:floatRedCard 2.2s ease-in-out infinite;
+  animation:none !important;
 }
 #comfortScene.mode-on #cfLineRed{
   animation:floatRedLine 2.2s ease-in-out infinite;
@@ -1428,15 +1428,10 @@
 #comfortScene.mode-on #cfLineBlue{
   animation:none !important;
 }
-@keyframes floatRedCard{
-  0%{ transform:translate(-50%,-50%) translateY(0); }
-  50%{ transform:translate(-50%,-50%) translateY(-6px); }
-  100%{ transform:translate(-50%,-50%) translateY(0); }
-}
 @keyframes floatRedLine{
-  0%{ margin-top:0; }
-  50%{ margin-top:-6px; }
-  100%{ margin-top:0; }
+  0%{ transform:translateY(0); }
+  50%{ transform:translateY(-6px); }
+  100%{ transform:translateY(0); }
 }
 
 
@@ -2515,7 +2510,6 @@ function openBlueLightDemo(){
       const baseCardCx = w * 0.225;
       const baseCardCy = (eyeLeft.y + eyeRight.y) / 2 + 10;
 
-      // 파란/빨간 카드는 보라 카드와 동일한 x축 기준을 사용
       const cardCx = baseCardCx;
       const cardCy = baseCardCy;
 
@@ -2534,28 +2528,57 @@ function openBlueLightDemo(){
 
       const cardRightX = baseCardCx + cardW * 0.50;
       const cardCenterY = baseCardCy;
-      const redStartY = baseCardCy - (mobile ? 22 : (tablet ? 26 : 30));
 
       if(modeOn){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
-        // 파란 선: 눈에서 시작해서 카드 우측면 중앙에서 종료
-        cfPlaceLine(cfLineBlue, eyeRight.x - (mobile ? 10 : 12), eyeRight.y, cardRightX, cardCenterY, rect);
-        // 빨간 카드는 같은 x축, 더 위쪽에 보이도록 시작점만 위로 조정
-        cfPlaceLine(cfLineRed, eyeLeft.x - (mobile ? 2 : 4), eyeLeft.y, cardRightX, redStartY, rect);
+        const blueCardY = cardCenterY + (mobile ? 10 : (tablet ? 12 : 14));
+        const redCardY = cardCenterY - (mobile ? 10 : (tablet ? 12 : 14));
+
+        // blue card/line fixed
+        cfPlaceLine(
+          cfLineBlue,
+          eyeRight.x - (mobile ? 10 : 12),
+          eyeRight.y,
+          cardRightX,
+          blueCardY,
+          rect
+        );
+
+        // red card shakes visually, line follows the card-attached end
+        cfPlaceLine(
+          cfLineRed,
+          eyeLeft.x - (mobile ? 2 : 4),
+          eyeLeft.y,
+          cardRightX,
+          redCardY,
+          rect
+        );
       }else if(modeOff){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
-        const tilt = mobile ? 1 : 2;
-        const redEndY = eyeLeft.y;
-        const blueStartX = eyeRight.x - (mobile ? 10 : 12);
-        const blueStartY = eyeRight.y + tilt;
+        const redLineY = eyeLeft.y - (mobile ? 4 : 5);
+        const blueLineY = eyeRight.y + (mobile ? 2 : 3);
 
-        cfPlaceLine(cfLineRed, cardRightX, redStartY, eyeLeft.x - (mobile ? 2 : 4), redEndY, rect);
-        // 파란 선: 눈에서 시작해서 카드 우측면 중앙에서 종료
-        cfPlaceLine(cfLineBlue, blueStartX, blueStartY, cardRightX, cardCenterY, rect);
+        // almost horizontal stable lines, separated just enough not to overlap
+        cfPlaceLine(
+          cfLineRed,
+          cardRightX,
+          redLineY,
+          eyeLeft.x - (mobile ? 2 : 4),
+          redLineY,
+          rect
+        );
+        cfPlaceLine(
+          cfLineBlue,
+          eyeRight.x - (mobile ? 10 : 12),
+          blueLineY,
+          cardRightX,
+          cardCenterY + (mobile ? 2 : 3),
+          rect
+        );
       }else{
         cfLineRed.style.opacity = '0';
         cfLineBlue.style.opacity = '0';
