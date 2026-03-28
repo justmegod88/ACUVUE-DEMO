@@ -2002,8 +2002,12 @@
     function closeBlueLightDemo(){
       if(blueTintRays) blueTintRays.classList.remove('show');
       if(blueLightOverlay) blueLightOverlay.classList.remove('show');
+      document.body.classList.remove('blue-demo-on');
+      if(maxPackshot) maxPackshot.classList.remove('active');
       if(mv){
         mv.style.filter = '';
+        mv.style.transform = '';
+        mv.style.transition = '';
       }
       syncPackshot();
     }
@@ -2043,7 +2047,11 @@ function openBlueLightDemo(){
 
       setTimeout(()=>{
         try{
-          mv.style.filter = 'hue-rotate(22deg) saturate(1.22) brightness(1.04)';
+          document.body.classList.add('blue-demo-on');
+          if(maxPackshot) maxPackshot.classList.add('active');
+          mv.style.filter = '';
+          mv.style.transform = '';
+          mv.style.transition = '';
         }catch(e){}
         if(maxPackshot) maxPackshot.style.display = 'none';
         if(blueTintRays) blueTintRays.classList.add('show');
