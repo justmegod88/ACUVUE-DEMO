@@ -2874,6 +2874,60 @@ if(packshot){
   });
 }
 </script>
+<script>
+/* =========================
+   ✅ MAX 팩샷 클릭 → 블루라이트 ON/OFF
+   (기존 setBlueState 그대로 사용)
+   ========================= */
 
+// 👉 팩샷 찾기 (이미지 or 카드 안에 있는 이미지)
+const maxPackshot =
+  document.getElementById('maxPackshot') ||
+  document.querySelector('img[src*="mf"]') ||
+  document.querySelector('img[src*="MAX"]');
+
+// 👉 기존 상태 변수와 충돌 방지 (이미 있으면 그대로 사용)
+if (typeof blueOn === "undefined") {
+  var blueOn = false;
+}
+
+function triggerBlueFromPackshot(){
+  blueOn = !blueOn;
+
+  // 🔥 핵심: 기존 블루라이트 로직 그대로 실행
+  if (typeof setBlueState === "function") {
+    setBlueState(blueOn);
+  }
+
+  // 👉 팩샷 클릭 피드백 (UX)
+  if(maxPackshot){
+    maxPackshot.style.transition = "all .25s ease";
+    maxPackshot.style.transform = blueOn ? "scale(1.05)" : "scale(1)";
+    maxPackshot.style.boxShadow = blueOn
+      ? "0 10px 30px rgba(0,94,184,.35)"
+      : "none";
+  }
+}
+
+// 👉 이벤트 연결
+if(maxPackshot){
+  maxPackshot.style.cursor = "pointer";
+
+  maxPackshot.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    triggerBlueFromPackshot();
+  });
+}
+
+/* =========================
+   ✅ 기존 ON 버튼 숨김 (있을 경우만)
+   ========================= */
+
+const blueOnBtn = document.getElementById('blueSegOn');
+if(blueOnBtn){
+  blueOnBtn.style.display = "none";
+}
+
+</script>
 </body>
 </html>
