@@ -2572,7 +2572,8 @@ function openBlueLightDemo(){
         const topCardOffset = -14;
         const bottomCardOffset = 14;
         if(cfBoxTop) cfBoxTop.style.top = topCardOffset + 'px';
-        if(cfBoxBottom) cfBoxBottom.style.top = bottomCardOffset + 'px';
+        
+        if(cfBoxBottom){cfBoxBottom.style.top = bottomCardOffset + 'px';
         if(cfARed){
           cfARed.style.left = '50%';
           cfARed.style.top = `calc(50% + ${topCardOffset}px)`;
@@ -2581,7 +2582,6 @@ function openBlueLightDemo(){
           cfABlue.style.left = '50%';
           cfABlue.style.top = `calc(50% + ${bottomCardOffset}px)`;
         }
-       }        
       
       
       
