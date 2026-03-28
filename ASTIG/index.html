@@ -2874,6 +2874,43 @@ if(packshot){
   });
 }
 </script>
+<script>
+const maxPackshot = document.getElementById('maxPackshot');
+const blueLightConfirmBtn = document.getElementById('blueLightConfirm');
+const blueLightOverlayEl = document.getElementById('blueLightOverlay');
 
+/* ON (팩샷 클릭) */
+function triggerBlueOnFromPackshot(){
+  if (typeof setBlueState === "function") {
+    setBlueState(true);
+  }
+  if (blueLightOverlayEl) blueLightOverlayEl.classList.add('show');
+}
+
+/* OFF (확인 버튼) */
+function triggerBlueOffFromConfirm(){
+  if (typeof setBlueState === "function") {
+    setBlueState(false);
+  }
+  if (blueLightOverlayEl) blueLightOverlayEl.classList.remove('show');
+}
+
+/* 팩샷 클릭 */
+if (maxPackshot) {
+  maxPackshot.style.cursor = "pointer";
+  maxPackshot.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    triggerBlueOnFromPackshot();
+  });
+}
+
+/* 확인 버튼 */
+if (blueLightConfirmBtn) {
+  blueLightConfirmBtn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    triggerBlueOffFromConfirm();
+  });
+}
+</script>
 </body>
 </html>
