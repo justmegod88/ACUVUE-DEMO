@@ -2567,26 +2567,11 @@ function openBlueLightDemo(){
       cfTargetStage.style.height = cardH + 'px';
       cfSetCenterPercent(cfTargetStage, cardCx, cardCy, rect);
 
-      
       if(modeOn){
-        const topCardOffset = -14;
-        const bottomCardOffset = 14;
-        if(cfBoxTop) cfBoxTop.style.top = topCardOffset + 'px';
-        
-        if(cfBoxBottom){cfBoxBottom.style.top = bottomCardOffset + 'px';
-        if(cfARed){
-          cfARed.style.left = '50%';
-          cfARed.style.top = `calc(50% + ${topCardOffset}px)`;
-        }
-        if(cfABlue){
-          cfABlue.style.left = '50%';
-          cfABlue.style.top = `calc(50% + ${bottomCardOffset}px)`;
-        }
-      
-      
-      
-      
-      
+        if(cfBoxTop) cfBoxTop.style.top = '-20px';
+        if(cfBoxBottom) cfBoxBottom.style.top = '20px';
+        if(cfARed){ cfARed.style.top = '50%'; cfARed.style.left = '50%'; }
+        if(cfABlue){ cfABlue.style.top = '50%'; cfABlue.style.left = '50%'; }
       }else if(modeOff){
         if(cfBoxTop) cfBoxTop.style.top = '0px';
         if(cfBoxBottom) cfBoxBottom.style.top = '0px';
