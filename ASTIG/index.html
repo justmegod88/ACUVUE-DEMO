@@ -1476,112 +1476,112 @@
       el.style.left = (sx / rect.width * 100) + '%'; el.style.top = (sy / rect.height * 100) + '%'; el.style.width = length + 'px'; el.style.transform = `rotate(${angle}deg)`;
     }
 
-function positionComfortInteractiveElements(redFloatOffset = 0){
-  if(!comfortScene || !comfortOverlay.classList.contains('show')) return;
-  const rect = comfortScene.getBoundingClientRect();
-  const w = rect.width;
-  const h = rect.height;
-  const mobile = w <= 560;
-  const tablet = w <= 820 && w > 560;
+    function positionComfortInteractiveElements(redFloatOffset = 0){
+      if(!comfortScene || !comfortOverlay.classList.contains('show')) return;
 
-  const eyeLeft = { x: w * 0.552, y: h * 0.408 };
-  const eyeRight = { x: w * 0.811, y: h * 0.410 };
+      const rect = comfortScene.getBoundingClientRect();
+      const w = rect.width, h = rect.height;
+      const mobile = w <= 560, tablet = w <= 820 && w > 560;
 
-  const cardW = mobile ? 82 : (tablet ? 104 : 118);
-  const cardH = mobile ? 126 : (tablet ? 158 : 176);
-  const modeOn = comfortScene.classList.contains('mode-on');
-  const modeOff = comfortScene.classList.contains('mode-off');
+      const eyeLeft = { x: w * 0.552, y: h * 0.408 };
+      const eyeRight = { x: w * 0.811, y: h * 0.410 };
 
-  const baseCardCx = w * 0.225;
-  const baseCardCy = (eyeLeft.y + eyeRight.y) / 2 + 4;
+      const cardW = mobile ? 82 : (tablet ? 104 : 118);
+      const cardH = mobile ? 126 : (tablet ? 158 : 176);
+      const modeOn = comfortScene.classList.contains('mode-on');
+      const modeOff = comfortScene.classList.contains('mode-off');
 
-  const cardCx = baseCardCx;
-  const offCardYOffset = mobile ? 12 : 14;
-  const cardCy = modeOff ? (baseCardCy + offCardYOffset) : baseCardCy;
+      const baseCardCx = w * 0.225;
+      const baseCardCy = (eyeLeft.y + eyeRight.y) / 2 + 4;
 
-  /* ✅ 레드 더 위 */
-  const redCardCenterY = baseCardCy - 26 + redFloatOffset;
-  const blueCardCenterY = baseCardCy + 20;
+      const cardCx = baseCardCx;
+      const offCardYOffset = mobile ? 12 : 14;
+      const cardCy = modeOff ? (baseCardCy + offCardYOffset) : baseCardCy;
 
-  cfTargetStage.style.width = cardW + 'px';
-  cfTargetStage.style.height = cardH + 'px';
-  cfSetCenterPercent(cfTargetStage, cardCx, cardCy, rect);
+      const redCardCenterY = baseCardCy - 20 + redFloatOffset;
+      const blueCardCenterY = baseCardCy + 20;
 
-  /* ✅ A 완전 중앙 */
-  if(cfARed){
-    cfARed.style.position = 'absolute';
-    cfARed.style.top = '50%';
-    cfARed.style.left = '50%';
-    cfARed.style.transform = 'translate(-50%, -50%)';
-  }
-  if(cfABlue){
-    cfABlue.style.position = 'absolute';
-    cfABlue.style.top = '50%';
-    cfABlue.style.left = '50%';
-    cfABlue.style.transform = 'translate(-50%, -50%)';
-  }
+      cfTargetStage.style.width = cardW + 'px';
+      cfTargetStage.style.height = cardH + 'px';
+      cfSetCenterPercent(cfTargetStage, cardCx, cardCy, rect);
 
-  if(modeOn){
-    if(cfBoxTop) cfBoxTop.style.top = '-20px';
-    if(cfBoxBottom) cfBoxBottom.style.top = '20px';
-  }else if(modeOff){
-    if(cfBoxTop) cfBoxTop.style.top = '0px';
-    if(cfBoxBottom) cfBoxBottom.style.top = '0px';
-  }
+      if(modeOn){
+        if(cfBoxTop) cfBoxTop.style.top = '-20px';
+        if(cfBoxBottom) cfBoxBottom.style.top = '20px';
 
-  const opticW = mobile ? 38 : (tablet ? 48 : 58);
-  const opticH = mobile ? 76 : (tablet ? 98 : 118);
-  const opticCx = eyeLeft.x + (mobile ? -1 : -2);
-  const opticCy = eyeLeft.y - 20;
+        if(cfARed){
+          cfARed.style.top = '50%';
+          cfARed.style.left = '50%';
+        }
+        if(cfABlue){
+          cfABlue.style.top = '50%';
+          cfABlue.style.left = '50%';
+        }
+      }else if(modeOff){
+        if(cfBoxTop) cfBoxTop.style.top = '0px';
+        if(cfBoxBottom) cfBoxBottom.style.top = '0px';
 
-  cfOptic.style.width = opticW + 'px';
-  cfOptic.style.height = opticH + 'px';
-  cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
+        if(cfARed){
+          cfARed.style.top = '50%';
+          cfARed.style.left = '50%';
+        }
+        if(cfABlue){
+          cfABlue.style.top = '50%';
+          cfABlue.style.left = '50%';
+        }
+      }
 
-  const cardRightCenterX = cardCx + cardW * 0.50;
+      const opticW = mobile ? 38 : (tablet ? 48 : 58);
+      const opticH = mobile ? 76 : (tablet ? 98 : 118);
+      const opticCx = eyeLeft.x + (mobile ? -1 : -2);
+      const opticCy = eyeLeft.y - 20;
 
-  if(modeOn){
-    cfLineRed.style.opacity = '1';
-    cfLineBlue.style.opacity = '1';
+      cfOptic.style.width = opticW + 'px';
+      cfOptic.style.height = opticH + 'px';
+      cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
 
-    const blueStartX = eyeRight.x;
-    const blueStartY = eyeRight.y;
-    const blueEndX = baseCardCx + cardW * 0.50;
-    const blueEndY = blueCardCenterY;
+      const cardRightCenterX = cardCx + cardW * 0.50;
 
-    const redStartX = eyeLeft.x;
-    const redStartY = eyeLeft.y;
-    const redEndX = cardRightCenterX;
-    const redEndY = redCardCenterY;
+      if(modeOn){
+        cfLineRed.style.opacity = '1';
+        cfLineBlue.style.opacity = '1';
 
-    cfPlaceLine(cfLineBlue, blueStartX, blueStartY, blueEndX, blueEndY, rect);
+        const blueStartX = eyeRight.x;
+        const blueStartY = eyeRight.y;
+        const blueEndX = baseCardCx + cardW * 0.50;
+        const blueEndY = blueCardCenterY;
 
-    const dx = redEndX - redStartX;
-    const dy = redEndY - redStartY;
-    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-    const length = Math.sqrt(dx * dx + dy * dy);
+        const redStartX = eyeLeft.x;
+        const redStartY = eyeLeft.y;
+        const redEndX = cardRightCenterX;
+        const redEndY = redCardCenterY;
 
-    cfLineRed.style.left = (redStartX / rect.width * 100) + '%';
-    cfLineRed.style.top = (redStartY / rect.height * 100) + '%';
-    cfLineRed.style.width = length + 'px';
-    cfLineRed.style.transform = `rotate(${angle}deg)`;
+        cfPlaceLine(cfLineBlue, blueStartX, blueStartY, blueEndX, blueEndY, rect);
 
-  }else if(modeOff){
-    cfLineRed.style.opacity = '1';
-    cfLineBlue.style.opacity = '1';
+        const fixedDx = redEndX - redStartX;
+        const fixedDy = redEndY - redStartY;
+        const fixedAngle = Math.atan2(fixedDy, fixedDx) * 180 / Math.PI;
+        const liveLength = Math.sqrt(fixedDx * fixedDx + fixedDy * fixedDy);
 
-    const offAttachY = cardCy;
-    const redCardAttachY = offAttachY - (mobile ? 3 : 4);
-    const blueCardAttachY = offAttachY;
+        cfLineRed.style.left = (redStartX / rect.width * 100) + '%';
+        cfLineRed.style.top = (redStartY / rect.height * 100) + '%';
+        cfLineRed.style.width = liveLength + 'px';
+        cfLineRed.style.transform = `rotate(${fixedAngle}deg)`;
+      }else if(modeOff){
+        cfLineRed.style.opacity = '1';
+        cfLineBlue.style.opacity = '1';
 
-    cfPlaceLine(cfLineRed, cardRightCenterX, redCardAttachY, eyeLeft.x - (mobile ? 2 : 4), eyeLeft.y, rect);
-    cfPlaceLine(cfLineBlue, cardRightCenterX, blueCardAttachY, eyeRight.x - (mobile ? 10 : 12), eyeRight.y, rect);
-  }else{
-    cfLineRed.style.opacity = '0';
-    cfLineBlue.style.opacity = '0';
-  }
-}
-  
+        const offAttachY = cardCy;
+        const redCardAttachY = offAttachY - (mobile ? 3 : 4);
+        const blueCardAttachY = offAttachY;
+
+        cfPlaceLine(cfLineRed, cardRightCenterX, redCardAttachY, eyeLeft.x - (mobile ? 2 : 4), eyeLeft.y, rect);
+        cfPlaceLine(cfLineBlue, cardRightCenterX, blueCardAttachY, eyeRight.x - (mobile ? 10 : 12), eyeRight.y, rect);
+      }else{
+        cfLineRed.style.opacity = '0';
+        cfLineBlue.style.opacity = '0';
+      }
+    }
 
     missionComfort.addEventListener('click', toggleComfort);
     missionComfort.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') toggleComfort(); });
