@@ -17,6 +17,8 @@
       --shadow:0 18px 60px rgba(11,31,51,.18);
       --glass:rgba(255,255,255,.86);
       --glass-2:rgba(255,255,255,.72);
+      --navy:#062a72;
+      --navy-2:#0b3c8c;
 
       --panel-grad: linear-gradient(180deg, rgba(234,243,255,.92) 0%, rgba(255,255,255,.90) 55%, rgba(245,249,255,.86) 100%);
       --panel-stroke: rgba(0,94,184,.18);
@@ -44,7 +46,7 @@
       z-index:1;
     }
 
-    /* ìë¨ ë¯¸ì ì¹´ë */
+    /* 상단 미션 카드 */
     #missionBarWrap{
       position:fixed;
       left:12px;
@@ -120,7 +122,7 @@
     }
 
     .missionCard.done::after{
-      content:"ìë£";
+      content:"완료";
       position:absolute;
       right:10px;
       top:10px;
@@ -177,7 +179,7 @@
       }
     }
 
-    /* íë¨ ë²í¼ */
+    /* 하단 버튼 */
     #bottomBtns{
       position:fixed;
       left:12px;
@@ -209,7 +211,7 @@
       color:#ffffff;
     }
 
-    /* ìì ìí âº ë²í¼ */
+    /* 작은 원형 ↺ 버튼 */
     #btnReset{
       width:46px;
       height:46px;
@@ -229,11 +231,11 @@
       box-shadow: 0 10px 28px rgba(11,31,51,.10);
     }
 
-    /* â ì°ì¸¡ íë¨ í©ì· */
+    /* ✅ 우측 하단 팩샷 */
     #maxPackshot{
       position:fixed;
       right:18px;
-      bottom:90px; /* ì¡°ê¸ ë ìë */
+      bottom:90px;
       width:150px;
       max-width:34vw;
       height:auto;
@@ -242,14 +244,12 @@
       user-select:none;
       display:none;
       object-fit:contain;
-      mix-blend-mode:multiply; /* í° ë°°ê²½ì´ ìì¼ë©´ ìµëí ìì°ì¤ë½ê² */
+      mix-blend-mode:multiply;
       filter: drop-shadow(0 10px 18px rgba(11,31,51,.12));
       transform: translateZ(0);
     }
 
-
-
-    /* ëì íì´ì§ ê³µíµ ëì¤í´ë ì´ë¨¸ */
+    /* 난시 페이지 공통 디스클레이머 */
     #globalToricDisclaimer{
       position:fixed;
       left:12px;
@@ -291,7 +291,7 @@
       color:rgba(72,80,92,.92);
     }
     .toric-popup-disclaimer em{ font-style:italic; }
-    /* PVP */
+
     @keyframes pvpPop {
       0%   { transform: translate(-50%,-50%) scale(.94); opacity: 0; }
       60%  { transform: translate(-50%,-50%) scale(1.02); opacity: 1; }
@@ -392,7 +392,6 @@
     }
     #pvpConfirm:active{ transform:scale(.98); }
 
-    /* ëê» ë° */
     #thicknessBar{
       position:fixed;
       left:12px;
@@ -512,20 +511,26 @@
 
     #thHint{ display:none; }
 
-    /* ASD ì¤ë²ë ì´ */
+    /* ASD 오버레이 */
     #asdOverlay{
       position:fixed;
       inset:0;
       z-index:80;
       display:none;
-      background:rgba(11,31,51,.22);
-      backdrop-filter: blur(12px);
+      background:rgba(11,31,51,.36);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
       align-items:center;
       justify-content:center;
       padding:18px;
       box-sizing:border-box;
     }
     #asdOverlay.show{ display:flex; }
+
+    #asdCard, #comfortWrap{
+      pointer-events:auto;
+      touch-action:manipulation;
+    }
 
     #asdCard{
       width:min(920px, 96vw);
@@ -542,13 +547,14 @@
       align-items:center;
       justify-content:space-between;
       padding:14px 18px;
-      background:#eef3fa;
-      border-bottom:1px solid rgba(11,31,51,.08);
+      background:linear-gradient(135deg, var(--navy) 0%, #144fb8 100%);
+      border-bottom:1px solid rgba(255,255,255,.10);
+      box-shadow: inset 0 -1px 0 rgba(255,255,255,.08);
     }
     #asdHeaderTitle{
       font-size:18px;
       font-weight:900;
-      color:#111;
+      color:#fff;
       letter-spacing:-.2px;
     }
 
@@ -557,11 +563,15 @@
       height:34px;
       border:none;
       background:transparent;
-      color:#111;
+      color:#fff;
       font-weight:900;
       font-size:18px;
       cursor:pointer;
       box-shadow:none;
+      -webkit-appearance:none;
+      appearance:none;
+      pointer-events:auto;
+      touch-action:manipulation;
     }
 
     #asdHint{
@@ -579,8 +589,8 @@
       background: linear-gradient(180deg, rgba(234,243,255,.94) 0%, rgba(255,255,255,.84) 100%);
     }
     #asdHint button{
-      border:1px solid rgba(0,94,184,.65);
-      background:var(--acuvue-blue);
+      border:1px solid rgba(6,42,114,.70);
+      background:var(--navy);
       color:#ffffff;
       font-weight:900;
       font-size:14px;
@@ -591,7 +601,7 @@
       cursor:pointer;
       flex:0 0 auto;
       white-space:nowrap;
-      box-shadow: 0 10px 22px rgba(0,94,184,.22);
+      box-shadow: 0 10px 22px rgba(6,42,114,.20);
       align-self:flex-end;
     }
     #asdHint .hintText{
@@ -600,7 +610,7 @@
     }
     #asdHint .hintTitle{
       display:block;
-      color:var(--acuvue-blue);
+      color:var(--navy);
       font-size:17px;
       font-weight:900;
       margin-bottom:8px;
@@ -619,7 +629,7 @@
       letter-spacing:-.2px;
     }
     #asdHint .hintBody .blue{
-      color:var(--acuvue-blue);
+      color:var(--navy);
     }
 
     #asdScene{
@@ -758,50 +768,59 @@
     #asdBlinkBtn, #asdRotateBtn{
       position:absolute;
       bottom:14px;
-      width:54px;
       height:54px;
-      border-radius:999px;
-      font-weight:900;
-      font-size:12px;
       display:flex;
       align-items:center;
       justify-content:center;
-      z-index:5;
+      z-index:20;
       -webkit-tap-highlight-color: transparent;
       user-select:none;
       cursor:pointer;
-      box-shadow: 0 10px 22px rgba(11,31,51,.12);
+      font-weight:900;
+      font-size:14px;
+      box-shadow:none;
+      -webkit-appearance:none;
+      appearance:none;
+      pointer-events:auto;
+      touch-action:manipulation;
+      border:none;
+    }
+    #asdRotateBtn{
+      right:120px;
+      width:96px;
+      border-radius:999px 0 0 999px;
+      border:1.5px solid rgba(6,42,114,.22);
+      border-right:none;
+      background:rgba(255,255,255,.96);
+      color:var(--navy);
+      box-shadow:0 10px 22px rgba(11,31,51,.12);
     }
     #asdBlinkBtn{
       right:14px;
-      border:1px solid rgba(0,94,184,.55);
-      background:var(--acuvue-blue);
+      width:108px;
+      border-radius:0 999px 999px 0;
+      border:1.5px solid rgba(6,42,114,.24);
+      background:linear-gradient(135deg, var(--navy) 0%, #1450b8 100%);
       color:#fff;
-      box-shadow: 0 12px 26px rgba(0,94,184,.20);
-    }
-    #asdRotateBtn{
-      right:76px;
-      border:1px solid rgba(0,94,184,.35);
-      background:rgba(255,255,255,.92);
-      color:var(--acuvue-blue);
+      box-shadow:0 10px 22px rgba(6,42,114,.18);
     }
 
     #asdAngleBadge{
       position:absolute;
       left:14px;
       bottom:18px;
-      color:var(--acuvue-blue);
+      color:var(--navy);
       font-size:12px;
       font-weight:900;
       background:rgba(255,255,255,.86);
-      border:1px solid rgba(0,94,184,.35);
+      border:1px solid rgba(6,42,114,.28);
       border-radius:999px;
       padding:6px 10px;
       z-index:5;
       box-shadow: 0 10px 22px rgba(11,31,51,.10);
     }
 
-    /* íí ë¦¬ì¼ */
+    /* 튜토리얼 */
     #tutorialLayer{
       position:fixed;
       inset:0;
@@ -894,16 +913,16 @@
     #tutLeft{ left:20px; right:20px; top:50%; transform:translateY(-50%); display:none; }
     #tutBottom{ left:20px; right:20px; bottom:88px; display:none; }
     #tutTop{ left:20px; right:20px; top:126px; display:none; }
-  
 
-    /* ASD í¸ìí ìì¼ ì¤ë²ë ì´ */
+    /* ASD 편안한 시야 오버레이 */
     #comfortOverlay{
       position:fixed;
       inset:0;
       z-index:82;
       display:none;
-      background:rgba(255,255,255,.16);
-      backdrop-filter: blur(8px);
+      background:rgba(11,31,51,.36);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
       align-items:center;
       justify-content:center;
       padding:18px;
@@ -922,182 +941,20 @@
 
     #comfortHead{
       height:76px;
-      background:#dbe5f1;
+      background:linear-gradient(135deg, var(--navy) 0%, #144fb8 100%);
       display:flex;
       align-items:center;
       justify-content:space-between;
       padding:0 26px;
-      border-bottom:1px solid rgba(10,30,55,.08);
+      border-bottom:1px solid rgba(255,255,255,.10);
+      box-shadow: inset 0 -1px 0 rgba(255,255,255,.08);
     }
     #comfortTitle{
       font-size:28px;
       font-weight:900;
-      color:#000;
+      color:#fff;
       letter-spacing:-.5px;
     }
-    #comfortClose{
-      border:none;
-      background:transparent;
-      font-size:34px;
-      line-height:1;
-      color:#000;
-      cursor:pointer;
-      padding:0;
-      width:44px;
-      height:44px;
-    }
-
-    #comfortScene{
-      position:relative;
-      height:min(64vw, 540px);
-      min-height:420px;
-      background:#efefef url('face_V2.png') center center / cover no-repeat;
-      overflow:hidden;
-    }
-    #comfortScene::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        radial-gradient(120px 150px at 30% 46%, rgba(255,255,255,.18), rgba(255,255,255,0) 62%),
-        radial-gradient(120px 150px at 69% 46%, rgba(255,255,255,.14), rgba(255,255,255,0) 62%);
-      pointer-events:none;
-      z-index:0;
-    }
-
-    #cfTargetStage{
-      position:absolute;
-      width:118px;
-      height:176px;
-      transform:translate(-50%,-50%);
-      z-index:4;
-      pointer-events:none;
-      transition:left .35s ease, top .35s ease, width .35s ease, height .35s ease;
-    }
-    .cf-target-box{
-      position:absolute;
-      left:50%;
-      transform:translateX(-50%);
-      width:100%;
-      height:100%;
-      border-radius:18px;
-      border:2px solid rgba(255,255,255,.58);
-      backdrop-filter: blur(1px);
-      box-shadow:0 8px 24px rgba(0,0,0,.08);
-      transition: top .45s ease, opacity .35s ease, background .35s ease, transform .45s ease;
-    }
-    .cf-box-top{ z-index:0; background:rgba(251,221,231,.38); }
-    .cf-box-bottom{ z-index:0; background:rgba(245,222,232,.16); }
-
-    .cf-target-a{
-      position:absolute;
-      left:50%;
-      transform:translate(-50%,-50%);
-      font-size:104px;
-      line-height:1;
-      font-weight:300;
-      letter-spacing:-6px;
-      font-family:Georgia, "Times New Roman", serif;
-      user-select:none;
-      transition: top .55s cubic-bezier(.22,.8,.22,1), opacity .35s ease, transform .55s cubic-bezier(.22,.8,.22,1), color .35s ease;
-      z-index:2;
-    }
-    .cf-a-red{ color:#e02020; }
-    .cf-a-blue{ color:#176fd6; }
-
-    .cf-target-box::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      border-radius:inherit;
-      background:linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0));
-      pointer-events:none;
-    }
-    #cfTargetStage,
-    .cf-target-box,
-    .cf-target-a,
-    #cfOptic{
-      transform-style:preserve-3d;
-    }
-    #comfortScene.mode-off #cfTargetStage{ transform:translate(-50%,-50%) rotate(0deg); }
-    #comfortScene.mode-on #cfTargetStage{ transform:translate(-50%,-50%) rotate(0deg); }
-    #comfortScene.mode-default #cfTargetStage{ transform:translate(-50%,-50%) rotate(0deg); }
-    #comfortScene.mode-on .cf-optic-prism{ transform:rotate(0deg); }
-    #comfortScene.mode-off .cf-optic-flat{ transform:rotate(0deg); }
-
-    #comfortScene.mode-default .cf-box-top,
-    #comfortScene.mode-default .cf-box-bottom{ top:0; opacity:.92; transform:translateX(-50%); }
-    #comfortScene.mode-default .cf-box-top{ background:rgba(245,222,232,.24); }
-    #comfortScene.mode-default .cf-box-bottom{ background:rgba(245,222,232,.14); }
-    #comfortScene.mode-default .cf-a-red{ top:50%; opacity:.16; transform:translate(-50%,-50%); animation:none; color:#b44dc9; }
-    #comfortScene.mode-default .cf-a-blue{ top:50%; opacity:.88; transform:translate(-50%,-50%); animation:none; color:#8b2da0; }
-
-    #comfortScene.mode-off .cf-box-top,
-    #comfortScene.mode-off .cf-box-bottom{ top:0; opacity:.92; transform:translateX(-50%); }
-    #comfortScene.mode-off .cf-box-top{ background:rgba(245,222,232,.28); }
-    #comfortScene.mode-off .cf-box-bottom{ background:rgba(245,222,232,.16); }
-    #comfortScene.mode-off .cf-a-red{ top:50%; opacity:.30; transform:translate(-50%,-50%); animation:none; color:#b44dc9; }
-    #comfortScene.mode-off .cf-a-blue{ top:50%; opacity:.92; transform:translate(-50%,-50%); color:#8b2da0; animation:none; }
-
-    #comfortScene.mode-on .cf-box-top{ top:-14px; opacity:.96; background:rgba(251,221,231,.42); animation:cfPinkFloat 1.45s ease-in-out infinite; }
-    #comfortScene.mode-on .cf-box-bottom{ top:14px; opacity:.82; background:rgba(219,234,255,.28); transform:translateX(-50%); }
-    #comfortScene.mode-on .cf-a-red{ top:33%; opacity:1; transform:translate(-50%,-50%); color:#e02020; animation:cfRedFloat 1.45s ease-in-out infinite; }
-    #comfortScene.mode-on .cf-a-blue{ top:69%; opacity:1; transform:translate(-50%,-50%); color:#176fd6; }
-
-    @keyframes cfRedFloat{
-      0%{ transform:translate(-50%,-50%) translateY(0); }
-      25%{ transform:translate(-50%,-50%) translateY(-4px); }
-      50%{ transform:translate(-50%,-50%) translateY(1px); }
-      75%{ transform:translate(-50%,-50%) translateY(-3px); }
-      100%{ transform:translate(-50%,-50%) translateY(0); }
-    }
-    @keyframes cfPinkFloat{
-      0%{ transform:translateX(-50%) translateY(0); }
-      25%{ transform:translateX(-50%) translateY(-4px); }
-      50%{ transform:translateX(-50%) translateY(1px); }
-      75%{ transform:translateX(-50%) translateY(-3px); }
-      100%{ transform:translateX(-50%) translateY(0); }
-    }
-
-    #cfOptic{
-      position:absolute;
-      width:58px;
-      height:118px;
-      transform:translate(-50%,-50%);
-      z-index:7;
-      transition:left .35s ease, top .35s ease, width .35s ease, height .35s ease;
-      pointer-events:none;
-    }
-    #comfortScene.mode-on .cf-optic-prism{ display:block; }
-    #comfortScene.mode-on .cf-optic-flat{ display:none; }
-    #comfortScene.mode-off .cf-optic-prism{ display:none; }
-    #comfortScene.mode-off .cf-optic-flat{ display:block; }
-    #comfortScene.mode-default .cf-optic-prism,
-    #comfortScene.mode-default .cf-optic-flat{ display:none; }
-    .cf-optic-prism,.cf-optic-flat{ position:absolute; inset:0; }
-    .cf-optic-prism::before{
-      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-      width:0; height:0; border-left:30px solid transparent; border-right:30px solid transparent; border-bottom:100px solid rgba(255,255,255,.46);
-      filter:drop-shadow(0 4px 10px rgba(0,0,0,.10));
-    }
-    .cf-optic-prism::after{
-      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-46%);
-      width:0; height:0; border-left:24px solid transparent; border-right:24px solid transparent; border-bottom:82px solid rgba(214,238,255,.30);
-    }
-    .cf-optic-flat::before{
-      display:none;
-    }
-
-    .cf-guide-line{
-      position:absolute; height:0; border-top:3px dashed; z-index:5; transform-origin:left center;
-      transition:left .35s ease, top .35s ease, width .35s ease, transform .35s ease, opacity .25s ease;
-      pointer-events:none; opacity:0;
-    }
-    .cf-guide-line.red{ border-color:#e02020; }
-    .cf-guide-line.blue{ border-color:#176fd6; }
-    #comfortScene.mode-default .cf-guide-line{ opacity:0; }
-    #comfortScene.mode-off .cf-guide-line,
-    #comfortScene.mode-on .cf-guide-line{ opacity:1; }
 
     #cfSegWrap{
       position:absolute; left:50%; bottom:16px; transform:translateX(-50%); width:min(94%, 760px); z-index:10;
@@ -1106,12 +963,12 @@
       display:grid; grid-template-columns:1fr 1fr; gap:8px; align-items:center;
     }
     .cf-seg-btn{
-      height:66px; border-radius:999px; border:1.5px solid rgba(110,162,218,.72); background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%);
-      color:#627588; font-size:21px; font-weight:800; letter-spacing:-.35px; cursor:pointer; transition:all .18s ease;
-      box-shadow:0 8px 18px rgba(17,104,208,.08), inset 0 1px 0 rgba(255,255,255,.96); padding:0 18px; white-space:nowrap; -webkit-appearance:none; appearance:none;
+      height:66px; border-radius:999px; border:1.5px solid rgba(6,42,114,.22); background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%);
+      color:var(--navy); font-size:21px; font-weight:800; letter-spacing:-.35px; cursor:pointer; transition:all .18s ease;
+      box-shadow:0 8px 18px rgba(17,104,208,.08), inset 0 1px 0 rgba(255,255,255,.96); padding:0 18px; white-space:nowrap; -webkit-appearance:none; appearance:none; pointer-events:auto; touch-action:manipulation;
     }
-    .cf-seg-btn.active{ background:linear-gradient(180deg,#eef7ff 0%,#dceeff 100%); color:#0f4f8f; border-color:#7fb1e6; box-shadow:0 10px 22px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98); }
-    .cf-seg-btn.default-active{ background:linear-gradient(180deg,#eef7ff 0%,#dceeff 100%); color:#0f4f8f; border-color:#7fb1e6; box-shadow:0 10px 22px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98); }
+    .cf-seg-btn.active{ background:linear-gradient(135deg, var(--navy) 0%, #144fb8 100%); color:#fff; border-color:rgba(6,42,114,.24); box-shadow:0 10px 22px rgba(6,42,114,.16), inset 0 1px 0 rgba(255,255,255,.14); }
+    .cf-seg-btn.default-active{ background:linear-gradient(135deg, var(--navy) 0%, #144fb8 100%); color:#fff; border-color:rgba(6,42,114,.24); box-shadow:0 10px 22px rgba(6,42,114,.16), inset 0 1px 0 rgba(255,255,255,.14); }
     .cf-seg-btn:not(.active):not(.default-active){ color:#627588; }
     .cf-seg-btn:not(.active):active{ transform:scale(.985); }
 
@@ -1122,10 +979,10 @@
     #comfortMessageCopy{
       flex:1 1 auto; font-size:28px; line-height:1.34; font-weight:900; letter-spacing:-.6px; color:#000; word-break:keep-all;
     }
-    #comfortMessageCopy .blue{ color:#005EB8; }
+    #comfortMessageCopy .blue{ color:var(--navy); }
     #comfortConfirm{
-      flex:0 0 auto; min-width:120px; height:86px; padding:0 26px; border:none; border-radius:18px; background:#1168d0; color:#fff;
-      font-size:24px; font-weight:900; cursor:pointer; box-shadow:0 10px 22px rgba(17,104,208,.22);
+      flex:0 0 auto; min-width:120px; height:86px; padding:0 26px; border:none; border-radius:18px; background:linear-gradient(135deg, var(--navy) 0%, #144fb8 100%); color:#fff;
+      font-size:24px; font-weight:900; cursor:pointer; box-shadow:0 10px 22px rgba(6,42,114,.22); -webkit-appearance:none; appearance:none; pointer-events:auto; touch-action:manipulation;
     }
 
     @media (max-width: 820px){
@@ -1165,19 +1022,12 @@
       #comfortMessage{ padding:18px 14px 18px; gap:12px; }
       #comfortMessageCopy{ font-size:17px; line-height:1.38; }
       #comfortConfirm{ min-width:82px; height:58px; font-size:16px; border-radius:14px; padding:0 18px; }
+      #asdRotateBtn{ right:112px; width:90px; font-size:13px; }
+      #asdBlinkBtn{ width:100px; font-size:13px; }
     }
 
+    #maxPackshot{ pointer-events:auto; cursor:pointer; }
 
-    /* ë§¥ì¤ í©ì· ë¸ë£¨ë¼ì´í¸ ì²´í */
-    #maxPackshot{
-      pointer-events:auto;
-      cursor:pointer;
-    }
-
-    
-
-    
-    
     #blueLightIcon{
       width:46px;
       height:46px;
@@ -1219,8 +1069,6 @@
       box-shadow: 0 10px 22px rgba(0,94,184,.22);
     }
 
-  
-    /* ===== MAX blue-light demo: clearly visible version ===== */
     body.blue-demo-on model-viewer{
       filter:hue-rotate(52deg) saturate(1.75) brightness(1.08) !important;
       transform:translate(26px,-16px) rotateY(-18deg) scale(1.045) !important;
@@ -1239,49 +1087,13 @@
       filter:drop-shadow(0 24px 40px rgba(0,94,184,.36)) !important;
     }
 
-    
-
-    
-
-    
-
-    /* speech bubble anchored to MAX packshot */
-    
-    
-    
-
-    @media (max-width:560px){
-      
-      
-
-      body.blue-demo-on model-viewer{
-        transform:translate(18px,-12px) rotateY(-15deg) scale(1.035) !important;
-      }
-      
-      
-      #maxPackshot.active{
-        transform:translateY(-8px) scale(1.12) !important;
-      }
+    #lensTintGlow{
+      width:min(28vw, 200px) !important;
+      height:min(28vw, 200px) !important;
+      transform:translate(6vw, -10vh) !important;
+      opacity:.7;
     }
 
-
-/* ===== FIX: speech bubble attached to packshot ===== */
-
-
-
-/* ===== reduce weird big blue blob ===== */
-#lensTintGlow{
-  width:min(28vw, 200px) !important;
-  height:min(28vw, 200px) !important;
-  transform:translate(6vw, -10vh) !important;
-  opacity:.7;
-}
-
-
-    
-
-
-    /* ===== requested OptiBlue beam effect ===== */
     #optiBeamLayer{
       position:fixed;
       inset:0;
@@ -1299,7 +1111,6 @@
       filter:blur(.1px);
     }
 
-    /* incoming yellow beam toward lens center */
     #beamIn{
       left:-8vw;
       top:56.2%;
@@ -1313,7 +1124,6 @@
       box-shadow:0 0 18px rgba(255,196,0,.50);
     }
 
-    /* outgoing blue beam from same lens center point */
     #beamOut{
       left:31.4%;
       top:48.8%;
@@ -1343,7 +1153,6 @@
       box-shadow:0 0 10px rgba(255,210,77,.28);
     }
 
-    /* strong blue-green tint + angled lens */
     body.blue-demo-on model-viewer{
       filter:hue-rotate(62deg) saturate(1.88) brightness(1.08) !important;
       transform:translate(20px,-12px) rotateY(-15deg) scale(1.035) !important;
@@ -1375,8 +1184,6 @@
       }
     }
 
-
-    /* corrected popup with natural tail */
     #blueLightOverlay{
       position:fixed !important;
       right:18px !important;
@@ -1418,27 +1225,25 @@
       }
     }
 
-
-#comfortScene.mode-on #cfTargetStage{
-  animation:floatRedCard 2.2s ease-in-out infinite;
-}
-#comfortScene.mode-on #cfLineRed{
-  animation:floatRedLine 2.2s ease-in-out infinite;
-}
-#comfortScene.mode-on #cfLineBlue{
-  animation:none !important;
-}
-@keyframes floatRedCard{
-  0%{ transform:translate(-50%,-50%) translateY(0); }
-  50%{ transform:translate(-50%,-50%) translateY(-6px); }
-  100%{ transform:translate(-50%,-50%) translateY(0); }
-}
-@keyframes floatRedLine{
-  0%{ margin-top:0; }
-  50%{ margin-top:-6px; }
-  100%{ margin-top:0; }
-}
-
+    #comfortScene.mode-on #cfTargetStage{
+      animation:floatRedCard 2.2s ease-in-out infinite;
+    }
+    #comfortScene.mode-on #cfLineRed{
+      animation:floatRedLine 2.2s ease-in-out infinite;
+    }
+    #comfortScene.mode-on #cfLineBlue{
+      animation:none !important;
+    }
+    @keyframes floatRedCard{
+      0%{ transform:translate(-50%,-50%) translateY(0); }
+      50%{ transform:translate(-50%,-50%) translateY(-6px); }
+      100%{ transform:translate(-50%,-50%) translateY(0); }
+    }
+    @keyframes floatRedLine{
+      0%{ margin-top:0; }
+      50%{ margin-top:-6px; }
+      100%{ margin-top:0; }
+    }
 
     #blueLightOverlay{
       overflow:visible !important;
@@ -1476,186 +1281,184 @@
       }
     }
 
+    #blueLightOverlay{
+      display:none !important;
+      align-items:stretch !important;
+      gap:14px !important;
+      padding:18px 18px !important;
+      border-radius:24px !important;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(248,251,255,.98) 100%) !important;
+      border:1px solid rgba(0,94,184,.16) !important;
+      box-shadow:
+        0 24px 56px rgba(0,94,184,.10),
+        0 18px 60px rgba(11,31,51,.14),
+        inset 0 1px 0 rgba(255,255,255,.9) !important;
+      overflow:hidden !important;
+    }
+    #blueLightOverlay.show{
+      display:flex !important;
+    }
+    #blueLightOverlay::before,
+    #blueLightOverlay::after{
+      display:none !important;
+    }
+    #blueLightOverlay::selection{
+      background:rgba(0,94,184,.10);
+    }
 
-/* ===== premium blue-light overlay refinement ===== */
-#blueLightOverlay{
-  display:none !important;
-  align-items:stretch !important;
-  gap:14px !important;
-  padding:18px 18px !important;
-  border-radius:24px !important;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(248,251,255,.98) 100%) !important;
-  border:1px solid rgba(0,94,184,.16) !important;
-  box-shadow:
-    0 24px 56px rgba(0,94,184,.10),
-    0 18px 60px rgba(11,31,51,.14),
-    inset 0 1px 0 rgba(255,255,255,.9) !important;
-  overflow:hidden !important;
-}
-#blueLightOverlay.show{
-  display:flex !important;
-}
-#blueLightOverlay::before,
-#blueLightOverlay::after{
-  display:none !important;
-}
-#blueLightOverlay::selection{
-  background:rgba(0,94,184,.10);
-}
+    #blueLightIcon{
+      width:58px !important;
+      height:58px !important;
+      align-self:flex-start !important;
+      margin-top:2px;
+      border:1px solid rgba(255,255,255,.55);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(168,245,255,.98), rgba(74,206,255,.95) 58%, rgba(36,175,232,.92) 100%) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.65),
+        0 12px 26px rgba(0,94,184,.16) !important;
+      font-size:24px !important;
+    }
 
-#blueLightIcon{
-  width:58px !important;
-  height:58px !important;
-  align-self:flex-start !important;
-  margin-top:2px;
-  border:1px solid rgba(255,255,255,.55);
-  background:
-    radial-gradient(circle at 30% 30%, rgba(168,245,255,.98), rgba(74,206,255,.95) 58%, rgba(36,175,232,.92) 100%) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.65),
-    0 12px 26px rgba(0,94,184,.16) !important;
-  font-size:24px !important;
-}
+    #blueLightBody{
+      flex:1 1 auto;
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap:10px;
+    }
 
-#blueLightBody{
-  flex:1 1 auto;
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  gap:10px;
-}
+    #blueLightTitle{
+      margin:0 0 2px 0 !important;
+      color:#0b1f33 !important;
+      font-size:17px !important;
+      line-height:1.15 !important;
+      font-weight:900 !important;
+      letter-spacing:-.35px !important;
+    }
 
-#blueLightTitle{
-  margin:0 0 2px 0 !important;
-  color:#0b1f33 !important;
-  font-size:17px !important;
-  line-height:1.15 !important;
-  font-weight:900 !important;
-  letter-spacing:-.35px !important;
-}
+    #blueLightHint{
+      margin:0 !important;
+      color:#35506b !important;
+      font-size:12.8px !important;
+      line-height:1.48 !important;
+      letter-spacing:-.15px;
+      max-width:unset !important;
+    }
 
-#blueLightHint{
-  margin:0 !important;
-  color:#35506b !important;
-  font-size:12.8px !important;
-  line-height:1.48 !important;
-  letter-spacing:-.15px;
-  max-width:unset !important;
-}
+    #blueLightBottomRow{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:2px;
+    }
 
-#blueLightBottomRow{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap:12px;
-  margin-top:2px;
-}
+    #blueLightConfirm{
+      flex:0 0 auto !important;
+      min-width:88px;
+      height:48px;
+      padding:0 18px !important;
+      border-radius:999px !important;
+      border:1px solid rgba(0,94,184,.62) !important;
+      background:linear-gradient(180deg, #1775df 0%, #0f62c5 100%) !important;
+      color:#fff !important;
+      font-size:14px !important;
+      font-weight:900 !important;
+      letter-spacing:-.2px;
+      box-shadow:
+        0 12px 24px rgba(17,104,208,.20),
+        inset 0 1px 0 rgba(255,255,255,.24) !important;
+    }
 
-#blueLightConfirm{
-  flex:0 0 auto !important;
-  min-width:88px;
-  height:48px;
-  padding:0 18px !important;
-  border-radius:999px !important;
-  border:1px solid rgba(0,94,184,.62) !important;
-  background:linear-gradient(180deg, #1775df 0%, #0f62c5 100%) !important;
-  color:#fff !important;
-  font-size:14px !important;
-  font-weight:900 !important;
-  letter-spacing:-.2px;
-  box-shadow:
-    0 12px 24px rgba(17,104,208,.20),
-    inset 0 1px 0 rgba(255,255,255,.24) !important;
-}
+    #blueLightOverlay #overlayPackshot{
+      position:static !important;
+      display:block !important;
+      width:126px !important;
+      max-width:34vw !important;
+      height:auto !important;
+      object-fit:contain !important;
+      flex:0 0 auto;
+      pointer-events:none !important;
+      user-select:none !important;
+      mix-blend-mode:multiply;
+      filter:drop-shadow(0 10px 18px rgba(11,31,51,.12)) !important;
+      transform:translateY(2px);
+    }
 
-#blueLightOverlay #overlayPackshot{
-  position:static !important;
-  display:block !important;
-  width:126px !important;
-  max-width:34vw !important;
-  height:auto !important;
-  object-fit:contain !important;
-  flex:0 0 auto;
-  pointer-events:none !important;
-  user-select:none !important;
-  mix-blend-mode:multiply;
-  filter:drop-shadow(0 10px 18px rgba(11,31,51,.12)) !important;
-  transform:translateY(2px);
-}
+    @media (max-width:560px){
+      #blueLightOverlay{
+        left:12px !important;
+        right:12px !important;
+        width:auto !important;
+        bottom:118px !important;
+        gap:12px !important;
+        padding:16px 16px !important;
+        border-radius:22px !important;
+      }
+      #blueLightIcon{
+        width:52px !important;
+        height:52px !important;
+        font-size:22px !important;
+      }
+      #blueLightTitle{
+        font-size:15px !important;
+      }
+      #blueLightHint{
+        font-size:12px !important;
+        line-height:1.42 !important;
+      }
+      #blueLightBottomRow{
+        gap:10px;
+        margin-top:0;
+      }
+      #blueLightConfirm{
+        min-width:78px;
+        height:44px;
+        padding:0 16px !important;
+        font-size:13px !important;
+      }
+      #blueLightOverlay #overlayPackshot{
+        width:110px !important;
+        max-width:30vw !important;
+        transform:translateY(1px);
+      }
+    }
 
-@media (max-width:560px){
-  #blueLightOverlay{
-    left:12px !important;
-    right:12px !important;
-    width:auto !important;
-    bottom:118px !important;
-    gap:12px !important;
-    padding:16px 16px !important;
-    border-radius:22px !important;
-  }
-  #blueLightIcon{
-    width:52px !important;
-    height:52px !important;
-    font-size:22px !important;
-  }
-  #blueLightTitle{
-    font-size:15px !important;
-  }
-  #blueLightHint{
-    font-size:12px !important;
-    line-height:1.42 !important;
-  }
-  #blueLightBottomRow{
-    gap:10px;
-    margin-top:0;
-  }
-  #blueLightConfirm{
-    min-width:78px;
-    height:44px;
-    padding:0 16px !important;
-    font-size:13px !important;
-  }
-  #blueLightOverlay #overlayPackshot{
-    width:110px !important;
-    max-width:30vw !important;
-    transform:translateY(1px);
-  }
-}
-
-</style>
+  </style>
 </head>
 
 <body>
   <div id="missionBarWrap">
-    <div id="missionBarHeader">ìíë¸Â® ëì ë ì¦ ê¸°ì </div>
+    <div id="missionBarHeader">아큐브® 난시 렌즈 기술</div>
     <div id="missionBar">
     <div id="missionASD" class="missionCard" role="button" tabindex="0">
       <div class="missionNo">01</div>
-      <div class="missionTitle">ASDâ¢ ì¶ìì í</div>
-      <div class="missionDesc"> ìì¸í ë³´ê¸° > </div>
+      <div class="missionTitle">ASD™ 축안정화</div>
+      <div class="missionDesc"> 자세히 보기 > </div>
     </div>
     <div id="missionPVP" class="missionCard" role="button" tabindex="0">
       <div class="missionNo">02</div>
-      <div class="missionTitle">PVP ìµì¤ ì¸ì</div>
-      <div class="missionDesc"> ìì¸í ë³´ê¸° ></div>
+      <div class="missionTitle">PVP 습윤 인자</div>
+      <div class="missionDesc"> 자세히 보기 ></div>
     </div>
     <div id="missionComfort" class="missionCard" role="button" tabindex="0">
       <div class="missionNo">03</div>
-      <div class="missionTitle">íë¦¬ì¦ì´ ì ì ê´íë¶</div>
-      <div class="missionDesc">  ìì¸í ë³´ê¸° > </div>
+      <div class="missionTitle">프리즘이 적은 광학부</div>
+      <div class="missionDesc">  자세히 보기 > </div>
     </div>
     </div>
   </div>
 
   <div id="thicknessBar" aria-hidden="true">
     <div id="thHeader">
-      <div id="thTitle">ëê»</div>
+      <div id="thTitle">두께</div>
       <div id="thUnit">mm</div>
     </div>
     <div id="gradRow">
-      <div class="tickLabel">ìì_0.0</div>
+      <div class="tickLabel">얇음_0.0</div>
       <div id="gradWrap">
         <div id="grad"></div>
         <div id="gradShine"></div>
@@ -1665,7 +1468,7 @@
         <div class="mark m75"><strong>0.3</strong></div>
         <div class="mark m100"><strong>0.4</strong></div>
       </div>
-      <div class="tickLabel" style="text-align:left;width:46px;">0.4_ëê»</div>
+      <div class="tickLabel" style="text-align:left;width:46px;">0.4_두껍</div>
     </div>
     <div id="thHint"></div>
   </div>
@@ -1677,16 +1480,16 @@
   <div id="pvpOverlay">
     <img id="pvpThumb" src="PVP.png" alt="PVP" onerror="this.onerror=null; this.src='PVP.jpeg';">
     <div id="pvpText">
-      <div id="pvpTitle">PVP ìµì¤ ì¸ì</div>
-      <div id="hint">ë ì¦ ë´ PVP ìµì¤ì¸ìê° ìë¶ì ì ëê¹ì§ ì ì§íì¬ ì´ì´í¨ê³¼ ì ëªí¨ ì ê³µí©ëë¤.</div>
+      <div id="pvpTitle">PVP 습윤 인자</div>
+      <div id="hint">렌즈 내 PVP 습윤인자가 수분을 저녁까지 유지하여 촉촉함과 선명함 제공합니다.</div>
     </div>
-    <div id="pvpConfirm" role="button" tabindex="0">íì¸</div>
+    <div id="pvpConfirm" role="button" tabindex="0">확인</div>
   </div>
 
   <div id="asdOverlay" aria-hidden="true">
     <div id="asdCard">
       <div id="asdHeader">
-        <div id="asdHeaderTitle">ASDâ¢ ì¶ìì í</div>
+        <div id="asdHeaderTitle">ASD™ 축안정화</div>
         <button id="asdClose" type="button">X</button>
       </div>
 
@@ -1694,7 +1497,7 @@
         <img id="asdEyeMV" src="a.png" alt="Eye background" onerror="this.onerror=null; this.src='a.gif';">
         <div id="asdLensRim"></div>
         <img id="asdLensImg" src="lens.png" alt="Lens overlay"
-             onerror="this.style.display='none'; document.getElementById('asdHint').textContent='lens.png / lens2.png íì¼ì ê°ì í´ëì ë£ì´ì£¼ì¸ì.';">
+             onerror="this.style.display='none'; document.getElementById('asdHint').textContent='lens.png / lens2.png 파일을 같은 폴더에 넣어주세요.';">
         <div id="asdMaskShade"></div>
         <img id="asdUpperLid" src="upper_lid.png" alt="Upper eyelid overlay" onerror="this.style.display='none';">
 
@@ -1703,19 +1506,19 @@
           <div id="asdLidBot"></div>
         </div>
 
-        <div id="asdAngleBadge">20Â°</div>
-        <button id="asdRotateBtn" type="button">ì¶ì´í</button>
-        <button id="asdBlinkBtn" type="button">ê¹ë°ì</button>
+        <div id="asdAngleBadge">20°</div>
+        <button id="asdRotateBtn" type="button">축이탈</button>
+        <button id="asdBlinkBtn" type="button">깜박임</button>
       </div>
 
       <div id="asdHint">
         <div class="hintText">
-          <span class="hintTitle"ëìë ì¦ë ì¶ì´ íì íë©´ ìì¼ê° íë ¤ì§ëë¤. </span>
-          <span class="hintBody"><span class="blue">âê¹ë°ìâ ë²í¼</span>ì ëë¬ íì ë ì¶ì ìì í ìì¼ ë³´ì¸ì.</span>
+          <span class="hintTitle">난시렌즈, 축 회전이되면 시야가 흐려집니다.</span>
+          <span class="hintBody"><span class="blue">‘깜박임’ 버튼</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span>
         </div>
       </div>
       <div class="toric-popup-disclaimer">
-        <span class="disc-note">í´ë¹ ì´ë¯¸ì§ë ì´í´ë¥¼ ëê¸° ìí ê°ì ì´ë¯¸ì§ ìëë¤. KR_2026_233</span>
+        <span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span>
       </div>
     </div>
   </div>
@@ -1723,7 +1526,7 @@
   <div id="comfortOverlay" aria-hidden="true">
     <div id="comfortWrap" onclick="event.stopPropagation()">
       <div id="comfortHead">
-        <div id="comfortTitle">íë¦¬ì¦ì´ ì ì ê´íë¶</div>
+        <div id="comfortTitle">프리즘이 적은 광학부</div>
         <button id="comfortClose" type="button">X</button>
       </div>
 
@@ -1744,21 +1547,21 @@
         </div>
 
         <div id="cfSegWrap">
-          <button id="cfBtnOff" class="cf-seg-btn active" type="button">íë¦¬ì¦ ìë ê²½ì°</button>
-          <button id="cfBtnOn" class="cf-seg-btn" type="button">íë¦¬ì¦ ìë ê²½ì°</button>
+          <button id="cfBtnOff" class="cf-seg-btn active" type="button">프리즘 없는 경우</button>
+          <button id="cfBtnOn" class="cf-seg-btn" type="button">프리즘 있는 경우</button>
         </div>
       </div>
 
       <div id="comfortMessage">
         <div id="comfortMessageCopy">
-          ëì ë ì¦ ê´íë¶ì íë¦¬ì¦ì ë¨ì ëì ìë¹ììê² ì¤ìí©ëë¤.
-          <span class="blue">íë¦¬ì¦ì´ ì ì ê´íë¶ë ë³´ë¤ í¸ìí ìì¼ ì´í´ì ëìì´ ë©ëë¤.</span>
+          난시 렌즈 광학부의 프리즘은 단안 난시 소비자에게 중요합니다.
+          <span class="blue">프리즘이 적은 광학부는 보다 편안한 시야 이해에 도움이 됩니다.</span>
         </div>
-        <button id="comfortConfirm" type="button">íì¸</button>
+        <button id="comfortConfirm" type="button">확인</button>
       </div>
       <div class="toric-popup-disclaimer">
-        <span class="disc-note">í´ë¹ ì´ë¯¸ì§ë ì´í´ë¥¼ ëê¸° ìí ê°ì ì´ë¯¸ì§ ìëë¤. KR_2026_233</span>
-        <span class="disc-ref">Sulley A, Hawke R, Osborn Lorenz K, et al. Resultant vertical prism in toric soft contact lenses. <em>Cont Lens Anterior Eye.</em> 2015;38(4):253â257.</span>
+        <span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span>
+        <span class="disc-ref">Sulley A, Hawke R, Osborn Lorenz K, et al. Resultant vertical prism in toric soft contact lenses. <em>Cont Lens Anterior Eye.</em> 2015;38(4):253–257.</span>
       </div>
     </div>
   </div>
@@ -1768,34 +1571,34 @@
     <div id="tutorialFocus"></div>
 
     <div class="tutBox" id="tutLeft" style="display:none;">
-      <div class="tutTitle">ê°ì´ë 1</div>
-      <div class="tutText">ë ì¦ë¥¼ ì¢ì°ë¡ ëëê·¸íì¬ ìì§ì¬ ë³´ì¸ì.<br>íëì ì¶ìë¥¼ íµí´ ë ì¦ êµ¬ì¡°ë¥¼ ë ì ëªíê² íì¸í  ì ììµëë¤.</div>
-      <button class="tutBtn" id="tutNext1">íì¸</button>
+      <div class="tutTitle">가이드 1</div>
+      <div class="tutText">렌즈를 좌우로 드래그하여 움직여 보세요.<br>확대와 축소를 통해 렌즈 구조를 더 선명하게 확인할 수 있습니다.</div>
+      <button class="tutBtn" id="tutNext1">확인</button>
     </div>
 
     <div class="tutBox" id="tutBottom" style="display:none;">
-      <div class="tutTitle">ê°ì´ë 2</div>
-      <div class="tutText">âë ì¦ ëê» MAPâì í´ë¦­íì¬<br>ìíë¸Â® ì¸í¼ëí° ì£ì§(ê°ì¥ ìì ë³´ë¼ì ìì­)ì íì¸í´ ë³´ì¸ì!</div>
-      <button class="tutBtn" id="tutNext2">íì¸</button>
+      <div class="tutTitle">가이드 2</div>
+      <div class="tutText">‘렌즈 두께 MAP’을 클릭하여<br>아큐브® 인피니티 엣지(가장 얇은 보라색 영역)을 확인해 보세요!</div>
+      <button class="tutBtn" id="tutNext2">확인</button>
     </div>
 
     <div class="tutBox" id="tutTop" style="display:none;">
-      <div class="tutTitle">ê°ì´ë 3</div>
-      <div class="tutText">ê° ì¹´ëë¥¼ ëë¬ ì²´íì ì§íí´ ë³´ì¸ì.<br></div>
-      <button class="tutBtn" id="tutDone">íì¸</button>
+      <div class="tutTitle">가이드 3</div>
+      <div class="tutText">각 카드를 눌러 체험을 진행해 보세요.<br></div>
+      <button class="tutBtn" id="tutDone">확인</button>
     </div>
   </div>
 
   <div id="blueTintRays" aria-hidden="true" style="display:none !important;"></div>
 
   <div id="blueLightOverlay" aria-hidden="true">
-    <div id="blueLightIcon">â¦</div>
+    <div id="blueLightIcon">✦</div>
     <div id="blueLightBody">
-      <div id="blueLightTitle">ë¸ë£¨ë¼ì´í¸ íí°</div>
-      <div id="blueLightHint">ë¸ë£¨-ê·¸ë¦° í´í¸ì ê´ì  í¨ê³¼ë¥¼ íµí´ ìíë¸Â® MAXì ë¸ë£¨ë¼ì´í¸ íí° ì²´íì íì¸í´ ë³´ì¸ì.</div>
+      <div id="blueLightTitle">블루라이트 필터</div>
+      <div id="blueLightHint">블루-그린 틴트와 광선 효과를 통해 아큐브® MAX의 블루라이트 필터 체험을 확인해 보세요.</div>
       <div id="blueLightBottomRow">
-        <button id="blueLightConfirm" type="button">íì¸</button>
-        <img id="overlayPackshot" src="MAX.png" alt="ìíë¸ ë§¥ì¤ ëì í©ì·" onerror="this.style.display='none';">
+        <button id="blueLightConfirm" type="button">확인</button>
+        <img id="overlayPackshot" src="MAX.png" alt="아큐브 맥스 난시 팩샷" onerror="this.style.display='none';">
       </div>
     </div>
   </div>
@@ -1810,8 +1613,7 @@
   <div id="beamHitGlow"></div>
 </div>
 
-<!-- â ì°ì¸¡ íë¨ ë ì¦ í©ì· -->
-  <img id="maxPackshot" src="MAX.png" alt="ìíë¸ ë§¥ì¤ ëì í©ì·" onerror="this.style.display='none';">
+  <img id="maxPackshot" src="MAX.png" alt="아큐브 맥스 난시 팩샷" onerror="this.style.display='none';">
 
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
@@ -1830,11 +1632,11 @@
   </model-viewer>
 
   <div id="bottomBtns">
-    <button id="btnReset" title="ì²ì ìì¹ë¡">âº</button>
-    <button id="modeLens" class="btn primary">í¬ëª ë ì¦ ëª¨ë</button>
-    <button id="modeHeat" class="btn">ë ì¦ ëê» MAP</button>
+    <button id="btnReset" title="처음 위치로">↺</button>
+    <button id="modeLens" class="btn primary">투명 렌즈 모드</button>
+    <button id="modeHeat" class="btn">렌즈 두께 MAP</button>
   </div>
-  <div id="globalToricDisclaimer">í´ë¹ ì´ë¯¸ì§ë ì´í´ë¥¼ ëê¸° ìí ê°ì ì´ë¯¸ì§ ìëë¤. KR_2026_233</div>
+  <div id="globalToricDisclaimer">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</div>
 
   <script>
     const mv = document.getElementById('mv');
@@ -1969,7 +1771,6 @@
       maxPackshot.style.display = (currentMode === 'lens' && !cardOverlayOpen) ? 'block' : 'none';
     }
 
-
     function closeBlueLightDemo(){
       if(blueTintRays) blueTintRays.classList.remove('show');
       if(blueLightOverlay) blueLightOverlay.classList.remove('show');
@@ -1979,27 +1780,25 @@
       syncPackshot();
     }
 
-    
-/* ===== FORCE lens visual change ===== */
-function applyLensBlueEffect(){
-  try{
-    const mvEl = document.getElementById('mv');
-    if(!mvEl) return;
-    mvEl.style.filter = 'hue-rotate(60deg) saturate(1.8) brightness(1.1)';
-    mvEl.style.transform = 'translate(30px,-18px) rotateY(-20deg) scale(1.06)';
-    mvEl.style.transition = 'all .35s ease';
-  }catch(e){}
-}
-function resetLensBlueEffect(){
-  try{
-    const mvEl = document.getElementById('mv');
-    if(!mvEl) return;
-    mvEl.style.filter = '';
-    mvEl.style.transform = '';
-  }catch(e){}
-}
+    function applyLensBlueEffect(){
+      try{
+        const mvEl = document.getElementById('mv');
+        if(!mvEl) return;
+        mvEl.style.filter = 'hue-rotate(60deg) saturate(1.8) brightness(1.1)';
+        mvEl.style.transform = 'translate(30px,-18px) rotateY(-20deg) scale(1.06)';
+        mvEl.style.transition = 'all .35s ease';
+      }catch(e){}
+    }
+    function resetLensBlueEffect(){
+      try{
+        const mvEl = document.getElementById('mv');
+        if(!mvEl) return;
+        mvEl.style.filter = '';
+        mvEl.style.transform = '';
+      }catch(e){}
+    }
 
-function openBlueLightDemo(){
+    function openBlueLightDemo(){
       if(currentMode !== 'lens'){
         setModel('lens_clear.glb', 'lens', { resetCamera:true }).then(()=>{
           setTimeout(openBlueLightDemo, 160);
@@ -2025,8 +1824,8 @@ function openBlueLightDemo(){
     function setASDHintDefault(){
       asdHint.innerHTML = `
         <div class="hintText">
-          <span class="hintTitle">ëìë ì¦, ì¶ íì ì´ëë©´ ìì¼ê° íë ¤ì§ëë¤.</span>
-          <span class="hintBody"><span class="blue">âê¹ë°ìâ ë²í¼</span>ì ëë¬ íì ë ì¶ì ìì í ìì¼ ë³´ì¸ì.</span>
+          <span class="hintTitle">난시렌즈, 축 회전이되면 시야가 흐려집니다.</span>
+          <span class="hintBody"><span class="blue">‘깜박임’ 버튼</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span>
         </div>
       `;
     }
@@ -2034,10 +1833,10 @@ function openBlueLightDemo(){
     function setASDHintSuccess(){
       asdHint.innerHTML = `
         <div class="hintText">
-          <span class="hintTitle">ê¸°ìµí´ì£¼ì¸ì!</span>
-          <span class="hintBody"><span class="blue">ìíë¸Â® ASDâ¢</span>ë ìì°ì¤ë¬ì´ ìëª©(ë ê¹ë°ì)ì¼ë¡ ë ì¦ ìì§ìì ìì ííì¬ ì ëªí ìì¼ë¥¼ ì ê³µí©ëë¤.</span>
+          <span class="hintTitle">기억해주세요!</span>
+          <span class="hintBody"><span class="blue">아큐브® ASD™</span>는 자연스러운 순목(눈 깜박임)으로 렌즈 움직임을 안정화하여 선명한 시야를 제공합니다.</span>
         </div>
-        <button id="asdConfirmBtn" type="button">íì¸</button>
+        <button id="asdConfirmBtn" type="button">확인</button>
       `;
       document.getElementById('asdConfirmBtn')?.addEventListener('click', (e)=>{
         e.stopPropagation();
@@ -2066,9 +1865,9 @@ function openBlueLightDemo(){
         `translate(calc(-50% + ${extraX}px + var(--irisX, 0px)), calc(-50% + var(--irisY, 0px))) rotate(${asdAngle}deg)`;
 
       if(asdAngleBadge){
-        if(asdAngle > 0) asdAngleBadge.textContent = `ì¢ì¸¡ì¼ë¡ ${asdAngle}Â° íì `;
-        else if(asdAngle < 0) asdAngleBadge.textContent = `ì°ì¸¡ì¼ë¡ ${Math.abs(asdAngle)}Â° íì `;
-        else asdAngleBadge.textContent = `ì¶ ìì `;
+        if(asdAngle > 0) asdAngleBadge.textContent = `좌측으로 ${asdAngle}° 회전`;
+        else if(asdAngle < 0) asdAngleBadge.textContent = `우측으로 ${Math.abs(asdAngle)}° 회전`;
+        else asdAngleBadge.textContent = `축 안정`;
       }
     }
 
@@ -2423,8 +2222,6 @@ function openBlueLightDemo(){
       }
     });
 
-
-
     function closeComfort(markDone = false){
       if(markDone) comfortDone = true;
       comfortOverlay.classList.remove('show');
@@ -2466,15 +2263,15 @@ function openBlueLightDemo(){
         comfortScene.classList.add('mode-on');
         cfBtnOn.classList.add('active');
         comfortMessageCopy.innerHTML = `
-          ë¨ìì íë¦¬ì¦ ìí¥ì´ ìë ê²½ì°
-          <span class="blue">ìì ì´ë¯¸ì§ ìì¹ì ì°¨ì´ê° ë°ìíì¬ í¼ë¡ê°ì´ ë°ìí  ì ììµëë¤.</span>
+          단안에 프리즘 영향이 있는 경우
+          <span class="blue">양안 이미지 위치에 차이가 발생하여 피로감이 발생할 수 있습니다.</span>
         `;
       }else{
         comfortScene.classList.add('mode-off');
         cfBtnOff.classList.add('active');
         comfortMessageCopy.innerHTML = `
-          ëì ë ì¦ ê´íë¶ì íë¦¬ì¦ì
-          <span class="blue">ë¨ì ëì ìë¹ììê² ì¤ìí©ëë¤.</span>
+          난시 렌즈 광학부의 프리즘은
+          <span class="blue">단안 난시 소비자에게 중요합니다.</span>
         `;
       }
       requestAnimationFrame(positionComfortInteractiveElements);
@@ -2512,11 +2309,9 @@ function openBlueLightDemo(){
       const modeOn = comfortScene.classList.contains('mode-on');
       const modeOff = comfortScene.classList.contains('mode-off');
 
-      // ê¸°ë³¸ ì¹´ë(ë³´ë¼/íë ëì¼ ê¸°ì¤ ìì¹)
       const baseCardCx = w * 0.225;
       const baseCardCy = (eyeLeft.y + eyeRight.y) / 2 + 10;
 
-      // ë¹¨ê° ì¹´ë: ì¼ìª½ ë ê¸°ì¤ 170ë ëëì¼ë¡ ì¡°ê¸ ë ììª½
       let cardCx, cardCy;
       if(modeOn){
         cardCx = eyeLeft.x - (mobile ? 108 : 128);
@@ -2546,11 +2341,9 @@ function openBlueLightDemo(){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
-        // íë ì¹´ëë ë³´ë¼ ì¹´ëì ëì¼ ìì¹ / ìì§ì ìì / ìí ì ì§
         const blueY = baseCardCy;
         const blueEndX = eyeRight.x - (mobile ? 10 : 12);
 
-        // ë¹¨ê° ì¹´ëì ë¹¨ê° ì ì ë§ ê°ì´ ìì§ì
         const redStartY = cardCy;
         const redEndY = eyeLeft.y;
 
@@ -2560,7 +2353,6 @@ function openBlueLightDemo(){
         cfLineRed.style.opacity = '1';
         cfLineBlue.style.opacity = '1';
 
-        // ìì ê°ê° ë ê¸°ì¤ì¼ë¡ ì¹´ëê° ìì£¼ ì´ì§ ì¢ì¸¡ íë°©ì ìëë¡ 3~5ë ëëë§ ì ì©
         const tilt = mobile ? 4 : 6;
         const redStartY = eyeLeft.y + tilt;
         const blueStartY = eyeRight.y + tilt;
@@ -2613,7 +2405,6 @@ function openBlueLightDemo(){
 
     setModel('lens_clear.glb', 'lens', { resetCamera:true });
 
-    /* íí ë¦¬ì¼ */
     const tutorialLayer = document.getElementById('tutorialLayer');
     const tutorialMask = document.getElementById('tutorialMask');
     const tutorialFocus = document.getElementById('tutorialFocus');
