@@ -269,14 +269,24 @@
       flex:0 0 100%;
       margin-top:10px;
       grid-column:1 / -1;
-      padding:0;
+      padding:12px 0 0;
       text-align:left;
-      font-size:9.4px;
-      line-height:1.38;
-      color:#5f6875;
+      font-size:8.6px;
+      line-height:1.34;
+      color:#59616d;
       font-weight:500;
-      letter-spacing:-.04px;
+      letter-spacing:-.03px;
       word-break:keep-all;
+      position:relative;
+    }
+    .popup-reference-area::before{
+      content:"";
+      position:absolute;
+      left:-14px;
+      right:-14px;
+      top:0;
+      height:2px;
+      background:linear-gradient(90deg, rgba(176,220,255,0), rgba(176,220,255,.95) 20%, rgba(176,220,255,.95) 80%, rgba(176,220,255,0));
     }
     .popup-reference-area .ref-line{
       display:block;
@@ -332,9 +342,9 @@
       border-radius:18px;
       padding:14px 14px 12px;
       display:none;
-      grid-template-columns:78px minmax(0,1fr) 84px;
+      grid-template-columns:78px minmax(0,1fr) 72px;
       gap:10px 12px;
-      align-items:start;
+      align-items:center;
       backdrop-filter:none;
       box-shadow:0 16px 32px rgba(15,40,95,.12);
       overflow:hidden;
@@ -353,13 +363,13 @@
     }
     #pvpText{
       color:var(--smartfit-text);
-      font-size:13px;
-      line-height:1.4;
+      font-size:14px;
+      line-height:1.44;
       min-width:0;
       grid-column:2;
       align-self:center;
     }
-    #pvpTitle{ font-weight:900; margin-bottom:4px; color:#0f2240; font-size:14px; }
+    #pvpTitle{ font-weight:900; margin-bottom:4px; color:#0f2240; font-size:15px; }
     #hint{ opacity:1; color:#334b6a; }
 
     #pvpConfirm{
@@ -368,11 +378,11 @@
       opacity:1;
       cursor:pointer;
       user-select:none;
-      width:84px;
-      min-width:84px;
-      max-width:84px;
-      height:40px;
-      padding:0 12px;
+      width:68px;
+      min-width:68px;
+      max-width:68px;
+      height:38px;
+      padding:0 10px;
       border-radius:999px;
       border:1px solid rgba(36,85,199,.92);
       background:var(--smartfit-blue);
@@ -389,7 +399,7 @@
       justify-content:center;
       align-self:center;
       justify-self:end;
-      margin-top:2px;
+      margin-top:0;
     }
     #pvpConfirm:active{ transform:scale(.98); }
 
@@ -822,29 +832,29 @@
       #comfortConfirm{ min-width:96px; width:96px; max-width:96px; height:44px; font-size:13px; border-radius:999px; padding:0 16px; }
       #pvpOverlay{
         padding:12px 12px 10px;
-        grid-template-columns:74px minmax(0,1fr) 84px;
+        grid-template-columns:72px minmax(0,1fr) 66px;
         gap:8px 10px;
       }
       #pvpOverlay img{
-        width:74px;
-        height:74px;
+        width:72px;
+        height:72px;
         border-radius:12px;
       }
       #pvpText{
-        font-size:12px;
-        line-height:1.36;
+        font-size:13px;
+        line-height:1.4;
       }
       #pvpTitle{
-        font-size:13px;
+        font-size:14px;
         margin-bottom:3px;
       }
       #pvpConfirm{
-        width:96px;
-        min-width:96px;
-        max-width:96px;
-        height:44px;
-        padding:0 16px;
-        font-size:13px;
+        width:66px;
+        min-width:66px;
+        max-width:66px;
+        height:36px;
+        padding:0 8px;
+        font-size:11px;
         align-self:center;
       }
       #asdHeader{
