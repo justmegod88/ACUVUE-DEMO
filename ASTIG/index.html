@@ -266,6 +266,7 @@
     .toric-popup-disclaimer em{ font-style:italic; }
 
     .popup-reference-area{
+      grid-column:1 / -1;
       flex:0 0 100%;
       margin-top:10px;
       padding:0;
@@ -331,13 +332,14 @@
       border-radius:18px;
       padding:14px 14px 12px;
       display:none;
+      grid-template-columns:94px minmax(0, 1fr) auto;
       gap:12px;
-      align-items:flex-start;
+      align-items:start;
       backdrop-filter:none;
       box-shadow:0 16px 32px rgba(15,40,95,.12);
       overflow:hidden;
     }
-    #pvpOverlay.show{ display:flex; flex-wrap:wrap; }
+    #pvpOverlay.show{ display:grid; }
     #pvpOverlay img{
       width:94px;
       height:94px;
@@ -357,9 +359,10 @@
       opacity:1;
       cursor:pointer;
       user-select:none;
-      width:112px;
-      height:52px;
-      padding:0 22px;
+      width:96px;
+      min-width:96px;
+      height:44px;
+      padding:0 18px;
       border-radius:999px;
       border:1px solid rgba(36,85,199,.92);
       background:var(--smartfit-blue);
@@ -368,9 +371,10 @@
       white-space:nowrap;
       display:none;
       box-shadow:0 6px 16px rgba(36,85,199,.16);
-      font-size:15px;
+      font-size:14px;
       align-items:center;
       justify-content:center;
+      align-self:start;
     }
     #pvpConfirm:active{ transform:scale(.98); }
 
@@ -465,9 +469,9 @@
       box-shadow:0 18px 40px rgba(15,40,95,.14);
       position:relative;
     }
-    #asdHeader{ display:flex; align-items:center; justify-content:space-between; padding:10px 16px; min-height:48px; background:var(--smartfit-blue); border-bottom:1px solid rgba(255,255,255,.14); }
-    #asdHeaderTitle{ font-size:16px; font-weight:900; color:#fff; letter-spacing:-.25px; }
-    #asdClose{ width:32px; height:32px; border:none; background:rgba(255,255,255,.12); color:#fff; font-weight:800; font-size:17px; cursor:pointer; box-shadow:none; border-radius:999px; }
+    #asdHeader{ display:flex; align-items:center; justify-content:space-between; padding:8px 14px; min-height:42px; background:var(--smartfit-blue); border-bottom:1px solid rgba(255,255,255,.14); }
+    #asdHeaderTitle{ font-size:15px; font-weight:900; color:#fff; letter-spacing:-.25px; }
+    #asdClose{ width:30px; height:30px; border:none; background:rgba(255,255,255,.12); color:#fff; font-weight:800; font-size:16px; cursor:pointer; box-shadow:none; border-radius:999px; }
 
     #asdHint{
       padding:16px 16px 17px;
@@ -477,9 +481,9 @@
       font-weight:800;
       opacity:1;
       border-top:1px solid #d6e4fb;
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) auto;
+      align-items:end;
       gap:14px;
       background:#eef4fb;
     }
@@ -488,10 +492,11 @@
       background:var(--smartfit-blue);
       color:#ffffff;
       font-weight:900;
-      font-size:15px;
-      width:112px;
-      height:52px;
-      padding:0 22px;
+      font-size:14px;
+      width:96px;
+      min-width:96px;
+      height:44px;
+      padding:0 18px;
       border-radius:999px;
       -webkit-tap-highlight-color: transparent;
       cursor:pointer;
