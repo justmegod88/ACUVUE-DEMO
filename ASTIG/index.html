@@ -293,6 +293,12 @@
       margin-top:0;
     }
 
+    .pvp-highlight{
+      font-weight:900;
+      color:var(--acuvue-blue);
+      letter-spacing:-.01em;
+    }
+
     @keyframes pvpPop {
       0%   { transform: translate(-50%,-50%) scale(.94); opacity: 0; }
       60%  { transform: translate(-50%,-50%) scale(1.02); opacity: 1; }
@@ -304,8 +310,8 @@
       left:50%;
       top:50%;
       transform:translate(-50%,-50%);
-      width:min(80vw, 600px);
-      height:min(80vw, 600px);
+      width:min(76vw, 560px);
+      height:min(76vw, 560px);
       border-radius:999px;
       z-index:56;
       display:none;
@@ -315,7 +321,6 @@
       backdrop-filter: blur(10px);
       overflow:hidden;
       box-shadow: var(--panel-glow);
-      transition:transform .35s cubic-bezier(.22,.9,.22,1);
     }
     #pvpBig.show{
       display:block;
@@ -328,7 +333,7 @@
       display:block;
       border-radius:999px;
       filter:saturate(1.05) contrast(1.02);
-      transform: scale(1.2);
+      transform: scale(1.02);
       transform-origin:center;
     }
 
@@ -393,7 +398,7 @@
       white-space:nowrap;
       display:none;
       box-shadow:0 6px 16px rgba(36,85,199,.16);
-      font-size:12px;
+      font-size:13px;
       line-height:1;
       box-sizing:border-box;
       align-items:center;
@@ -528,7 +533,7 @@
       background:var(--smartfit-blue);
       color:#ffffff;
       font-weight:900;
-      font-size:12px;
+      font-size:13px;
       width:84px;
       min-width:84px;
       max-width:84px;
@@ -570,7 +575,7 @@
     #asdLensImg{
       position:absolute; left:50%; top:52%; width:80%;
       transform: translate(calc(-50% - 4px), calc(-50% + 10px)) rotate(20deg);
-      opacity:.90; pointer-events:none; will-change: transform, opacity; mix-blend-mode:normal; filter:saturate(1.08) contrast(1.06);
+      opacity:.70; pointer-events:none; will-change: transform, opacity; mix-blend-mode:normal; filter:saturate(1.08) contrast(1.06);
     }
     #asdLensRim{
       position:absolute; left:50%; top:52%; width:80%; height:80%; transform:translate(-50%,-50%);
@@ -607,14 +612,14 @@
 
     #asdBlinkBtn, #asdRotateBtn{
       position:absolute; bottom:14px; width:54px; height:54px; border-radius:999px;
-      font-weight:900; font-size:12px; display:flex; align-items:center; justify-content:center; z-index:5;
+      font-weight:900; font-size:13px; display:flex; align-items:center; justify-content:center; z-index:5;
       -webkit-tap-highlight-color: transparent; user-select:none; cursor:pointer; box-shadow: 0 10px 22px rgba(11,31,51,.12);
     }
     #asdBlinkBtn{ right:14px; border:1px solid rgba(0,94,184,.55); background:var(--acuvue-blue); color:#fff; box-shadow: 0 12px 26px rgba(0,94,184,.20); }
     #asdRotateBtn{ right:76px; border:1px solid rgba(0,94,184,.35); background:rgba(255,255,255,.92); color:var(--acuvue-blue); }
 
     #asdAngleBadge{
-      position:absolute; left:14px; bottom:18px; color:var(--acuvue-blue); font-size:12px; font-weight:900;
+      position:absolute; left:14px; bottom:18px; color:var(--acuvue-blue); font-size:13px; font-weight:900;
       background:rgba(255,255,255,.86); border:1px solid rgba(0,94,184,.35); border-radius:999px; padding:6px 10px; z-index:5;
       box-shadow: 0 10px 22px rgba(11,31,51,.10);
     }
@@ -858,11 +863,6 @@
         font-size:11px;
         align-self:center;
       }
-      .pvp-highlight{
-        font-weight:900;
-        color:#005Eb8;
-        position:relative;
-      }  
       #asdHeader{
         padding:6px 14px;
         min-height:38px;
@@ -1005,7 +1005,7 @@
     #blueInfoBody{
       padding:0 18px 14px;
       color:var(--text-sub);
-      font-size:12.8px;
+      font-size:13.8px;
       line-height:1.48;
       letter-spacing:-.15px;
       word-break:keep-all;
@@ -1047,7 +1047,7 @@
       -webkit-tap-highlight-color: transparent;
       white-space:nowrap;
       box-shadow:0 6px 16px rgba(36,85,199,.16);
-      font-size:12px;
+      font-size:13px;
       line-height:1;
       box-sizing:border-box;
       display:inline-flex;
@@ -1073,7 +1073,7 @@
       }
       #blueInfoBody{
         padding:0 16px 12px;
-        font-size:12px;
+        font-size:13px;
         line-height:1.42;
       }
       #blueInfoMission{
@@ -1094,7 +1094,20 @@
       }
     }
 
-  </style>
+  
+.blue-highlight{
+  font-weight:900;
+  color:var(--acuvue-blue);
+  letter-spacing:-0.01em;
+}
+.tint-highlight{
+  font-weight:900;
+  background: linear-gradient(90deg, #00AEEF, #00C853);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+</style>
 </head>
 <body>
   <div id="missionBarWrap">
@@ -1143,7 +1156,7 @@
     <img id="pvpThumb" src="PVP.png" alt="PVP" onerror="this.onerror=null; this.src='PVP.jpeg';">
     <div id="pvpText">
       <div id="pvpTitle">PVP 습윤 인자</div>
-      <div id="hint">렌즈 내 <span class="pvp-highlight">PVP</span> 습윤인자가 하루 종일 촉촉함을 제공합니다.</div>
+      <div id="hint"><span class="pvp-highlight">렌즈 내 PVP 습윤인자</span>가 하루 종일 촉촉함을 제공합니다.</div>
     </div>
     <div id="pvpConfirm" role="button" tabindex="0">확인</div>
     <div class="popup-reference-area">
@@ -1317,8 +1330,9 @@
       <b>블루라이트 <span class="pct">55%</span> 차단</b>
     </div>
     <div id="blueInfoBody">
-      아큐브® MAX 원데이 난시는 블루라이트를 55% 차단하여 디지털에 노출된 눈을 보호합니다.
-      블루라이트 차단을 위한 “블루그린 틴트”를 확인해 주세요.
+      아큐브® MAX 원데이 난시는 
+      <span class="blue-highlight">블루라이트를 55% 차단하여 디지털에 노출된 눈을 보호</span>합니다.
+      블루라이트 차단을 위한 <span class="tint-highlight">블루그린 틴트</span>를 확인해 주세요.
     </div>
     <div id="blueInfoMission">
       <img id="blueInfoPackshot" src="MAX.png" alt="아큐브 맥스 난시 팩샷" onerror="this.style.display='none';">
