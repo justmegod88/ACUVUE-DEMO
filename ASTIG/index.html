@@ -1268,7 +1268,7 @@
     const HEAT_DEFAULT_ORBIT_STR   = '0deg 100deg 2.6m';
     const HEAT_DEFAULT_TARGET_STR  = '0m 0.015m 0m';
     const BLUE_PANEL_ORBIT_STR   = '55deg 99deg 2.9m';
-    const BLUE_PANEL_TARGET_STR  = '0m 0.085m 0m';
+    const BLUE_PANEL_TARGET_STR  = '0m 0.015m 0m';
     const BLUEGREEN_TINT = [0.55, 1.08, 0.72, 0.45];
 
     const __isIOS = (()=> {
@@ -1542,16 +1542,13 @@
         if(!allMaterialBackup) backupOriginalColors();
         applyTint();
 
-        applyOrbitStr(BLUE_PANEL_ORBIT_STR);
-        applyTargetStr(BLUE_PANEL_TARGET_STR);
+        beamGeom = null;
+        __patchBeamsForSafari();
+        __forceSvgRedraw();
         setTimeout(()=>{
-          applyOrbitStr(BLUE_PANEL_ORBIT_STR);
-          applyTargetStr(BLUE_PANEL_TARGET_STR);
-          __patchBeamsForSafari();
-          __forceSvgRedraw();
           updateBeams();
           playBeamAnimation();
-        }, 120);
+        }, 80);
 
         setBlueUI();
       };
