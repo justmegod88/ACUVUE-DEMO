@@ -449,51 +449,85 @@
 
     #asdCard{
       width:min(920px, 96vw);
-      border-radius:18px;
-      border:1px solid var(--panel-stroke);
-      background: var(--panel-grad);
+      border-radius:24px;
+      border:1px solid rgba(16,101,196,.16);
+      background:#ffffff;
       overflow:hidden;
-      box-shadow: var(--panel-glow);
+      box-shadow: 0 22px 60px rgba(11,31,51,.18), 0 10px 24px rgba(0,94,184,.10);
       position:relative;
     }
-    #asdHeader{ display:flex; align-items:center; justify-content:space-between; padding:14px 18px; background:#eef3fa; border-bottom:1px solid rgba(11,31,51,.08); }
-    #asdHeaderTitle{ font-size:18px; font-weight:900; color:#111; letter-spacing:-.2px; }
-    #asdClose{ width:34px; height:34px; border:none; background:transparent; color:#111; font-weight:900; font-size:18px; cursor:pointer; box-shadow:none; }
+    #asdCard::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:24px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.65);
+      pointer-events:none;
+      z-index:1;
+    }
+    #asdHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:16px 20px;
+      background:#1A8BFF;
+      border-bottom:1px solid rgba(255,255,255,.22);
+      position:relative;
+      z-index:2;
+    }
+    #asdHeader::after{
+      content:"";
+      position:absolute;
+      left:20px;
+      right:20px;
+      bottom:0;
+      height:1px;
+      background:rgba(255,255,255,.28);
+    }
+    #asdHeaderTitle{ font-size:18px; font-weight:900; color:#fff; letter-spacing:-.2px; text-shadow:0 1px 0 rgba(0,0,0,.08); }
+    #asdClose{
+      width:38px; height:38px; border:none; background:rgba(255,255,255,.16); color:#fff; font-weight:900; font-size:19px; cursor:pointer; box-shadow:none;
+      border-radius:999px; backdrop-filter: blur(6px);
+    }
 
     #asdHint{
-      padding:16px 16px 18px;
+      padding:18px 18px 20px;
       color:var(--text-navy);
       font-size:18px;
       line-height:1.42;
       font-weight:800;
       opacity:1;
-      border-top:1px solid rgba(11,31,51,.10);
+      border-top:1px solid rgba(16,101,196,.10);
       display:flex;
       align-items:flex-start;
       justify-content:space-between;
       gap:14px;
-      background: linear-gradient(180deg, rgba(234,243,255,.94) 0%, rgba(255,255,255,.84) 100%);
+      background:#F4F9FF;
     }
     #asdHint button{
-      border:1px solid rgba(0,94,184,.65);
-      background:var(--acuvue-blue);
+      border:1px solid rgba(0,94,184,.10);
+      background:#1A8BFF;
       color:#ffffff;
       font-weight:900;
       font-size:14px;
-      padding:10px 16px;
-      border-radius:12px;
+      padding:11px 18px;
+      border-radius:14px;
       -webkit-tap-highlight-color: transparent;
-      backdrop-filter: blur(8px);
       cursor:pointer;
       flex:0 0 auto;
       white-space:nowrap;
-      box-shadow: 0 10px 22px rgba(0,94,184,.22);
+      box-shadow: 0 12px 24px rgba(26,139,255,.20);
       align-self:flex-end;
     }
     #asdHint .hintText{ flex:1 1 auto; word-break:keep-all; }
-    #asdHint .hintTitle{ display:block; color:var(--acuvue-blue); font-size:17px; font-weight:900; margin-bottom:8px; letter-spacing:-.2px; }
+    #asdHint .hintTitle{ display:block; color:#1675DC; font-size:17px; font-weight:900; margin-bottom:8px; letter-spacing:-.2px; }
     #asdHint .hintBody{ display:block; font-size:20px; line-height:1.38; font-weight:900; color:#111; letter-spacing:-.2px; }
-    #asdHint .hintBody .blue{ color:var(--acuvue-blue); }
+    #asdHint .hintBody .blue{ color:#1675DC; }
+    #asdCard .toric-popup-disclaimer{
+      background:#ffffff;
+      border-top:1px solid rgba(16,101,196,.10);
+      padding:11px 18px 14px;
+    }
 
     #asdScene{
       position:relative; width:100%; background:rgba(0,94,184,.03); overflow:hidden;
@@ -548,17 +582,17 @@
     #asdLidBot::after{ top:-12px; transform: scaleY(-1); }
 
     #asdBlinkBtn, #asdRotateBtn{
-      position:absolute; bottom:14px; width:54px; height:54px; border-radius:999px;
+      position:absolute; bottom:16px; width:58px; height:58px; border-radius:999px;
       font-weight:900; font-size:12px; display:flex; align-items:center; justify-content:center; z-index:5;
-      -webkit-tap-highlight-color: transparent; user-select:none; cursor:pointer; box-shadow: 0 10px 22px rgba(11,31,51,.12);
+      -webkit-tap-highlight-color: transparent; user-select:none; cursor:pointer; box-shadow: 0 12px 24px rgba(11,31,51,.12);
     }
-    #asdBlinkBtn{ right:14px; border:1px solid rgba(0,94,184,.55); background:var(--acuvue-blue); color:#fff; box-shadow: 0 12px 26px rgba(0,94,184,.20); }
-    #asdRotateBtn{ right:76px; border:1px solid rgba(0,94,184,.35); background:rgba(255,255,255,.92); color:var(--acuvue-blue); }
+    #asdBlinkBtn{ right:16px; border:1px solid rgba(0,94,184,.08); background:#1A8BFF; color:#fff; box-shadow: 0 14px 28px rgba(26,139,255,.24); }
+    #asdRotateBtn{ right:82px; border:1px solid rgba(26,139,255,.22); background:rgba(255,255,255,.96); color:#1675DC; }
 
     #asdAngleBadge{
-      position:absolute; left:14px; bottom:18px; color:var(--acuvue-blue); font-size:12px; font-weight:900;
-      background:rgba(255,255,255,.86); border:1px solid rgba(0,94,184,.35); border-radius:999px; padding:6px 10px; z-index:5;
-      box-shadow: 0 10px 22px rgba(11,31,51,.10);
+      position:absolute; left:16px; bottom:20px; color:#1675DC; font-size:12px; font-weight:900;
+      background:rgba(255,255,255,.94); border:1px solid rgba(26,139,255,.22); border-radius:999px; padding:7px 12px; z-index:5;
+      box-shadow: 0 12px 24px rgba(11,31,51,.10);
     }
 
     #tutorialLayer{ position:fixed; inset:0; display:none; z-index:95; }
@@ -592,14 +626,32 @@
     }
     #comfortOverlay.show{ display:flex; }
     #comfortWrap{
-      width:min(820px, 96vw); border-radius:24px; overflow:hidden; background:#fff; border:1px solid rgba(255,255,255,.18); box-shadow:0 18px 44px rgba(10,30,55,.20);
+      width:min(820px, 96vw); border-radius:24px; overflow:hidden; background:#fff; border:1px solid rgba(16,101,196,.16); box-shadow:0 22px 60px rgba(10,30,55,.20), 0 10px 24px rgba(0,94,184,.10); position:relative;
+    }
+    #comfortWrap::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:24px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.65);
+      pointer-events:none;
+      z-index:1;
     }
     #comfortHead{
-      height:76px; background:#dbe5f1; display:flex; align-items:center; justify-content:space-between; padding:0 26px;
-      border-bottom:1px solid rgba(10,30,55,.08);
+      height:76px; background:#1A8BFF; display:flex; align-items:center; justify-content:space-between; padding:0 26px;
+      border-bottom:1px solid rgba(255,255,255,.20); position:relative; z-index:2;
     }
-    #comfortTitle{ font-size:28px; font-weight:900; color:#000; letter-spacing:-.5px; }
-    #comfortClose{ border:none; background:transparent; font-size:34px; line-height:1; color:#000; cursor:pointer; padding:0; width:44px; height:44px; }
+    #comfortHead::after{
+      content:"";
+      position:absolute;
+      left:26px;
+      right:26px;
+      bottom:0;
+      height:1px;
+      background:rgba(255,255,255,.26);
+    }
+    #comfortTitle{ font-size:28px; font-weight:900; color:#fff; letter-spacing:-.5px; text-shadow:0 1px 0 rgba(0,0,0,.08); }
+    #comfortClose{ border:none; background:rgba(255,255,255,.16); font-size:30px; line-height:1; color:#fff; cursor:pointer; padding:0; width:40px; height:40px; border-radius:999px; }
     #comfortScene{
       position:relative; height:min(64vw, 540px); min-height:420px; background:#efefef url('face_V2.png') center center / cover no-repeat; overflow:hidden;
     }
@@ -685,23 +737,34 @@
       padding:0; border-radius:0; background:transparent; border:none; box-shadow:none; display:grid; grid-template-columns:1fr 1fr; gap:8px; align-items:center;
     }
     .cf-seg-btn{
-      height:66px; border-radius:999px; border:1.5px solid rgba(110,162,218,.72); background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%);
+      height:66px; border-radius:999px; border:1.5px solid rgba(26,139,255,.24); background:#ffffff;
       color:#627588; font-size:21px; font-weight:800; letter-spacing:-.35px; cursor:pointer; transition:all .18s ease;
       box-shadow:0 8px 18px rgba(17,104,208,.08), inset 0 1px 0 rgba(255,255,255,.96); padding:0 18px; white-space:nowrap; -webkit-appearance:none; appearance:none;
     }
     .cf-seg-btn.active, .cf-seg-btn.default-active{
-      background:linear-gradient(180deg,#eef7ff 0%,#dceeff 100%); color:#0f4f8f; border-color:#7fb1e6; box-shadow:0 10px 22px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98);
+      background:#EAF4FF; color:#1268C8; border-color:#8CC4FF; box-shadow:0 10px 22px rgba(17,104,208,.14), inset 0 1px 0 rgba(255,255,255,.98);
     }
     .cf-seg-btn:not(.active):not(.default-active){ color:#627588; }
     .cf-seg-btn:not(.active):active{ transform:scale(.985); }
     #comfortMessage{
-      background:#dbe5f1; padding:28px 34px 30px; display:flex; align-items:flex-end; justify-content:space-between; gap:20px; border-top:1px solid rgba(10,30,55,.08);
+      background:#F4F9FF; padding:28px 34px 30px; display:flex; align-items:flex-end; justify-content:space-between; gap:20px; border-top:1px solid rgba(16,101,196,.10);
     }
-    #comfortMessageCopy{ flex:1 1 auto; font-size:28px; line-height:1.34; font-weight:900; letter-spacing:-.6px; color:#000; word-break:keep-all; }
-    #comfortMessageCopy .blue{ color:#005EB8; }
+    #comfortMessageCopy{ flex:1 1 auto; font-size:28px; line-height:1.34; font-weight:900; letter-spacing:-.6px; color:#0B1F33; word-break:keep-all; }
+    #comfortMessageCopy .blue{ color:#1675DC; }
     #comfortConfirm{
-      flex:0 0 auto; min-width:120px; height:86px; padding:0 26px; border:none; border-radius:18px; background:#1168d0; color:#fff;
-      font-size:24px; font-weight:900; cursor:pointer; box-shadow:0 10px 22px rgba(17,104,208,.22);
+      flex:0 0 auto; min-width:120px; height:86px; padding:0 26px; border:none; border-radius:18px; background:#1A8BFF; color:#fff;
+      font-size:24px; font-weight:900; cursor:pointer; box-shadow:0 12px 24px rgba(26,139,255,.22);
+    }
+    #comfortWrap .popup-reference-area{
+      padding:12px 18px 0;
+      background:#F4F9FF !important;
+      color:#5F6F81;
+      border-top:1px solid rgba(16,101,196,.10);
+    }
+    #comfortWrap .toric-popup-disclaimer{
+      background:#ffffff;
+      padding:10px 18px 14px;
+      border-top:1px solid rgba(16,101,196,.08);
     }
 
     @media (max-width: 820px){
