@@ -1267,8 +1267,8 @@
     const CLEAR_DEFAULT_TARGET_STR = '0m 0.015m 0m';
     const HEAT_DEFAULT_ORBIT_STR   = '0deg 100deg 2.6m';
     const HEAT_DEFAULT_TARGET_STR  = '0m 0.015m 0m';
-    const BLUE_PANEL_ORBIT_STR   = '12deg 97deg 3.05m';
-    const BLUE_PANEL_TARGET_STR  = '0m 0.060m 0m';
+    const BLUE_PANEL_ORBIT_STR   = '28deg 94deg 3.38m';
+    const BLUE_PANEL_TARGET_STR  = '0m 0.095m 0m';
     const BLUEGREEN_TINT = [0.55, 1.08, 0.72, 0.45];
 
     const __isIOS = (()=> {
@@ -1452,10 +1452,10 @@
       const toVh = (y)=> (y / window.innerHeight) * 100;
       const clamp = (v, min, max)=> Math.max(min, Math.min(max, v));
 
-      const baseLensCx = clamp(toVw(rect.left + rect.width * 0.35), 0, 100);
-      const baseLensCy = clamp(toVh(rect.top + rect.height * 0.35), 0, 100);
-      const beamOffsetX = (bluePanelOpen && blueOn) ? 0.8 : 0;
-      const beamOffsetY = (bluePanelOpen && blueOn) ? 6.5 : 0;
+      const baseLensCx = clamp(toVw(rect.left + rect.width * 0.47), 0, 100);
+      const baseLensCy = clamp(toVh(rect.top + rect.height * 0.24), 0, 100);
+      const beamOffsetX = (bluePanelOpen && blueOn) ? 0.0 : 0;
+      const beamOffsetY = (bluePanelOpen && blueOn) ? 0.0 : 0;
       const lensCx = clamp(baseLensCx + beamOffsetX, 0, 100);
       const lensCy = clamp(baseLensCy + beamOffsetY, 0, 100);
       const rx = clamp((rect.width / window.innerWidth) * 100 * 0.24, 8, 40);
@@ -1469,8 +1469,8 @@
       const inY1 = clamp(hy - (m * hx), 0, 100);
       const outX2 = 100;
       const outY2 = clamp(hy + (m * (outX2 - hx)), 0, 100);
-      const bendX2 = clamp(hx - rx * 0.55, 0, 100);
-      const bendY2 = clamp(hy - ry * 0.95, 18, 100);
+      const bendX2 = clamp(hx - rx * 0.68, 0, 100);
+      const bendY2 = clamp(hy - ry * 0.88, 18, 100);
 
       beamIn.setAttribute('x1', inX1); beamIn.setAttribute('y1', inY1);
       beamIn.setAttribute('x2', hx);   beamIn.setAttribute('y2', hy);
