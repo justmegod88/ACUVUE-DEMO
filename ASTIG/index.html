@@ -226,30 +226,6 @@
       box-shadow: 0 10px 28px rgba(11,31,51,.10);
     }
 
-    #maxPackshot{
-      position:fixed;
-      right:18px;
-      bottom:90px;
-      width:150px;
-      max-width:34vw;
-      height:auto;
-      z-index:72 !important;
-      pointer-events:auto !important;
-      cursor:pointer !important;
-      user-select:none;
-      display:none;
-      object-fit:contain;
-      mix-blend-mode:multiply;
-      filter: drop-shadow(0 10px 18px rgba(11,31,51,.12));
-      transform: translateZ(0);
-      transition:transform .26s ease, filter .26s ease, opacity .26s ease !important;
-      transform-origin:center bottom;
-    }
-    #maxPackshot.active{
-      transform:translateY(-10px) scale(1.16) !important;
-      filter:drop-shadow(0 24px 40px rgba(0,94,184,.36)) !important;
-    }
-
     #globalToricDisclaimer{
       position:fixed;
       left:12px;
@@ -762,155 +738,200 @@
       #comfortMessage{ padding:18px 14px 18px; gap:12px; }
       #comfortMessageCopy{ font-size:17px; line-height:1.38; }
       #comfortConfirm{ min-width:82px; height:58px; font-size:16px; border-radius:14px; padding:0 18px; }
-      #maxPackshot.active{ transform:translateY(-8px) scale(1.12) !important; }
     }
 
-    #blueLightIcon{
-      width:58px !important;
-      height:58px !important;
-      align-self:flex-start !important;
-      margin-top:2px;
-      border:1px solid rgba(255,255,255,.55);
-      background: radial-gradient(circle at 30% 30%, rgba(168,245,255,.98), rgba(74,206,255,.95) 58%, rgba(36,175,232,.92) 100%) !important;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.65), 0 12px 26px rgba(0,94,184,.16) !important;
-      font-size:24px !important;
-      border-radius:999px;
-      flex:0 0 auto;
+    #maxPackshot{
+      position:fixed;
+      right:18px;
+      bottom:90px;
+      width:150px;
+      max-width:34vw;
+      height:auto;
+      z-index:72 !important;
+      pointer-events:auto !important;
+      cursor:pointer !important;
+      user-select:none;
+      touch-action:manipulation !important;
+      -webkit-user-drag:none;
+      -webkit-touch-callout:none;
+      display:none;
+      object-fit:contain;
+      mix-blend-mode:multiply;
+      filter: drop-shadow(0 10px 18px rgba(11,31,51,.12));
+      transform: translateZ(0);
+      transition:transform .26s ease, filter .26s ease, opacity .26s ease !important;
+      transform-origin:center bottom;
+    }
+    #maxPackshot.active{
+      transform:translateY(-10px) scale(1.10) !important;
+      filter:drop-shadow(0 24px 40px rgba(0,94,184,.30)) !important;
+    }
+
+    #blueBackGlow{
+      position:fixed;
+      inset:0;
+      z-index:21;
+      pointer-events:none;
+      display:none;
+      background:
+        radial-gradient(35% 22% at 66% 52%,
+          rgba(0,94,184,.18) 0%,
+          rgba(0,94,184,.12) 22%,
+          rgba(0,94,184,.08) 38%,
+          rgba(0,94,184,0) 62%);
+      filter: blur(1px);
+      opacity:.95;
+    }
+
+    #blueRayLayer{
+      position:fixed;
+      inset:0;
+      z-index:22;
+      pointer-events:none;
+      display:none;
+    }
+    #blueRaySvg{ width:100%; height:100%; display:block; }
+
+    #blueRayLayerBack{
+      position:fixed;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+      display:none;
+    }
+    #blueRaySvgBack{ width:100%; height:100%; display:block; }
+
+    #blueInfo{
+      position:fixed;
+      right:18px;
+      bottom:34px;
+      left:auto;
+      width:min(430px, calc(100vw - 28px));
+      max-width:calc(100vw - 28px);
+      z-index:74;
+      display:none;
+      border-radius:24px;
+      border:1px solid var(--panel-stroke);
+      background: var(--panel-grad);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--panel-glow);
+      overflow:hidden;
+      padding:0;
+    }
+    #blueInfo::before{
+      content:"";
+      position:absolute;
+      left:0; right:0; top:0;
+      height:2px;
+      background: var(--panel-topline);
+      opacity:.95;
+      pointer-events:none;
+    }
+    #blueInfo::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:24px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.45);
+      pointer-events:none;
+      opacity:.55;
+    }
+    #blueInfoTop{
+      padding:16px 18px 10px;
+      color:var(--text-navy);
+      font-weight:900;
+      font-size:17px;
+      line-height:1.15;
       display:flex;
       align-items:center;
-      justify-content:center;
-      color:#fff;
+      gap:8px;
+      letter-spacing:-.35px;
     }
-    #blueLightBody{
-      flex:1 1 auto;
-      min-width:0;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      gap:10px;
-    }
-    #blueLightTitle{
-      margin:0 0 2px 0 !important;
-      color:#0b1f33 !important;
-      font-size:17px !important;
-      line-height:1.15 !important;
-      font-weight:900 !important;
-      letter-spacing:-.35px !important;
-    }
-    #blueLightHint{
-      margin:0 !important;
-      color:#35506b !important;
-      font-size:12.8px !important;
-      line-height:1.48 !important;
+    #blueInfoTop b{ font-weight:900; }
+    #blueInfoTop b .pct{ color:var(--acuvue-blue); }
+
+    #blueInfoBody{
+      padding:0 18px 14px;
+      color:var(--text-sub);
+      font-size:12.8px;
+      line-height:1.48;
       letter-spacing:-.15px;
-      max-width:unset !important;
       word-break:keep-all;
     }
-    #blueLightBottomRow{
+
+    #blueInfoMission{
+      padding:14px 18px 18px;
+      border-top:1px solid rgba(11,31,51,.08);
       display:flex;
       align-items:flex-end;
       justify-content:space-between;
-      gap:12px;
-      margin-top:2px;
+      gap:14px;
     }
-    #blueLightConfirm{
-      flex:0 0 auto !important;
+    #blueInfoPackshot{
+      width:92px;
+      height:auto;
+      object-fit:contain;
+      flex:0 0 auto;
+      display:block;
+      mix-blend-mode:multiply;
+      filter:drop-shadow(0 10px 18px rgba(11,31,51,.10));
+      transform:translateY(4px);
+      pointer-events:none;
+      user-select:none;
+    }
+    #blueInfoMission .confirm{
+      color:#ffffff;
+      font-weight:900;
+      cursor:pointer;
+      user-select:none;
+      padding:0 18px;
       min-width:88px;
       height:48px;
-      padding:0 18px !important;
-      border-radius:999px !important;
-      border:1px solid rgba(0,94,184,.62) !important;
-      background:linear-gradient(180deg, #1775df 0%, #0f62c5 100%) !important;
-      color:#fff !important;
-      font-size:14px !important;
-      font-weight:900 !important;
-      letter-spacing:-.2px;
-      box-shadow: 0 12px 24px rgba(17,104,208,.20), inset 0 1px 0 rgba(255,255,255,.24) !important;
-      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(0,94,184,.65);
+      background:linear-gradient(180deg, #1775df 0%, #0f62c5 100%);
+      -webkit-tap-highlight-color: transparent;
+      white-space:nowrap;
+      box-shadow: 0 12px 24px rgba(17,104,208,.20), inset 0 1px 0 rgba(255,255,255,.24);
+      font-size:14px;
     }
-    #blueLightOverlay{
-      position:fixed !important;
-      right:18px !important;
-      bottom:34px !important;
-      left:auto !important;
-      width:min(430px, calc(100vw - 28px)) !important;
-      max-width:calc(100vw - 28px) !important;
-      z-index:74 !important;
-      display:none !important;
-      align-items:stretch !important;
-      gap:14px !important;
-      padding:18px 18px !important;
-      border-radius:24px !important;
-      background: linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(248,251,255,.98) 100%) !important;
-      border:1px solid rgba(0,94,184,.16) !important;
-      box-shadow: 0 24px 56px rgba(0,94,184,.10), 0 18px 60px rgba(11,31,51,.14), inset 0 1px 0 rgba(255,255,255,.9) !important;
-      overflow:hidden !important;
-      backdrop-filter:blur(12px);
-    }
-    #blueLightOverlay.show{ display:flex !important; }
-    #blueLightOverlay #overlayPackshot{
-      position:static !important;
-      display:block !important;
-      width:126px !important;
-      max-width:34vw !important;
-      height:auto !important;
-      object-fit:contain !important;
-      flex:0 0 auto;
-      pointer-events:none !important;
-      user-select:none !important;
-      mix-blend-mode:multiply;
-      filter:drop-shadow(0 10px 18px rgba(11,31,51,.12)) !important;
-      transform:translateY(2px);
-    }
+    #blueInfoMission .confirm:active{ transform:scale(.98); }
 
-    body.blue-demo-on model-viewer{
-      filter:hue-rotate(62deg) saturate(1.88) brightness(1.08) !important;
-      transform:translate(20px,-12px) rotateY(-15deg) scale(1.035) !important;
-      transition:filter .34s ease, transform .34s ease !important;
-    }
-    #optiBeamLayer{
-      position:fixed; inset:0; pointer-events:none; z-index:22; display:none;
-    }
-    body.blue-demo-on #optiBeamLayer{ display:block; }
-    .beamLine{
-      position:absolute; height:6px; border-radius:999px; transform-origin:left center; filter:blur(.1px);
-    }
-    #beamIn{
-      left:-8vw; top:56.2%; width:48vw;
-      background:linear-gradient(90deg, rgba(255,210,77,1) 0%, rgba(255,198,0,1) 40%, rgba(255,225,140,.86) 72%, rgba(255,225,140,0) 100%);
-      transform:rotate(23deg); box-shadow:0 0 18px rgba(255,196,0,.50);
-    }
-    #beamOut{
-      left:31.4%; top:48.8%; width:25vw;
-      background:linear-gradient(90deg, rgba(105,182,255,0) 0%, rgba(105,182,255,.42) 24%, rgba(105,182,255,.92) 74%, rgba(168,245,255,1) 100%);
-      transform:rotate(-67deg); box-shadow:0 0 16px rgba(89,180,255,.42);
-    }
-    #beamHitGlow{
-      position:absolute; left:31.1%; top:48.6%; width:16px; height:16px; border-radius:50%;
-      background:radial-gradient(circle, rgba(255,245,210,.96) 0%, rgba(255,214,82,.70) 28%, rgba(105,182,255,.18) 60%, rgba(105,182,255,0) 100%);
-      filter:blur(.15px); box-shadow:0 0 10px rgba(255,210,77,.28);
-    }
     @media (max-width:560px){
-      .beamLine{ height:5px; }
-      #beamIn{ left:-10vw; top:55.9%; width:51vw; transform:rotate(24deg); }
-      #beamOut{ left:33.2%; top:47.7%; width:27vw; transform:rotate(-66deg); }
-      #beamHitGlow{ left:33.0%; top:47.5%; width:14px; height:14px; }
-      body.blue-demo-on model-viewer{ transform:translate(16px,-10px) rotateY(-13deg) scale(1.03) !important; }
-      #blueLightOverlay{
-        left:12px !important; right:12px !important; width:auto !important; bottom:34px !important;
-        gap:12px !important; padding:16px 16px !important; border-radius:22px !important;
+      #maxPackshot.active{ transform:translateY(-8px) scale(1.08) !important; }
+      #blueInfo{
+        left:12px;
+        right:12px;
+        width:auto;
+        max-width:none;
+        bottom:34px;
+        border-radius:22px;
       }
-      #blueLightIcon{ width:52px !important; height:52px !important; font-size:22px !important; }
-      #blueLightTitle{ font-size:15px !important; }
-      #blueLightHint{ font-size:12px !important; line-height:1.42 !important; }
-      #blueLightBottomRow{ gap:10px; margin-top:0; }
-      #blueLightConfirm{ min-width:78px; height:44px; padding:0 16px !important; font-size:13px !important; }
-      #blueLightOverlay #overlayPackshot{ width:110px !important; max-width:30vw !important; transform:translateY(1px); }
+      #blueInfoTop{
+        padding:15px 16px 9px;
+        font-size:15px;
+      }
+      #blueInfoBody{
+        padding:0 16px 12px;
+        font-size:12px;
+        line-height:1.42;
+      }
+      #blueInfoMission{
+        padding:12px 16px 16px;
+        gap:12px;
+      }
+      #blueInfoPackshot{
+        width:82px;
+        transform:translateY(2px);
+      }
+      #blueInfoMission .confirm{
+        min-width:78px;
+        height:44px;
+        padding:0 16px;
+        font-size:13px;
+      }
     }
 
-    #blueTintRays{display:none !important;}
-    #lensTintGlow{ display:none !important; }
-    #maxPackshotHalo{ display:none !important; }
   </style>
 </head>
 <body>
@@ -1034,32 +1055,117 @@
     <div class="tutBox" id="tutTop" style="display:none;"><div class="tutTitle">가이드 3</div><div class="tutText">각 카드를 눌러 체험을 진행해 보세요.<br></div><button class="tutBtn" id="tutDone">확인</button></div>
   </div>
 
-  <div id="blueTintRays" aria-hidden="true"></div>
 
-  <div id="blueLightOverlay" aria-hidden="true">
-    <div id="blueLightBody">
-    <div id="blueLightIcon">✦</div>  
-      <div id="blueLightTitle">아큐브® MAX 난시의 블루라이트 차단 기술</div>
-      <div id="blueLightHint">아큐브® MAX 원데이 난시는 블루라이트를 55%차단하여 디지털에 노출된 눈을 보호합니다. 
-블루라이트 차단을 위한  “블루그린 틴트‘를 확인해 주세요       
-</div>
-      <div id="blueLightBottomRow">
-        <button id="blueLightConfirm" type="button">확인</button>
-      </div>
+  <div id="blueBackGlow" aria-hidden="true"></div>
+
+  <div id="blueRayLayerBack" aria-hidden="true">
+    <svg id="blueRaySvgBack" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="beamOutGradBack" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="rgb(255,191,0)" stop-opacity="0.22"></stop>
+          <stop offset="0.35" stop-color="rgb(255,191,0)" stop-opacity="1"></stop>
+          <stop offset="0.75" stop-color="rgb(255,191,0)" stop-opacity="0.50"></stop>
+          <stop offset="1" stop-color="rgb(255,191,0)" stop-opacity="0"></stop>
+        </linearGradient>
+        <filter id="beamGlowBack" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="0.9" result="blur"/>
+          <feMerge>
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+      <line id="beamOutBack"
+            x1="50" y1="50" x2="100" y2="50"
+            stroke="url(#beamOutGradBack)"
+            stroke-width="3.00"
+            stroke-linecap="round"
+            filter="url(#beamGlowBack)"
+            opacity="0.0"></line>
+    </svg>
+  </div>
+
+  <div id="blueRayLayer" aria-hidden="true">
+    <svg id="blueRaySvg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="beamInGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="rgb(255,170,0)" stop-opacity="0"></stop>
+          <stop offset="0.28" stop-color="rgb(255,170,0)" stop-opacity="0.55"></stop>
+          <stop offset="0.55" stop-color="rgb(255,170,0)" stop-opacity="1"></stop>
+          <stop offset="1" stop-color="rgb(255,170,0)" stop-opacity="0.18"></stop>
+        </linearGradient>
+
+        <linearGradient id="beamReflectGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="rgb(0,94,184)" stop-opacity="0.15"></stop>
+          <stop offset="0.30" stop-color="rgb(0,94,184)" stop-opacity="0.80"></stop>
+          <stop offset="0.55" stop-color="rgb(0,94,184)" stop-opacity="1"></stop>
+          <stop offset="1" stop-color="rgb(0,94,184)" stop-opacity="0"></stop>
+        </linearGradient>
+
+        <filter id="beamGlow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="1.15" result="blur"/>
+          <feMerge>
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+
+        <marker id="beamArrowBlueSmall" viewBox="0 0 12 10" refX="10.2" refY="5"
+                markerWidth="0.9" markerHeight="0.9" orient="auto">
+          <path d="M 0 1 L 11 5 L 0 9"
+                fill="none"
+                stroke="rgb(0,94,184)"
+                stroke-width="2.0"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                opacity="0.95"></path>
+        </marker>
+
+        <ellipse id="lensOccludeEllipse" cx="56" cy="52" rx="26" ry="30" fill="transparent"></ellipse>
+      </defs>
+
+      <line id="beamIn"
+            x1="0" y1="50" x2="50" y2="50"
+            stroke="url(#beamInGrad)"
+            stroke-width="3.4"
+            stroke-linecap="round"
+            filter="url(#beamGlow)"
+            opacity="0.0"></line>
+
+      <line id="beamBend"
+            x1="50" y1="50" x2="25" y2="70"
+            stroke="url(#beamReflectGrad)"
+            stroke-width="3.6"
+            stroke-linecap="round"
+            marker-end="url(#beamArrowBlueSmall)"
+            filter="url(#beamGlow)"
+            opacity="0.0"></line>
+
+      <circle id="beamHit"
+              cx="50" cy="50" r="1.6"
+              fill="rgb(255,255,255)"
+              fill-opacity="0.80"
+              filter="url(#beamGlow)"
+              opacity="0.0"></circle>
+    </svg>
+  </div>
+
+  <div id="blueInfo" aria-hidden="true">
+    <div id="blueInfoTop">
+      <b>블루라이트 <span class="pct">55%</span> 차단</b>
+    </div>
+    <div id="blueInfoBody">
+      아큐브® MAX 원데이 난시는 블루라이트를 55% 차단하여 디지털에 노출된 눈을 보호합니다.
+      블루라이트 차단을 위한 “블루그린 틴트”를 확인해 주세요.
+    </div>
+    <div id="blueInfoMission">
+      <img id="blueInfoPackshot" src="MAX.png" alt="아큐브 맥스 난시 팩샷" onerror="this.style.display='none';">
+      <button class="confirm" id="blueConfirm" type="button">확인</button>
     </div>
   </div>
 
-  <div id="blueBeamStrong" aria-hidden="true"><div class="beam-in"></div><div class="beam-out"></div></div>
-  <div id="lensTintGlow" aria-hidden="true"></div>
-  <div id="maxPackshotHalo" aria-hidden="true"></div>
+  <img id="maxPackshot" src="MAX.png" alt="아큐브 맥스 난시 팩샷" role="button" tabindex="0" aria-label="블루라이트 기능 열기" onerror="this.style.display='none';">
 
-  <div id="optiBeamLayer" aria-hidden="true">
-    <div id="beamIn" class="beamLine"></div>
-    <div id="beamOut" class="beamLine"></div>
-    <div id="beamHitGlow"></div>
-  </div>
-
-  <img id="maxPackshot" src="MAX.png" alt="아큐브 맥스 난시 팩샷" onerror="this.style.display='none';">
 
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
@@ -1107,9 +1213,6 @@
     const asdHint = document.getElementById('asdHint');
     const asdLidTop = document.getElementById('asdLidTop');
     const asdLidBot = document.getElementById('asdLidBot');
-    const maxPackshot = document.getElementById('maxPackshot');
-    const blueLightOverlay = document.getElementById('blueLightOverlay');
-    const blueLightConfirm = document.getElementById('blueLightConfirm');
     const comfortOverlay = document.getElementById('comfortOverlay');
     const comfortClose = document.getElementById('comfortClose');
     const comfortScene = document.getElementById('comfortScene');
@@ -1125,13 +1228,28 @@
     const cfARed = document.querySelector('.cf-a-red');
     const cfABlue = document.querySelector('.cf-a-blue');
     const comfortConfirm = document.getElementById('comfortConfirm');
+    const maxPackshot = document.getElementById('maxPackshot');
+    const blueBackGlow = document.getElementById('blueBackGlow');
+    const blueRayLayer = document.getElementById('blueRayLayer');
+    const blueRayLayerBack = document.getElementById('blueRayLayerBack');
+    const blueInfo = document.getElementById('blueInfo');
+    const blueConfirm = document.getElementById('blueConfirm');
+    const beamIn = document.getElementById('beamIn');
+    const beamOut = document.getElementById('beamOutBack');
+    const beamBend = document.getElementById('beamBend');
+    const beamHit = document.getElementById('beamHit');
+    const lensOccludeEllipse = document.getElementById('lensOccludeEllipse');
 
     let currentMode = 'lens';
     let pvpOn = false;
     let pvpDone = false;
     let asdDone = false;
     let comfortDone = false;
-    let blueDemoOn = false;
+    let blueOn = false;
+    let bluePanelOpen = false;
+    let allMaterialBackup = null;
+    let beamAnimToken = 0;
+    let beamGeom = null;
     let asdAngle = 20;
     let asdLastDir = -1;
     let asdBlinkBusy = false;
@@ -1149,6 +1267,18 @@
     const CLEAR_DEFAULT_TARGET_STR = '0m 0.015m 0m';
     const HEAT_DEFAULT_ORBIT_STR   = '0deg 100deg 2.6m';
     const HEAT_DEFAULT_TARGET_STR  = '0m 0.015m 0m';
+    const BLUE_PANEL_ORBIT_STR   = '61deg 97deg 3.85m';
+    const BLUE_PANEL_TARGET_STR  = '0m 0.018m 0m';
+    const BLUEGREEN_TINT = [0.55, 1.08, 0.72, 0.45];
+
+    const __isIOS = (()=> {
+      const platform = navigator.platform || '';
+      const iOS = /iP(hone|od|ad)/.test(platform);
+      const iPadOS13Plus = (platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      return iOS || iPadOS13Plus;
+    })();
+    const __isSafari = /^((?!chrome|crios|android).)*safari/i.test(navigator.userAgent || '');
+    const __isSafariIOS = __isIOS && __isSafari;
 
     function keepMVPlaying(){
       try{ if(mv && mv.paused) mv.play(); }catch(e){}
@@ -1195,52 +1325,248 @@
 
     function syncPackshot(){
       if(!maxPackshot) return;
-      const cardOverlayOpen = (asdOverlay && asdOverlay.classList.contains('show')) || (comfortOverlay && comfortOverlay.classList.contains('show')) || (pvpOn === true);
-      maxPackshot.style.display = (currentMode === 'lens' && !cardOverlayOpen) ? 'block' : 'none';
+      const overlayOpen = asdOverlay.classList.contains('show') || comfortOverlay.classList.contains('show') || pvpOn || bluePanelOpen;
+      maxPackshot.style.display = (currentMode === 'lens' && !overlayOpen) ? 'block' : 'none';
+      maxPackshot.classList.toggle('active', bluePanelOpen);
     }
 
-    function applyLensBlueEffect(){
+    function __forceSvgRedraw(){
       try{
-        if(!mv) return;
-        document.body.classList.add('blue-demo-on');
-        mv.style.filter = '';
-        mv.style.transform = '';
-      }catch(e){}
-    }
-    function resetLensBlueEffect(){
-      try{
-        document.body.classList.remove('blue-demo-on');
-        if(!mv) return;
-        mv.style.filter = '';
-        mv.style.transform = '';
+        const svg = document.getElementById('blueRaySvg');
+        if(!svg) return;
+        svg.style.transform = 'translateZ(0)';
+        const prev = svg.style.display || 'block';
+        svg.style.display = 'none';
+        void svg.getBoundingClientRect();
+        svg.style.display = prev;
+        try{ svg.getBBox(); }catch(e){}
       }catch(e){}
     }
 
-    function closeBlueLightDemo(){
-      blueDemoOn = false;
-      resetLensBlueEffect();
-      if(blueLightOverlay) blueLightOverlay.classList.remove('show');
-      if(maxPackshot) maxPackshot.classList.remove('active');
+    function __patchBeamsForSafari(){
+      if(!__isSafariIOS) return;
+      [beamIn, beamOut].forEach(el=>{
+        if(!el) return;
+        try{ el.setAttribute('filter','none'); }catch(e){}
+        try{ el.style.filter = 'none'; }catch(e){}
+        try{ el.setAttribute('stroke','rgb(255,191,0)'); }catch(e){}
+        try{ el.style.stroke = 'rgb(255,191,0)'; }catch(e){}
+        try{ el.setAttribute('shape-rendering','geometricPrecision'); }catch(e){}
+        try{ el.setAttribute('vector-effect','non-scaling-stroke'); }catch(e){}
+      });
+      if(beamBend){
+        try{ beamBend.setAttribute('shape-rendering','geometricPrecision'); }catch(e){}
+        try{ beamBend.setAttribute('vector-effect','non-scaling-stroke'); }catch(e){}
+      }
+    }
+
+    function backupOriginalColors(){
+      try{
+        const model = mv.model;
+        if(!model || !model.materials) return;
+        allMaterialBackup = model.materials.map(mat=>{
+          const pbr = mat.pbrMetallicRoughness;
+          return (pbr && pbr.baseColorFactor) ? [...pbr.baseColorFactor] : [1,1,1,1];
+        });
+      }catch(e){
+        allMaterialBackup = null;
+      }
+    }
+
+    function restoreOriginalColors(){
+      try{
+        const model = mv.model;
+        if(!model || !model.materials || !allMaterialBackup) return;
+        model.materials.forEach((mat, idx)=>{
+          const pbr = mat.pbrMetallicRoughness;
+          if(!pbr) return;
+          const base = allMaterialBackup[idx] ? [...allMaterialBackup[idx]] : [1,1,1,1];
+          base[3] = Math.max(base[3], 0.45);
+          pbr.setBaseColorFactor(base);
+        });
+      }catch(e){}
+    }
+
+    function applyTint(){
+      try{
+        const model = mv.model;
+        if(!model || !model.materials) return;
+        model.materials.forEach((mat, idx)=>{
+          const pbr = mat.pbrMetallicRoughness;
+          if(!pbr) return;
+          const cur = pbr.baseColorFactor ? [...pbr.baseColorFactor] : (allMaterialBackup?.[idx] ? [...allMaterialBackup[idx]] : [1,1,1,1]);
+          const a = Math.max(cur[3] ?? 0.45, 0.45);
+          pbr.setBaseColorFactor([BLUEGREEN_TINT[0], BLUEGREEN_TINT[1], BLUEGREEN_TINT[2], a]);
+        });
+      }catch(e){}
+    }
+
+    function setLineFull(el, g){
+      if(!el || !g) return;
+      el.setAttribute('x1', g.x1); el.setAttribute('y1', g.y1);
+      el.setAttribute('x2', g.x2); el.setAttribute('y2', g.y2);
+    }
+    function setLineProgress(el, g, t){
+      if(!el || !g) return;
+      const tt = Math.max(0, Math.min(1, t));
+      const x2 = g.x1 + (g.x2 - g.x1) * tt;
+      const y2 = g.y1 + (g.y2 - g.y1) * tt;
+      el.setAttribute('x1', g.x1); el.setAttribute('y1', g.y1);
+      el.setAttribute('x2', x2);   el.setAttribute('y2', y2);
+    }
+    function animateDraw(el, g, ms, delay=0, token=0){
+      if(!el || !g) return;
+      const startAt = performance.now() + delay;
+      setLineProgress(el, g, 0);
+      const tick = (now)=>{
+        if(token !== beamAnimToken) return;
+        if(now < startAt){ requestAnimationFrame(tick); return; }
+        const t = (now - startAt) / ms;
+        if(t >= 1){ setLineFull(el, g); return; }
+        setLineProgress(el, g, t);
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+
+    function syncBeamVisibility(){
+      const visible = bluePanelOpen && blueOn;
+      if(!visible){
+        beamIn?.setAttribute('opacity','0');
+        beamOut?.setAttribute('opacity','0');
+        beamBend?.setAttribute('opacity','0');
+        beamHit?.setAttribute('opacity','0');
+        return;
+      }
+      beamIn?.setAttribute('opacity','0.95');
+      beamOut?.setAttribute('opacity','0.50');
+      beamBend?.setAttribute('opacity','0.55');
+      beamHit?.setAttribute('opacity','0.90');
+    }
+
+    function updateBeams(){
+      if(!(bluePanelOpen && blueOn)) return;
+
+      const rect = mv.getBoundingClientRect();
+      const toVw = (x)=> (x / window.innerWidth) * 100;
+      const toVh = (y)=> (y / window.innerHeight) * 100;
+      const clamp = (v, min, max)=> Math.max(min, Math.min(max, v));
+
+      const baseLensCx = clamp(toVw(rect.left + rect.width * 0.35), 0, 100);
+      const baseLensCy = clamp(toVh(rect.top + rect.height * 0.35), 0, 100);
+      const beamOffsetX = (bluePanelOpen && blueOn) ? 0.8 : 0;
+      const beamOffsetY = (bluePanelOpen && blueOn) ? 14.5 : 0;
+      const lensCx = clamp(baseLensCx + beamOffsetX, 0, 100);
+      const lensCy = clamp(baseLensCy + beamOffsetY, 0, 100);
+      const rx = clamp((rect.width / window.innerWidth) * 100 * 0.24, 8, 40);
+      const ry = clamp((rect.height / window.innerHeight) * 100 * 0.28, 10, 45);
+
+      const m = Math.tan((8 * Math.PI) / 180);
+      const hx = lensCx;
+      const hy = lensCy;
+
+      const inX1 = 0;
+      const inY1 = clamp(hy - (m * hx), 0, 100);
+      const outX2 = 100;
+      const outY2 = clamp(hy + (m * (outX2 - hx)), 0, 100);
+      const bendX2 = clamp(hx - rx * 0.55, 0, 100);
+      const bendY2 = clamp(hy - ry * 0.60, 18, 100);
+
+      beamIn.setAttribute('x1', inX1); beamIn.setAttribute('y1', inY1);
+      beamIn.setAttribute('x2', hx);   beamIn.setAttribute('y2', hy);
+
+      beamOut.setAttribute('x1', hx);    beamOut.setAttribute('y1', hy);
+      beamOut.setAttribute('x2', outX2); beamOut.setAttribute('y2', outY2);
+
+      beamBend.setAttribute('x1', hx);      beamBend.setAttribute('y1', hy);
+      beamBend.setAttribute('x2', bendX2);  beamBend.setAttribute('y2', bendY2);
+
+      beamHit.setAttribute('cx', hx); beamHit.setAttribute('cy', hy);
+
+      if(lensOccludeEllipse){
+        lensOccludeEllipse.setAttribute('cx', lensCx);
+        lensOccludeEllipse.setAttribute('cy', lensCy);
+        lensOccludeEllipse.setAttribute('rx', rx);
+        lensOccludeEllipse.setAttribute('ry', ry);
+      }
+
+      beamGeom = {
+        in:  { x1: inX1, y1: inY1, x2: hx,    y2: hy },
+        out: { x1: hx,   y1: hy,   x2: outX2, y2: outY2 },
+        bend:{ x1: hx,   y1: hy,   x2: bendX2,y2: bendY2 }
+      };
+    }
+
+    function playBeamAnimation(){
+      beamAnimToken++;
+      const token = beamAnimToken;
+      if(!beamGeom) updateBeams();
+      syncBeamVisibility();
+      if(!(bluePanelOpen && blueOn)) return;
+      beamHit.setAttribute('opacity','0.92');
+      animateDraw(beamIn, beamGeom?.in, 180, 0, token);
+      animateDraw(beamOut, beamGeom?.out, 220, 120, token);
+      animateDraw(beamBend, beamGeom?.bend, 220, 120, token);
+    }
+
+    function setBlueUI(){
+      const visible = bluePanelOpen;
+      blueInfo.style.display = visible ? 'block' : 'none';
+      blueInfo.setAttribute('aria-hidden', visible ? 'false' : 'true');
+      blueRayLayer.style.display = visible ? 'block' : 'none';
+      blueRayLayerBack.style.display = visible ? 'block' : 'none';
+      blueBackGlow.style.display = 'none';
+      syncBeamVisibility();
+      if(visible){
+        __patchBeamsForSafari();
+        __forceSvgRedraw();
+        updateBeams();
+        playBeamAnimation();
+      }
       syncPackshot();
     }
 
+    function closeBlueLightDemo(shouldResetCamera = true){
+      bluePanelOpen = false;
+      blueOn = false;
+      restoreOriginalColors();
+      setBlueUI();
+      if(shouldResetCamera) resetCameraToModeDefault('lens');
+    }
+
     function openBlueLightDemo(){
-      if(currentMode !== 'lens'){
-        setModel('lens_clear.glb', 'lens', { resetCamera:true }).then(()=>{ setTimeout(openBlueLightDemo, 160); });
+      const proceed = ()=>{
+        if(asdOverlay.classList.contains('show')) closeASD();
+        if(comfortOverlay.classList.contains('show')) closeComfort();
+        if(pvpOn) forcePVPOff();
+
+        bluePanelOpen = true;
+        blueOn = true;
+
+        if(!allMaterialBackup) backupOriginalColors();
+        applyTint();
+
+        applyOrbitStr(BLUE_PANEL_ORBIT_STR);
+        applyTargetStr(BLUE_PANEL_TARGET_STR);
+
+        beamGeom = null;
+        __patchBeamsForSafari();
+        __forceSvgRedraw();
+        setTimeout(()=>{
+          applyOrbitStr(BLUE_PANEL_ORBIT_STR);
+          applyTargetStr(BLUE_PANEL_TARGET_STR);
+          updateBeams();
+          playBeamAnimation();
+        }, 80);
+
+        setBlueUI();
+      };
+
+      if(currentMode === 'heat'){
+        setModel('lens_clear.glb', 'lens', { resetCamera:true }).then(()=> setTimeout(proceed, 160));
         return;
       }
-      if(asdOverlay.classList.contains('show')) closeASD();
-      if(comfortOverlay.classList.contains('show')) closeComfort();
-      if(pvpOn) forcePVPOff();
-
-      resetCameraToModeDefault('lens');
-
-      setTimeout(()=>{
-        blueDemoOn = true;
-        applyLensBlueEffect();
-        if(maxPackshot){ maxPackshot.style.display = 'none'; maxPackshot.classList.add('active'); }
-        if(blueLightOverlay) blueLightOverlay.classList.add('show');
-      }, 140);
+      proceed();
     }
 
     function setASDHintDefault(){
@@ -1350,11 +1676,12 @@
       missionComfort.classList.toggle('done', comfortDone);
     }
 
-    function closeASD(){ asdOverlay.classList.remove('show'); asdOverlay.setAttribute('aria-hidden','true'); closeBlueLightDemo(); resetCameraToModeDefault('lens'); syncMissionUI(); syncPackshot(); }
+    function closeASD(){ asdOverlay.classList.remove('show'); asdOverlay.setAttribute('aria-hidden','true'); resetCameraToModeDefault('lens'); syncMissionUI(); syncPackshot(); }
     function setModeButtons(){ modeLens.classList.toggle('primary', currentMode === 'lens'); modeHeat.classList.toggle('primary', currentMode === 'heat'); syncPackshot(); }
     function forcePVPOff(){ if(!pvpOn) return; pvpOn = false; showPVP(false); syncMissionUI(); syncPackshot(); }
 
     function openASD(){
+      if(bluePanelOpen) closeBlueLightDemo();
       if(pvpOn) forcePVPOff();
       resetCameraToModeDefault('lens'); setASDLensSrc(); resetASDState(); setASDHintDefault();
       if(asdEyeMV){ asdEyeMV.src = 'a.png?v=' + Date.now(); }
@@ -1370,7 +1697,7 @@
           lastOrbit = null; lastTarget = null;
           pendingCameraPreset = (mode === 'heat') ? { orbitStr: HEAT_DEFAULT_ORBIT_STR, targetStr: HEAT_DEFAULT_TARGET_STR } : { orbitStr: CLEAR_DEFAULT_ORBIT_STR, targetStr: CLEAR_DEFAULT_TARGET_STR };
         }
-        currentMode = mode; forcePVPOff(); showThickness(mode === 'heat'); setModeButtons();
+        currentMode = mode; if(bluePanelOpen) closeBlueLightDemo(); forcePVPOff(); showThickness(mode === 'heat'); setModeButtons();
         const onLoadOnce = ()=>{ mv.removeEventListener('load', onLoadOnce); resolve(); };
         mv.addEventListener('load', onLoadOnce, { once:true });
         mv.src = file + '?v=' + Date.now();
@@ -1387,8 +1714,8 @@
         if(lastTarget) applyTarget(lastTarget); if(lastOrbit) applyOrbit(lastOrbit);
         setTimeout(()=>{ if(lastTarget) applyTarget(lastTarget); if(lastOrbit) applyOrbit(lastOrbit); }, 120);
       }
-      if(currentMode === 'lens'){ tuneClearLensMaterials(); }
-      setModeButtons(); syncMissionUI(); syncPackshot(); keepMVPlaying(); setTimeout(keepMVPlaying, 120);
+      if(currentMode === 'lens'){ tuneClearLensMaterials(); backupOriginalColors(); }
+      setModeButtons(); syncMissionUI(); setBlueUI(); keepMVPlaying(); setTimeout(keepMVPlaying, 120);
     });
 
     function toggleASD(){ if(asdOverlay.classList.contains('show')){ closeASD(); return; } openASD(); }
@@ -1403,6 +1730,7 @@
     async function togglePVP(){
       if(currentMode === 'heat'){ await setModel('lens_clear.glb', 'lens', { resetCamera:true }); }
       if(currentMode !== 'lens') return;
+      if(bluePanelOpen) closeBlueLightDemo();
       if(asdOverlay.classList.contains('show')) closeASD();
       pvpOn = !pvpOn;
       if(pvpOn){
@@ -1422,9 +1750,10 @@
     function closeComfort(markDone = false){
       if(markDone) comfortDone = true;
       comfortOverlay.classList.remove('show'); comfortOverlay.setAttribute('aria-hidden','true');
-      closeBlueLightDemo(); stopComfortModeOnMotion(); setComfortMode('off'); syncMissionUI(); syncPackshot();
+      stopComfortModeOnMotion(); setComfortMode('off'); syncMissionUI(); syncPackshot();
     }
     function openComfort(){
+      if(bluePanelOpen) closeBlueLightDemo();
       if(asdOverlay.classList.contains('show')) closeASD();
       if(pvpOn) forcePVPOff();
       stopComfortModeOnMotion(); comfortOverlay.classList.add('show'); comfortOverlay.setAttribute('aria-hidden','false');
@@ -1476,148 +1805,145 @@
       el.style.left = (sx / rect.width * 100) + '%'; el.style.top = (sy / rect.height * 100) + '%'; el.style.width = length + 'px'; el.style.transform = `rotate(${angle}deg)`;
     }
 
-function positionComfortInteractiveElements(redFloatOffset = 0){
-  if(!comfortScene || !comfortOverlay.classList.contains('show')) return;
+    function positionComfortInteractiveElements(redFloatOffset = 0){
+      if(!comfortScene || !comfortOverlay.classList.contains('show')) return;
 
-  const rect = comfortScene.getBoundingClientRect();
-  const w = rect.width;
-  const h = rect.height;
-  const mobile = w <= 560;
-  const tablet = w <= 820 && w > 560;
+      const rect = comfortScene.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+      const mobile = w <= 560;
+      const tablet = w <= 820 && w > 560;
 
-  const eyeLeft = { x: w * 0.552, y: h * 0.408 };
-  const eyeRight = { x: w * 0.811, y: h * 0.410 };
+      const eyeLeft = { x: w * 0.552, y: h * 0.408 };
+      const eyeRight = { x: w * 0.811, y: h * 0.410 };
 
-  const cardW = mobile ? 82 : (tablet ? 104 : 118);
-  const cardH = mobile ? 126 : (tablet ? 158 : 176);
+      const cardW = mobile ? 82 : (tablet ? 104 : 118);
+      const cardH = mobile ? 126 : (tablet ? 158 : 176);
 
-  const modeOn = comfortScene.classList.contains('mode-on');
-  const modeOff = comfortScene.classList.contains('mode-off');
+      const modeOn = comfortScene.classList.contains('mode-on');
+      const modeOff = comfortScene.classList.contains('mode-off');
 
-  const baseCardCx = mobile ? w * 0.23 : w * 0.225;
-  const baseCardCy = (eyeLeft.y + eyeRight.y) / 2 + 4;
+      const baseCardCx = mobile ? w * 0.23 : w * 0.225;
+      const baseCardCy = (eyeLeft.y + eyeRight.y) / 2 + 4;
 
-  const cardCx = baseCardCx;
-  const cardCy = modeOff ? (baseCardCy + 14) : baseCardCy;
+      const cardCx = baseCardCx;
+      const cardCy = modeOff ? (baseCardCy + 14) : baseCardCy;
 
-  /* ✅ 핵심: 카드 각각 중심 계산 */
-  const redCardCenterY = baseCardCy - 20 + redFloatOffset;
-  const blueCardCenterY = baseCardCy + 20;
+      const redCardCenterY = baseCardCy - 20 + redFloatOffset;
+      const blueCardCenterY = baseCardCy + 20;
 
-  cfTargetStage.style.width = cardW + 'px';
-  cfTargetStage.style.height = cardH + 'px';
-  cfSetCenterPercent(cfTargetStage, cardCx, cardCy, rect);
+      cfTargetStage.style.width = cardW + 'px';
+      cfTargetStage.style.height = cardH + 'px';
+      cfSetCenterPercent(cfTargetStage, cardCx, cardCy, rect);
 
-  if(modeOn){
-    if(cfBoxTop){
-      cfBoxTop.style.top = '-20px';
-      cfBoxTop.style.transform = 'translateX(-50%)';
+      if(modeOn){
+        if(cfBoxTop){
+          cfBoxTop.style.top = '-20px';
+          cfBoxTop.style.transform = 'translateX(-50%)';
+        }
+        if(cfBoxBottom){
+          cfBoxBottom.style.top = '20px';
+          cfBoxBottom.style.transform = 'translateX(-50%)';
+        }
+
+        if(cfARed){
+          cfARed.style.left = '50%';
+          cfARed.style.top = '30%';
+          cfARed.style.transform = 'translate(-50%,-50%)';
+        }
+        if(cfABlue){
+          cfABlue.style.left = '50%';
+          cfABlue.style.top = '70%';
+          cfABlue.style.transform = 'translate(-50%,-50%)';
+        }
+      }
+
+      if(modeOff){
+        if(cfBoxTop){
+          cfBoxTop.style.top = '0px';
+          cfBoxTop.style.transform = 'translateX(-50%)';
+        }
+        if(cfBoxBottom){
+          cfBoxBottom.style.top = '0px';
+          cfBoxBottom.style.transform = 'translateX(-50%)';
+        }
+
+        if(cfARed){
+          cfARed.style.left = '50%';
+          cfARed.style.top = '50%';
+          cfARed.style.transform = 'translate(-50%,-50%)';
+        }
+        if(cfABlue){
+          cfABlue.style.left = '50%';
+          cfABlue.style.top = '50%';
+          cfABlue.style.transform = 'translate(-50%,-50%)';
+        }
+      }
+
+      const opticW = mobile ? 38 : (tablet ? 48 : 58);
+      const opticH = mobile ? 76 : (tablet ? 98 : 118);
+      const opticCx = eyeLeft.x - 2;
+      const opticCy = eyeLeft.y - 20;
+
+      cfOptic.style.width = opticW + 'px';
+      cfOptic.style.height = opticH + 'px';
+      cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
+
+      const cardRightCenterX = cardCx + cardW * 0.50;
+
+      if(modeOn){
+        cfLineRed.style.opacity = '1';
+        cfLineBlue.style.opacity = '1';
+
+        const blueStartX = eyeRight.x;
+        const blueStartY = eyeRight.y;
+
+        const redStartX = eyeLeft.x;
+        const redStartY = eyeLeft.y;
+
+        cfPlaceLine(
+          cfLineRed,
+          redStartX,
+          redStartY,
+          cardRightCenterX,
+          redCardCenterY - 14,
+          rect
+        );
+
+        cfPlaceLine(
+          cfLineBlue,
+          blueStartX,
+          blueStartY,
+          cardRightCenterX,
+          blueCardCenterY,
+          rect
+        );
+      }
+
+      if(modeOff){
+        cfLineRed.style.opacity = '1';
+        cfLineBlue.style.opacity = '1';
+
+        cfPlaceLine(
+          cfLineRed,
+          cardRightCenterX,
+          cardCy - 4,
+          eyeLeft.x,
+          eyeLeft.y,
+          rect
+        );
+
+        cfPlaceLine(
+          cfLineBlue,
+          cardRightCenterX,
+          cardCy,
+          eyeRight.x,
+          eyeRight.y,
+          rect
+        );
+      }
     }
-    if(cfBoxBottom){
-      cfBoxBottom.style.top = '20px';
-      cfBoxBottom.style.transform = 'translateX(-50%)';
-    }
 
-    /* ✅ A 완전 각 카드 정중앙 */
-    if(cfARed){
-      cfARed.style.left = '50%';
-      cfARed.style.top = '30%';
-      cfARed.style.transform = 'translate(-50%,-50%)';
-    }
-    if(cfABlue){
-      cfABlue.style.left = '50%';
-      cfABlue.style.top = '70%';
-      cfABlue.style.transform = 'translate(-50%,-50%)';
-    }
-  }
-
-  if(modeOff){
-    if(cfBoxTop){
-      cfBoxTop.style.top = '0px';
-      cfBoxTop.style.transform = 'translateX(-50%)';
-    }
-    if(cfBoxBottom){
-      cfBoxBottom.style.top = '0px';
-      cfBoxBottom.style.transform = 'translateX(-50%)';
-    }
-
-    if(cfARed){
-      cfARed.style.left = '50%';
-      cfARed.style.top = '50%';
-      cfARed.style.transform = 'translate(-50%,-50%)';
-    }
-    if(cfABlue){
-      cfABlue.style.left = '50%';
-      cfABlue.style.top = '50%';
-      cfABlue.style.transform = 'translate(-50%,-50%)';
-    }
-  }
-
-  const opticW = mobile ? 38 : (tablet ? 48 : 58);
-  const opticH = mobile ? 76 : (tablet ? 98 : 118);
-  const opticCx = eyeLeft.x - 2;
-  const opticCy = eyeLeft.y - 20;
-
-  cfOptic.style.width = opticW + 'px';
-  cfOptic.style.height = opticH + 'px';
-  cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
-
-  const cardRightCenterX = cardCx + cardW * 0.50;
-
-  if(modeOn){
-    cfLineRed.style.opacity = '1';
-    cfLineBlue.style.opacity = '1';
-
-    const blueStartX = eyeRight.x;
-    const blueStartY = eyeRight.y;
-
-    const redStartX = eyeLeft.x;
-    const redStartY = eyeLeft.y;
-
-    /* ✅ 레드선 더 위로 올림 */
-    cfPlaceLine(
-      cfLineRed,
-      redStartX,
-      redStartY,
-      cardRightCenterX,
-      redCardCenterY - 14,
-      rect
-    );
-
-    cfPlaceLine(
-      cfLineBlue,
-      blueStartX,
-      blueStartY,
-      cardRightCenterX,
-      blueCardCenterY,
-      rect
-    );
-  }
-
-  if(modeOff){
-    cfLineRed.style.opacity = '1';
-    cfLineBlue.style.opacity = '1';
-
-    cfPlaceLine(
-      cfLineRed,
-      cardRightCenterX,
-      cardCy - 4,
-      eyeLeft.x,
-      eyeLeft.y,
-      rect
-    );
-
-    cfPlaceLine(
-      cfLineBlue,
-      cardRightCenterX,
-      cardCy,
-      eyeRight.x,
-      eyeRight.y,
-      rect
-    );
-  }
-}
-    
     missionComfort.addEventListener('click', toggleComfort);
     missionComfort.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') toggleComfort(); });
     comfortClose?.addEventListener('click', ()=>closeComfort());
@@ -1630,15 +1956,41 @@ function positionComfortInteractiveElements(redFloatOffset = 0){
       if(asdOverlay.classList.contains('show')) closeASD();
       if(comfortOverlay.classList.contains('show')) closeComfort();
       if(pvpOn){ pvpOn = false; showPVP(false); }
-      closeBlueLightDemo();
+      if(bluePanelOpen) closeBlueLightDemo();
       showThickness(currentMode === 'heat'); resetCameraToModeDefault(currentMode); syncMissionUI(); syncPackshot(); positionComfortInteractiveElements(0);
     });
 
-    modeLens.addEventListener('click', ()=> { closeBlueLightDemo(); setModel('lens_clear.glb', 'lens', { resetCamera:false }); });
-    modeHeat.addEventListener('click', ()=> { closeBlueLightDemo(); setModel('lens_heatmap.glb', 'heat', { resetCamera:false }); });
+    modeLens.addEventListener('click', ()=> { if(bluePanelOpen) closeBlueLightDemo(); setModel('lens_clear.glb', 'lens', { resetCamera:false }); });
+    modeHeat.addEventListener('click', ()=> { if(bluePanelOpen) closeBlueLightDemo(); setModel('lens_heatmap.glb', 'heat', { resetCamera:false }); });
 
-    maxPackshot?.addEventListener('click', (e)=>{ e.stopPropagation(); openBlueLightDemo(); });
-    blueLightConfirm?.addEventListener('click', (e)=>{ e.stopPropagation(); closeBlueLightDemo(); });
+    function handleMaxPackshotActivate(e){
+      if(e){
+        e.preventDefault?.();
+        e.stopPropagation?.();
+      }
+      openBlueLightDemo();
+    }
+
+    maxPackshot?.addEventListener('click', handleMaxPackshotActivate);
+    maxPackshot?.addEventListener('pointerup', handleMaxPackshotActivate);
+    maxPackshot?.addEventListener('touchend', handleMaxPackshotActivate, { passive:false });
+    maxPackshot?.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' '){
+        handleMaxPackshotActivate(e);
+      }
+    });
+
+    function handleBlueConfirm(e){
+      if(e){
+        e.preventDefault?.();
+        e.stopPropagation?.();
+      }
+      closeBlueLightDemo(true);
+    }
+
+    blueConfirm?.addEventListener('click', handleBlueConfirm);
+    blueConfirm?.addEventListener('pointerup', handleBlueConfirm);
+    blueConfirm?.addEventListener('touchend', handleBlueConfirm, { passive:false });
 
     setModel('lens_clear.glb', 'lens', { resetCamera:true });
 
@@ -1678,12 +2030,13 @@ function positionComfortInteractiveElements(redFloatOffset = 0){
     document.getElementById('tutNext2')?.addEventListener('click', ()=>showTut(3));
     document.getElementById('tutDone')?.addEventListener('click', ()=>{ hideTut(); sessionStorage.setItem('asd_tutorial_done','1'); });
     window.addEventListener('load', ()=>{});
-    window.addEventListener('resize', ()=>{
+    mv.addEventListener('camera-change', ()=>{ if(bluePanelOpen && blueOn) updateBeams(); });
+    window.addEventListener('resize', ()=>{ if(bluePanelOpen && blueOn) updateBeams(); 
       if(!tutorialLayer.classList.contains('show')) return;
       if(tutLeft.style.display === 'block') showTut(1);
       else if(tutBottom.style.display === 'block') showTut(2);
       else if(tutTop.style.display === 'block') showTut(3);
-      syncPackshot(); positionComfortInteractiveElements(0);
+      positionComfortInteractiveElements(0);
     });
   </script>
 </body>
