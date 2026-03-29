@@ -321,6 +321,7 @@
       backdrop-filter: blur(10px);
       overflow:hidden;
       box-shadow: var(--panel-glow);
+      transition:transform .35s cubic-bezier(.22,.9,.22,1);
     }
     #pvpBig.show{
       display:block;
@@ -332,8 +333,8 @@
       object-fit:cover;
       display:block;
       border-radius:999px;
-      filter:saturate(1.05) contrast(1.2);
-      transform: scale(1.02);
+      filter:saturate(1.05) contrast(1.02);
+      transform: scale(1.2);
       transform-origin:center;
     }
 
