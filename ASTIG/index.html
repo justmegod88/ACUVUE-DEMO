@@ -304,8 +304,8 @@
       left:50%;
       top:50%;
       transform:translate(-50%,-50%);
-      width:min(76vw, 560px);
-      height:min(76vw, 560px);
+      width:min(88vw, 640px);
+      height:min(88vw, 640px);
       border-radius:999px;
       z-index:56;
       display:none;
@@ -315,6 +315,7 @@
       backdrop-filter: blur(10px);
       overflow:hidden;
       box-shadow: var(--panel-glow);
+      transition:transform .35s cubic-bezier(.22,.9,.22,1);
     }
     #pvpBig.show{
       display:block;
@@ -327,7 +328,7 @@
       display:block;
       border-radius:999px;
       filter:saturate(1.05) contrast(1.02);
-      transform: scale(1.02);
+      transform: scale(1.2);
       transform-origin:center;
     }
 
