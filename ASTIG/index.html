@@ -266,9 +266,9 @@
     .toric-popup-disclaimer em{ font-style:italic; }
 
     .popup-reference-area{
-      grid-column:1 / -1;
       flex:0 0 100%;
       margin-top:10px;
+      grid-column:1 / -1;
       padding:0;
       text-align:left;
       font-size:9.4px;
@@ -332,24 +332,33 @@
       border-radius:18px;
       padding:14px 14px 12px;
       display:none;
-      grid-template-columns:94px minmax(0, 1fr) auto;
-      gap:12px;
+      grid-template-columns:78px minmax(0,1fr) 84px;
+      gap:10px 12px;
       align-items:start;
       backdrop-filter:none;
       box-shadow:0 16px 32px rgba(15,40,95,.12);
       overflow:hidden;
+      box-sizing:border-box;
     }
     #pvpOverlay.show{ display:grid; }
     #pvpOverlay img{
-      width:94px;
-      height:94px;
+      width:78px;
+      height:78px;
       object-fit:cover;
       border-radius:14px;
       border:1px solid rgba(36,85,199,.12);
       background:#f7faff;
       box-shadow:none;
+      flex:0 0 auto;
     }
-    #pvpText{ color:var(--smartfit-text); font-size:13px; line-height:1.4; flex:1 1 0; min-width:0; }
+    #pvpText{
+      color:var(--smartfit-text);
+      font-size:13px;
+      line-height:1.4;
+      min-width:0;
+      grid-column:2;
+      align-self:center;
+    }
     #pvpTitle{ font-weight:900; margin-bottom:4px; color:#0f2240; font-size:14px; }
     #hint{ opacity:1; color:#334b6a; }
 
@@ -359,22 +368,28 @@
       opacity:1;
       cursor:pointer;
       user-select:none;
-      width:96px;
-      min-width:96px;
-      height:44px;
-      padding:0 18px;
+      width:84px;
+      min-width:84px;
+      max-width:84px;
+      height:40px;
+      padding:0 12px;
       border-radius:999px;
       border:1px solid rgba(36,85,199,.92);
       background:var(--smartfit-blue);
       -webkit-tap-highlight-color: transparent;
       flex:0 0 auto;
+      flex-shrink:0;
       white-space:nowrap;
       display:none;
       box-shadow:0 6px 16px rgba(36,85,199,.16);
-      font-size:14px;
+      font-size:12px;
+      line-height:1;
+      box-sizing:border-box;
       align-items:center;
       justify-content:center;
-      align-self:start;
+      align-self:center;
+      justify-self:end;
+      margin-top:2px;
     }
     #pvpConfirm:active{ transform:scale(.98); }
 
@@ -469,9 +484,19 @@
       box-shadow:0 18px 40px rgba(15,40,95,.14);
       position:relative;
     }
-    #asdHeader{ display:flex; align-items:center; justify-content:space-between; padding:8px 14px; min-height:42px; background:var(--smartfit-blue); border-bottom:1px solid rgba(255,255,255,.14); }
-    #asdHeaderTitle{ font-size:15px; font-weight:900; color:#fff; letter-spacing:-.25px; }
-    #asdClose{ width:30px; height:30px; border:none; background:rgba(255,255,255,.12); color:#fff; font-weight:800; font-size:16px; cursor:pointer; box-shadow:none; border-radius:999px; }
+    /* ASD 타이틀 두께 2/3로 축소 */
+    #asdHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:7px 16px;
+      min-height:40px;
+      background:var(--smartfit-blue);
+      border-bottom:1px solid rgba(255,255,255,.14);
+      box-sizing:border-box;
+    }
+    #asdHeaderTitle{ font-size:16px; font-weight:900; color:#fff; letter-spacing:-.25px; }
+    #asdClose{ width:32px; height:32px; border:none; background:rgba(255,255,255,.12); color:#fff; font-weight:800; font-size:17px; cursor:pointer; box-shadow:none; border-radius:999px; }
 
     #asdHint{
       padding:16px 16px 17px;
@@ -481,9 +506,9 @@
       font-weight:800;
       opacity:1;
       border-top:1px solid #d6e4fb;
-      display:grid;
-      grid-template-columns:minmax(0, 1fr) auto;
-      align-items:end;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
       gap:14px;
       background:#eef4fb;
     }
@@ -492,20 +517,27 @@
       background:var(--smartfit-blue);
       color:#ffffff;
       font-weight:900;
-      font-size:14px;
-      width:96px;
-      min-width:96px;
-      height:44px;
-      padding:0 18px;
+      font-size:12px;
+      width:84px;
+      min-width:84px;
+      max-width:84px;
+      height:40px;
+      padding:0 12px;
       border-radius:999px;
       -webkit-tap-highlight-color: transparent;
       cursor:pointer;
       flex:0 0 auto;
+      flex-shrink:0;
       white-space:nowrap;
       box-shadow:0 6px 16px rgba(36,85,199,.16);
       align-self:flex-end;
+      box-sizing:border-box;
+      line-height:1;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
     }
-    #asdHint .hintText{ flex:1 1 auto; word-break:keep-all; }
+    #asdHint .hintText{ flex:1 1 auto; min-width:0; word-break:keep-all; }
     #asdHint .hintTitle{ display:block; color:var(--acuvue-blue); font-size:17px; font-weight:900; margin-bottom:8px; letter-spacing:-.2px; }
     #asdHint .hintBody{ display:block; font-size:20px; line-height:1.38; font-weight:900; color:#111; letter-spacing:-.2px; }
     #asdHint .hintBody .blue{ color:var(--acuvue-blue); }
@@ -712,11 +744,29 @@
     #comfortMessage{
       background:#eef4fb; padding:16px 18px 16px; display:flex; align-items:center; justify-content:space-between; gap:14px; border-top:1px solid #d6e4fb;
     }
-    #comfortMessageCopy{ flex:1 1 auto; font-size:18px; line-height:1.42; font-weight:900; letter-spacing:-.25px; color:#111; word-break:keep-all; }
+    #comfortMessageCopy{ flex:1 1 auto; min-width:0; font-size:18px; line-height:1.42; font-weight:900; letter-spacing:-.25px; color:#111; word-break:keep-all; }
     #comfortMessageCopy .blue{ color:var(--smartfit-blue); }
     #comfortConfirm{
-      flex:0 0 auto; min-width:112px; height:52px; padding:0 22px; border:none; border-radius:999px; background:var(--smartfit-blue); color:#fff;
-      font-size:15px; font-weight:900; cursor:pointer; box-shadow:0 6px 16px rgba(36,85,199,.16);
+      flex:0 0 auto;
+      flex-shrink:0;
+      min-width:84px;
+      width:84px;
+      max-width:84px;
+      height:40px;
+      padding:0 12px;
+      border:none;
+      border-radius:999px;
+      background:var(--smartfit-blue);
+      color:#fff;
+      font-size:13px;
+      line-height:1;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 6px 16px rgba(36,85,199,.16);
+      box-sizing:border-box;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
     }
 
     #comfortWrap .popup-reference-area{
@@ -747,7 +797,7 @@
       .cf-seg-btn{ font-size:15px; height:50px; }
       #comfortMessage{ padding:14px 16px 14px; gap:12px; }
       #comfortMessageCopy{ font-size:17px; }
-      #comfortConfirm{ min-width:112px; height:52px; font-size:15px; border-radius:999px; }
+      #comfortConfirm{ min-width:96px; width:96px; max-width:96px; height:44px; font-size:13px; border-radius:999px; }
     }
     @media (max-width: 560px){
       #comfortOverlay{ padding:8px; }
@@ -769,7 +819,61 @@
       .cf-seg-btn{ height:44px; font-size:11px; border-width:1.5px; padding:0 8px; }
       #comfortMessage{ padding:12px 14px 12px; gap:10px; }
       #comfortMessageCopy{ font-size:14px; line-height:1.42; }
-      #comfortConfirm{ min-width:96px; height:44px; font-size:13px; border-radius:999px; padding:0 16px; }
+      #comfortConfirm{ min-width:96px; width:96px; max-width:96px; height:44px; font-size:13px; border-radius:999px; padding:0 16px; }
+      #pvpOverlay{
+        padding:12px 12px 10px;
+        grid-template-columns:74px minmax(0,1fr) 84px;
+        gap:8px 10px;
+      }
+      #pvpOverlay img{
+        width:74px;
+        height:74px;
+        border-radius:12px;
+      }
+      #pvpText{
+        font-size:12px;
+        line-height:1.36;
+      }
+      #pvpTitle{
+        font-size:13px;
+        margin-bottom:3px;
+      }
+      #pvpConfirm{
+        width:96px;
+        min-width:96px;
+        max-width:96px;
+        height:44px;
+        padding:0 16px;
+        font-size:13px;
+        align-self:center;
+      }
+      #asdHeader{
+        padding:6px 14px;
+        min-height:38px;
+      }
+      #asdHeaderTitle{
+        font-size:15px;
+      }
+      #asdHint{
+        padding:14px 14px 15px;
+        gap:10px;
+      }
+      #asdHint .hintTitle{
+        font-size:15px;
+        margin-bottom:6px;
+      }
+      #asdHint .hintBody{
+        font-size:16px;
+        line-height:1.4;
+      }
+      #asdHint button{
+        width:96px;
+        min-width:96px;
+        max-width:96px;
+        height:44px;
+        padding:0 16px;
+        font-size:13px;
+      }
     }
 
     #maxPackshot{
@@ -916,16 +1020,24 @@
       font-weight:900;
       cursor:pointer;
       user-select:none;
-      padding:0 22px;
-      min-width:112px;
-      height:52px;
+      padding:0 12px;
+      min-width:84px;
+      width:84px;
+      max-width:84px;
+      height:40px;
       border-radius:999px;
       border:1px solid rgba(36,85,199,.92);
       background:var(--smartfit-blue);
       -webkit-tap-highlight-color: transparent;
       white-space:nowrap;
       box-shadow:0 6px 16px rgba(36,85,199,.16);
-      font-size:15px;
+      font-size:12px;
+      line-height:1;
+      box-sizing:border-box;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      flex-shrink:0;
     }
     #blueInfoMission .confirm:active{ transform:scale(.98); }
 
@@ -958,6 +1070,8 @@
       }
       #blueInfoMission .confirm{
         min-width:96px;
+        width:96px;
+        max-width:96px;
         height:44px;
         padding:0 16px;
         font-size:13px;
@@ -1348,7 +1462,7 @@
     function showPVP(show){
       pvpOverlay.classList.toggle('show', show);
       pvpBig.classList.toggle('show', show);
-      pvpConfirm.style.display = show ? 'block' : 'none';
+      pvpConfirm.style.display = show ? 'inline-flex' : 'none';
     }
     function showThickness(show){
       thicknessBar.classList.toggle('show', show);
@@ -1821,7 +1935,7 @@
       if(mode === 'on'){
         comfortScene.classList.add('mode-on'); cfBtnOn.classList.add('active');
         comfortMessageCopy.innerHTML = `단안에 프리즘 영향이 있는 경우 <span class="blue">양안 이미지 위치에 차이가 발생하여 피로감이 발생할 수 있습니다.</span>`;
-        if(comfortConfirm) comfortConfirm.style.display = '';
+        if(comfortConfirm) comfortConfirm.style.display = 'inline-flex';
       }else{
         comfortScene.classList.add('mode-off'); cfBtnOff.classList.add('active');
         comfortMessageCopy.innerHTML = `난시 렌즈 광학부의 프리즘은 <span class="blue">단안 난시 소비자에게 중요합니다.</span>`;
