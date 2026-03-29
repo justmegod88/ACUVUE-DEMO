@@ -1452,8 +1452,8 @@
       const toVh = (y)=> (y / window.innerHeight) * 100;
       const clamp = (v, min, max)=> Math.max(min, Math.min(max, v));
 
-      const baseLensCx = clamp(toVw(rect.left + rect.width * 0.35), 0, 100);
-      const baseLensCy = clamp(toVh(rect.top + rect.height * 0.35), 0, 100);
+      const baseLensCx = clamp(toVw(rect.left + rect.width * 0.50), 0, 100);
+      const baseLensCy = clamp(toVh(rect.top + rect.height * 0.50), 0, 100);
       const beamOffsetX = (bluePanelOpen && blueOn) ? 0.8 : 0;
       const beamOffsetY = (bluePanelOpen && blueOn) ? 14.5 : 0;
       const lensCx = clamp(baseLensCx + beamOffsetX, 0, 100);
