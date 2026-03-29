@@ -604,12 +604,16 @@
     #asdLidTop::after{ bottom:-12px; }
     #asdLidBot::after{ top:-12px; transform: scaleY(-1); }
 
-    #asdBlinkBtn, #asdRotateBtn{ left:14px; bottom:14px; border:1px solid rgba(0,94,184,.35); background:rgba(255,255,255,.92); color:var(--acuvue-blue); }
-    #asdBlinkBtn{ left:14px; top:14px; border:1px solid rgba(0,94,184,.55); background:var(--acuvue-blue); color:#fff; box-shadow: 0 12px 26px rgba(0,94,184,.20); }
+    #asdBlinkBtn, #asdRotateBtn{
+      position:absolute; bottom:14px; width:54px; height:54px; border-radius:999px;
+      font-weight:900; font-size:12px; display:flex; align-items:center; justify-content:center; z-index:5;
+      -webkit-tap-highlight-color: transparent; user-select:none; cursor:pointer; box-shadow: 0 10px 22px rgba(11,31,51,.12);
+    }
+    #asdBlinkBtn{ right:14px; border:1px solid rgba(0,94,184,.55); background:var(--acuvue-blue); color:#fff; box-shadow: 0 12px 26px rgba(0,94,184,.20); }
     #asdRotateBtn{ right:76px; border:1px solid rgba(0,94,184,.35); background:rgba(255,255,255,.92); color:var(--acuvue-blue); }
 
     #asdAngleBadge{
-      position:absolute; left:116px; bottom:18px; color:var(--acuvue-blue); font-size:12px; font-weight:900;
+      position:absolute; left:14px; bottom:18px; color:var(--acuvue-blue); font-size:12px; font-weight:900;
       background:rgba(255,255,255,.86); border:1px solid rgba(0,94,184,.35); border-radius:999px; padding:6px 10px; z-index:5;
       box-shadow: 0 10px 22px rgba(11,31,51,.10);
     }
