@@ -1,0 +1,2828 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>ACUVUE ASTIG</title>
+
+  <style>
+    :root{
+      --acuvue-blue:#005EB8;
+      --acuvue-blue-2:#1E78D6;
+      --acuvue-soft:#EAF3FF;
+      --acuvue-soft-2:#F5F9FF;
+      --text-navy:#0B1F33;
+      --text-sub:#30485F;
+      --line:#D9E6F5;
+      --shadow:0 18px 60px rgba(11,31,51,.18);
+      --glass:rgba(255,255,255,.86);
+      --glass-2:rgba(255,255,255,.72);
+
+      --panel-grad: linear-gradient(180deg, rgba(234,243,255,.92) 0%, rgba(255,255,255,.90) 55%, rgba(245,249,255,.86) 100%);
+      --panel-stroke: rgba(0,94,184,.18);
+      --panel-stroke-2: rgba(11,31,51,.10);
+      --panel-glow: 0 16px 50px rgba(0,94,184,.10), 0 18px 60px rgba(11,31,51,.14);
+      --panel-topline: linear-gradient(90deg, rgba(0,94,184,.75), rgba(0,94,184,.12));
+      --smartfit-blue:#2455C7;
+      --smartfit-blue-deep:#1F4CB7;
+      --smartfit-blue-soft:#EAF2FF;
+      --smartfit-blue-line:#BDD1F5;
+      --smartfit-text:#18345C;
+    }
+
+    html,body{
+      height:100%;
+      margin:0;
+      background:linear-gradient(180deg, var(--acuvue-soft-2) 0%, #ffffff 55%, var(--acuvue-soft-2) 100%);
+      overflow:hidden;
+      font-family:-apple-system,system-ui;
+      color:var(--text-navy);
+    }
+
+    model-viewer{
+      width:100vw;
+      height:100vh;
+      background:transparent;
+      display:block;
+      position:fixed;
+      inset:0;
+      z-index:1;
+    }
+
+    #missionBarWrap{
+      position:fixed;
+      left:12px;
+      right:12px;
+      top:12px;
+      z-index:40;
+      pointer-events:auto;
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow: 0 18px 44px rgba(11,31,51,.12);
+      border:1px solid rgba(0,94,184,.10);
+      background:rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+    }
+    #missionBarHeader{
+      background:linear-gradient(180deg, #123F95 0%, #0A3486 100%);
+      color:#fff;
+      text-align:center;
+      font-weight:900;
+      font-size:18px;
+      letter-spacing:-.2px;
+      padding:16px 18px 17px;
+      box-shadow: inset 0 -1px 0 rgba(255,255,255,.10);
+    }
+    #missionBar{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:0;
+      align-items:stretch;
+      pointer-events:auto;
+      background:rgba(255,255,255,.96);
+    }
+    .missionCard{
+      padding:16px 14px 15px;
+      background:linear-gradient(180deg, rgba(255,255,255,.96) 0%, rgba(248,251,255,.96) 100%);
+      border:none;
+      border-right:1px solid rgba(11,31,51,.08);
+      color:var(--text-navy);
+      min-height:116px;
+      box-sizing:border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select:none;
+      cursor:pointer;
+      transition: transform .08s ease, background .22s ease, box-shadow .22s ease, color .22s ease;
+      position:relative;
+      overflow:hidden;
+    }
+    .missionCard:last-child{ border-right:none; }
+    .missionCard:active{ transform: scale(.99); }
+
+    .missionCard::before{
+      content:"";
+      position:absolute;
+      left:14px;
+      right:14px;
+      bottom:0;
+      height:3px;
+      border-radius:999px 999px 0 0;
+      background:linear-gradient(90deg, rgba(0,94,184,.92), rgba(30,120,214,.55));
+      opacity:0;
+      transform:scaleX(.55);
+      transform-origin:center;
+      transition:opacity .22s ease, transform .22s ease;
+    }
+
+    .missionCard.on{
+      background:linear-gradient(180deg, rgba(234,243,255,.98) 0%, rgba(255,255,255,.98) 100%);
+      box-shadow: inset 0 0 0 1px rgba(0,94,184,.12), 0 10px 22px rgba(0,94,184,.06);
+    }
+    .missionCard.on::before{
+      opacity:1;
+      transform:scaleX(1);
+    }
+
+    .missionCard.done::after{
+      content:"완료";
+      position:absolute;
+      right:10px;
+      top:10px;
+      font-size:11px;
+      font-weight:900;
+      padding:4px 8px;
+      border-radius:999px;
+      background:rgba(0,94,184,.10);
+      border:1px solid rgba(0,94,184,.22);
+      color:var(--acuvue-blue);
+      backdrop-filter: blur(6px);
+    }
+
+    .missionNo{
+      font-weight:900;
+      opacity:.78;
+      font-size:14px;
+      margin-bottom:8px;
+      color:var(--text-sub);
+      letter-spacing:.2px;
+    }
+    .missionTitle{
+      font-weight:900;
+      font-size:16px;
+      line-height:1.24;
+      margin-bottom:10px;
+      color:var(--text-navy);
+      letter-spacing:-.2px;
+      word-break:keep-all;
+    }
+    .missionDesc{
+      font-size:12.5px;
+      line-height:1.35;
+      opacity:.92;
+      white-space:nowrap;
+      color:var(--text-sub);
+      font-weight:700;
+    }
+
+    @media (max-width: 560px){
+      #missionBarHeader{
+        font-size:16px;
+        padding:15px 14px 16px;
+      }
+      .missionCard{
+        min-height:112px;
+        padding:15px 10px 14px;
+      }
+      .missionTitle{
+        font-size:14px;
+      }
+      .missionDesc{
+        font-size:11.5px;
+      }
+    }
+
+    #bottomBtns{
+      position:fixed;
+      left:12px;
+      right:12px;
+      bottom:calc(env(safe-area-inset-bottom, 0px) + 34px);
+      z-index:50;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .btn{
+      flex:1;
+      min-width:140px;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:var(--glass);
+      color:var(--text-navy);
+      font-weight:900;
+      font-size:13px;
+      -webkit-tap-highlight-color: transparent;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 28px rgba(11,31,51,.10);
+    }
+    .btn.primary{
+      background:var(--acuvue-blue);
+      border-color:rgba(0,94,184,.65);
+      color:#ffffff;
+    }
+
+    #btnReset{
+      width:46px;
+      height:46px;
+      min-width:46px;
+      flex:0 0 auto;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:var(--glass);
+      color:var(--text-navy);
+      font-weight:900;
+      font-size:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      backdrop-filter: blur(10px);
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 10px 28px rgba(11,31,51,.10);
+    }
+
+    #globalToricDisclaimer{
+      position:fixed;
+      left:12px;
+      right:12px;
+      bottom:calc(env(safe-area-inset-bottom, 0px) + 8px);
+      z-index:49;
+      text-align:center;
+      font-size:9px;
+      line-height:1.30;
+      color:rgba(72,80,92,.88);
+      font-weight:500;
+      letter-spacing:-.08px;
+      pointer-events:none;
+      text-shadow:0 1px 0 rgba(255,255,255,.55);
+    }
+    @media (max-width:560px){
+      #globalToricDisclaimer{
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 6px);
+        font-size:8.2px;
+        line-height:1.26;
+      }
+    }
+
+    .toric-popup-disclaimer{
+      padding:6px 16px 10px;
+      font-size:9px;
+      line-height:1.34;
+      color:rgba(72,80,92,.90);
+      background:#fff;
+    }
+    .toric-popup-disclaimer .disc-note{ display:block; margin-bottom:4px; font-weight:500; }
+    .toric-popup-disclaimer .disc-ref{ display:block; font-weight:500; color:rgba(72,80,92,.92); }
+    .toric-popup-disclaimer em{ font-style:italic; }
+
+    .popup-reference-area{
+      flex:0 0 100%;
+      margin-top:10px;
+      grid-column:1 / -1;
+      padding:12px 0 0;
+      text-align:left;
+      font-size:8.6px;
+      line-height:1.34;
+      color:#59616d;
+      font-weight:500;
+      letter-spacing:-.03px;
+      word-break:keep-all;
+      position:relative;
+    }
+    .popup-reference-area::before{
+      content:"";
+      position:absolute;
+      left:-14px;
+      right:-14px;
+      top:0;
+      height:2px;
+      background:linear-gradient(90deg, rgba(176,220,255,0), rgba(176,220,255,.95) 20%, rgba(176,220,255,.95) 80%, rgba(176,220,255,0));
+    }
+    .popup-reference-area .ref-line{
+      display:block;
+      margin-top:0;
+    }
+
+    .pvp-highlight{
+      font-weight:900;
+      color:var(--acuvue-blue);
+      letter-spacing:-.01em;
+    }
+
+    @keyframes pvpPop {
+      0%   { transform: translate(-50%,-50%) scale(.94); opacity: 0; }
+      60%  { transform: translate(-50%,-50%) scale(1.02); opacity: 1; }
+      100% { transform: translate(-50%,-50%) scale(1.00); opacity: 1; }
+    }
+
+    #pvpBig{
+      position:fixed;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      width:min(80vw, 600px);
+      height:min(80vw, 600px);
+      border-radius:999px;
+      z-index:56;
+      display:none;
+      pointer-events:none;
+      background:rgba(0,94,184,.04);
+      border:1px solid var(--panel-stroke);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+      box-shadow: var(--panel-glow);
+      transition:transform .35s cubic-bezier(.22,.9,.22,1);
+    }
+    #pvpBig.show{
+      display:block;
+      animation: pvpPop 220ms ease-out both;
+    }
+    #pvpBig img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      border-radius:999px;
+      filter:saturate(1.05) contrast(1.02);
+      transform: scale(1.2);
+      transform-origin:center;
+    }
+
+    #pvpOverlay{
+      position:fixed;
+      left:12px;
+      right:12px;
+      bottom:34px;
+      z-index:60;
+      background:#ffffff;
+      border:1px solid rgba(36,85,199,.16);
+      border-radius:18px;
+      padding:14px 14px 12px;
+      display:none;
+      grid-template-columns:78px minmax(0,1fr) 72px;
+      gap:10px 12px;
+      align-items:center;
+      backdrop-filter:none;
+      box-shadow:0 16px 32px rgba(15,40,95,.12);
+      overflow:hidden;
+      box-sizing:border-box;
+    }
+    #pvpOverlay.show{ display:grid; }
+    #pvpOverlay img{
+      width:78px;
+      height:78px;
+      object-fit:cover;
+      border-radius:14px;
+      border:1px solid rgba(36,85,199,.12);
+      background:#f7faff;
+      box-shadow:none;
+      flex:0 0 auto;
+    }
+    #pvpText{
+      color:var(--smartfit-text);
+      font-size:14px;
+      line-height:1.44;
+      min-width:0;
+      grid-column:2;
+      align-self:center;
+    }
+    #pvpTitle{ font-weight:900; margin-bottom:4px; color:#0f2240; font-size:15px; }
+    #hint{ opacity:1; color:#334b6a; }
+
+    #pvpConfirm{
+      color:#ffffff;
+      font-weight:900;
+      opacity:1;
+      cursor:pointer;
+      user-select:none;
+      width:68px;
+      min-width:68px;
+      max-width:68px;
+      height:38px;
+      padding:0 10px;
+      border-radius:999px;
+      border:1px solid rgba(36,85,199,.92);
+      background:var(--smartfit-blue);
+      -webkit-tap-highlight-color: transparent;
+      flex:0 0 auto;
+      flex-shrink:0;
+      white-space:nowrap;
+      display:none;
+      box-shadow:0 6px 16px rgba(36,85,199,.16);
+      font-size:13px;
+      line-height:1;
+      box-sizing:border-box;
+      align-items:center;
+      justify-content:center;
+      align-self:center;
+      justify-self:end;
+      margin-top:0;
+    }
+    #pvpConfirm:active{ transform:scale(.98); }
+
+
+    #pvpBig,
+    #pvpOverlay{ display:none !important; }
+
+    #pvpSimOverlay{
+      position:fixed; inset:0; z-index:84; display:none;
+      background:rgba(11,31,51,.28); backdrop-filter: blur(12px);
+      align-items:center; justify-content:center; padding:18px; box-sizing:border-box;
+    }
+    #pvpSimOverlay.show{ display:flex; }
+    #pvpSimWrap{
+      width:min(920px, 96vw); border-radius:24px; overflow:hidden; background:#fff;
+      border:1px solid rgba(36,85,199,.16); box-shadow:0 18px 44px rgba(15,40,95,.16);
+    }
+    #pvpSimHead{
+      height:50px; background:var(--smartfit-blue); display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+      border-bottom:1px solid rgba(255,255,255,.14);
+    }
+    #pvpSimTitle{ font-size:16px; font-weight:900; color:#fff; letter-spacing:-.25px; }
+    #pvpSimClose{ border:none; background:rgba(255,255,255,.12); font-size:18px; line-height:1; color:#fff; cursor:pointer; padding:0; width:32px; height:32px; border-radius:999px; }
+
+    #pvpSimScene{
+      position:relative; height:min(66vw, 620px); min-height:380px; overflow:hidden;
+      background:linear-gradient(180deg, #eef4fb 0%, #dde8f7 100%);
+    }
+    #pvpSceneBase{
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;
+      filter:saturate(1.02) contrast(1.02);
+    }
+    #pvpLensStage{
+      position:absolute; left:50%; top:52%; width:min(44vw, 330px); aspect-ratio:1/1;
+      transform:translate(-50%,-50%); pointer-events:none; z-index:3;
+    }
+    #pvpLensBase,
+    #pvpLensOn,
+    #pvpLensOff,
+    #pvpMoistureFx,
+    #pvpDryFx{
+      position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:block;
+    }
+    #pvpLensBase{ opacity:.16; filter:blur(1px); }
+    #pvpLensOn{ opacity:.92; transition:opacity .28s ease, transform .28s ease, filter .28s ease; }
+    #pvpLensOff{ opacity:0; transition:opacity .28s ease, transform .28s ease, filter .28s ease; }
+    #pvpMoistureFx{
+      opacity:.92;
+      background:radial-gradient(48% 48% at 35% 30%, rgba(255,255,255,.82), rgba(255,255,255,0) 52%),
+                 radial-gradient(44% 44% at 70% 66%, rgba(170,225,255,.48), rgba(170,225,255,0) 56%),
+                 linear-gradient(180deg, rgba(0,174,239,.16), rgba(0,200,150,.12));
+      mix-blend-mode:screen; border-radius:999px; filter:blur(5px);
+      transition:opacity .28s ease, filter .28s ease, transform .28s ease;
+    }
+    #pvpDryFx{
+      opacity:0;
+      background:
+        linear-gradient(115deg, rgba(255,255,255,0) 0 42%, rgba(255,255,255,.72) 44%, rgba(255,255,255,0) 46%),
+        linear-gradient(62deg, rgba(255,255,255,0) 0 58%, rgba(255,255,255,.62) 60%, rgba(255,255,255,0) 62%),
+        radial-gradient(40% 32% at 42% 40%, rgba(255,255,255,.18), rgba(255,255,255,0) 70%),
+        radial-gradient(46% 36% at 68% 68%, rgba(11,31,51,.18), rgba(11,31,51,0) 72%);
+      mix-blend-mode:screen; border-radius:999px; filter:blur(1.6px);
+      transition:opacity .28s ease, filter .28s ease, transform .28s ease;
+    }
+    #pvpSurfaceRing{
+      position:absolute; left:50%; top:52%; width:min(46vw, 346px); aspect-ratio:1/1; transform:translate(-50%,-50%);
+      border-radius:999px; pointer-events:none; z-index:2;
+      box-shadow:0 0 0 1px rgba(255,255,255,.48), 0 14px 36px rgba(11,31,51,.12), inset 0 0 34px rgba(255,255,255,.18);
+      opacity:.72;
+    }
+    #pvpBlinkLid{ position:absolute; inset:0; pointer-events:none; z-index:5; }
+    #pvpLidTop, #pvpLidBot{
+      position:absolute; left:0; right:0; height:56%;
+      background: radial-gradient(120% 90% at 50% 85%, rgba(165,120,95,.98) 0%, rgba(120,80,62,.98) 46%, rgba(40,25,22,.98) 92%);
+      opacity:0; transform: translateY(-110%); will-change: transform, opacity;
+    }
+    #pvpLidBot{
+      top:auto; bottom:0;
+      background: radial-gradient(120% 90% at 50% 15%, rgba(165,120,95,.98) 0%, rgba(120,80,62,.98) 46%, rgba(40,25,22,.98) 92%);
+      transform: translateY(110%);
+    }
+    #pvpLidTop::after, #pvpLidBot::after{
+      content:""; position:absolute; left:-10%; right:-10%; height:28px;
+      background: radial-gradient(120% 100% at 50% 50%, rgba(0,0,0,.35) 0%, rgba(0,0,0,.18) 35%, rgba(0,0,0,0) 70%);
+      opacity:.55;
+    }
+    #pvpLidTop::after{ bottom:-12px; }
+    #pvpLidBot::after{ top:-12px; transform: scaleY(-1); }
+
+    #pvpStateBadge{
+      position:absolute; left:14px; top:14px; z-index:6;
+      padding:8px 12px; border-radius:999px; font-size:12px; font-weight:900;
+      border:1px solid rgba(0,94,184,.18); background:rgba(255,255,255,.82); color:var(--smartfit-blue-deep);
+      box-shadow:0 8px 18px rgba(11,31,51,.10); backdrop-filter:blur(8px);
+    }
+    #pvpCalloutTop,
+    #pvpCalloutBottom{
+      position:absolute; z-index:6; display:flex; align-items:center; gap:8px; color:#1c3557; font-weight:900; font-size:15px;
+    }
+    #pvpCalloutTop{ left:16%; top:14%; }
+    #pvpCalloutBottom{ right:10%; bottom:22%; }
+    .pvpDot{ width:12px; height:12px; border-radius:999px; background:#fff; box-shadow:0 2px 8px rgba(11,31,51,.24); flex:0 0 auto; }
+    .pvpPill{
+      background:rgba(255,255,255,.86); border:2px solid rgba(0,94,184,.22); border-radius:18px;
+      padding:8px 14px; box-shadow:0 10px 18px rgba(11,31,51,.10); backdrop-filter:blur(8px);
+    }
+
+    #pvpSimControls{
+      position:absolute; left:16px; right:16px; bottom:16px; z-index:7;
+      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+    .pvpSeg{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .pvpSeg.single{ grid-template-columns:1fr; }
+    .pvpSegBtn{
+      height:46px; min-width:118px; border-radius:999px; border:1.5px solid var(--smartfit-blue-line); background:#fff;
+      color:#6c7c93; font-size:14px; font-weight:800; letter-spacing:-.2px; cursor:pointer; transition:all .18s ease;
+      padding:0 18px; box-shadow:0 6px 14px rgba(11,31,51,.08);
+    }
+    .pvpSegBtn.active{ background:#edf4ff; color:var(--smartfit-blue-deep); border-color:#6e9be6; box-shadow:0 4px 10px rgba(36,85,199,.10); }
+
+    #pvpSimMessage{
+      background:#eef4fb; padding:16px 18px 16px; display:flex; align-items:center; justify-content:space-between; gap:14px; border-top:1px solid #d6e4fb;
+    }
+    #pvpSimMessageCopy{ flex:1 1 auto; min-width:0; font-size:18px; line-height:1.42; font-weight:900; letter-spacing:-.25px; color:#111; word-break:keep-all; }
+    #pvpSimMessageCopy .blue{ color:var(--smartfit-blue); }
+    #pvpSimConfirm{
+      flex:0 0 auto; width:84px; height:40px; border:none; border-radius:999px; background:var(--smartfit-blue);
+      color:#fff; font-size:13px; line-height:1; font-weight:900; cursor:pointer; box-shadow:0 6px 16px rgba(36,85,199,.16);
+    }
+
+    #pvpSimWrap .popup-reference-area{
+      margin-top:0; padding:10px 16px 0 !important; background:#fff !important; font-size:9px; line-height:1.34;
+    }
+    #pvpSimWrap .toric-popup-disclaimer{ padding:4px 16px 10px; background:#fff; font-size:8.8px; }
+
+    #pvpSimOverlay.state-on #pvpLensOn{ opacity:.95; transform:scale(1.01); filter:saturate(1.04) contrast(1.02); }
+    #pvpSimOverlay.state-on #pvpLensOff{ opacity:0; transform:scale(.98); filter:blur(2px); }
+    #pvpSimOverlay.state-on #pvpMoistureFx{ opacity:.96; filter:blur(5px); transform:scale(1.02); }
+    #pvpSimOverlay.state-on #pvpDryFx{ opacity:0; transform:scale(.96); }
+
+    #pvpSimOverlay.state-off #pvpLensOn{ opacity:.14; transform:scale(.98); filter:blur(2px); }
+    #pvpSimOverlay.state-off #pvpLensOff{ opacity:.94; transform:scale(1); filter:saturate(.92) contrast(.98); }
+    #pvpSimOverlay.state-off #pvpMoistureFx{ opacity:.16; filter:blur(7px); transform:scale(.98); }
+    #pvpSimOverlay.state-off #pvpDryFx{ opacity:.78; transform:scale(1.01); }
+
+    #pvpSimOverlay.is-blinking.state-on #pvpMoistureFx{ animation:pvpHydrationPulse .7s ease; }
+    #pvpSimOverlay.is-blinking.state-off #pvpDryFx{ animation:pvpDryBreak .7s ease; }
+
+    @keyframes pvpHydrationPulse{
+      0%{ opacity:.68; transform:scale(.98); filter:blur(8px); }
+      42%{ opacity:1; transform:scale(1.04); filter:blur(4px); }
+      100%{ opacity:.96; transform:scale(1.02); filter:blur(5px); }
+    }
+    @keyframes pvpDryBreak{
+      0%{ opacity:.26; transform:scale(.98); filter:blur(3px); }
+      45%{ opacity:.95; transform:scale(1.03); filter:blur(1px); }
+      100%{ opacity:.78; transform:scale(1.01); filter:blur(1.6px); }
+    }
+
+
+    #thicknessBar{
+      position:fixed;
+      left:12px;
+      right:12px;
+      bottom:92px;
+      z-index:67;
+      display:none;
+      border-radius:14px;
+      border:1px solid var(--panel-stroke);
+      background: var(--panel-grad);
+      backdrop-filter: blur(12px);
+      padding:10px 12px 12px;
+      box-sizing:border-box;
+      box-shadow: var(--panel-glow);
+      overflow:hidden;
+    }
+    #thicknessBar.show{ display:block; }
+    #thHeader{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:8px; }
+    #thTitle{ color:var(--text-navy); font-weight:900; font-size:12.5px; letter-spacing:.2px; opacity:.98; }
+    #thUnit{ color:rgba(48,72,95,.85); font-size:11px; font-weight:700; letter-spacing:.1px; }
+    #gradRow{ display:flex; align-items:center; gap:10px; }
+    .tickLabel{
+      width:46px;
+      text-align:right;
+      color:rgba(48,72,95,.86);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.1px;
+      flex:0 0 auto;
+    }
+    #gradWrap{
+      position:relative;
+      flex:1 1 auto;
+      height:14px;
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid rgba(11,31,51,.12);
+      background:rgba(0,94,184,.03);
+      box-shadow: inset 0 0 12px rgba(11,31,51,.10);
+    }
+    #grad{
+      position:absolute;
+      inset:0;
+      background:linear-gradient(90deg,
+        rgba(140,0,255,1) 0%,
+        rgba(0,90,255,1) 17%,
+        rgba(0,200,255,1) 32%,
+        rgba(0,255,150,1) 48%,
+        rgba(150,255,0,1) 64%,
+        rgba(255,220,0,1) 78%,
+        rgba(255,120,0,1) 90%,
+        rgba(255,50,50,1) 100%
+      );
+      opacity:.92;
+      filter:saturate(1.05) contrast(1.05);
+    }
+    #gradShine{
+      position:absolute; inset:0;
+      background:linear-gradient(180deg,
+        rgba(255,255,255,.30) 0%,
+        rgba(255,255,255,0) 55%,
+        rgba(11,31,51,.10) 100%
+      );
+      mix-blend-mode: overlay;
+      opacity:.55;
+      pointer-events:none;
+    }
+    .mark{ position:absolute; top:-6px; width:1px; height:26px; background:rgba(11,31,51,.18); }
+    .mark strong{
+      position:absolute; top:18px; left:50%; transform:translateX(-50%);
+      font-size:10px; color:rgba(48,72,95,.80); font-weight:700; white-space:nowrap;
+    }
+    .m0{ left:0%; } .m25{ left:25%; } .m50{ left:50%; } .m75{ left:75%; } .m100{ left:100%; }
+    #thHint{ display:none; }
+
+    #asdOverlay{
+      position:fixed; inset:0; z-index:80; display:none;
+      background:rgba(11,31,51,.22); backdrop-filter: blur(12px);
+      align-items:center; justify-content:center; padding:18px; box-sizing:border-box;
+    }
+    #asdOverlay.show{ display:flex; }
+
+    #asdCard{
+      width:min(920px, 96vw);
+      border-radius:18px;
+      border:1px solid rgba(36,85,199,.16);
+      background:#ffffff;
+      overflow:hidden;
+      box-shadow:0 18px 40px rgba(15,40,95,.14);
+      position:relative;
+    }
+    /* ASD 타이틀 두께 2/3로 축소 */
+    #asdHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:7px 16px;
+      min-height:40px;
+      background:var(--smartfit-blue);
+      border-bottom:1px solid rgba(255,255,255,.14);
+      box-sizing:border-box;
+    }
+    #asdHeaderTitle{ font-size:16px; font-weight:900; color:#fff; letter-spacing:-.25px; }
+    #asdClose{ width:32px; height:32px; border:none; background:rgba(255,255,255,.12); color:#fff; font-weight:800; font-size:17px; cursor:pointer; box-shadow:none; border-radius:999px; }
+
+    #asdHint{
+      padding:16px 16px 17px;
+      color:var(--smartfit-text);
+      font-size:18px;
+      line-height:1.42;
+      font-weight:800;
+      opacity:1;
+      border-top:1px solid #d6e4fb;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      background:#eef4fb;
+    }
+    #asdHint button{
+      border:1px solid rgba(36,85,199,.92);
+      background:var(--smartfit-blue);
+      color:#ffffff;
+      font-weight:900;
+      font-size:13px;
+      width:84px;
+      min-width:84px;
+      max-width:84px;
+      height:40px;
+      padding:0 12px;
+      border-radius:999px;
+      -webkit-tap-highlight-color: transparent;
+      cursor:pointer;
+      flex:0 0 auto;
+      flex-shrink:0;
+      white-space:nowrap;
+      box-shadow:0 6px 16px rgba(36,85,199,.16);
+      align-self:flex-end;
+      box-sizing:border-box;
+      line-height:1;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+    #asdHint .hintText{ flex:1 1 auto; min-width:0; word-break:keep-all; }
+    #asdHint .hintTitle{ display:block; color:var(--acuvue-blue); font-size:17px; font-weight:900; margin-bottom:8px; letter-spacing:-.2px; }
+    #asdHint .hintBody{ display:block; font-size:20px; line-height:1.38; font-weight:900; color:#111; letter-spacing:-.2px; }
+    #asdHint .hintBody .blue{ color:var(--acuvue-blue); }
+
+    #asdScene{
+      position:relative; width:100%; background:rgba(0,94,184,.03); overflow:hidden;
+      aspect-ratio: 1/1; min-height: 360px; --irisX: 13px; --irisY: 26px;
+    }
+    #asdEyeMV{
+      position:absolute; inset:0; width:100%; height:100%; display:block; background:transparent;
+      pointer-events:none; object-fit:cover; transform: scale(1.55); transform-origin:center;
+      filter: contrast(1.02) saturate(1.02);
+    }
+    #asdUpperLid{
+      position:absolute; inset:0; width:100%; height:100%; display:block; pointer-events:none;
+      object-fit:cover; transform: scale(1.55) translateY(3px); transform-origin:center; z-index:3;
+      filter: drop-shadow(0 2px 10px rgba(0,0,0,.18));
+    }
+    #asdLensImg{
+      position:absolute; left:50%; top:52%; width:80%;
+      transform: translate(calc(-50% - 4px), calc(-50% + 10px)) rotate(20deg);
+      opacity:.70; pointer-events:none; will-change: transform, opacity; mix-blend-mode:normal; filter:saturate(1.08) contrast(1.06);
+    }
+    #asdLensRim{
+      position:absolute; left:50%; top:52%; width:80%; height:80%; transform:translate(-50%,-50%);
+      border-radius:999px; pointer-events:none;
+      box-shadow: 0 0 0 1px rgba(11,31,51,.10), 0 18px 46px rgba(11,31,51,.16), inset 0 0 24px rgba(255,255,255,.18);
+      opacity:.45;
+    }
+    #asdMaskShade{
+      position:absolute; inset:0; pointer-events:none;
+      background:
+        radial-gradient(110% 70% at 50% 18%, rgba(11,31,51,.38) 0%, rgba(11,31,51,.16) 32%, rgba(11,31,51,0) 58%),
+        radial-gradient(110% 70% at 50% 90%, rgba(11,31,51,.34) 0%, rgba(11,31,51,.14) 34%, rgba(11,31,51,0) 60%);
+      opacity:.78; mix-blend-mode:multiply;
+    }
+
+    #asdBlinkLid{ position:absolute; inset:0; pointer-events:none; z-index:4; }
+    #asdLidTop, #asdLidBot{
+      position:absolute; left:0; right:0; height:55%;
+      background: radial-gradient(120% 90% at 50% 85%, rgba(165,120,95,.98) 0%, rgba(120,80,62,.98) 46%, rgba(40,25,22,.98) 92%);
+      filter: blur(.2px); opacity:0; transform: translateY(-110%); will-change: transform, opacity;
+    }
+    #asdLidBot{
+      top:auto; bottom:0;
+      background: radial-gradient(120% 90% at 50% 15%, rgba(165,120,95,.98) 0%, rgba(120,80,62,.98) 46%, rgba(40,25,22,.98) 92%);
+      transform: translateY(110%);
+    }
+    #asdLidTop::after, #asdLidBot::after{
+      content:""; position:absolute; left:-10%; right:-10%; height:28px;
+      background: radial-gradient(120% 100% at 50% 50%, rgba(0,0,0,.35) 0%, rgba(0,0,0,.18) 35%, rgba(0,0,0,0) 70%);
+      opacity:.55;
+    }
+    #asdLidTop::after{ bottom:-12px; }
+    #asdLidBot::after{ top:-12px; transform: scaleY(-1); }
+
+    #asdBlinkBtn, #asdRotateBtn{
+      position:absolute; bottom:14px; width:54px; height:54px; border-radius:999px;
+      font-weight:900; font-size:13px; display:flex; align-items:center; justify-content:center; z-index:5;
+      -webkit-tap-highlight-color: transparent; user-select:none; cursor:pointer; box-shadow: 0 10px 22px rgba(11,31,51,.12);
+    }
+    #asdBlinkBtn{ right:14px; border:1px solid rgba(0,94,184,.55); background:var(--acuvue-blue); color:#fff; box-shadow: 0 12px 26px rgba(0,94,184,.20); }
+    #asdRotateBtn{ right:76px; border:1px solid rgba(0,94,184,.35); background:rgba(255,255,255,.92); color:var(--acuvue-blue); }
+
+    #asdAngleBadge{
+      position:absolute; left:14px; bottom:18px; color:var(--acuvue-blue); font-size:13px; font-weight:900;
+      background:rgba(255,255,255,.86); border:1px solid rgba(0,94,184,.35); border-radius:999px; padding:6px 10px; z-index:5;
+      box-shadow: 0 10px 22px rgba(11,31,51,.10);
+    }
+
+    #tutorialLayer{ position:fixed; inset:0; display:none; z-index:95; }
+    #tutorialLayer.show{ display:block; }
+    #tutorialMask{ position:absolute; inset:0; background:rgba(8,22,37,.42); pointer-events:none; }
+    #tutorialFocus{
+      position:absolute; pointer-events:none; background:transparent; border:2px solid rgba(255,255,255,.92);
+      box-shadow: 0 0 0 9999px rgba(8,22,37,.42), 0 0 0 6px rgba(255,255,255,.12), 0 12px 34px rgba(0,0,0,.12);
+      transition: all .22s ease; display:none;
+    }
+    .tutBox{
+      position:absolute; width:min(360px, calc(100vw - 40px)); max-width:min(360px, calc(100vw - 40px)); box-sizing:border-box;
+      background:linear-gradient(180deg, #1E63B8 0%, #0A5FBE 100%); color:#fff; border-radius:24px; padding:18px 18px 16px;
+      box-shadow: 0 18px 48px rgba(0,0,0,.20), 0 6px 18px rgba(0,94,184,.22); border:1px solid rgba(255,255,255,.20); overflow:hidden;
+    }
+    .tutBox::before{ content:""; position:absolute; left:0; right:0; top:0; height:2px; background:linear-gradient(90deg, rgba(255,255,255,.85), rgba(255,255,255,0)); opacity:.85; }
+    .tutBox::after{ content:""; position:absolute; inset:0; border-radius:24px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); pointer-events:none; }
+    .tutBox .tutTitle{ font-weight:900; margin-bottom:10px; font-size:18px; letter-spacing:-.2px; }
+    .tutBox .tutText{ line-height:1.5; font-size:14px; opacity:.96; word-break:keep-all; }
+    .tutBox .tutBtn{
+      margin-top:16px; width:100%; height:50px; border-radius:16px; border:1px solid rgba(255,255,255,.70);
+      background:#fff; color:var(--acuvue-blue); font-weight:900; font-size:15px; cursor:pointer; box-shadow: inset 0 -2px 0 rgba(0,0,0,.04);
+    }
+    #tutLeft{ left:20px; right:20px; top:50%; transform:translateY(-50%); display:none; }
+    #tutBottom{ left:20px; right:20px; bottom:88px; display:none; }
+    #tutTop{ left:20px; right:20px; top:126px; display:none; }
+
+    #comfortOverlay{
+      position:fixed; inset:0; z-index:82; display:none; background:rgba(255,255,255,.16); backdrop-filter: blur(8px);
+      align-items:center; justify-content:center; padding:18px; box-sizing:border-box;
+    }
+    #comfortOverlay.show{ display:flex; }
+    #comfortWrap{
+      width:min(820px, 96vw); border-radius:24px; overflow:hidden; background:#fff; border:1px solid rgba(36,85,199,.16); box-shadow:0 18px 44px rgba(15,40,95,.16);
+    }
+    #comfortHead{
+      height:50px; background:var(--smartfit-blue); display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+      border-bottom:1px solid rgba(255,255,255,.14);
+    }
+    #comfortTitle{ font-size:16px; font-weight:900; color:#fff; letter-spacing:-.25px; }
+    #comfortClose{ border:none; background:rgba(255,255,255,.12); font-size:18px; line-height:1; color:#fff; cursor:pointer; padding:0; width:32px; height:32px; border-radius:999px; }
+    #comfortScene{
+      position:relative; height:min(64vw, 540px); min-height:420px; background:#efefef url('face_V2.png') center center / cover no-repeat; overflow:hidden;
+    }
+    #comfortScene::before{
+      content:""; position:absolute; inset:0;
+      background:
+        radial-gradient(120px 150px at 30% 46%, rgba(255,255,255,.18), rgba(255,255,255,0) 62%),
+        radial-gradient(120px 150px at 69% 46%, rgba(255,255,255,.14), rgba(255,255,255,0) 62%);
+      pointer-events:none; z-index:0;
+    }
+    #cfTargetStage{
+      position:absolute; width:118px; height:176px; transform:translate(-50%,-50%); z-index:4; pointer-events:none;
+      transition:left .35s ease, top .35s ease, width .35s ease, height .35s ease;
+    }
+    .cf-target-box{
+      position:absolute; left:50%; transform:translateX(-50%); width:100%; height:100%; border-radius:18px; border:2px solid rgba(255,255,255,.58);
+      backdrop-filter: blur(1px); box-shadow:0 8px 24px rgba(0,0,0,.08); transition: top .45s ease, opacity .35s ease, background .35s ease, transform .45s ease;
+    }
+    .cf-box-top{ z-index:0; background:rgba(251,221,231,.38); }
+    .cf-box-bottom{ z-index:0; background:rgba(245,222,232,.16); }
+    .cf-target-a{
+      position:absolute; left:50%; transform:translate(-50%,-50%); font-size:104px; line-height:1; font-weight:300; letter-spacing:-6px;
+      font-family:Georgia, "Times New Roman", serif; user-select:none; transition: top .55s cubic-bezier(.22,.8,.22,1), opacity .35s ease, transform .55s cubic-bezier(.22,.8,.22,1), color .35s ease; z-index:2;
+    }
+    .cf-a-red{ color:#e02020; } .cf-a-blue{ color:#176fd6; }
+    .cf-target-box::before{ content:""; position:absolute; inset:0; border-radius:inherit; background:linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0)); pointer-events:none; }
+    #cfTargetStage, .cf-target-box, .cf-target-a, #cfOptic{ transform-style:preserve-3d; }
+    #comfortScene.mode-off #cfTargetStage, #comfortScene.mode-on #cfTargetStage, #comfortScene.mode-default #cfTargetStage{ transform:translate(-50%,-50%) rotate(0deg); }
+    #comfortScene.mode-on .cf-optic-prism{ transform:rotate(0deg); } #comfortScene.mode-off .cf-optic-flat{ transform:rotate(0deg); }
+    #comfortScene.mode-default .cf-box-top, #comfortScene.mode-default .cf-box-bottom{ top:0; opacity:.92; transform:translateX(-50%); }
+    #comfortScene.mode-default .cf-box-top{ background:rgba(245,222,232,.24); }
+    #comfortScene.mode-default .cf-box-bottom{ background:rgba(245,222,232,.14); }
+    #comfortScene.mode-default .cf-a-red{ top:20%; opacity:.16; transform:translate(-50%,-50%); animation:none; color:#b44dc9; }
+    #comfortScene.mode-default .cf-a-blue{ top:80%; opacity:.88; transform:translate(-50%,-50%); animation:none; color:#8b2da0; }
+    #comfortScene.mode-off .cf-box-top, #comfortScene.mode-off .cf-box-bottom{ top:0; opacity:.92; transform:translateX(-50%); }
+    #comfortScene.mode-off .cf-box-top{ background:rgba(245,222,232,.28); } #comfortScene.mode-off .cf-box-bottom{ background:rgba(245,222,232,.16); }
+    #comfortScene.mode-off .cf-a-red{ top:50%; opacity:.30; transform:translate(-50%,-50%); animation:none; color:#b44dc9; }
+    #comfortScene.mode-off .cf-a-blue{ top:50%; opacity:.92; transform:translate(-50%,-50%); color:#8b2da0; animation:none; }
+    #comfortScene.mode-on .cf-box-top{ top:-14px; opacity:.96; background:rgba(251,221,231,.42); animation:cfPinkFloat 1.45s ease-in-out infinite; }
+    #comfortScene.mode-on .cf-box-bottom{ top:14px; opacity:.82; background:rgba(219,234,255,.28); transform:translateX(-50%); }
+    #comfortScene.mode-on .cf-a-red{ top:33%; opacity:1; transform:translate(-50%,-50%); color:#e02020; animation:cfRedFloat 1.45s ease-in-out infinite; }
+    #comfortScene.mode-on .cf-a-blue{ top:69%; opacity:1; transform:translate(-50%,-50%); color:#176fd6; }
+    @keyframes cfRedFloat{
+      0%{ transform:translate(-50%,-50%) translateY(0); }
+      25%{ transform:translate(-50%,-50%) translateY(-4px); }
+      50%{ transform:translate(-50%,-50%) translateY(1px); }
+      75%{ transform:translate(-50%,-50%) translateY(-3px); }
+      100%{ transform:translate(-50%,-50%) translateY(0); }
+    }
+    @keyframes cfPinkFloat{
+      0%{ transform:translateX(-50%) translateY(0); }
+      25%{ transform:translateX(-50%) translateY(-4px); }
+      50%{ transform:translateX(-50%) translateY(1px); }
+      75%{ transform:translateX(-50%) translateY(-3px); }
+      100%{ transform:translateX(-50%) translateY(0); }
+    }
+    #cfOptic{
+      position:absolute; width:58px; height:118px; transform:translate(-50%,-50%); z-index:7; transition:left .35s ease, top .35s ease, width .35s ease, height .35s ease; pointer-events:none;
+    }
+    #comfortScene.mode-on .cf-optic-prism{ display:block; } #comfortScene.mode-on .cf-optic-flat{ display:none; }
+    #comfortScene.mode-off .cf-optic-prism{ display:none; } #comfortScene.mode-off .cf-optic-flat{ display:block; }
+    #comfortScene.mode-default .cf-optic-prism, #comfortScene.mode-default .cf-optic-flat{ display:none; }
+    .cf-optic-prism,.cf-optic-flat{ position:absolute; inset:0; }
+    .cf-optic-prism::before{
+      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:0; height:0;
+      border-left:30px solid transparent; border-right:30px solid transparent; border-bottom:100px solid rgba(255,255,255,.46); filter:drop-shadow(0 4px 10px rgba(0,0,0,.10));
+    }
+    .cf-optic-prism::after{
+      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-46%); width:0; height:0;
+      border-left:24px solid transparent; border-right:24px solid transparent; border-bottom:82px solid rgba(214,238,255,.30);
+    }
+    .cf-optic-flat::before{ display:none; }
+    .cf-guide-line{
+      position:absolute; height:0; border-top:3px dashed; z-index:5; transform-origin:left center; pointer-events:none; opacity:0;
+    }
+    #cfLineBlue{ transition:none !important; }
+    #cfLineRed{ transition:top .35s ease, width .35s ease, opacity .25s ease; }
+    .cf-guide-line.red{ border-color:#e02020; } .cf-guide-line.blue{ border-color:#176fd6; }
+    #comfortScene.mode-default .cf-guide-line{ opacity:0; }
+    #comfortScene.mode-off .cf-guide-line, #comfortScene.mode-on .cf-guide-line{ opacity:1; }
+    #cfSegWrap{
+      position:absolute; left:50%; bottom:16px; transform:translateX(-50%); width:min(94%, 760px); z-index:10;
+      padding:0; border-radius:0; background:transparent; border:none; box-shadow:none; display:grid; grid-template-columns:1fr 1fr; gap:8px; align-items:center;
+    }
+    .cf-seg-btn{
+      height:54px; border-radius:999px; border:1.5px solid var(--smartfit-blue-line); background:#ffffff;
+      color:#6c7c93; font-size:16px; font-weight:800; letter-spacing:-.25px; cursor:pointer; transition:all .18s ease;
+      box-shadow:none; padding:0 18px; white-space:nowrap; -webkit-appearance:none; appearance:none;
+    }
+    .cf-seg-btn.active, .cf-seg-btn.default-active{
+      background:#edf4ff; color:var(--smartfit-blue-deep); border-color:#6e9be6; box-shadow:0 4px 10px rgba(36,85,199,.10);
+    }
+    .cf-seg-btn:not(.active):not(.default-active){ color:#627588; }
+    .cf-seg-btn:not(.active):active{ transform:scale(.985); }
+    #comfortMessage{
+      background:#eef4fb; padding:16px 18px 16px; display:flex; align-items:center; justify-content:space-between; gap:14px; border-top:1px solid #d6e4fb;
+    }
+    #comfortMessageCopy{ flex:1 1 auto; min-width:0; font-size:18px; line-height:1.42; font-weight:900; letter-spacing:-.25px; color:#111; word-break:keep-all; }
+    #comfortMessageCopy .blue{ color:var(--smartfit-blue); }
+    #comfortConfirm{
+      flex:0 0 auto;
+      flex-shrink:0;
+      min-width:84px;
+      width:84px;
+      max-width:84px;
+      height:40px;
+      padding:0 12px;
+      border:none;
+      border-radius:999px;
+      background:var(--smartfit-blue);
+      color:#fff;
+      font-size:13px;
+      line-height:1;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 6px 16px rgba(36,85,199,.16);
+      box-sizing:border-box;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    #comfortWrap .popup-reference-area{
+      margin-top:0;
+      padding:10px 16px 0 !important;
+      background:#fff !important;
+      font-size:9px;
+      line-height:1.34;
+    }
+    #comfortWrap .toric-popup-disclaimer{
+      padding:4px 16px 10px;
+      background:#fff;
+      font-size:8.8px;
+    }
+    #comfortWrap .toric-popup-disclaimer .disc-note{ margin-bottom:0; }
+    #comfortWrap .popup-reference-area .ref-line{ margin-top:0; }
+    #comfortWrap .toric-popup-disclaimer,
+    #comfortWrap .popup-reference-area{ color:#6b7480; }
+
+    @media (max-width: 820px){
+      #comfortTitle{ font-size:16px; }
+      #comfortScene{ height:520px; min-height:360px; }
+      #cfTargetStage{ width:104px; height:158px; }
+      .cf-target-a{ font-size:90px; }
+      #cfOptic{ width:48px; height:98px; }
+      .cf-optic-prism::before{ border-left-width:24px; border-right-width:24px; border-bottom-width:82px; }
+      .cf-optic-prism::after{ border-left-width:20px; border-right-width:20px; border-bottom-width:68px; }
+      .cf-seg-btn{ font-size:15px; height:50px; }
+      #comfortMessage{ padding:14px 16px 14px; gap:12px; }
+      #comfortMessageCopy{ font-size:17px; }
+      #comfortConfirm{ min-width:96px; width:96px; max-width:96px; height:44px; font-size:13px; border-radius:999px; }
+    }
+    @media (max-width: 560px){
+      #comfortOverlay{ padding:8px; }
+      #comfortWrap{ width:100%; border-radius:20px; }
+      #comfortHead{ height:48px; padding:0 14px; }
+      #comfortTitle{ font-size:15px; }
+      #comfortClose{ font-size:17px; width:32px; height:32px; }
+      #comfortScene{ height:320px; min-height:320px; }
+      #cfTargetStage{ width:82px; height:126px; }
+      .cf-target-box{ border-radius:16px; }
+      #comfortScene.mode-on .cf-box-top{ top:-10px; }
+      #comfortScene.mode-on .cf-box-bottom{ top:10px; }
+      .cf-target-a{ font-size:72px; letter-spacing:-4px; }
+      #cfOptic{ width:38px; height:76px; }
+      .cf-optic-prism::before{ border-left-width:20px; border-right-width:20px; border-bottom-width:62px; }
+      .cf-optic-prism::after{ border-left-width:16px; border-right-width:16px; border-bottom-width:50px; }
+      .cf-guide-line{ border-top-width:2px; }
+      #cfSegWrap{ width:min(94%, 520px); bottom:10px; padding:0; gap:5px; border:none; background:transparent; box-shadow:none; grid-template-columns:1fr 1fr; }
+      .cf-seg-btn{ height:44px; font-size:11px; border-width:1.5px; padding:0 8px; }
+      #comfortMessage{ padding:12px 14px 12px; gap:10px; }
+      #comfortMessageCopy{ font-size:14px; line-height:1.42; }
+      #comfortConfirm{ min-width:96px; width:96px; max-width:96px; height:44px; font-size:13px; border-radius:999px; padding:0 16px; }
+      #pvpOverlay{
+        padding:12px 12px 10px;
+        grid-template-columns:72px minmax(0,1fr) 66px;
+        gap:8px 10px;
+      }
+      #pvpOverlay img{
+        width:72px;
+        height:72px;
+        border-radius:12px;
+      }
+      #pvpText{
+        font-size:13px;
+        line-height:1.4;
+      }
+      #pvpTitle{
+        font-size:14px;
+        margin-bottom:3px;
+      }
+      #pvpConfirm{
+        width:66px;
+        min-width:66px;
+        max-width:66px;
+        height:36px;
+        padding:0 8px;
+        font-size:11px;
+        align-self:center;
+      }
+
+      #pvpSimOverlay{ padding:8px; }
+      #pvpSimWrap{ width:100%; border-radius:20px; }
+      #pvpSimHead{ height:48px; padding:0 14px; }
+      #pvpSimTitle{ font-size:15px; }
+      #pvpSimScene{ height:340px; min-height:340px; }
+      #pvpLensStage{ width:min(56vw, 250px); }
+      #pvpSurfaceRing{ width:min(58vw, 264px); }
+      #pvpCalloutTop, #pvpCalloutBottom{ font-size:11px; gap:6px; }
+      #pvpCalloutTop{ left:8%; top:11%; }
+      #pvpCalloutBottom{ right:5%; bottom:25%; }
+      .pvpPill{ padding:7px 10px; border-radius:16px; }
+      .pvpDot{ width:10px; height:10px; }
+      #pvpSimControls{ left:10px; right:10px; bottom:10px; gap:8px; }
+      .pvpSegBtn{ min-width:96px; height:42px; font-size:12px; padding:0 12px; }
+      #pvpStateBadge{ font-size:11px; padding:7px 10px; }
+      #pvpSimMessage{ padding:12px 14px 12px; gap:10px; }
+      #pvpSimMessageCopy{ font-size:14px; line-height:1.42; }
+      #pvpSimConfirm{ width:96px; height:44px; font-size:13px; }
+      #asdHeader{
+        padding:6px 14px;
+        min-height:38px;
+      }
+      #asdHeaderTitle{
+        font-size:15px;
+      }
+      #asdHint{
+        padding:14px 14px 15px;
+        gap:10px;
+      }
+      #asdHint .hintTitle{
+        font-size:15px;
+        margin-bottom:6px;
+      }
+      #asdHint .hintBody{
+        font-size:16px;
+        line-height:1.4;
+      }
+      #asdHint button{
+        width:96px;
+        min-width:96px;
+        max-width:96px;
+        height:44px;
+        padding:0 16px;
+        font-size:13px;
+      }
+    }
+
+    #maxPackshot{
+      position:fixed;
+      right:16px;
+      bottom:90px;
+      width:100px;
+      max-width:34vw;
+      height:auto;
+      z-index:72 !important;
+      pointer-events:auto !important;
+      cursor:pointer !important;
+      user-select:none;
+      touch-action:manipulation !important;
+      -webkit-user-drag:none;
+      -webkit-touch-callout:none;
+      display:none;
+      object-fit:contain;
+      mix-blend-mode:multiply;
+      filter: drop-shadow(0 10px 18px rgba(11,31,51,.12));
+      transform: translateZ(0);
+      transition:transform .26s ease, filter .26s ease, opacity .26s ease !important;
+      transform-origin:center bottom;
+    }
+    #maxPackshot.active{
+      transform:translateY(-10px) scale(1.2) !important;
+      filter:drop-shadow(0 24px 40px rgba(0,94,184,.30)) !important;
+    }
+
+    #blueBackGlow{
+      position:fixed;
+      inset:0;
+      z-index:21;
+      pointer-events:none;
+      display:none;
+      background:
+        radial-gradient(35% 22% at 66% 52%,
+          rgba(0,94,184,.18) 0%,
+          rgba(0,94,184,.12) 22%,
+          rgba(0,94,184,.08) 38%,
+          rgba(0,94,184,0) 62%);
+      filter: blur(1px);
+      opacity:.95;
+    }
+
+    #blueRayLayer{
+      position:fixed;
+      inset:0;
+      z-index:22;
+      pointer-events:none;
+      display:none;
+    }
+    #blueRaySvg{ width:100%; height:100%; display:block; }
+
+    #blueRayLayerBack{
+      position:fixed;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+      display:none;
+    }
+    #blueRaySvgBack{ width:100%; height:100%; display:block; }
+
+    #blueInfo{
+      position:fixed;
+      right:18px;
+      bottom:34px;
+      left:auto;
+      width:min(430px, calc(100vw - 28px));
+      max-width:calc(100vw - 28px);
+      z-index:74;
+      display:none;
+      border-radius:24px;
+      border:1px solid var(--panel-stroke);
+      background: var(--panel-grad);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--panel-glow);
+      overflow:hidden;
+      padding:0;
+    }
+    #blueInfo::before{
+      content:"";
+      position:absolute;
+      left:0; right:0; top:0;
+      height:2px;
+      background: var(--panel-topline);
+      opacity:.95;
+      pointer-events:none;
+    }
+    #blueInfo::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:24px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.45);
+      pointer-events:none;
+      opacity:.55;
+    }
+    #blueInfoTop{
+      padding:16px 18px 10px;
+      color:var(--text-navy);
+      font-weight:900;
+      font-size:17px;
+      line-height:1.15;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      letter-spacing:-.35px;
+    }
+    #blueInfoTop b{ font-weight:900; }
+    #blueInfoTop b .pct{ color:var(--acuvue-blue); }
+
+    #blueInfoBody{
+      padding:0 18px 14px;
+      color:var(--text-sub);
+      font-size:13.8px;
+      line-height:1.48;
+      letter-spacing:-.15px;
+      word-break:keep-all;
+    }
+
+    #blueInfoMission{
+      padding:8px 10px 12px;
+      border-top:1px solid rgba(11,31,51,.08);
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:4px;
+    }
+    #blueInfoPackshot{
+      width:92px;
+      height:auto;
+      object-fit:contain;
+      flex:0 0 auto;
+      display:block;
+      mix-blend-mode:multiply;
+      filter:drop-shadow(0 10px 18px rgba(11,31,51,.10));
+      transform:translateY(4px);
+      pointer-events:none;
+      user-select:none;
+    }
+    #blueInfoMission .confirm{
+      color:#ffffff;
+      font-weight:900;
+      cursor:pointer;
+      user-select:none;
+      padding:0 12px;
+      min-width:84px;
+      width:84px;
+      max-width:84px;
+      height:40px;
+      border-radius:999px;
+      border:1px solid rgba(36,85,199,.92);
+      background:var(--smartfit-blue);
+      -webkit-tap-highlight-color: transparent;
+      white-space:nowrap;
+      box-shadow:0 6px 16px rgba(36,85,199,.16);
+      font-size:13px;
+      line-height:1;
+      box-sizing:border-box;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      flex-shrink:0;
+    }
+    #blueInfoMission .confirm:active{ transform:scale(.98); }
+
+    @media (max-width:560px){
+      #maxPackshot.active{ transform:translateY(-8px) scale(1.08) !important; }
+      #blueInfo{
+        left:12px;
+        right:12px;
+        width:auto;
+        max-width:none;
+        bottom:34px;
+        border-radius:22px;
+      }
+      #blueInfoTop{
+        padding:14px 16px 6px;
+        font-size:15px;
+      }
+      #blueInfoBody{
+        padding:0 16px 12px;
+        font-size:13px;
+        line-height:1.42;
+      }
+      #blueInfoMission{
+        padding:12px 16px 16px;
+        gap:12px;
+      }
+      #blueInfoPackshot{
+        width:82px;
+        transform:translateY(2px);
+      }
+      #blueInfoMission .confirm{
+        min-width:96px;
+        width:96px;
+        max-width:96px;
+        height:44px;
+        padding:0 16px;
+        font-size:13px;
+      }
+    }
+
+  
+.blue-highlight{
+  font-weight:900;
+  color:var(--acuvue-blue);
+  letter-spacing:-0.01em;
+}
+.tint-highlight{
+  font-weight:900;
+  background: linear-gradient(90deg, #00AEEF, #00C853);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+
+    #blueSimOverlay{
+      position:fixed; inset:0; z-index:86; display:none;
+      background:rgba(11,31,51,.28); backdrop-filter: blur(12px);
+      align-items:center; justify-content:center; padding:18px; box-sizing:border-box;
+    }
+    #blueSimOverlay.show{ display:flex; }
+    #blueSimWrap{
+      width:min(920px, 96vw); border-radius:24px; overflow:hidden; background:#fff;
+      border:1px solid rgba(36,85,199,.16); box-shadow:0 18px 44px rgba(15,40,95,.16);
+    }
+    #blueSimHead{
+      height:50px; background:var(--smartfit-blue); display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+      border-bottom:1px solid rgba(255,255,255,.14);
+    }
+    #blueSimTitle{ font-size:16px; font-weight:900; color:#fff; letter-spacing:-.25px; }
+    #blueSimClose{ border:none; background:rgba(255,255,255,.12); font-size:18px; line-height:1; color:#fff; cursor:pointer; padding:0; width:32px; height:32px; border-radius:999px; }
+
+    #blueSimScene{
+      position:relative; height:min(66vw, 620px); min-height:380px; overflow:hidden;
+      background:#cfd8e2;
+    }
+    #blueSimImageStage, #blueSimCameraStage{ position:absolute; inset:0; }
+    #blueSimImageStage, #blueSimCameraStage, #blueCameraVideo{
+      transition:filter .28s ease, transform .28s ease, opacity .28s ease;
+    }
+    #blueSimImageStage{
+      background-image:url("data:image/jpeg;base64,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");
+      background-size:cover; background-position:center; display:block;
+      filter: blur(0px) saturate(1.02) contrast(1.02);
+      transition:filter .28s ease;
+    }
+    #blueSimCameraStage{ display:none; background:#0b1f33; }
+    #blueCameraVideo{ width:100%; height:100%; object-fit:cover; display:block; transform:scaleX(-1); background:#0b1f33; }
+    #blueCameraFallback{ position:absolute; inset:0; display:none; align-items:center; justify-content:center; text-align:center; padding:24px; color:#fff; background:rgba(11,31,51,.85); font-size:14px; line-height:1.5; font-weight:700; }
+
+    #blueSimTint{
+      position:absolute; inset:0; pointer-events:none;
+      background:linear-gradient(180deg, rgba(0,174,239,.08), rgba(0,200,150,.06));
+      opacity:.42; transition:opacity .28s ease;
+    }
+    #blueSimBloom{
+      position:absolute; inset:0; pointer-events:none;
+      background:radial-gradient(46% 34% at 20% 18%, rgba(255,255,255,.48), rgba(255,255,255,0) 58%);
+      mix-blend-mode:screen; opacity:.88; transition:opacity .28s ease, filter .28s ease;
+      filter: blur(20px);
+    }
+    .blue-hotspot{
+      position:absolute; overflow:hidden; border-radius:999px; border:2px solid rgba(255,255,255,.92);
+      box-shadow:0 0 0 6px rgba(255,255,255,.14); background:rgba(255,255,255,.02);
+      backdrop-filter: blur(var(--hotspot-blur, 2px)); -webkit-backdrop-filter: blur(var(--hotspot-blur, 2px));
+      transition:backdrop-filter .28s ease, -webkit-backdrop-filter .28s ease, box-shadow .28s ease, border-color .28s ease;
+    }
+    #blueHotspot1{ left:20.5%; top:16.5%; width:120px; height:120px; }
+    #blueHotspot2{ left:55.5%; top:44.5%; width:140px; height:92px; border-radius:999px; }
+
+    .blue-callout{
+      position:absolute; display:flex; align-items:center; gap:8px; color:#1c3557; font-weight:900; font-size:15px;
+    }
+    .blue-dot{ width:12px; height:12px; border-radius:999px; background:#fff; box-shadow:0 2px 8px rgba(11,31,51,.24); flex:0 0 auto; }
+    .blue-pill{
+      background:rgba(255,255,255,.86); border:2px solid rgba(0,94,184,.24); border-radius:18px;
+      padding:8px 14px; box-shadow:0 10px 18px rgba(11,31,51,.10); backdrop-filter:blur(8px);
+    }
+    #blueCallout1{ left:22%; top:8%; }
+    #blueCallout2{ left:59%; top:48%; }
+
+    #blueSimControls{
+      position:absolute; left:16px; right:16px; bottom:16px; z-index:5;
+      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+    .blueSeg{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .blueSeg.single{ grid-template-columns:1fr; }
+    .blueSegBtn{
+      height:46px; min-width:118px; border-radius:999px; border:1.5px solid var(--smartfit-blue-line); background:#fff;
+      color:#6c7c93; font-size:14px; font-weight:800; letter-spacing:-.2px; cursor:pointer; transition:all .18s ease;
+      padding:0 18px; box-shadow:0 6px 14px rgba(11,31,51,.08);
+    }
+    .blueSegBtn.active{ background:#edf4ff; color:var(--smartfit-blue-deep); border-color:#6e9be6; box-shadow:0 4px 10px rgba(36,85,199,.10); }
+
+    #blueSimMessage{
+      background:#eef4fb; padding:16px 18px 16px; display:flex; align-items:center; justify-content:space-between; gap:14px; border-top:1px solid #d6e4fb;
+    }
+    #blueSimMessageCopy{ flex:1 1 auto; min-width:0; font-size:18px; line-height:1.42; font-weight:900; letter-spacing:-.25px; color:#111; word-break:keep-all; }
+    #blueSimMessageCopy .blue{ color:var(--smartfit-blue); }
+    #blueSimConfirm{
+      flex:0 0 auto; width:84px; height:40px; border:none; border-radius:999px; background:var(--smartfit-blue);
+      color:#fff; font-size:13px; line-height:1; font-weight:900; cursor:pointer; box-shadow:0 6px 16px rgba(36,85,199,.16);
+    }
+
+    #blueSimWrap .popup-reference-area{
+      margin-top:0; padding:10px 16px 0 !important; background:#fff !important; font-size:9px; line-height:1.34;
+    }
+    #blueSimWrap .toric-popup-disclaimer{ padding:4px 16px 10px; background:#fff; font-size:8.8px; }
+
+    #blueSimOverlay.state-off #blueSimImageStage,
+    #blueSimOverlay.state-off #blueCameraVideo{
+      filter: blur(1.4px) saturate(1) contrast(.98) brightness(1);
+      transform:scale(1);
+    }
+    #blueSimOverlay.state-off #blueSimTint{ opacity:.16; }
+    #blueSimOverlay.state-off #blueSimBloom{ opacity:1; filter:blur(30px); }
+    #blueSimOverlay.state-off #blueHotspot1{ --hotspot-blur: 13px; box-shadow:0 0 0 6px rgba(255,255,255,.18), 0 0 46px rgba(255,255,255,.24); }
+    #blueSimOverlay.state-off #blueHotspot2{ --hotspot-blur: 11px; box-shadow:0 0 0 6px rgba(255,255,255,.18), 0 0 38px rgba(255,255,255,.20); }
+
+    #blueSimOverlay.state-on #blueSimImageStage,
+    #blueSimOverlay.state-on #blueCameraVideo{
+      filter: blur(0px) saturate(1.03) contrast(1.05) brightness(1.01);
+      transform:scale(1);
+    }
+    #blueSimOverlay.state-on #blueSimTint{ opacity:.38; }
+    #blueSimOverlay.state-on #blueSimBloom{ opacity:.58; filter:blur(16px); }
+    #blueSimOverlay.state-on #blueHotspot1{ --hotspot-blur: 4px; box-shadow:0 0 0 6px rgba(255,255,255,.12), 0 0 12px rgba(255,255,255,.10); }
+    #blueSimOverlay.state-on #blueHotspot2{ --hotspot-blur: 3px; box-shadow:0 0 0 6px rgba(255,255,255,.12), 0 0 10px rgba(255,255,255,.08); }
+
+    #blueSimOverlay.camera-on.state-off #blueCameraVideo{
+      filter: blur(1.2px) saturate(1) contrast(.98) brightness(1);
+    }
+    #blueSimOverlay.camera-on.state-on #blueCameraVideo{
+      filter: blur(.15px) saturate(1.02) contrast(1.04) brightness(1.01);
+    }
+
+    @media (max-width: 560px){
+      #blueSimOverlay{ padding:8px; }
+      #blueSimWrap{ width:100%; border-radius:20px; }
+      #blueSimHead{ height:48px; padding:0 14px; }
+      #blueSimTitle{ font-size:15px; }
+      #blueSimScene{ height:340px; min-height:340px; }
+      #blueHotspot1{ width:78px; height:78px; left:20%; top:15%; }
+      #blueHotspot2{ width:96px; height:60px; left:54%; top:45%; }
+      .blue-callout{ font-size:11px; gap:6px; }
+      .blue-pill{ padding:7px 10px; border-radius:16px; }
+      .blue-dot{ width:10px; height:10px; }
+      #blueCallout1{ left:18%; top:7%; }
+      #blueCallout2{ left:49%; top:49%; }
+      #blueSimControls{ left:10px; right:10px; bottom:10px; gap:8px; }
+      .blueSegBtn{ min-width:96px; height:42px; font-size:12px; padding:0 12px; }
+      #blueSimMessage{ padding:12px 14px 12px; gap:10px; }
+      #blueSimMessageCopy{ font-size:14px; line-height:1.42; }
+      #blueSimConfirm{ width:96px; height:44px; font-size:13px; }
+    }
+
+</style>
+</head>
+<body>
+  <div id="missionBarWrap">
+    <div id="missionBarHeader">아큐브® 난시 렌즈 기술</div>
+    <div id="missionBar">
+      <div id="missionASD" class="missionCard" role="button" tabindex="0">
+        <div class="missionNo">01</div>
+        <div class="missionTitle">ASD™ 축안정화</div>
+        <div class="missionDesc"> 자세히 보기 > </div>
+      </div>
+      <div id="missionPVP" class="missionCard" role="button" tabindex="0">
+        <div class="missionNo">02</div>
+        <div class="missionTitle">PVP 습윤 인자</div>
+        <div class="missionDesc"> 자세히 보기 ></div>
+      </div>
+      <div id="missionComfort" class="missionCard" role="button" tabindex="0">
+        <div class="missionNo">03</div>
+        <div class="missionTitle">프리즘이 적은 광학부</div>
+        <div class="missionDesc">  자세히 보기 > </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="thicknessBar" aria-hidden="true">
+    <div id="thHeader"><div id="thTitle">두께</div><div id="thUnit">mm</div></div>
+    <div id="gradRow">
+      <div class="tickLabel">얇음_0.0</div>
+      <div id="gradWrap">
+        <div id="grad"></div><div id="gradShine"></div>
+        <div class="mark m0"><strong>0.0</strong></div>
+        <div class="mark m25"><strong>0.1</strong></div>
+        <div class="mark m50"><strong>0.2</strong></div>
+        <div class="mark m75"><strong>0.3</strong></div>
+        <div class="mark m100"><strong>0.4</strong></div>
+      </div>
+      <div class="tickLabel" style="text-align:left;width:46px;">0.4_두껍</div>
+    </div>
+    <div id="thHint"></div>
+  </div>
+
+  <div id="pvpBig">
+    <img id="pvpBigImg" src="https://d1qldkl5c71vyf.cloudfront.net/astig/PVP.gif" alt="PVP Big" onerror="this.onerror=null; this.src='PVP.jpeg';">
+  </div>
+
+  <div id="pvpOverlay">
+    <img id="pvpThumb" src="PVP.png" alt="PVP" onerror="this.onerror=null; this.src='PVP.jpeg';">
+    <div id="pvpText">
+      <div id="pvpTitle">PVP 습윤 인자</div>
+      <div id="hint"><span class="pvp-highlight">렌즈 내 PVP 습윤인자</span>가 하루 종일 촉촉함을 제공합니다.</div>
+    </div>
+    <div id="pvpConfirm" role="button" tabindex="0">확인</div>
+    <div class="popup-reference-area">
+      <span class="ref-line">1.Reducing Friction in the Eye: A Comparative Study of Lubrication by Surface Anchored Synthetic and Natural Ocular Mucin Analogues.Sterner O, et al. <em>ACS Applied Materials &amp; Interfaces</em>. 2017;9(23):20150~20160.</span>
+    </div>
+  </div>
+
+  <div id="pvpSimOverlay" class="state-on" aria-hidden="true">
+    <div id="pvpSimWrap" onclick="event.stopPropagation()">
+      <div id="pvpSimHead">
+        <div id="pvpSimTitle">PVP 습윤 인자 시뮬레이터</div>
+        <button id="pvpSimClose" type="button">X</button>
+      </div>
+      <div id="pvpSimScene">
+        <img id="pvpSceneBase" src="pvp_scene_base.png" alt="PVP 시뮬레이터 배경" onerror="this.onerror=null; this.src='a.png';">
+        <div id="pvpSurfaceRing"></div>
+        <div id="pvpLensStage">
+          <img id="pvpLensBase" src="lens.png" alt="기본 렌즈" onerror="this.onerror=null; this.src='lens2.png';">
+          <img id="pvpLensOn" src="pvp_lens_on.png" alt="PVP ON 렌즈 플레이스홀더" onerror="this.onerror=null; this.src='lens.png';">
+          <img id="pvpLensOff" src="pvp_lens_off.png" alt="PVP OFF 렌즈 플레이스홀더" onerror="this.onerror=null; this.src='lens2.png';">
+          <div id="pvpMoistureFx"></div>
+          <div id="pvpDryFx"></div>
+        </div>
+        <div id="pvpBlinkLid"><div id="pvpLidTop"></div><div id="pvpLidBot"></div></div>
+        <div id="pvpStateBadge">PVP ON</div>
+        <div id="pvpCalloutTop"><span class="pvpDot"></span><span class="pvpPill">깜박여도 수분막 유지</span></div>
+        <div id="pvpCalloutBottom"><span class="pvpDot"></span><span class="pvpPill">눈물막 안정 도움</span></div>
+        <div id="pvpSimControls">
+          <div class="pvpSeg" id="pvpStateSeg">
+            <button id="pvpStateOn" class="pvpSegBtn active" type="button">PVP ON</button>
+            <button id="pvpStateOff" class="pvpSegBtn" type="button">PVP OFF</button>
+          </div>
+          <div class="pvpSeg single" id="pvpBlinkSeg">
+            <button id="pvpBlinkTrigger" class="pvpSegBtn" type="button">깜박임</button>
+          </div>
+        </div>
+      </div>
+      <div id="pvpSimMessage">
+        <div id="pvpSimMessageCopy"><span class="blue">PVP ON</span> 상태에서는 깜박일 때마다 렌즈 표면의 <span class="blue">수분 유지와 눈물막 안정</span>을 돕는 느낌으로 표현했습니다.</div>
+        <button id="pvpSimConfirm" type="button">확인</button>
+      </div>
+      <div class="popup-reference-area" style="padding:12px 16px 0; background:#dbe5f1;">
+        <span class="ref-line">PVP 관련 이미지는 추후 교체 가능한 플레이스홀더입니다. pvp_scene_base.png / pvp_lens_on.png / pvp_lens_off.png 파일명으로 넣어주세요.</span>
+      </div>
+      <div class="toric-popup-disclaimer"><span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span></div>
+    </div>
+  </div>
+
+  <div id="asdOverlay" aria-hidden="true">
+    <div id="asdCard">
+      <div id="asdHeader">
+        <div id="asdHeaderTitle">ASD™ 축안정화</div>
+        <button id="asdClose" type="button">X</button>
+      </div>
+      <div id="asdScene">
+        <img id="asdEyeMV" src="a.png" alt="Eye background" onerror="this.onerror=null; this.src='a.gif';">
+        <div id="asdLensRim"></div>
+        <img id="asdLensImg" src="lens.png" alt="Lens overlay" onerror="this.style.display='none'; document.getElementById('asdHint').textContent='lens.png / lens2.png 파일을 같은 폴더에 넣어주세요.';">
+        <div id="asdMaskShade"></div>
+        <img id="asdUpperLid" src="upper_lid.png" alt="Upper eyelid overlay" onerror="this.style.display='none';">
+        <div id="asdBlinkLid"><div id="asdLidTop"></div><div id="asdLidBot"></div></div>
+        <div id="asdAngleBadge">20°</div>
+        <button id="asdRotateBtn" type="button">축이탈</button>
+        <button id="asdBlinkBtn" type="button">깜박임</button>
+      </div>
+      <div id="asdHint">
+        <div class="hintText">
+          <span class="hintTitle">난시렌즈는 축이 회전하면 시야가 흐려집니다.</span>
+          <span class="hintBody"><span class="blue">‘깜박임’ 버튼</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span>
+        </div>
+      </div>
+      <div class="toric-popup-disclaimer"><span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span></div>
+    </div>
+  </div>
+
+  <div id="comfortOverlay" aria-hidden="true">
+    <div id="comfortWrap" onclick="event.stopPropagation()">
+      <div id="comfortHead">
+        <div id="comfortTitle">프리즘이 적은 광학부</div>
+        <button id="comfortClose" type="button">X</button>
+      </div>
+      <div id="comfortScene" class="mode-off">
+        <div id="cfTargetStage">
+          <div class="cf-target-box cf-box-top"></div>
+          <div class="cf-target-box cf-box-bottom"></div>
+          <div class="cf-target-a cf-a-red">A</div>
+          <div class="cf-target-a cf-a-blue">A</div>
+        </div>
+        <div id="cfLineRed" class="cf-guide-line red"></div>
+        <div id="cfLineBlue" class="cf-guide-line blue"></div>
+        <div id="cfOptic"><div class="cf-optic-prism"></div><div class="cf-optic-flat"></div></div>
+        <div id="cfSegWrap">
+          <button id="cfBtnOff" class="cf-seg-btn active" type="button">프리즘 없는 경우</button>
+          <button id="cfBtnOn" class="cf-seg-btn" type="button">프리즘 있는 경우</button>
+        </div>
+      </div>
+      <div id="comfortMessage">
+        <div id="comfortMessageCopy">난시 렌즈 광학부의 프리즘은 단안 난시 소비자에게 중요합니다. <span class="blue">프리즘이 적은 광학부는 보다 편안한 시야 이해에 도움이 됩니다.</span></div>
+        <button id="comfortConfirm" type="button">확인</button>
+      </div>
+      <div class="popup-reference-area" style="padding:12px 16px 0; background:#dbe5f1;">
+        <span class="ref-line">1. Sulley A, Hawke R, Osborn Lorenz K, et al. <em>Cont Lens Anterior Eye</em>. 2015;38(4):253–257.</span>      
+      </div>
+      <div class="toric-popup-disclaimer"><span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span></div>
+    </div>
+  </div>
+
+  <div id="tutorialLayer" aria-hidden="true">
+    <div id="tutorialMask"></div><div id="tutorialFocus"></div>
+    <div class="tutBox" id="tutLeft" style="display:none;"><div class="tutTitle">가이드 1</div><div class="tutText">렌즈를 좌우로 드래그하여 움직여 보세요.<br>확대와 축소를 통해 렌즈 구조를 더 선명하게 확인할 수 있습니다.</div><button class="tutBtn" id="tutNext1">확인</button></div>
+    <div class="tutBox" id="tutBottom" style="display:none;"><div class="tutTitle">가이드 2</div><div class="tutText">‘렌즈 두께 MAP’을 클릭하여<br>아큐브® 인피니티 엣지(가장 얇은 보라색 영역)을 확인해 보세요!</div><button class="tutBtn" id="tutNext2">확인</button></div>
+    <div class="tutBox" id="tutTop" style="display:none;"><div class="tutTitle">가이드 3</div><div class="tutText">각 카드를 눌러 체험을 진행해 보세요.<br></div><button class="tutBtn" id="tutDone">확인</button></div>
+  </div>
+
+
+  <div id="blueBackGlow" aria-hidden="true"></div>
+
+  <div id="blueRayLayerBack" aria-hidden="true">
+    <svg id="blueRaySvgBack" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="beamOutGradBack" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="rgb(255,191,0)" stop-opacity="0.22"></stop>
+          <stop offset="0.35" stop-color="rgb(255,191,0)" stop-opacity="1"></stop>
+          <stop offset="0.75" stop-color="rgb(255,191,0)" stop-opacity="0.50"></stop>
+          <stop offset="1" stop-color="rgb(255,191,0)" stop-opacity="0"></stop>
+        </linearGradient>
+        <filter id="beamGlowBack" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="0.9" result="blur"/>
+          <feMerge>
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+      <line id="beamOutBack"
+            x1="50" y1="50" x2="100" y2="50"
+            stroke="url(#beamOutGradBack)"
+            stroke-width="3.00"
+            stroke-linecap="round"
+            filter="url(#beamGlowBack)"
+            opacity="0.0"></line>
+    </svg>
+  </div>
+
+  <div id="blueRayLayer" aria-hidden="true">
+    <svg id="blueRaySvg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="beamInGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="rgb(255,170,0)" stop-opacity="0"></stop>
+          <stop offset="0.28" stop-color="rgb(255,170,0)" stop-opacity="0.55"></stop>
+          <stop offset="0.55" stop-color="rgb(255,170,0)" stop-opacity="1"></stop>
+          <stop offset="1" stop-color="rgb(255,170,0)" stop-opacity="0.18"></stop>
+        </linearGradient>
+
+        <linearGradient id="beamReflectGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="rgb(0,94,184)" stop-opacity="0.15"></stop>
+          <stop offset="0.30" stop-color="rgb(0,94,184)" stop-opacity="0.80"></stop>
+          <stop offset="0.55" stop-color="rgb(0,94,184)" stop-opacity="1"></stop>
+          <stop offset="1" stop-color="rgb(0,94,184)" stop-opacity="0"></stop>
+        </linearGradient>
+
+        <filter id="beamGlow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="1.15" result="blur"/>
+          <feMerge>
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+
+        <marker id="beamArrowBlueSmall" viewBox="0 0 12 10" refX="10.2" refY="5"
+                markerWidth="0.9" markerHeight="0.9" orient="auto">
+          <path d="M 0 1 L 11 5 L 0 9"
+                fill="none"
+                stroke="rgb(0,94,184)"
+                stroke-width="2.0"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                opacity="0.95"></path>
+        </marker>
+
+        <ellipse id="lensOccludeEllipse" cx="56" cy="52" rx="26" ry="30" fill="transparent"></ellipse>
+      </defs>
+
+      <line id="beamIn"
+            x1="0" y1="50" x2="50" y2="50"
+            stroke="url(#beamInGrad)"
+            stroke-width="3.4"
+            stroke-linecap="round"
+            filter="url(#beamGlow)"
+            opacity="0.0"></line>
+
+      <line id="beamBend"
+            x1="50" y1="50" x2="25" y2="70"
+            stroke="url(#beamReflectGrad)"
+            stroke-width="3.6"
+            stroke-linecap="round"
+            marker-end="url(#beamArrowBlueSmall)"
+            filter="url(#beamGlow)"
+            opacity="0.0"></line>
+
+      <circle id="beamHit"
+              cx="50" cy="50" r="1.6"
+              fill="rgb(255,255,255)"
+              fill-opacity="0.80"
+              filter="url(#beamGlow)"
+              opacity="0.0"></circle>
+    </svg>
+  </div>
+
+  <div id="blueInfo" aria-hidden="true">
+    <div id="blueInfoTop">
+      <b>블루라이트 <span class="pct">55%</span> 차단</b>
+    </div>
+    <div id="blueInfoBody">
+      아큐브® MAX 원데이 난시는 
+      <span class="blue-highlight">블루라이트를 55% 차단하여 디지털에 노출된 눈을 보호</span>합니다.
+      블루라이트 차단을 위한 <span class="tint-highlight">블루그린 틴트</span>를 확인해 주세요.
+    </div>
+    <div id="blueInfoMission">
+      <button class="confirm" id="blueSimOpen" type="button" style="width:auto;min-width:132px;max-width:none;padding:0 18px;">비전 시뮬레이터</button>
+      <button class="confirm" id="blueConfirm" type="button">확인</button>
+    </div>
+  </div>
+
+  <div id="blueSimOverlay" class="state-on" aria-hidden="true">
+    <div id="blueSimWrap" onclick="event.stopPropagation()">
+      <div id="blueSimHead">
+        <div id="blueSimTitle">블루라이트 비전 시뮬레이터</div>
+        <button id="blueSimClose" type="button">X</button>
+      </div>
+      <div id="blueSimScene">
+        <div id="blueSimImageStage"></div>
+        <div id="blueSimCameraStage">
+          <video id="blueCameraVideo" playsinline autoplay muted></video>
+          <div id="blueCameraFallback">카메라 권한이 허용되면 실제 화면에서 반사광이나 조명에 따른 눈부심 변화를 확인할 수 있습니다.<br>권한이 없으면 기본 이미지로 체험 가능합니다.</div>
+        </div>
+        <div id="blueSimTint"></div>
+        <div id="blueSimBloom"></div>
+        <div id="blueHotspot1" class="blue-hotspot"></div>
+        <div id="blueHotspot2" class="blue-hotspot"></div>
+        <div id="blueCallout1" class="blue-callout"><span class="blue-dot"></span><span class="blue-pill">빛 번짐 감소</span></div>
+        <div id="blueCallout2" class="blue-callout"><span class="blue-dot"></span><span class="blue-pill">눈 피로 감소</span></div>
+        <div id="blueSimControls">
+          <div class="blueSeg" id="blueStateSeg">
+            <button id="blueStateOn" class="blueSegBtn active" type="button">블루라이트 차단 ON</button>
+            <button id="blueStateOff" class="blueSegBtn" type="button">블루라이트 차단 OFF</button>
+          </div>
+          <div class="blueSeg single" id="blueViewSeg">
+            <button id="blueViewCamera" class="blueSegBtn" type="button">카메라 켜기</button>
+          </div>
+        </div>
+      </div>
+      <div id="blueSimMessage">
+        <div id="blueSimMessageCopy"><span class="blue">블루라이트 차단 OFF</span> 상태에서는 창 쪽 빛 퍼짐이 더 크게 보이고, <span class="blue">ON</span> 상태에서는 빛 번짐이 줄고 모니터가 더 선명해 보이도록 시뮬레이션했습니다.</div>
+        <button id="blueSimConfirm" type="button">확인</button>
+      </div>
+      <div class="popup-reference-area" style="padding:12px 16px 0; background:#dbe5f1;">
+        <span class="ref-line">해당 시뮬레이션은 이해를 돕기 위한 데모 화면이며, 실제 시야 경험과는 차이가 있을 수 있습니다.</span>
+      </div>
+      <div class="toric-popup-disclaimer"><span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span></div>
+    </div>
+  </div>
+
+  <img id="maxPackshot" src="bluelight.png" alt="아큐브 맥스 난시 팩샷" role="button" tabindex="0" aria-label="블루라이트 기능 열기" onerror="this.style.display='none';">
+
+
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+
+  <model-viewer
+    id="mv"
+    src="lens_clear.glb"
+    camera-controls
+    camera-orbit="0deg 100deg 2.6m"
+    camera-target="0m 0.015m 0m"
+    touch-action="pan-y"
+    exposure="1.35"
+    tone-mapping="aces"
+    environment-image="neutral"
+    shadow-intensity="0">
+  </model-viewer>
+
+  <div id="bottomBtns">
+    <button id="btnReset" title="처음 위치로">↺</button>
+    <button id="modeLens" class="btn primary">투명 렌즈 모드</button>
+    <button id="modeHeat" class="btn">렌즈 두께 MAP</button>
+  </div>
+  <div id="globalToricDisclaimer">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</div>
+
+  <script>
+    const mv = document.getElementById('mv');
+    const missionASD = document.getElementById('missionASD');
+    const missionPVP = document.getElementById('missionPVP');
+    const missionComfort = document.getElementById('missionComfort');
+    const modeLens = document.getElementById('modeLens');
+    const modeHeat = document.getElementById('modeHeat');
+    const btnReset = document.getElementById('btnReset');
+    const asdOverlay = document.getElementById('asdOverlay');
+    const asdClose = document.getElementById('asdClose');
+    const pvpOverlay = document.getElementById('pvpOverlay');
+    const pvpBig = document.getElementById('pvpBig');
+    const pvpConfirm = document.getElementById('pvpConfirm');
+    const pvpSimOverlay = document.getElementById('pvpSimOverlay');
+    const pvpSimClose = document.getElementById('pvpSimClose');
+    const pvpSimConfirm = document.getElementById('pvpSimConfirm');
+    const pvpSimMessageCopy = document.getElementById('pvpSimMessageCopy');
+    const pvpStateBadge = document.getElementById('pvpStateBadge');
+    const pvpStateOn = document.getElementById('pvpStateOn');
+    const pvpStateOff = document.getElementById('pvpStateOff');
+    const pvpBlinkTrigger = document.getElementById('pvpBlinkTrigger');
+    const pvpCalloutTop = document.getElementById('pvpCalloutTop');
+    const pvpCalloutBottom = document.getElementById('pvpCalloutBottom');
+    const pvpLidTop = document.getElementById('pvpLidTop');
+    const pvpLidBot = document.getElementById('pvpLidBot');
+    const thicknessBar = document.getElementById('thicknessBar');
+    const asdEyeMV = document.getElementById('asdEyeMV');
+    const asdLensImg = document.getElementById('asdLensImg');
+    const asdBlinkBtn = document.getElementById('asdBlinkBtn');
+    const asdRotateBtn = document.getElementById('asdRotateBtn');
+    const asdAngleBadge = document.getElementById('asdAngleBadge');
+    const asdLensRim = document.getElementById('asdLensRim');
+    const asdHint = document.getElementById('asdHint');
+    const asdLidTop = document.getElementById('asdLidTop');
+    const asdLidBot = document.getElementById('asdLidBot');
+    const comfortOverlay = document.getElementById('comfortOverlay');
+    const comfortClose = document.getElementById('comfortClose');
+    const comfortScene = document.getElementById('comfortScene');
+    const cfBtnOn = document.getElementById('cfBtnOn');
+    const cfBtnOff = document.getElementById('cfBtnOff');
+    const comfortMessageCopy = document.getElementById('comfortMessageCopy');
+    const cfTargetStage = document.getElementById('cfTargetStage');
+    const cfOptic = document.getElementById('cfOptic');
+    const cfLineRed = document.getElementById('cfLineRed');
+    const cfLineBlue = document.getElementById('cfLineBlue');
+    const cfBoxTop = document.querySelector('.cf-box-top');
+    const cfBoxBottom = document.querySelector('.cf-box-bottom');
+    const cfARed = document.querySelector('.cf-a-red');
+    const cfABlue = document.querySelector('.cf-a-blue');
+    const comfortConfirm = document.getElementById('comfortConfirm');
+    const maxPackshot = document.getElementById('maxPackshot');
+    const blueBackGlow = document.getElementById('blueBackGlow');
+    const blueRayLayer = document.getElementById('blueRayLayer');
+    const blueRayLayerBack = document.getElementById('blueRayLayerBack');
+    const blueInfo = document.getElementById('blueInfo');
+    const blueConfirm = document.getElementById('blueConfirm');
+    const blueSimOpen = document.getElementById('blueSimOpen');
+    const blueSimOverlay = document.getElementById('blueSimOverlay');
+    const blueSimClose = document.getElementById('blueSimClose');
+    const blueSimConfirm = document.getElementById('blueSimConfirm');
+    const blueStateOn = document.getElementById('blueStateOn');
+    const blueStateOff = document.getElementById('blueStateOff');
+    const blueViewCamera = document.getElementById('blueViewCamera');
+    const blueSimMessageCopy = document.getElementById('blueSimMessageCopy');
+    const blueSimImageStage = document.getElementById('blueSimImageStage');
+    const blueSimCameraStage = document.getElementById('blueSimCameraStage');
+    const blueCameraVideo = document.getElementById('blueCameraVideo');
+    const blueCameraFallback = document.getElementById('blueCameraFallback');
+    const beamIn = document.getElementById('beamIn');
+    const beamOut = document.getElementById('beamOutBack');
+    const beamBend = document.getElementById('beamBend');
+    const beamHit = document.getElementById('beamHit');
+    const lensOccludeEllipse = document.getElementById('lensOccludeEllipse');
+
+    let currentMode = 'lens';
+    let pvpOn = false;
+    let pvpDone = false;
+    let asdDone = false;
+    let comfortDone = false;
+    let blueOn = false;
+    let bluePanelOpen = false;
+    let blueSimState = 'on';
+    let blueSimView = 'image';
+    let blueCameraStream = null;
+    let pvpState = 'on';
+    let pvpBlinkBusy = false;
+    let allMaterialBackup = null;
+    let beamAnimToken = 0;
+    let beamGeom = null;
+    let asdAngle = 20;
+    let asdLastDir = -1;
+    let asdBlinkBusy = false;
+    let lastOrbit = null;
+    let lastTarget = null;
+    let defaultFov = null;
+    let pendingCameraPreset = null;
+    let comfortMotionRaf = null;
+    const COMFORT_FLOAT_AMPLITUDE = 6;
+    const COMFORT_FLOAT_PERIOD = 2200;
+
+    const ASD_STEP = 5;
+    const ASD_START = 20;
+    const CLEAR_DEFAULT_ORBIT_STR  = '0deg 100deg 2.6m';
+    const CLEAR_DEFAULT_TARGET_STR = '0m 0.015m 0m';
+    const HEAT_DEFAULT_ORBIT_STR   = '0deg 100deg 2.6m';
+    const HEAT_DEFAULT_TARGET_STR  = '0m 0.015m 0m';
+    const BLUE_PANEL_ORBIT_STR   = '61deg 97deg 3.85m';
+    const BLUE_PANEL_TARGET_STR  = '0m 0.018m 0m';
+    const BLUEGREEN_TINT = [0.55, 1.08, 0.72, 0.45];
+
+    const __isIOS = (()=> {
+      const platform = navigator.platform || '';
+      const iOS = /iP(hone|od|ad)/.test(platform);
+      const iPadOS13Plus = (platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      return iOS || iPadOS13Plus;
+    })();
+    const __isSafari = /^((?!chrome|crios|android).)*safari/i.test(navigator.userAgent || '');
+    const __isSafariIOS = __isIOS && __isSafari;
+
+    function keepMVPlaying(){
+      try{ if(mv && mv.paused) mv.play(); }catch(e){}
+    }
+    if(mv){
+      ['pointerdown','pointermove','pointerup','touchstart','touchend','mousedown','mouseup'].forEach((ev)=>{
+        try{ mv.addEventListener(ev, keepMVPlaying, { passive:true }); }catch(e){}
+      });
+    }
+    document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) setTimeout(keepMVPlaying, 60); });
+
+    function getOrbitSafe(){ try{ return mv.getCameraOrbit(); }catch(e){ return null; } }
+    function getTargetSafe(){ try{ return mv.getCameraTarget(); }catch(e){ return null; } }
+    function applyOrbit(orbit){ if(!orbit) return; try{ mv.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${orbit.radius}m`; }catch(e){} }
+    function applyTarget(target){ if(!target) return; try{ mv.cameraTarget = `${target.x}m ${target.y}m ${target.z}m`; }catch(e){} }
+    function applyOrbitStr(s){ try{ mv.cameraOrbit = s; }catch(e){} }
+    function applyTargetStr(s){ try{ mv.cameraTarget = s; }catch(e){} }
+
+    function resetCameraToModeDefault(mode){
+      const orbitStr  = (mode === 'heat') ? HEAT_DEFAULT_ORBIT_STR  : CLEAR_DEFAULT_ORBIT_STR;
+      const targetStr = (mode === 'heat') ? HEAT_DEFAULT_TARGET_STR : CLEAR_DEFAULT_TARGET_STR;
+      const applyAll = ()=>{
+        applyTargetStr(targetStr); applyOrbitStr(orbitStr);
+        try{ mv.fieldOfView = defaultFov || '45deg'; }catch(e){}
+        try{ mv.jumpCameraToGoal?.(); }catch(e){}
+      };
+      try{ mv.removeAttribute('camera-controls'); }catch(e){}
+      applyAll();
+      requestAnimationFrame(()=>{
+        try{ mv.setAttribute('camera-controls',''); }catch(e){}
+        applyAll(); setTimeout(applyAll, 120); setTimeout(applyAll, 260);
+      });
+    }
+
+    function showPVP(show){
+      pvpOverlay.classList.toggle('show', false);
+      pvpBig.classList.toggle('show', false);
+      pvpConfirm.style.display = 'none';
+      pvpSimOverlay?.classList.toggle('show', show);
+      pvpSimOverlay?.setAttribute('aria-hidden', show ? 'false' : 'true');
+    }
+    function showThickness(show){
+      thicknessBar.classList.toggle('show', show);
+      thicknessBar.setAttribute('aria-hidden', show ? 'false' : 'true');
+    }
+
+    function syncPackshot(){
+      if(!maxPackshot) return;
+      const overlayOpen = asdOverlay.classList.contains('show') || comfortOverlay.classList.contains('show') || pvpOn || bluePanelOpen;
+      maxPackshot.style.display = (currentMode === 'lens' && !overlayOpen) ? 'block' : 'none';
+      maxPackshot.classList.toggle('active', bluePanelOpen);
+    }
+
+    async function startBlueCamera(){
+      if(blueCameraStream) return true;
+      if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+        if(blueCameraFallback){ blueCameraFallback.style.display = 'flex'; }
+        return false;
+      }
+      try{
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio:false });
+        blueCameraStream = stream;
+        if(blueCameraVideo){ blueCameraVideo.srcObject = stream; await blueCameraVideo.play().catch(()=>{}); }
+        if(blueCameraFallback) blueCameraFallback.style.display = 'none';
+        return true;
+      }catch(err){
+        if(blueCameraFallback) blueCameraFallback.style.display = 'flex';
+        return false;
+      }
+    }
+
+    function stopBlueCamera(){
+      if(blueCameraStream){
+        blueCameraStream.getTracks().forEach(track => track.stop());
+        blueCameraStream = null;
+      }
+      if(blueCameraVideo){
+        try{ blueCameraVideo.pause(); }catch(e){}
+        blueCameraVideo.srcObject = null;
+      }
+    }
+
+    function updateBlueSimMessage(){
+      if(!blueSimMessageCopy) return;
+      const useCam = blueSimView === 'camera';
+      if(blueSimState === 'on'){
+        blueSimMessageCopy.innerHTML = `<span class="blue">블루라이트 차단</span>을 통해 ${useCam ? '실시간 카메라' : '기본 이미지'}에서 <span class="blue">빛 번짐을 감소시키고, 시력 선명을 개선하여 눈의 피로감</span>을 감소합니다.`;
+      }else{
+        blueSimMessageCopy.innerHTML = `<span class="blue">블루라이트 차단 OFF</span> 상태에서는 ${useCam ? '실시간 카메라' : '기본 이미지'}에서 <span class="blue">창가 반사광과 빛 퍼짐이 더 크게 보이는 느낌</span>으로 시뮬레이션했습니다.`;
+      }
+    }
+
+    function setBlueSimState(state){
+      blueSimState = state === 'off' ? 'off' : 'on';
+      blueSimOverlay?.classList.toggle('state-on', blueSimState === 'on');
+      blueSimOverlay?.classList.toggle('state-off', blueSimState === 'off');
+      blueStateOn?.classList.toggle('active', blueSimState === 'on');
+      blueStateOff?.classList.toggle('active', blueSimState === 'off');
+      updateBlueSimMessage();
+    }
+
+    async function setBlueSimView(view){
+      blueSimView = view === 'camera' ? 'camera' : 'image';
+      const useCamera = blueSimView === 'camera';
+      if(useCamera){
+        const ok = await startBlueCamera();
+        if(ok){
+          if(blueSimImageStage) blueSimImageStage.style.display = 'none';
+          if(blueSimCameraStage) blueSimCameraStage.style.display = 'block';
+          blueSimOverlay?.classList.add('camera-on');
+          blueViewCamera?.classList.add('active');
+          if(blueViewCamera) blueViewCamera.textContent = '카메라 끄기';
+        }else{
+          blueSimView = 'image';
+          if(blueSimImageStage) blueSimImageStage.style.display = 'block';
+          if(blueSimCameraStage) blueSimCameraStage.style.display = 'none';
+          blueSimOverlay?.classList.remove('camera-on');
+          blueViewCamera?.classList.remove('active');
+          if(blueViewCamera) blueViewCamera.textContent = '카메라 켜기';
+        }
+      }else{
+        stopBlueCamera();
+        if(blueSimImageStage) blueSimImageStage.style.display = 'block';
+        if(blueSimCameraStage) blueSimCameraStage.style.display = 'none';
+        blueSimOverlay?.classList.remove('camera-on');
+        blueViewCamera?.classList.remove('active');
+        if(blueViewCamera) blueViewCamera.textContent = '카메라 켜기';
+      }
+      updateBlueSimMessage();
+    }
+
+    async function openBlueSimulator(){
+      if(!bluePanelOpen) return;
+      blueSimOverlay?.classList.add('show');
+      blueSimOverlay?.setAttribute('aria-hidden','false');
+      setBlueSimState('off');
+      await setBlueSimView('image');
+    }
+
+    function closeBlueSimulator(){
+      blueSimOverlay?.classList.remove('show');
+      blueSimOverlay?.setAttribute('aria-hidden','true');
+      blueSimOverlay?.classList.remove('camera-on');
+      stopBlueCamera();
+      blueSimView = 'image';
+      if(blueSimImageStage) blueSimImageStage.style.display = 'block';
+      if(blueSimCameraStage) blueSimCameraStage.style.display = 'none';
+      blueViewCamera?.classList.remove('active');
+      if(blueViewCamera) blueViewCamera.textContent = '카메라 켜기';
+    }
+
+    function __forceSvgRedraw(){
+      try{
+        const svg = document.getElementById('blueRaySvg');
+        if(!svg) return;
+        svg.style.transform = 'translateZ(0)';
+        const prev = svg.style.display || 'block';
+        svg.style.display = 'none';
+        void svg.getBoundingClientRect();
+        svg.style.display = prev;
+        try{ svg.getBBox(); }catch(e){}
+      }catch(e){}
+    }
+
+    function __patchBeamsForSafari(){
+      if(!__isSafariIOS) return;
+      [beamIn, beamOut].forEach(el=>{
+        if(!el) return;
+        try{ el.setAttribute('filter','none'); }catch(e){}
+        try{ el.style.filter = 'none'; }catch(e){}
+        try{ el.setAttribute('stroke','rgb(255,191,0)'); }catch(e){}
+        try{ el.style.stroke = 'rgb(255,191,0)'; }catch(e){}
+        try{ el.setAttribute('shape-rendering','geometricPrecision'); }catch(e){}
+        try{ el.setAttribute('vector-effect','non-scaling-stroke'); }catch(e){}
+      });
+      if(beamBend){
+        try{ beamBend.setAttribute('shape-rendering','geometricPrecision'); }catch(e){}
+        try{ beamBend.setAttribute('vector-effect','non-scaling-stroke'); }catch(e){}
+      }
+    }
+
+    function backupOriginalColors(){
+      try{
+        const model = mv.model;
+        if(!model || !model.materials) return;
+        allMaterialBackup = model.materials.map(mat=>{
+          const pbr = mat.pbrMetallicRoughness;
+          return (pbr && pbr.baseColorFactor) ? [...pbr.baseColorFactor] : [1,1,1,1];
+        });
+      }catch(e){
+        allMaterialBackup = null;
+      }
+    }
+
+    function restoreOriginalColors(){
+      try{
+        const model = mv.model;
+        if(!model || !model.materials || !allMaterialBackup) return;
+        model.materials.forEach((mat, idx)=>{
+          const pbr = mat.pbrMetallicRoughness;
+          if(!pbr) return;
+          const base = allMaterialBackup[idx] ? [...allMaterialBackup[idx]] : [1,1,1,1];
+          base[3] = Math.max(base[3], 0.45);
+          pbr.setBaseColorFactor(base);
+        });
+      }catch(e){}
+    }
+
+    function applyTint(){
+      try{
+        const model = mv.model;
+        if(!model || !model.materials) return;
+        model.materials.forEach((mat, idx)=>{
+          const pbr = mat.pbrMetallicRoughness;
+          if(!pbr) return;
+          const cur = pbr.baseColorFactor ? [...pbr.baseColorFactor] : (allMaterialBackup?.[idx] ? [...allMaterialBackup[idx]] : [1,1,1,1]);
+          const a = Math.max(cur[3] ?? 0.45, 0.45);
+          pbr.setBaseColorFactor([BLUEGREEN_TINT[0], BLUEGREEN_TINT[1], BLUEGREEN_TINT[2], a]);
+        });
+      }catch(e){}
+    }
+
+    function setLineFull(el, g){
+      if(!el || !g) return;
+      el.setAttribute('x1', g.x1); el.setAttribute('y1', g.y1);
+      el.setAttribute('x2', g.x2); el.setAttribute('y2', g.y2);
+    }
+    function setLineProgress(el, g, t){
+      if(!el || !g) return;
+      const tt = Math.max(0, Math.min(1, t));
+      const x2 = g.x1 + (g.x2 - g.x1) * tt;
+      const y2 = g.y1 + (g.y2 - g.y1) * tt;
+      el.setAttribute('x1', g.x1); el.setAttribute('y1', g.y1);
+      el.setAttribute('x2', x2);   el.setAttribute('y2', y2);
+    }
+    function animateDraw(el, g, ms, delay=0, token=0){
+      if(!el || !g) return;
+      const startAt = performance.now() + delay;
+      setLineProgress(el, g, 0);
+      const tick = (now)=>{
+        if(token !== beamAnimToken) return;
+        if(now < startAt){ requestAnimationFrame(tick); return; }
+        const t = (now - startAt) / ms;
+        if(t >= 1){ setLineFull(el, g); return; }
+        setLineProgress(el, g, t);
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+
+    function syncBeamVisibility(){
+      const visible = bluePanelOpen && blueOn;
+      if(!visible){
+        beamIn?.setAttribute('opacity','0');
+        beamOut?.setAttribute('opacity','0');
+        beamBend?.setAttribute('opacity','0');
+        beamHit?.setAttribute('opacity','0');
+        return;
+      }
+      beamIn?.setAttribute('opacity','0.95');
+      beamOut?.setAttribute('opacity','0.50');
+      beamBend?.setAttribute('opacity','0.55');
+      beamHit?.setAttribute('opacity','0.90');
+    }
+
+    function updateBeams(){
+      if(!(bluePanelOpen && blueOn)) return;
+
+      const rect = mv.getBoundingClientRect();
+      const toVw = (x)=> (x / window.innerWidth) * 100;
+      const toVh = (y)=> (y / window.innerHeight) * 100;
+      const clamp = (v, min, max)=> Math.max(min, Math.min(max, v));
+
+      const baseLensCx = clamp(toVw(rect.left + rect.width * 0.35), 0, 100);
+      const baseLensCy = clamp(toVh(rect.top + rect.height * 0.35), 0, 100);
+      const beamOffsetX = (bluePanelOpen && blueOn) ? 0.8 : 0;
+      const beamOffsetY = (bluePanelOpen && blueOn) ? 14.5 : 0;
+      const lensCx = clamp(baseLensCx + beamOffsetX, 0, 100);
+      const lensCy = clamp(baseLensCy + beamOffsetY, 0, 100);
+      const rx = clamp((rect.width / window.innerWidth) * 100 * 0.24, 8, 40);
+      const ry = clamp((rect.height / window.innerHeight) * 100 * 0.28, 10, 45);
+
+      const m = Math.tan((8 * Math.PI) / 180);
+      const hx = lensCx;
+      const hy = lensCy;
+
+      const inX1 = 0;
+      const inY1 = clamp(hy - (m * hx), 0, 100);
+      const outX2 = 100;
+      const outY2 = clamp(hy + (m * (outX2 - hx)), 0, 100);
+      const bendX2 = clamp(hx - rx * 0.55, 0, 100);
+      const bendY2 = clamp(hy - ry * 0.60, 18, 100);
+
+      beamIn.setAttribute('x1', inX1); beamIn.setAttribute('y1', inY1);
+      beamIn.setAttribute('x2', hx);   beamIn.setAttribute('y2', hy);
+
+      beamOut.setAttribute('x1', hx);    beamOut.setAttribute('y1', hy);
+      beamOut.setAttribute('x2', outX2); beamOut.setAttribute('y2', outY2);
+
+      beamBend.setAttribute('x1', hx);      beamBend.setAttribute('y1', hy);
+      beamBend.setAttribute('x2', bendX2);  beamBend.setAttribute('y2', bendY2);
+
+      beamHit.setAttribute('cx', hx); beamHit.setAttribute('cy', hy);
+
+      if(lensOccludeEllipse){
+        lensOccludeEllipse.setAttribute('cx', lensCx);
+        lensOccludeEllipse.setAttribute('cy', lensCy);
+        lensOccludeEllipse.setAttribute('rx', rx);
+        lensOccludeEllipse.setAttribute('ry', ry);
+      }
+
+      beamGeom = {
+        in:  { x1: inX1, y1: inY1, x2: hx,    y2: hy },
+        out: { x1: hx,   y1: hy,   x2: outX2, y2: outY2 },
+        bend:{ x1: hx,   y1: hy,   x2: bendX2,y2: bendY2 }
+      };
+    }
+
+    function playBeamAnimation(){
+      beamAnimToken++;
+      const token = beamAnimToken;
+      if(!beamGeom) updateBeams();
+      syncBeamVisibility();
+      if(!(bluePanelOpen && blueOn)) return;
+      beamHit.setAttribute('opacity','0.92');
+      animateDraw(beamIn, beamGeom?.in, 180, 0, token);
+      animateDraw(beamOut, beamGeom?.out, 220, 120, token);
+      animateDraw(beamBend, beamGeom?.bend, 220, 120, token);
+    }
+
+    function setBlueUI(){
+      const visible = bluePanelOpen;
+      blueInfo.style.display = visible ? 'block' : 'none';
+      blueInfo.setAttribute('aria-hidden', visible ? 'false' : 'true');
+      blueRayLayer.style.display = visible ? 'block' : 'none';
+      blueRayLayerBack.style.display = visible ? 'block' : 'none';
+      blueBackGlow.style.display = 'none';
+      syncBeamVisibility();
+      if(visible){
+        __patchBeamsForSafari();
+        __forceSvgRedraw();
+        updateBeams();
+        playBeamAnimation();
+      }
+      syncPackshot();
+    }
+
+    function closeBlueLightDemo(shouldResetCamera = true){
+      closeBlueSimulator();
+      bluePanelOpen = false;
+      blueOn = false;
+      restoreOriginalColors();
+      setBlueUI();
+      if(shouldResetCamera) resetCameraToModeDefault('lens');
+    }
+
+    function openBlueLightDemo(){
+      const proceed = ()=>{
+        if(asdOverlay.classList.contains('show')) closeASD();
+        if(comfortOverlay.classList.contains('show')) closeComfort();
+        if(pvpOn) forcePVPOff();
+
+        bluePanelOpen = true;
+        blueOn = true;
+
+        if(!allMaterialBackup) backupOriginalColors();
+        applyTint();
+
+        applyOrbitStr(BLUE_PANEL_ORBIT_STR);
+        applyTargetStr(BLUE_PANEL_TARGET_STR);
+
+        beamGeom = null;
+        __patchBeamsForSafari();
+        __forceSvgRedraw();
+        setTimeout(()=>{
+          applyOrbitStr(BLUE_PANEL_ORBIT_STR);
+          applyTargetStr(BLUE_PANEL_TARGET_STR);
+          updateBeams();
+          playBeamAnimation();
+        }, 80);
+
+        setBlueUI();
+      };
+
+      if(currentMode === 'heat'){
+        setModel('lens_clear.glb', 'lens', { resetCamera:true }).then(()=> setTimeout(proceed, 160));
+        return;
+      }
+      proceed();
+    }
+
+    function setASDHintDefault(){
+      asdHint.innerHTML = `<div class="hintText"><span class="hintTitle">난시렌즈는 축이 회전되면 시야가 흐려집니다.</span><span class="hintBody"><span class="blue">‘깜박임’ 버튼</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
+    }
+    function setASDHintSuccess(){
+      asdHint.innerHTML = `<div class="hintText"><span class="hintTitle">기억해주세요!</span><span class="hintBody"><span class="blue">아큐브® ASD™</span>는 자연스러운 순목(눈 깜박임)으로 렌즈 움직임을 안정화하여 선명한 시야를 제공합니다.</span></div><button id="asdConfirmBtn" type="button">확인</button>`;
+      document.getElementById('asdConfirmBtn')?.addEventListener('click', (e)=>{ e.stopPropagation(); closeASD(); markASDDone(true); });
+    }
+    function markASDDone(done){ asdDone = !!done; missionASD.classList.toggle('done', asdDone); }
+    function pickASDLensSrc(){ return (currentMode === 'heat') ? 'lens2.png' : 'lens.png'; }
+    function setASDLensSrc(){ if(!asdLensImg) return; asdLensImg.src = pickASDLensSrc() + '?v=' + Date.now(); }
+    function renderASDLensTransform(extraX=0){
+      if(!asdLensImg) return;
+      asdLensImg.style.transform = `translate(calc(-50% + ${extraX}px + var(--irisX, 0px)), calc(-50% + var(--irisY, 0px))) rotate(${asdAngle}deg)`;
+      if(asdAngleBadge){
+        if(asdAngle > 0) asdAngleBadge.textContent = `좌측으로 ${asdAngle}° 회전`;
+        else if(asdAngle < 0) asdAngleBadge.textContent = `우측으로 ${Math.abs(asdAngle)}° 회전`;
+        else asdAngleBadge.textContent = `축 안정`;
+      }
+    }
+    function resetASDState(){ asdAngle = ASD_START; asdLastDir = -1; renderASDLensTransform(0); }
+
+    function playBlinkLid(){
+      if(asdBlinkBusy) return;
+      asdBlinkBusy = true;
+      const hideLens = ()=>{ if(asdLensImg) asdLensImg.style.opacity = '0'; if(asdLensRim) asdLensRim.style.opacity = '0'; };
+      const showLens = ()=>{ if(asdLensImg) asdLensImg.style.opacity = ''; if(asdLensRim) asdLensRim.style.opacity = ''; };
+      if(!asdLidTop || !asdLidBot) { hideLens(); setTimeout(()=>{ showLens(); asdBlinkBusy = false; }, 220); return; }
+      asdLidTop.style.transition = 'none'; asdLidBot.style.transition = 'none';
+      asdLidTop.style.opacity = '0'; asdLidBot.style.opacity = '0';
+      asdLidTop.style.transform = 'translateY(-110%)'; asdLidBot.style.transform = 'translateY(110%)';
+      requestAnimationFrame(()=>{
+        asdLidTop.style.transition = 'transform 120ms ease, opacity 120ms ease';
+        asdLidBot.style.transition = 'transform 120ms ease, opacity 120ms ease';
+        asdLidTop.style.opacity = '1'; asdLidBot.style.opacity = '1';
+        asdLidTop.style.transform = 'translateY(0%)'; asdLidBot.style.transform = 'translateY(0%)';
+        setTimeout(hideLens, 55);
+        setTimeout(()=>{
+          asdLidTop.style.transition = 'transform 150ms ease, opacity 150ms ease';
+          asdLidBot.style.transition = 'transform 150ms ease, opacity 150ms ease';
+          asdLidTop.style.transform = 'translateY(-110%)'; asdLidBot.style.transform = 'translateY(110%)';
+          asdLidTop.style.opacity = '0'; asdLidBot.style.opacity = '0';
+        }, 140);
+        setTimeout(()=>{ showLens(); asdBlinkBusy = false; }, 240);
+      });
+    }
+
+    function overshootAndReturn(){
+      const overshootDeg = asdLastDir * 3;
+      if(!asdLensImg) return;
+      asdLensImg.style.transition = 'transform 120ms ease';
+      asdAngle = overshootDeg; renderASDLensTransform(0);
+      setTimeout(()=>{
+        asdLensImg.style.transition = 'transform 180ms ease';
+        asdAngle = 0; renderASDLensTransform(0);
+        setTimeout(()=>{ if(asdLensImg) asdLensImg.style.transition = ''; }, 190);
+      }, 120);
+    }
+
+    function handleASDBlink(){
+      playBlinkLid();
+      if(asdAngle > 0){
+        asdLastDir = -1; asdAngle = Math.max(0, asdAngle - ASD_STEP);
+        if(asdLensImg){ asdLensImg.style.transition = 'transform 160ms ease'; renderASDLensTransform(0); setTimeout(()=>{ if(asdLensImg) asdLensImg.style.transition = ''; }, 170); }
+        if(asdAngle === 0 && !asdDone) setASDHintSuccess();
+      }else if(asdAngle < 0){
+        asdLastDir = +1; asdAngle = Math.min(0, asdAngle + ASD_STEP);
+        if(asdLensImg){ asdLensImg.style.transition = 'transform 160ms ease'; renderASDLensTransform(0); setTimeout(()=>{ if(asdLensImg) asdLensImg.style.transition = ''; }, 170); }
+        if(asdAngle === 0 && !asdDone) setASDHintSuccess();
+      }else{
+        overshootAndReturn();
+      }
+    }
+    asdBlinkBtn?.addEventListener('click', (e)=>{ e.stopPropagation(); handleASDBlink(); });
+
+    function handleASDRotateRandom(){
+      markASDDone(false); setASDHintDefault();
+      const mags = [10,15,20]; const mag = mags[Math.floor(Math.random() * mags.length)]; const dir = (Math.random() < 0.5) ? -1 : 1;
+      asdLastDir = dir; asdAngle = dir * mag;
+      if(asdLensImg){ asdLensImg.style.transition = 'transform 180ms ease'; renderASDLensTransform(0); setTimeout(()=>{ if(asdLensImg) asdLensImg.style.transition = ''; }, 190); }
+    }
+    asdRotateBtn?.addEventListener('click', (e)=>{ e.stopPropagation(); handleASDRotateRandom(); });
+
+    function tuneClearLensMaterials(){
+      try{
+        const model = mv.model; if(!model || !model.materials) return;
+        model.materials.forEach(mat=>{
+          const pbr = mat.pbrMetallicRoughness; if(!pbr) return;
+          const base = pbr.baseColorFactor ? [...pbr.baseColorFactor] : [1,1,1,1];
+          base[3] = Math.max(base[3], 0.68); pbr.setBaseColorFactor(base);
+          try{ pbr.setRoughnessFactor(0.18); }catch(e){}
+          try{ pbr.setMetallicFactor(0.0); }catch(e){}
+          if(mat.extensions && mat.extensions.KHR_materials_transmission){ mat.extensions.KHR_materials_transmission.transmissionFactor = 0.62; }
+          try{ if(mat.emissiveFactor){ mat.emissiveFactor = [0.05, 0.07, 0.08]; } }catch(e){}
+          try{ if(mat.setAlphaMode) mat.setAlphaMode('BLEND'); }catch(e){}
+        });
+      }catch(e){}
+    }
+
+    function syncMissionUI(){
+      missionASD.classList.toggle('on', asdOverlay.classList.contains('show'));
+      missionPVP.classList.toggle('on', pvpOn);
+      missionComfort.classList.toggle('on', comfortOverlay.classList.contains('show'));
+      missionASD.classList.toggle('done', asdDone);
+      missionPVP.classList.toggle('done', pvpDone);
+      missionComfort.classList.toggle('done', comfortDone);
+    }
+
+    function closeASD(){ asdOverlay.classList.remove('show'); asdOverlay.setAttribute('aria-hidden','true'); resetCameraToModeDefault('lens'); syncMissionUI(); syncPackshot(); }
+    function setModeButtons(){ modeLens.classList.toggle('primary', currentMode === 'lens'); modeHeat.classList.toggle('primary', currentMode === 'heat'); syncPackshot(); }
+    function forcePVPOff(){ if(!pvpOn) return; pvpOn = false; showPVP(false); syncMissionUI(); syncPackshot(); }
+
+    function openASD(){
+      if(bluePanelOpen) closeBlueLightDemo();
+      if(pvpOn) forcePVPOff();
+      resetCameraToModeDefault('lens'); setASDLensSrc(); resetASDState(); setASDHintDefault();
+      if(asdEyeMV){ asdEyeMV.src = 'a.png?v=' + Date.now(); }
+      asdOverlay.classList.add('show'); asdOverlay.setAttribute('aria-hidden','false'); syncMissionUI(); syncPackshot();
+    }
+
+    function setModel(file, mode, options = {}){
+      const { resetCamera = false } = options;
+      return new Promise((resolve)=>{
+        pendingCameraPreset = null;
+        if(!resetCamera){ lastOrbit = getOrbitSafe(); lastTarget = getTargetSafe(); }
+        else{
+          lastOrbit = null; lastTarget = null;
+          pendingCameraPreset = (mode === 'heat') ? { orbitStr: HEAT_DEFAULT_ORBIT_STR, targetStr: HEAT_DEFAULT_TARGET_STR } : { orbitStr: CLEAR_DEFAULT_ORBIT_STR, targetStr: CLEAR_DEFAULT_TARGET_STR };
+        }
+        currentMode = mode; if(bluePanelOpen) closeBlueLightDemo(); forcePVPOff(); showThickness(mode === 'heat'); setModeButtons();
+        const onLoadOnce = ()=>{ mv.removeEventListener('load', onLoadOnce); resolve(); };
+        mv.addEventListener('load', onLoadOnce, { once:true });
+        mv.src = file + '?v=' + Date.now();
+      });
+    }
+
+    mv.addEventListener('load', ()=>{
+      if(!defaultFov){ try{ defaultFov = mv.fieldOfView; }catch(e){ defaultFov = null; } }
+      if(pendingCameraPreset){
+        applyTargetStr(pendingCameraPreset.targetStr); applyOrbitStr(pendingCameraPreset.orbitStr);
+        setTimeout(()=>{ applyTargetStr(pendingCameraPreset.targetStr); applyOrbitStr(pendingCameraPreset.orbitStr); }, 120);
+        resetCameraToModeDefault(currentMode); pendingCameraPreset = null;
+      }else{
+        if(lastTarget) applyTarget(lastTarget); if(lastOrbit) applyOrbit(lastOrbit);
+        setTimeout(()=>{ if(lastTarget) applyTarget(lastTarget); if(lastOrbit) applyOrbit(lastOrbit); }, 120);
+      }
+      if(currentMode === 'lens'){ tuneClearLensMaterials(); backupOriginalColors(); }
+      setModeButtons(); syncMissionUI(); setBlueUI(); keepMVPlaying(); setTimeout(keepMVPlaying, 120);
+    });
+
+    function toggleASD(){ if(asdOverlay.classList.contains('show')){ closeASD(); return; } openASD(); }
+    missionASD.addEventListener('click', toggleASD);
+    missionASD.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') toggleASD(); });
+    asdClose.addEventListener('click', closeASD);
+    asdOverlay.addEventListener('click', (e)=>{ if(e.target === asdOverlay) closeASD(); });
+
+    const PVP_ZOOM_FACTOR = 0.70;
+    function zoomInForPVP(){ try{ const orbit = getOrbitSafe(); if(!orbit) return; mv.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${orbit.radius * PVP_ZOOM_FACTOR}m`; }catch(e){} }
+
+
+    function updatePVPMessage(){
+      if(!pvpSimMessageCopy) return;
+      if(pvpState === 'on'){
+        pvpSimMessageCopy.innerHTML = `<span class="blue">PVP ON</span> 상태에서는 깜박일 때마다 렌즈 표면의 <span class="blue">수분 유지와 눈물막 안정</span>을 돕는 느낌으로 표현했습니다.`;
+        if(pvpStateBadge) pvpStateBadge.textContent = 'PVP ON';
+        if(pvpCalloutTop) pvpCalloutTop.innerHTML = `<span class="pvpDot"></span><span class="pvpPill">깜박여도 수분막 유지</span>`;
+        if(pvpCalloutBottom) pvpCalloutBottom.innerHTML = `<span class="pvpDot"></span><span class="pvpPill">눈물막 안정 도움</span>`;
+      }else{
+        pvpSimMessageCopy.innerHTML = `<span class="blue">PVP OFF</span> 상태에서는 깜박인 뒤 렌즈 표면의 <span class="blue">수분 유지가 적고 눈물막이 깨지는 느낌</span>으로 1차 시뮬레이션했습니다.`;
+        if(pvpStateBadge) pvpStateBadge.textContent = 'PVP OFF';
+        if(pvpCalloutTop) pvpCalloutTop.innerHTML = `<span class="pvpDot"></span><span class="pvpPill">깜박여도 금방 건조</span>`;
+        if(pvpCalloutBottom) pvpCalloutBottom.innerHTML = `<span class="pvpDot"></span><span class="pvpPill">눈물막 불안정 표현</span>`;
+      }
+    }
+
+    function setPVPState(state){
+      pvpState = state === 'off' ? 'off' : 'on';
+      pvpSimOverlay?.classList.toggle('state-on', pvpState === 'on');
+      pvpSimOverlay?.classList.toggle('state-off', pvpState === 'off');
+      pvpStateOn?.classList.toggle('active', pvpState === 'on');
+      pvpStateOff?.classList.toggle('active', pvpState === 'off');
+      updatePVPMessage();
+    }
+
+    function playPVPBlink(){
+      if(pvpBlinkBusy) return;
+      pvpBlinkBusy = true;
+      pvpSimOverlay?.classList.add('is-blinking');
+      if(!pvpLidTop || !pvpLidBot){
+        setTimeout(()=>{ pvpSimOverlay?.classList.remove('is-blinking'); pvpBlinkBusy = false; }, 360);
+        return;
+      }
+      pvpLidTop.style.transition = 'none'; pvpLidBot.style.transition = 'none';
+      pvpLidTop.style.opacity = '0'; pvpLidBot.style.opacity = '0';
+      pvpLidTop.style.transform = 'translateY(-110%)'; pvpLidBot.style.transform = 'translateY(110%)';
+      requestAnimationFrame(()=>{
+        pvpLidTop.style.transition = 'transform 120ms ease, opacity 120ms ease';
+        pvpLidBot.style.transition = 'transform 120ms ease, opacity 120ms ease';
+        pvpLidTop.style.opacity = '1'; pvpLidBot.style.opacity = '1';
+        pvpLidTop.style.transform = 'translateY(0%)'; pvpLidBot.style.transform = 'translateY(0%)';
+        setTimeout(()=>{
+          pvpLidTop.style.transition = 'transform 160ms ease, opacity 160ms ease';
+          pvpLidBot.style.transition = 'transform 160ms ease, opacity 160ms ease';
+          pvpLidTop.style.transform = 'translateY(-110%)'; pvpLidBot.style.transform = 'translateY(110%)';
+          pvpLidTop.style.opacity = '0'; pvpLidBot.style.opacity = '0';
+        }, 140);
+        setTimeout(()=>{
+          pvpSimOverlay?.classList.remove('is-blinking');
+          pvpBlinkBusy = false;
+        }, 360);
+      });
+    }
+
+    function closePVP(markDone = false){
+      if(markDone) pvpDone = true;
+      pvpOn = false;
+      showPVP(false);
+      pvpSimOverlay?.classList.remove('is-blinking');
+      resetCameraToModeDefault('lens');
+      syncMissionUI();
+      syncPackshot();
+    }
+
+    async function togglePVP(){
+      if(currentMode === 'heat'){ await setModel('lens_clear.glb', 'lens', { resetCamera:true }); }
+      if(currentMode !== 'lens') return;
+      if(bluePanelOpen) closeBlueLightDemo();
+      if(asdOverlay.classList.contains('show')) closeASD();
+      pvpOn = !pvpOn;
+      if(pvpOn){
+        resetCameraToModeDefault('lens');
+        setPVPState('on');
+        setTimeout(()=>{ zoomInForPVP(); showPVP(true); syncMissionUI(); syncPackshot(); }, 140);
+      }else{
+        closePVP(false);
+      }
+    }
+    missionPVP.addEventListener('click', togglePVP);
+    missionPVP.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') togglePVP(); });
+
+    function confirmPVP(){ closePVP(true); }
+    pvpConfirm.addEventListener('click', (e)=>{ e.stopPropagation(); confirmPVP(); });
+    pvpConfirm.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); confirmPVP(); } });
+    pvpSimConfirm?.addEventListener('click', (e)=>{ e.stopPropagation(); confirmPVP(); });
+    pvpStateOn?.addEventListener('click', ()=> setPVPState('on'));
+    pvpStateOff?.addEventListener('click', ()=> setPVPState('off'));
+    pvpBlinkTrigger?.addEventListener('click', (e)=>{ e.stopPropagation(); playPVPBlink(); });
+    pvpSimClose?.addEventListener('click', ()=> closePVP(false));
+    pvpSimOverlay?.addEventListener('click', (e)=>{ if(e.target === pvpSimOverlay) closePVP(false); });
+
+    function closeComfort(markDone = false){
+      if(markDone) comfortDone = true;
+      comfortOverlay.classList.remove('show'); comfortOverlay.setAttribute('aria-hidden','true');
+      stopComfortModeOnMotion(); setComfortMode('off'); syncMissionUI(); syncPackshot();
+    }
+    function openComfort(){
+      if(bluePanelOpen) closeBlueLightDemo();
+      if(asdOverlay.classList.contains('show')) closeASD();
+      if(pvpOn) forcePVPOff();
+      stopComfortModeOnMotion(); comfortOverlay.classList.add('show'); comfortOverlay.setAttribute('aria-hidden','false');
+      setComfortMode('off'); requestAnimationFrame(positionComfortInteractiveElements); syncMissionUI(); syncPackshot();
+    }
+    function toggleComfort(){ if(comfortOverlay.classList.contains('show')){ closeComfort(); return; } openComfort(); }
+
+    function stopComfortModeOnMotion(){
+      if(comfortMotionRaf){ cancelAnimationFrame(comfortMotionRaf); comfortMotionRaf = null; }
+      if(cfBoxTop) cfBoxTop.style.transform = 'translateX(-50%)';
+      if(cfBoxBottom) cfBoxBottom.style.transform = 'translateX(-50%)';
+      if(cfARed) cfARed.style.transform = 'translate(-50%,-50%)';
+      if(cfABlue) cfABlue.style.transform = 'translate(-50%,-50%)';
+    }
+    function startComfortModeOnMotion(){
+      stopComfortModeOnMotion();
+      const animate = (ts)=>{
+        if(!comfortOverlay.classList.contains('show') || !comfortScene.classList.contains('mode-on')){ stopComfortModeOnMotion(); return; }
+        const wave = Math.sin((ts % COMFORT_FLOAT_PERIOD) / COMFORT_FLOAT_PERIOD * Math.PI * 2);
+        const offset = wave * COMFORT_FLOAT_AMPLITUDE;
+        if(cfBoxTop) cfBoxTop.style.transform = `translateX(-50%) translateY(${offset}px)`;
+        if(cfARed) cfARed.style.transform = `translate(-50%,-50%) translateY(${offset}px)`;
+        if(cfBoxBottom) cfBoxBottom.style.transform = 'translateX(-50%)';
+        if(cfABlue) cfABlue.style.transform = 'translate(-50%,-50%)';
+        positionComfortInteractiveElements(offset);
+        comfortMotionRaf = requestAnimationFrame(animate);
+      };
+      comfortMotionRaf = requestAnimationFrame(animate);
+    }
+
+    function setComfortMode(mode){
+      comfortScene.classList.remove('mode-default', 'mode-on', 'mode-off'); cfBtnOn.classList.remove('active'); cfBtnOff.classList.remove('active');
+      if(mode === 'on'){
+        comfortScene.classList.add('mode-on'); cfBtnOn.classList.add('active');
+        comfortMessageCopy.innerHTML = `단안에 프리즘 영향이 있는 경우 <span class="blue">양안 이미지 위치에 차이가 발생하여 피로감이 발생할 수 있습니다.</span>`;
+        if(comfortConfirm) comfortConfirm.style.display = 'inline-flex';
+      }else{
+        comfortScene.classList.add('mode-off'); cfBtnOff.classList.add('active');
+        comfortMessageCopy.innerHTML = `난시 렌즈 광학부의 프리즘은 <span class="blue">단안 난시 소비자에게 중요합니다.</span>`;
+        if(comfortConfirm) comfortConfirm.style.display = 'none';
+      }
+      requestAnimationFrame(()=>positionComfortInteractiveElements(0));
+      if(mode === 'on') startComfortModeOnMotion(); else stopComfortModeOnMotion();
+    }
+
+    function cfSetCenterPercent(el, xPx, yPx, rect){ el.style.left = ((xPx / rect.width) * 100) + '%'; el.style.top  = ((yPx / rect.height) * 100) + '%'; }
+    function cfPlaceLine(el, sx, sy, ex, ey, rect){
+      const dx = ex - sx; const dy = ey - sy; const length = Math.sqrt(dx * dx + dy * dy); const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+      el.style.left = (sx / rect.width * 100) + '%'; el.style.top = (sy / rect.height * 100) + '%'; el.style.width = length + 'px'; el.style.transform = `rotate(${angle}deg)`;
+    }
+
+    function positionComfortInteractiveElements(redFloatOffset = 0){
+      if(!comfortScene || !comfortOverlay.classList.contains('show')) return;
+
+      const rect = comfortScene.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+      const mobile = w <= 560;
+      const tablet = w <= 820 && w > 560;
+
+      const eyeLeft = { x: w * 0.552, y: h * 0.408 };
+      const eyeRight = { x: w * 0.811, y: h * 0.410 };
+
+      const cardW = mobile ? 82 : (tablet ? 104 : 118);
+      const cardH = mobile ? 126 : (tablet ? 158 : 176);
+
+      const modeOn = comfortScene.classList.contains('mode-on');
+      const modeOff = comfortScene.classList.contains('mode-off');
+
+      const baseCardCx = mobile ? w * 0.23 : w * 0.225;
+      const baseCardCy = (eyeLeft.y + eyeRight.y) / 2 + 4;
+
+      const cardCx = baseCardCx;
+      const cardCy = modeOff ? (baseCardCy + 14) : baseCardCy;
+
+      const redCardCenterY = baseCardCy - 20 + redFloatOffset;
+      const blueCardCenterY = baseCardCy + 20;
+
+      cfTargetStage.style.width = cardW + 'px';
+      cfTargetStage.style.height = cardH + 'px';
+      cfSetCenterPercent(cfTargetStage, cardCx, cardCy, rect);
+
+      if(modeOn){
+        if(cfBoxTop){
+          cfBoxTop.style.top = '-20px';
+          cfBoxTop.style.transform = 'translateX(-50%)';
+        }
+        if(cfBoxBottom){
+          cfBoxBottom.style.top = '20px';
+          cfBoxBottom.style.transform = 'translateX(-50%)';
+        }
+
+        if(cfARed){
+          cfARed.style.left = '50%';
+          cfARed.style.top = '30%';
+          cfARed.style.transform = 'translate(-50%,-50%)';
+        }
+        if(cfABlue){
+          cfABlue.style.left = '50%';
+          cfABlue.style.top = '70%';
+          cfABlue.style.transform = 'translate(-50%,-50%)';
+        }
+      }
+
+      if(modeOff){
+        if(cfBoxTop){
+          cfBoxTop.style.top = '0px';
+          cfBoxTop.style.transform = 'translateX(-50%)';
+        }
+        if(cfBoxBottom){
+          cfBoxBottom.style.top = '0px';
+          cfBoxBottom.style.transform = 'translateX(-50%)';
+        }
+
+        if(cfARed){
+          cfARed.style.left = '50%';
+          cfARed.style.top = '50%';
+          cfARed.style.transform = 'translate(-50%,-50%)';
+        }
+        if(cfABlue){
+          cfABlue.style.left = '50%';
+          cfABlue.style.top = '50%';
+          cfABlue.style.transform = 'translate(-50%,-50%)';
+        }
+      }
+
+      const opticW = mobile ? 38 : (tablet ? 48 : 58);
+      const opticH = mobile ? 76 : (tablet ? 98 : 118);
+      const opticCx = eyeLeft.x - 2;
+      const opticCy = eyeLeft.y - 20;
+
+      cfOptic.style.width = opticW + 'px';
+      cfOptic.style.height = opticH + 'px';
+      cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
+
+      const cardRightCenterX = cardCx + cardW * 0.50;
+
+      if(modeOn){
+        cfLineRed.style.opacity = '1';
+        cfLineBlue.style.opacity = '1';
+
+        const blueStartX = eyeRight.x;
+        const blueStartY = eyeRight.y;
+
+        const redStartX = eyeLeft.x;
+        const redStartY = eyeLeft.y;
+
+        cfPlaceLine(
+          cfLineRed,
+          redStartX,
+          redStartY,
+          cardRightCenterX,
+          redCardCenterY - 14,
+          rect
+        );
+
+        cfPlaceLine(
+          cfLineBlue,
+          blueStartX,
+          blueStartY,
+          cardRightCenterX,
+          blueCardCenterY,
+          rect
+        );
+      }
+
+      if(modeOff){
+        cfLineRed.style.opacity = '1';
+        cfLineBlue.style.opacity = '1';
+
+        cfPlaceLine(
+          cfLineRed,
+          cardRightCenterX,
+          cardCy - 4,
+          eyeLeft.x,
+          eyeLeft.y,
+          rect
+        );
+
+        cfPlaceLine(
+          cfLineBlue,
+          cardRightCenterX,
+          cardCy,
+          eyeRight.x,
+          eyeRight.y,
+          rect
+        );
+      }
+    }
+
+    missionComfort.addEventListener('click', toggleComfort);
+    missionComfort.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') toggleComfort(); });
+    comfortClose?.addEventListener('click', ()=>closeComfort());
+    comfortConfirm?.addEventListener('click', ()=>closeComfort(true));
+    comfortOverlay?.addEventListener('click', (e)=>{ if(e.target === comfortOverlay) closeComfort(); });
+    cfBtnOn?.addEventListener('click', ()=>setComfortMode('on'));
+    cfBtnOff?.addEventListener('click', ()=>setComfortMode('off'));
+
+    btnReset.addEventListener('click', ()=>{
+      if(asdOverlay.classList.contains('show')) closeASD();
+      if(comfortOverlay.classList.contains('show')) closeComfort();
+      if(pvpOn){ pvpOn = false; showPVP(false); }
+      if(bluePanelOpen) closeBlueLightDemo();
+      showThickness(currentMode === 'heat'); resetCameraToModeDefault(currentMode); syncMissionUI(); syncPackshot(); positionComfortInteractiveElements(0);
+    });
+
+    modeLens.addEventListener('click', ()=> { if(bluePanelOpen) closeBlueLightDemo(); setModel('lens_clear.glb', 'lens', { resetCamera:false }); });
+    modeHeat.addEventListener('click', ()=> { if(bluePanelOpen) closeBlueLightDemo(); setModel('lens_heatmap.glb', 'heat', { resetCamera:false }); });
+
+    function handleMaxPackshotActivate(e){
+      if(e){
+        e.preventDefault?.();
+        e.stopPropagation?.();
+      }
+      openBlueLightDemo();
+    }
+
+    maxPackshot?.addEventListener('click', handleMaxPackshotActivate);
+    maxPackshot?.addEventListener('pointerup', handleMaxPackshotActivate);
+    maxPackshot?.addEventListener('touchend', handleMaxPackshotActivate, { passive:false });
+    maxPackshot?.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' '){
+        handleMaxPackshotActivate(e);
+      }
+    });
+
+    function handleBlueConfirm(e){
+      if(e){
+        e.preventDefault?.();
+        e.stopPropagation?.();
+      }
+      closeBlueLightDemo(true);
+    }
+
+    blueConfirm?.addEventListener('click', handleBlueConfirm);
+    blueConfirm?.addEventListener('pointerup', handleBlueConfirm);
+    blueConfirm?.addEventListener('touchend', handleBlueConfirm, { passive:false });
+
+    blueSimOpen?.addEventListener('click', (e)=>{ e.stopPropagation(); openBlueSimulator(); });
+    blueSimClose?.addEventListener('click', closeBlueSimulator);
+    blueSimConfirm?.addEventListener('click', closeBlueSimulator);
+    blueSimOverlay?.addEventListener('click', (e)=>{ if(e.target === blueSimOverlay) closeBlueSimulator(); });
+    blueStateOn?.addEventListener('click', ()=>setBlueSimState('on'));
+    blueStateOff?.addEventListener('click', ()=>setBlueSimState('off'));
+    blueViewCamera?.addEventListener('click', ()=>setBlueSimView(blueSimView === 'camera' ? 'image' : 'camera'));
+
+    setModel('lens_clear.glb', 'lens', { resetCamera:true });
+
+    const tutorialLayer = document.getElementById('tutorialLayer');
+    const tutorialMask = document.getElementById('tutorialMask');
+    const tutorialFocus = document.getElementById('tutorialFocus');
+    const tutLeft = document.getElementById('tutLeft');
+    const tutBottom = document.getElementById('tutBottom');
+    const tutTop = document.getElementById('tutTop');
+
+    function applyTutorialHole(rect, radius = 24){
+      if(!rect || !tutorialFocus) return;
+      const left = Math.max(8, rect.left - 8), top = Math.max(8, rect.top - 8);
+      const width = Math.min(window.innerWidth - left - 8, rect.width + 16), height = Math.min(window.innerHeight - top - 8, rect.height + 16);
+      tutorialFocus.style.left = `${left}px`; tutorialFocus.style.top = `${top}px`; tutorialFocus.style.width = `${width}px`; tutorialFocus.style.height = `${height}px`; tutorialFocus.style.borderRadius = `${radius}px`; tutorialFocus.style.display = 'block';
+      if(tutorialMask) tutorialMask.style.display = 'none';
+    }
+    function positionTutorialBox(box, where){
+      if(!box) return;
+      if(where === 'center-left'){ box.style.left = '20px'; box.style.right = 'auto'; box.style.top = '50%'; box.style.bottom = 'auto'; box.style.transform = 'translateY(-50%)'; box.style.width = 'min(360px, calc(100vw - 40px))'; }
+      else if(where === 'bottom'){ box.style.left = '20px'; box.style.right = '20px'; box.style.top = 'auto'; box.style.bottom = '72px'; box.style.transform = 'none'; box.style.width = 'min(360px, calc(100vw - 40px))'; }
+      else if(where === 'top'){ box.style.left = '20px'; box.style.right = '20px'; box.style.top = '124px'; box.style.bottom = 'auto'; box.style.transform = 'none'; box.style.width = 'min(360px, calc(100vw - 40px))'; }
+    }
+    function getLensFocusRect(){ const r = mv.getBoundingClientRect(); const size = Math.min(r.width * 0.70, r.height * 0.70, window.innerWidth - 40); const left = (window.innerWidth - size) / 2; const top = (window.innerHeight - size) / 2 - 12; return { left, top, width:size, height:size }; }
+    function getBottomFocusRect(){ const r = document.getElementById('bottomBtns').getBoundingClientRect(); return { left:r.left, top:r.top, width:r.width, height:r.height }; }
+    function getTopCardFocusRect(){ const r = document.getElementById('missionBar').getBoundingClientRect(); return { left:r.left, top:r.top, width:r.width, height:r.height }; }
+    function showTut(step){
+      tutorialLayer.classList.add('show'); tutorialLayer.setAttribute('aria-hidden','false'); tutLeft.style.display = 'none'; tutBottom.style.display = 'none'; tutTop.style.display = 'none';
+      if(step === 1){ const rect = getLensFocusRect(); applyTutorialHole(rect, Math.round(rect.width / 2)); tutLeft.style.display = 'block'; positionTutorialBox(tutLeft, 'center-left'); }
+      if(step === 2){ const rect = getBottomFocusRect(); applyTutorialHole(rect, 22); tutBottom.style.display = 'block'; positionTutorialBox(tutBottom, 'bottom'); }
+      if(step === 3){ const rect = getTopCardFocusRect(); applyTutorialHole(rect, 20); tutTop.style.display = 'block'; positionTutorialBox(tutTop, 'top'); }
+    }
+    function hideTut(){
+      tutorialLayer.classList.remove('show'); tutorialLayer.setAttribute('aria-hidden','true'); tutLeft.style.display = 'none'; tutBottom.style.display = 'none'; tutTop.style.display = 'none'; tutorialFocus.style.display = 'none'; if(tutorialMask) tutorialMask.style.display = 'block';
+    }
+    document.getElementById('tutNext1')?.addEventListener('click', ()=>showTut(2));
+    document.getElementById('tutNext2')?.addEventListener('click', ()=>showTut(3));
+    document.getElementById('tutDone')?.addEventListener('click', ()=>{ hideTut(); sessionStorage.setItem('asd_tutorial_done','1'); });
+    window.addEventListener('load', ()=>{});
+    mv.addEventListener('camera-change', ()=>{ if(bluePanelOpen && blueOn) updateBeams(); });
+    window.addEventListener('resize', ()=>{ if(bluePanelOpen && blueOn) updateBeams(); 
+      if(!tutorialLayer.classList.contains('show')) return;
+      if(tutLeft.style.display === 'block') showTut(1);
+      else if(tutBottom.style.display === 'block') showTut(2);
+      else if(tutTop.style.display === 'block') showTut(3);
+      positionComfortInteractiveElements(0);
+    });
+  </script>
+</body>
+</html>
