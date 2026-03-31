@@ -1453,8 +1453,8 @@
     }
     #blueSimOverlay.state-off #blueSimTint{ opacity:0; }
     #blueSimOverlay.state-off #blueSimBloom{ opacity:0; filter:blur(0px); }
-    #blueSimOverlay.state-off #blueHotspot1{ --hotspot-blur: 13px; box-shadow:0 0 0 6px rgba(255,255,255,.18), 0 0 46px rgba(255,255,255,.24); }
-    #blueSimOverlay.state-off #blueHotspot2{ --hotspot-blur: 11px; box-shadow:0 0 0 6px rgba(255,255,255,.18), 0 0 38px rgba(255,255,255,.20); }
+    #blueSimOverlay.state-off #blueHotspot1{ --hotspot-blur: 13px; box-shadow:0 0 0 6px rgba(255,255,255,.10), 0 0 46px rgba(255,255,255,.12); }
+    #blueSimOverlay.state-off #blueHotspot2{ --hotspot-blur: 11px; box-shadow:0 0 0 6px rgba(255,255,255,.10), 0 0 38px rgba(255,255,255,.10); }
 
     #blueSimOverlay.state-on #blueSimImageStage,
     #blueSimOverlay.state-on #blueCameraVideo{
@@ -1463,8 +1463,8 @@
     }
     #blueSimOverlay.state-on #blueSimTint{ opacity:.20; }
     #blueSimOverlay.state-on #blueSimBloom{ opacity:.30; filter:blur(10px); }
-    #blueSimOverlay.state-on #blueHotspot1{ --hotspot-blur: 4px; box-shadow:0 0 0 6px rgba(255,255,255,.12), 0 0 12px rgba(255,255,255,.10); }
-    #blueSimOverlay.state-on #blueHotspot2{ --hotspot-blur: 3px; box-shadow:0 0 0 6px rgba(255,255,255,.12), 0 0 10px rgba(255,255,255,.08); }
+    #blueSimOverlay.state-on #blueHotspot1{ --hotspot-blur: 4px; box-shadow:0 0 0 6px rgba(255,255,255,.06), 0 0 12px rgba(255,255,255,.05); }
+    #blueSimOverlay.state-on #blueHotspot2{ --hotspot-blur: 3px; box-shadow:0 0 0 6px rgba(255,255,255,.06), 0 0 10px rgba(255,255,255,.04); }
 
     #blueSimOverlay.camera-on.state-off #blueCameraVideo{
       filter:none;
@@ -2190,7 +2190,7 @@
       blueStateOn?.classList.toggle('active', blueSimState === 'on');
       blueStateOff?.classList.toggle('active', blueSimState === 'off');
       if(blueSimImageStage){
-        blueSimImageStage.style.backgroundImage = `url("${blueSimState === 'on' ? BLUE_SIM_IMAGE_ON : BLUE_SIM_IMAGE_OFF}")`;
+        blueSimImageStage.style.backgroundImage = `url("${blueSimState === 'on' ? BLUE_SIM_IMAGE_OFF : BLUE_SIM_IMAGE_ON}")`;
       }
       updateBlueSimMessage();
     }
