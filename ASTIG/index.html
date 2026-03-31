@@ -1366,6 +1366,43 @@
     #blueSimOverlay.camera-on .blue-hotspot,
     #blueSimOverlay.camera-on .blue-callout{ display:none; }
 
+    #blueCameraGlare,
+    #blueCameraHalo{
+      position:absolute;
+      left:var(--glare-x,50%);
+      top:var(--glare-y,24%);
+      transform:translate(-50%,-50%);
+      pointer-events:none;
+      border-radius:999px;
+      opacity:0;
+      transition:left .18s linear, top .18s linear, width .18s ease, height .18s ease, opacity .22s ease, filter .22s ease, background .22s ease;
+      z-index:4;
+      mix-blend-mode:screen;
+    }
+    #blueCameraGlare{
+      width:var(--glare-size,210px);
+      height:var(--glare-size,210px);
+      background:radial-gradient(circle,
+        rgba(255,255,255,.96) 0%,
+        rgba(255,255,255,.78) 16%,
+        rgba(255,255,255,.36) 36%,
+        rgba(255,255,255,.12) 58%,
+        rgba(255,255,255,0) 74%);
+      filter:blur(var(--glare-blur,10px));
+    }
+    #blueCameraHalo{
+      width:calc(var(--glare-size,210px) * 1.9);
+      height:calc(var(--glare-size,210px) * 1.9);
+      background:radial-gradient(circle,
+        rgba(180,210,255,.32) 0%,
+        rgba(180,210,255,.12) 28%,
+        rgba(180,210,255,.04) 48%,
+        rgba(180,210,255,0) 70%);
+      filter:blur(calc(var(--glare-blur,10px) * 1.4));
+    }
+    #blueSimOverlay.camera-on.bright-light #blueCameraGlare,
+    #blueSimOverlay.camera-on.bright-light #blueCameraHalo{ opacity:1; }
+
     #blueSimControls{
       position:absolute; left:16px; right:16px; bottom:16px; z-index:5;
       display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
@@ -1418,18 +1455,42 @@
       filter:none;
     }
     #blueSimOverlay.camera-on.state-on #blueCameraVideo{
-      filter:saturate(1.03) contrast(1.08) brightness(1.01);
+      filter:saturate(1.04) contrast(1.16) brightness(1.01);
     }
     #blueSimOverlay.camera-on.state-off #blueSimTint,
     #blueSimOverlay.camera-on.state-off #blueSimBloom{
       opacity:0;
     }
     #blueSimOverlay.camera-on.state-on #blueSimTint{
-      opacity:.16;
+      opacity:.10;
     }
     #blueSimOverlay.camera-on.state-on #blueSimBloom{
-      opacity:.22;
-      filter:blur(10px);
+      opacity:.08;
+      filter:blur(4px);
+    }
+    #blueSimOverlay.camera-on.state-off #blueCameraGlare{
+      width:var(--glare-size,210px);
+      height:var(--glare-size,210px);
+      filter:blur(calc(var(--glare-blur,10px) + 8px));
+      opacity:.92;
+    }
+    #blueSimOverlay.camera-on.state-off #blueCameraHalo{
+      width:calc(var(--glare-size,210px) * 2.25);
+      height:calc(var(--glare-size,210px) * 2.25);
+      filter:blur(calc(var(--glare-blur,10px) * 2.1));
+      opacity:.72;
+    }
+    #blueSimOverlay.camera-on.state-on #blueCameraGlare{
+      width:calc(var(--glare-size,210px) * .56);
+      height:calc(var(--glare-size,210px) * .56);
+      filter:blur(calc(var(--glare-blur,10px) * .38));
+      opacity:.34;
+    }
+    #blueSimOverlay.camera-on.state-on #blueCameraHalo{
+      width:calc(var(--glare-size,210px) * 1.08);
+      height:calc(var(--glare-size,210px) * 1.08);
+      filter:blur(calc(var(--glare-blur,10px) * .55));
+      opacity:.18;
     }
 
     @media (max-width: 560px){
@@ -1746,6 +1807,8 @@
         <div id="blueCallout1" class="blue-callout"><span class="blue-dot"></span><span class="blue-pill">빛 번짐 감소</span></div>
         <div id="blueCallout2" class="blue-callout"><span class="blue-dot"></span><span class="blue-pill">눈 피로 감소</span></div>
         <div id="blueCameraGuide">밝은 빛에서 확인해 보세요</div>
+        <div id="blueCameraHalo"></div>
+        <div id="blueCameraGlare"></div>
         <div id="blueSimControls">
           <div class="blueSeg" id="blueStateSeg">
             <button id="blueStateOn" class="blueSegBtn active" type="button">블루라이트 ON</button>
@@ -1891,6 +1954,10 @@
     let defaultFov = null;
     let pendingCameraPreset = null;
     let comfortMotionRaf = null;
+    let blueLightDetectRaf = null;
+    let blueLightLastSampleTs = 0;
+    let blueLightCanvas = null;
+    let blueLightCtx = null;
     const COMFORT_FLOAT_AMPLITUDE = 6;
     const COMFORT_FLOAT_PERIOD = 2200;
 
@@ -1976,6 +2043,7 @@
         blueCameraStream = stream;
         if(blueCameraVideo){ blueCameraVideo.srcObject = stream; await blueCameraVideo.play().catch(()=>{}); }
         if(blueCameraFallback) blueCameraFallback.style.display = 'none';
+        startBlueLightDetection();
         return true;
       }catch(err){
         if(blueCameraFallback) blueCameraFallback.style.display = 'flex';
@@ -1992,6 +2060,83 @@
         try{ blueCameraVideo.pause(); }catch(e){}
         blueCameraVideo.srcObject = null;
       }
+      stopBlueLightDetection();
+    }
+
+
+    function resetBlueLightOverlay(){
+      blueSimOverlay?.classList.remove('bright-light');
+      document.documentElement.style.setProperty('--glare-x','50%');
+      document.documentElement.style.setProperty('--glare-y','24%');
+      document.documentElement.style.setProperty('--glare-size','210px');
+      document.documentElement.style.setProperty('--glare-blur','10px');
+    }
+
+    function stopBlueLightDetection(){
+      if(blueLightDetectRaf){
+        cancelAnimationFrame(blueLightDetectRaf);
+        blueLightDetectRaf = null;
+      }
+      blueLightLastSampleTs = 0;
+      resetBlueLightOverlay();
+    }
+
+    function startBlueLightDetection(){
+      stopBlueLightDetection();
+      if(!blueCameraVideo) return;
+      if(!blueLightCanvas){
+        blueLightCanvas = document.createElement('canvas');
+        blueLightCanvas.width = 96;
+        blueLightCanvas.height = 72;
+        blueLightCtx = blueLightCanvas.getContext('2d', { willReadFrequently:true });
+      }
+      const tick = (ts)=>{
+        if(!blueSimOverlay?.classList.contains('show') || blueSimView !== 'camera' || !blueCameraStream){
+          stopBlueLightDetection();
+          return;
+        }
+        if(!blueCameraVideo.videoWidth || !blueCameraVideo.videoHeight || !blueLightCtx){
+          blueLightDetectRaf = requestAnimationFrame(tick);
+          return;
+        }
+        if(!blueLightLastSampleTs || ts - blueLightLastSampleTs > 180){
+          blueLightLastSampleTs = ts;
+          const w = blueLightCanvas.width;
+          const h = blueLightCanvas.height;
+          blueLightCtx.drawImage(blueCameraVideo, 0, 0, w, h);
+          const data = blueLightCtx.getImageData(0, 0, w, h).data;
+          let maxL = 0;
+          let maxX = w * 0.5;
+          let maxY = h * 0.24;
+          let avg = 0;
+          let count = 0;
+          for(let y=0; y<h; y+=2){
+            for(let x=0; x<w; x+=2){
+              const i = (y * w + x) * 4;
+              const r = data[i], g = data[i+1], b = data[i+2];
+              const l = (0.2126*r + 0.7152*g + 0.0722*b);
+              avg += l; count++;
+              if(l > maxL){ maxL = l; maxX = x; maxY = y; }
+            }
+          }
+          const avgL = count ? (avg / count) : 0;
+          const brightStrength = Math.max(0, Math.min(1, (maxL - 208) / 42));
+          const isBright = maxL > 208 && (maxL - avgL) > 28;
+          blueSimOverlay?.classList.toggle('bright-light', isBright);
+          if(isBright){
+            const px = 100 - (maxX / w * 100);
+            const py = (maxY / h * 100);
+            const sizePx = Math.round(180 + brightStrength * 120);
+            const blurPx = Math.round(8 + brightStrength * 10);
+            document.documentElement.style.setProperty('--glare-x', px.toFixed(1) + '%');
+            document.documentElement.style.setProperty('--glare-y', py.toFixed(1) + '%');
+            document.documentElement.style.setProperty('--glare-size', sizePx + 'px');
+            document.documentElement.style.setProperty('--glare-blur', blurPx + 'px');
+          }
+        }
+        blueLightDetectRaf = requestAnimationFrame(tick);
+      };
+      blueLightDetectRaf = requestAnimationFrame(tick);
     }
 
     function updateBlueSimMessage(){
@@ -2026,6 +2171,7 @@
           if(blueSimImageStage) blueSimImageStage.style.display = 'none';
           if(blueSimCameraStage) blueSimCameraStage.style.display = 'block';
           blueSimOverlay?.classList.add('camera-on');
+          startBlueLightDetection();
           blueViewCamera?.classList.add('active');
           if(blueViewCamera) blueViewCamera.textContent = '카메라 켜기';
           if(blueViewSeg) blueViewSeg.style.display = 'none';
@@ -2034,6 +2180,7 @@
           if(blueSimImageStage) blueSimImageStage.style.display = 'block';
           if(blueSimCameraStage) blueSimCameraStage.style.display = 'none';
           blueSimOverlay?.classList.remove('camera-on');
+          stopBlueLightDetection();
           blueViewCamera?.classList.remove('active');
           if(blueViewCamera) blueViewCamera.textContent = '카메라 켜기';
           if(blueViewSeg) blueViewSeg.style.display = '';
@@ -2043,6 +2190,7 @@
         if(blueSimImageStage) blueSimImageStage.style.display = 'block';
         if(blueSimCameraStage) blueSimCameraStage.style.display = 'none';
         blueSimOverlay?.classList.remove('camera-on');
+        stopBlueLightDetection();
         blueViewCamera?.classList.remove('active');
         if(blueViewCamera) blueViewCamera.textContent = '카메라 켜기';
         if(blueViewSeg) blueViewSeg.style.display = '';
@@ -2062,6 +2210,7 @@
       blueSimOverlay?.classList.remove('show');
       blueSimOverlay?.setAttribute('aria-hidden','true');
       blueSimOverlay?.classList.remove('camera-on');
+      stopBlueLightDetection();
       stopBlueCamera();
       blueSimView = 'image';
       if(blueSimImageStage) blueSimImageStage.style.display = 'block';
