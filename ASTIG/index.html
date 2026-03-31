@@ -1363,6 +1363,8 @@
     }
     #blueSimOverlay.camera-on #blueCameraGuide{ display:inline-flex; }
     #blueSimOverlay.camera-on #blueViewSeg{ display:none; }
+    #blueSimOverlay.camera-on .blue-hotspot,
+    #blueSimOverlay.camera-on .blue-callout{ display:none; }
 
     #blueSimControls{
       position:absolute; left:16px; right:16px; bottom:16px; z-index:5;
@@ -1394,29 +1396,40 @@
 
     #blueSimOverlay.state-off #blueSimImageStage,
     #blueSimOverlay.state-off #blueCameraVideo{
-      filter: blur(2.6px) saturate(.96) contrast(.94) brightness(1.03);
-      transform:scale(1.01);
+      filter:none;
+      transform:scale(1);
     }
-    #blueSimOverlay.state-off #blueSimTint{ opacity:.12; }
-    #blueSimOverlay.state-off #blueSimBloom{ opacity:1; filter:blur(42px); }
+    #blueSimOverlay.state-off #blueSimTint{ opacity:0; }
+    #blueSimOverlay.state-off #blueSimBloom{ opacity:0; filter:blur(0px); }
     #blueSimOverlay.state-off #blueHotspot1{ --hotspot-blur: 13px; box-shadow:0 0 0 6px rgba(255,255,255,.18), 0 0 46px rgba(255,255,255,.24); }
     #blueSimOverlay.state-off #blueHotspot2{ --hotspot-blur: 11px; box-shadow:0 0 0 6px rgba(255,255,255,.18), 0 0 38px rgba(255,255,255,.20); }
 
     #blueSimOverlay.state-on #blueSimImageStage,
     #blueSimOverlay.state-on #blueCameraVideo{
-      filter: blur(.15px) saturate(1.05) contrast(1.10) brightness(1.02);
+      filter: saturate(1.03) contrast(1.08) brightness(1.01);
       transform:scale(1);
     }
-    #blueSimOverlay.state-on #blueSimTint{ opacity:.28; }
-    #blueSimOverlay.state-on #blueSimBloom{ opacity:.42; filter:blur(12px); }
+    #blueSimOverlay.state-on #blueSimTint{ opacity:.20; }
+    #blueSimOverlay.state-on #blueSimBloom{ opacity:.30; filter:blur(10px); }
     #blueSimOverlay.state-on #blueHotspot1{ --hotspot-blur: 4px; box-shadow:0 0 0 6px rgba(255,255,255,.12), 0 0 12px rgba(255,255,255,.10); }
     #blueSimOverlay.state-on #blueHotspot2{ --hotspot-blur: 3px; box-shadow:0 0 0 6px rgba(255,255,255,.12), 0 0 10px rgba(255,255,255,.08); }
 
     #blueSimOverlay.camera-on.state-off #blueCameraVideo{
-      filter: blur(2.8px) saturate(.95) contrast(.92) brightness(1.04);
+      filter:none;
     }
     #blueSimOverlay.camera-on.state-on #blueCameraVideo{
-      filter: blur(.12px) saturate(1.04) contrast(1.12) brightness(1.02);
+      filter:saturate(1.03) contrast(1.08) brightness(1.01);
+    }
+    #blueSimOverlay.camera-on.state-off #blueSimTint,
+    #blueSimOverlay.camera-on.state-off #blueSimBloom{
+      opacity:0;
+    }
+    #blueSimOverlay.camera-on.state-on #blueSimTint{
+      opacity:.16;
+    }
+    #blueSimOverlay.camera-on.state-on #blueSimBloom{
+      opacity:.22;
+      filter:blur(10px);
     }
 
     @media (max-width: 560px){
@@ -1986,12 +1999,12 @@
       const useCam = blueSimView === 'camera';
       if(blueSimState === 'on'){
         blueSimMessageCopy.innerHTML = useCam
-          ? `<span class="blue">실시간 카메라</span>에서 <span class="blue">블루라이트 55% 차단 느낌</span>으로 빛 번짐이 줄고 화면이 조금 더 선명해 보이도록 시뮬레이션했습니다.`
-          : `<span class="blue">기본 이미지</span>에서 <span class="blue">블루라이트 55% 차단 느낌</span>으로 빛 번짐을 줄이고 화면이 더 선명해 보이도록 시뮬레이션했습니다.`;
+          ? `<span class="blue">실시간 카메라</span>에서 <span class="blue">밝은 빛이 있을 때</span> 빛 번짐이 줄고 화면이 조금 더 선명해 보이도록 시뮬레이션했습니다.`
+          : `<span class="blue">기본 이미지</span>에서 <span class="blue">밝은 빛 환경</span>에서의 빛 번짐 감소와 선명도 변화를 시뮬레이션했습니다.`;
       }else{
         blueSimMessageCopy.innerHTML = useCam
-          ? `<span class="blue">실시간 카메라</span>에서 <span class="blue">밝은 조명이나 반사광의 빛 퍼짐이 더 크게 보이는 느낌</span>으로 OFF 상태를 시뮬레이션했습니다.`
-          : `<span class="blue">블루라이트 차단 OFF</span> 상태에서는 기본 이미지에서 <span class="blue">창가 반사광과 빛 퍼짐이 더 크게 보이는 느낌</span>으로 시뮬레이션했습니다.`;
+          ? `<span class="blue">블루라이트 OFF</span> 상태는 <span class="blue">일반 카메라 화면</span> 그대로 보이도록 설정했습니다.`
+          : `<span class="blue">블루라이트 OFF</span> 상태는 <span class="blue">기본 화면</span> 그대로 보이도록 설정했습니다.`;
       }
     }
 
