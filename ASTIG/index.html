@@ -824,6 +824,47 @@
     #comfortScene{
       position:relative; height:min(64vw, 540px); min-height:420px; background:#efefef url('face_V2.png') center center / cover no-repeat; overflow:hidden;
     }
+    #comfortCameraStage{
+      position:absolute; inset:0; z-index:1; display:none; overflow:hidden; background:#dfe6ef;
+    }
+    #comfortScene.camera-on #comfortCameraStage{ display:block; }
+    #comfortCameraBase,
+    #comfortCameraTop,
+    #comfortCameraBottom{
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; background:#dfe6ef;
+      transform:scaleX(-1);
+      -webkit-transform:scaleX(-1);
+    }
+    #comfortCameraSplit{ position:absolute; inset:0; display:none; }
+    #comfortScene.camera-on.mode-off #comfortCameraBase{ display:block; }
+    #comfortScene.camera-on.mode-off #comfortCameraSplit{ display:none; }
+    #comfortScene.camera-on.mode-on #comfortCameraBase{ display:none; }
+    #comfortScene.camera-on.mode-on #comfortCameraSplit{ display:block; }
+    .comfort-camera-half{
+      position:absolute; left:0; width:100%; height:50%; overflow:hidden;
+    }
+    .comfort-camera-half.top{ top:0; }
+    .comfort-camera-half.bottom{ bottom:0; }
+    .comfort-camera-half.top video{ clip-path: inset(0 0 50% 0); transform:scaleX(-1) translateY(-12px); -webkit-transform:scaleX(-1) translateY(-12px); }
+    .comfort-camera-half.bottom video{ clip-path: inset(50% 0 0 0); transform:scaleX(-1) translateY(12px); -webkit-transform:scaleX(-1) translateY(12px); }
+    #comfortScene.camera-on.mode-on .comfort-camera-half.top::after,
+    #comfortScene.camera-on.mode-on .comfort-camera-half.bottom::after{
+      content:""; position:absolute; left:0; right:0; pointer-events:none;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.18);
+    }
+    #comfortScene.camera-on.mode-on .comfort-camera-half.top::after{ bottom:0; height:2px; background:linear-gradient(90deg, rgba(255,255,255,.08), rgba(255,255,255,.48), rgba(255,255,255,.08)); }
+    #comfortScene.camera-on.mode-on .comfort-camera-half.bottom::after{ top:0; height:2px; background:linear-gradient(90deg, rgba(255,255,255,.08), rgba(255,255,255,.48), rgba(255,255,255,.08)); }
+    #comfortCameraFallback{
+      position:absolute; inset:0; display:none; align-items:center; justify-content:center; text-align:center;
+      padding:20px; background:rgba(11,31,51,.18); color:#fff; z-index:2; font-size:14px; line-height:1.5; font-weight:800;
+      word-break:keep-all;
+    }
+    #comfortScene.camera-on #cfTargetStage,
+    #comfortScene.camera-on #cfLineRed,
+    #comfortScene.camera-on #cfLineBlue,
+    #comfortScene.camera-on #cfOptic{
+      display:none !important;
+    }
     #comfortScene::before{
       content:""; position:absolute; inset:0;
       background:
@@ -905,6 +946,7 @@
       position:absolute; left:50%; bottom:16px; transform:translateX(-50%); width:min(94%, 760px); z-index:10;
       padding:0; border-radius:0; background:transparent; border:none; box-shadow:none; display:grid; grid-template-columns:1fr 1fr; gap:8px; align-items:center;
     }
+    .cf-camera-btn{ grid-column:1 / -1; }
     .cf-seg-btn{
       height:54px; border-radius:999px; border:1.5px solid var(--smartfit-blue-line); background:#ffffff;
       color:#6c7c93; font-size:16px; font-weight:800; letter-spacing:-.25px; cursor:pointer; transition:all .18s ease;
@@ -990,6 +1032,7 @@
       .cf-optic-prism::after{ border-left-width:16px; border-right-width:16px; border-bottom-width:50px; }
       .cf-guide-line{ border-top-width:2px; }
       #cfSegWrap{ width:min(94%, 520px); bottom:10px; padding:0; gap:5px; border:none; background:transparent; box-shadow:none; grid-template-columns:1fr 1fr; }
+      .cf-camera-btn{ grid-column:1 / -1; }
       .cf-seg-btn{ height:44px; font-size:11px; border-width:1.5px; padding:0 8px; }
       #comfortMessage{ padding:12px 14px 12px; gap:10px; }
       #comfortMessageCopy{ font-size:14px; line-height:1.42; }
@@ -1661,6 +1704,14 @@
         <button id="comfortClose" type="button">X</button>
       </div>
       <div id="comfortScene" class="mode-off">
+        <div id="comfortCameraStage" aria-hidden="true">
+          <video id="comfortCameraBase" autoplay playsinline muted></video>
+          <div id="comfortCameraSplit">
+            <div class="comfort-camera-half top"><video id="comfortCameraTop" autoplay playsinline muted></video></div>
+            <div class="comfort-camera-half bottom"><video id="comfortCameraBottom" autoplay playsinline muted></video></div>
+          </div>
+          <div id="comfortCameraFallback">카메라를 사용할 수 없는 환경입니다.<br>기본 시뮬레이션으로 확인해 주세요.</div>
+        </div>
         <div id="cfTargetStage">
           <div class="cf-target-box cf-box-top"></div>
           <div class="cf-target-box cf-box-bottom"></div>
@@ -1673,6 +1724,7 @@
         <div id="cfSegWrap">
           <button id="cfBtnOff" class="cf-seg-btn active" type="button">프리즘 없는 경우</button>
           <button id="cfBtnOn" class="cf-seg-btn" type="button">프리즘 있는 경우</button>
+          <button id="cfCameraBtn" class="cf-seg-btn cf-camera-btn" type="button">카메라 켜기</button>
         </div>
       </div>
       <div id="comfortMessage">
@@ -1908,6 +1960,12 @@
     const comfortScene = document.getElementById('comfortScene');
     const cfBtnOn = document.getElementById('cfBtnOn');
     const cfBtnOff = document.getElementById('cfBtnOff');
+    const cfCameraBtn = document.getElementById('cfCameraBtn');
+    const comfortCameraBase = document.getElementById('comfortCameraBase');
+    const comfortCameraTop = document.getElementById('comfortCameraTop');
+    const comfortCameraBottom = document.getElementById('comfortCameraBottom');
+    const comfortCameraSplit = document.getElementById('comfortCameraSplit');
+    const comfortCameraFallback = document.getElementById('comfortCameraFallback');
     const comfortMessageCopy = document.getElementById('comfortMessageCopy');
     const cfTargetStage = document.getElementById('cfTargetStage');
     const cfOptic = document.getElementById('cfOptic');
@@ -1968,6 +2026,8 @@
     let defaultFov = null;
     let pendingCameraPreset = null;
     let comfortMotionRaf = null;
+    let comfortCameraStream = null;
+    let comfortCameraOn = false;
     let blueLightDetectRaf = null;
     let blueLightLastSampleTs = 0;
     let blueLightCanvas = null;
@@ -2045,6 +2105,65 @@
       const overlayOpen = asdOverlay.classList.contains('show') || comfortOverlay.classList.contains('show') || pvpOn || bluePanelOpen;
       maxPackshot.style.display = (currentMode === 'lens' && !overlayOpen) ? 'block' : 'none';
       maxPackshot.classList.toggle('active', bluePanelOpen);
+    }
+
+    async function startComfortCamera(){
+      if(comfortCameraStream) return true;
+      if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+        if(comfortCameraFallback) comfortCameraFallback.style.display = 'flex';
+        return false;
+      }
+      try{
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio:false });
+        comfortCameraStream = stream;
+        [comfortCameraBase, comfortCameraTop, comfortCameraBottom].forEach(async (el)=>{
+          if(!el) return;
+          el.srcObject = stream;
+          try{ await el.play(); }catch(e){}
+        });
+        if(comfortCameraFallback) comfortCameraFallback.style.display = 'none';
+        return true;
+      }catch(err){
+        if(comfortCameraFallback) comfortCameraFallback.style.display = 'flex';
+        return false;
+      }
+    }
+
+    function stopComfortCamera(){
+      if(comfortCameraStream){
+        comfortCameraStream.getTracks().forEach(track => track.stop());
+        comfortCameraStream = null;
+      }
+      [comfortCameraBase, comfortCameraTop, comfortCameraBottom].forEach((el)=>{
+        if(!el) return;
+        try{ el.pause(); }catch(e){}
+        try{ el.srcObject = null; }catch(e){}
+      });
+      if(comfortCameraFallback) comfortCameraFallback.style.display = 'none';
+    }
+
+    function applyComfortCameraUI(){
+      if(!comfortScene) return;
+      comfortScene.classList.toggle('camera-on', !!comfortCameraOn);
+      if(cfCameraBtn){
+        cfCameraBtn.classList.toggle('active', !!comfortCameraOn);
+        cfCameraBtn.textContent = comfortCameraOn ? '카메라 끄기' : '카메라 켜기';
+      }
+      if(comfortCameraBase) comfortCameraBase.style.display = (comfortCameraOn && comfortScene.classList.contains('mode-off')) ? 'block' : 'none';
+      if(comfortCameraSplit) comfortCameraSplit.style.display = (comfortCameraOn && comfortScene.classList.contains('mode-on')) ? 'block' : 'none';
+    }
+
+    async function toggleComfortCamera(forceState = null){
+      const nextState = forceState === null ? !comfortCameraOn : !!forceState;
+      if(nextState){
+        const ok = await startComfortCamera();
+        comfortCameraOn = !!ok;
+      }else{
+        comfortCameraOn = false;
+        stopComfortCamera();
+      }
+      applyComfortCameraUI();
+      requestAnimationFrame(()=>positionComfortInteractiveElements(0));
     }
 
     async function startBlueCamera(){
@@ -2745,14 +2864,20 @@
     function closeComfort(markDone = false){
       if(markDone) comfortDone = true;
       comfortOverlay.classList.remove('show'); comfortOverlay.setAttribute('aria-hidden','true');
-      stopComfortModeOnMotion(); setComfortMode('off'); syncMissionUI(); syncPackshot();
+      stopComfortModeOnMotion(); setComfortMode('off');
+      comfortCameraOn = false;
+      stopComfortCamera();
+      applyComfortCameraUI();
+      syncMissionUI(); syncPackshot();
     }
     function openComfort(){
       if(bluePanelOpen) closeBlueLightDemo();
       if(asdOverlay.classList.contains('show')) closeASD();
       if(pvpOn) forcePVPOff();
       stopComfortModeOnMotion(); comfortOverlay.classList.add('show'); comfortOverlay.setAttribute('aria-hidden','false');
-      setComfortMode('off'); requestAnimationFrame(positionComfortInteractiveElements); syncMissionUI(); syncPackshot();
+      comfortCameraOn = false;
+      stopComfortCamera();
+      setComfortMode('off'); applyComfortCameraUI(); requestAnimationFrame(positionComfortInteractiveElements); syncMissionUI(); syncPackshot();
     }
     function toggleComfort(){ if(comfortOverlay.classList.contains('show')){ closeComfort(); return; } openComfort(); }
 
@@ -2790,6 +2915,7 @@
         comfortMessageCopy.innerHTML = `난시 렌즈 광학부의 프리즘은 <span class="blue">단안 난시 소비자에게 중요합니다.</span>`;
         if(comfortConfirm) comfortConfirm.style.display = 'none';
       }
+      applyComfortCameraUI();
       requestAnimationFrame(()=>positionComfortInteractiveElements(0));
       if(mode === 'on') startComfortModeOnMotion(); else stopComfortModeOnMotion();
     }
@@ -2802,6 +2928,7 @@
 
     function positionComfortInteractiveElements(redFloatOffset = 0){
       if(!comfortScene || !comfortOverlay.classList.contains('show')) return;
+      if(comfortCameraOn) return;
 
       const rect = comfortScene.getBoundingClientRect();
       const w = rect.width;
