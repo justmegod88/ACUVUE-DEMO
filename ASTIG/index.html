@@ -1885,7 +1885,7 @@
       </div>
       <div id="blueSimMessage">
         <div id="blueSimMessageCopy"><span class="blue">블루라이트 차단 OFF</span> 상태에서는 창 쪽 빛 퍼짐이 더 크게 보이고, <span class="blue">ON</span> 상태에서는 빛 번짐이 줄고 모니터가 더 선명해 보이도록 시뮬레이션했습니다.</div>
-        <button id="blueSimConfirm" type="button">카메라 ON</button>
+        <button id="blueSimConfirm" type="button">카메라 켜기</button>
       </div>
       <div class="popup-reference-area" style="padding:12px 16px 0; background:#dbe5f1;">
         <span class="ref-line">해당 시뮬레이션은 이해를 돕기 위한 데모 화면이며, 실제 시야 경험과는 차이가 있을 수 있습니다.</span>
@@ -2322,7 +2322,7 @@
           blueSimOverlay?.classList.add('camera-on');
           startBlueLightDetection();
           blueViewCamera?.classList.add('active');
-          if(blueViewCamera) blueViewCamera.textContent = '카메라 ON';
+          if(blueViewCamera) blueViewCamera.textContent = '카메라 켜기';
           if(blueViewSeg) blueViewSeg.style.display = 'none';
         }else{
           blueSimView = 'image';
@@ -2331,7 +2331,7 @@
           blueSimOverlay?.classList.remove('camera-on');
           stopBlueLightDetection();
           blueViewCamera?.classList.remove('active');
-          if(blueViewCamera) blueViewCamera.textContent = '카메라 ON';
+          if(blueViewCamera) blueViewCamera.textContent = '카메라 켜기';
           if(blueViewSeg) blueViewSeg.style.display = '';
         }
       }else{
@@ -2341,11 +2341,11 @@
         blueSimOverlay?.classList.remove('camera-on');
         stopBlueLightDetection();
         blueViewCamera?.classList.remove('active');
-        if(blueViewCamera) blueViewCamera.textContent = '카메라 ON';
+        if(blueViewCamera) blueViewCamera.textContent = '카메라 켜기';
         if(blueViewSeg) blueViewSeg.style.display = '';
       }
       if(blueSimConfirm){
-        blueSimConfirm.textContent = useCamera ? '카메라 OFF' : '카메라 ON';
+        blueSimConfirm.textContent = useCamera ? '카메라 끄기' : '카메라 켜기';
       }
       updateBlueSimMessage();
     }
@@ -2368,7 +2368,7 @@
       if(blueSimImageStage) blueSimImageStage.style.display = 'block';
       if(blueSimCameraStage) blueSimCameraStage.style.display = 'none';
       blueViewCamera?.classList.remove('active');
-      if(blueViewCamera) blueViewCamera.textContent = '카메라 ON';
+      if(blueViewCamera) blueViewCamera.textContent = '카메라 켜기';
       if(blueViewSeg) blueViewSeg.style.display = '';
     }
 
