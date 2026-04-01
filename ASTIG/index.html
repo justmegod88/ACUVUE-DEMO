@@ -835,25 +835,34 @@
       transform:scaleX(-1);
       -webkit-transform:scaleX(-1);
     }
-    #comfortCameraSplit{ position:absolute; inset:0; display:none; }
+    #comfortCameraSplit{ position:absolute; inset:0; display:none; pointer-events:none; z-index:2; }
     #comfortScene.camera-on.mode-off #comfortCameraBase{ display:block; }
     #comfortScene.camera-on.mode-off #comfortCameraSplit{ display:none; }
-    #comfortScene.camera-on.mode-on #comfortCameraBase{ display:none; }
+    #comfortScene.camera-on.mode-on #comfortCameraBase{ display:block; }
     #comfortScene.camera-on.mode-on #comfortCameraSplit{ display:block; }
     .comfort-camera-half{
-      position:absolute; left:0; width:100%; height:50%; overflow:hidden;
+      position:absolute; inset:0; width:100%; height:100%; overflow:hidden;
+      pointer-events:none;
     }
-    .comfort-camera-half.top{ top:0; }
-    .comfort-camera-half.bottom{ bottom:0; }
-    .comfort-camera-half.top video{ clip-path: inset(0 0 50% 0); transform:scaleX(-1) translateY(-12px); -webkit-transform:scaleX(-1) translateY(-12px); }
-    .comfort-camera-half.bottom video{ clip-path: inset(50% 0 0 0); transform:scaleX(-1) translateY(12px); -webkit-transform:scaleX(-1) translateY(12px); }
-    #comfortScene.camera-on.mode-on .comfort-camera-half.top::after,
-    #comfortScene.camera-on.mode-on .comfort-camera-half.bottom::after{
-      content:""; position:absolute; left:0; right:0; pointer-events:none;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.18);
+    .comfort-camera-half.top,
+    .comfort-camera-half.bottom{ top:0; bottom:auto; }
+    .comfort-camera-half.top video,
+    .comfort-camera-half.bottom video{
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover; clip-path:none;
+      transform:scaleX(-1); -webkit-transform:scaleX(-1);
     }
-    #comfortScene.camera-on.mode-on .comfort-camera-half.top::after{ bottom:0; height:2px; background:linear-gradient(90deg, rgba(255,255,255,.08), rgba(255,255,255,.48), rgba(255,255,255,.08)); }
-    #comfortScene.camera-on.mode-on .comfort-camera-half.bottom::after{ top:0; height:2px; background:linear-gradient(90deg, rgba(255,255,255,.08), rgba(255,255,255,.48), rgba(255,255,255,.08)); }
+    #comfortScene.camera-on.mode-on .comfort-camera-half.top{
+      opacity:.34;
+      filter:blur(1.2px);
+      transform:translateY(-14px);
+      -webkit-transform:translateY(-14px);
+    }
+    #comfortScene.camera-on.mode-on .comfort-camera-half.top::after{
+      content:""; position:absolute; inset:0; pointer-events:none;
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.10);
+    }
+    #comfortScene.camera-on.mode-on .comfort-camera-half.bottom{ display:none; }
     #comfortCameraFallback{
       position:absolute; inset:0; display:none; align-items:center; justify-content:center; text-align:center;
       padding:20px; background:rgba(11,31,51,.18); color:#fff; z-index:2; font-size:14px; line-height:1.5; font-weight:800;
@@ -1885,7 +1894,7 @@
       </div>
       <div id="blueSimMessage">
         <div id="blueSimMessageCopy"><span class="blue">블루라이트 차단 OFF</span> 상태에서는 창 쪽 빛 퍼짐이 더 크게 보이고, <span class="blue">ON</span> 상태에서는 빛 번짐이 줄고 모니터가 더 선명해 보이도록 시뮬레이션했습니다.</div>
-        <button id="blueSimConfirm" type="button">카메라 켜기</button>
+        <button id="blueSimConfirm" type="button">카메라 ON</button>
       </div>
       <div class="popup-reference-area" style="padding:12px 16px 0; background:#dbe5f1;">
         <span class="ref-line">해당 시뮬레이션은 이해를 돕기 위한 데모 화면이며, 실제 시야 경험과는 차이가 있을 수 있습니다.</span>
@@ -2149,7 +2158,7 @@
         cfCameraBtn.classList.toggle('active', !!comfortCameraOn);
         cfCameraBtn.textContent = comfortCameraOn ? '카메라 끄기' : '카메라 켜기';
       }
-      if(comfortCameraBase) comfortCameraBase.style.display = (comfortCameraOn && comfortScene.classList.contains('mode-off')) ? 'block' : 'none';
+      if(comfortCameraBase) comfortCameraBase.style.display = comfortCameraOn ? 'block' : 'none';
       if(comfortCameraSplit) comfortCameraSplit.style.display = (comfortCameraOn && comfortScene.classList.contains('mode-on')) ? 'block' : 'none';
     }
 
@@ -2322,7 +2331,7 @@
           blueSimOverlay?.classList.add('camera-on');
           startBlueLightDetection();
           blueViewCamera?.classList.add('active');
-          if(blueViewCamera) blueViewCamera.textContent = '카메라 켜기';
+          if(blueViewCamera) blueViewCamera.textContent = '카메라 ON';
           if(blueViewSeg) blueViewSeg.style.display = 'none';
         }else{
           blueSimView = 'image';
@@ -2331,7 +2340,7 @@
           blueSimOverlay?.classList.remove('camera-on');
           stopBlueLightDetection();
           blueViewCamera?.classList.remove('active');
-          if(blueViewCamera) blueViewCamera.textContent = '카메라 켜기';
+          if(blueViewCamera) blueViewCamera.textContent = '카메라 ON';
           if(blueViewSeg) blueViewSeg.style.display = '';
         }
       }else{
@@ -2341,11 +2350,11 @@
         blueSimOverlay?.classList.remove('camera-on');
         stopBlueLightDetection();
         blueViewCamera?.classList.remove('active');
-        if(blueViewCamera) blueViewCamera.textContent = '카메라 켜기';
+        if(blueViewCamera) blueViewCamera.textContent = '카메라 ON';
         if(blueViewSeg) blueViewSeg.style.display = '';
       }
       if(blueSimConfirm){
-        blueSimConfirm.textContent = useCamera ? '카메라 끄기' : '카메라 켜기';
+        blueSimConfirm.textContent = useCamera ? '카메라 OFF' : '카메라 ON';
       }
       updateBlueSimMessage();
     }
@@ -2368,7 +2377,7 @@
       if(blueSimImageStage) blueSimImageStage.style.display = 'block';
       if(blueSimCameraStage) blueSimCameraStage.style.display = 'none';
       blueViewCamera?.classList.remove('active');
-      if(blueViewCamera) blueViewCamera.textContent = '카메라 켜기';
+      if(blueViewCamera) blueViewCamera.textContent = '카메라 ON';
       if(blueViewSeg) blueViewSeg.style.display = '';
     }
 
