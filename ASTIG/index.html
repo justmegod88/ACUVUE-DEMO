@@ -2112,18 +2112,22 @@
       const mv = document.getElementById('mv');
       if(!mv) return;
       if(isOn){
-      // 현재 위치 강제로 정면으로 고정
         mv.cameraOrbit = '0deg 100deg 2.6m';
         mv.setAttribute('camera-orbit', '0deg 100deg 2.6m');
-      // 움직임 완전 차단 (회전 + 줌 포함)
         mv.setAttribute('min-camera-orbit', '0deg 100deg 2.6m');
         mv.setAttribute('max-camera-orbit', '0deg 100deg 2.6m');
+        mv.setAttribute('disable-zoom', '');
+        // 🔥 완전 터치 차단까지
+        mv.style.touchAction = 'none';
       }else{
-       // 제한 해제
         mv.removeAttribute('min-camera-orbit');
         mv.removeAttribute('max-camera-orbit');
+        mv.removeAttribute('disable-zoom');
+        mv.style.touchAction = 'pan-y';
       }
-    }
+    }   
+    
+  
     function syncPackshot(){
       if(!maxPackshot) return;
       const overlayOpen = asdOverlay.classList.contains('show') || comfortOverlay.classList.contains('show') || pvpOn || bluePanelOpen;
