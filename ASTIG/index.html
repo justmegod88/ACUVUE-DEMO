@@ -3073,6 +3073,7 @@
     comfortOverlay?.addEventListener('click', (e)=>{ if(e.target === comfortOverlay) closeComfort(); });
     cfBtnOn?.addEventListener('click', ()=>setComfortMode('on'));
     cfBtnOff?.addEventListener('click', ()=>setComfortMode('off'));
+    cfCameraBtn?.addEventListener('click', async ()=>{ await toggleComfortCamera(); });
 
     btnReset.addEventListener('click', ()=>{
       if(asdOverlay.classList.contains('show')) closeASD();
