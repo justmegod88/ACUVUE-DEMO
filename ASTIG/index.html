@@ -1349,9 +1349,9 @@
     }
     .blue-hotspot{
       position:absolute; overflow:hidden; border-radius:999px; border:2px solid rgba(255,255,255,.92);
-      box-shadow:0 0 0 6px rgba(255,255,255,.14); background:rgba(255,255,255,.02);
-      backdrop-filter: blur(var(--hotspot-blur, 2px)); -webkit-backdrop-filter: blur(var(--hotspot-blur, 2px));
-      transition:backdrop-filter .28s ease, -webkit-backdrop-filter .28s ease, box-shadow .28s ease, border-color .28s ease;
+      box-shadow:none; background:transparent !important;
+      backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
+      transition:box-shadow .28s ease, border-color .28s ease;
     }
     #blueHotspot1{ left:20.5%; top:16.5%; width:120px; height:120px; }
     #blueHotspot2{ left:55.5%; top:44.5%; width:140px; height:92px; border-radius:999px; }
@@ -1377,7 +1377,6 @@
       white-space:nowrap;
     }
     #blueSimOverlay.camera-on #blueCameraGuide{ display:inline-flex; }
-    #blueSimOverlay.camera-on #blueViewSeg{ display:none; }
     #blueSimOverlay.camera-on .blue-hotspot,
     #blueSimOverlay.camera-on .blue-callout{ display:none; }
 
@@ -1819,22 +1818,21 @@
         <div id="blueSimBloom"></div>
         <div id="blueHotspot1" class="blue-hotspot"></div>
         <div id="blueHotspot2" class="blue-hotspot"></div>
+        
         <div id="blueCameraGuide">밝은 빛에서 확인해 보세요</div>
         <div id="blueCameraHalo"></div>
         <div id="blueCameraGlare"></div>
         <div id="blueSimControls">
           <div class="blueSeg" id="blueStateSeg">
-            <button id="blueStateOn" class="blueSegBtn active" type="button">블루라이트 필터 ON</button>
-            <button id="blueStateOff" class="blueSegBtn" type="button">블루라이트 필터 OFF</button>
+            <button id="blueStateOn" class="blueSegBtn active" type="button">블루라이트 ON</button>
+            <button id="blueStateOff" class="blueSegBtn" type="button">블루라이트 OFF</button>
           </div>
-          <div class="blueSeg single" id="blueViewSeg">
-            <button id="blueViewCamera" class="blueSegBtn" type="button">카메라ON</button>
-          </div>
+          
         </div>
       </div>
       <div id="blueSimMessage">
         <div id="blueSimMessageCopy"><span class="blue">블루라이트 차단 OFF</span> 상태에서는 창 쪽 빛 퍼짐이 더 크게 보이고, <span class="blue">ON</span> 상태에서는 빛 번짐이 줄고 모니터가 더 선명해 보이도록 시뮬레이션했습니다.</div>
-        <button id="blueSimConfirm" type="button">확인</button>
+        <button id="blueSimConfirm" type="button">카메라 켜기</button>
       </div>
       <div class="popup-reference-area" style="padding:12px 16px 0; background:#dbe5f1;">
         <span class="ref-line">해당 시뮬레이션은 이해를 돕기 위한 데모 화면이며, 실제 시야 경험과는 차이가 있을 수 있습니다.</span>
@@ -2225,6 +2223,9 @@
         blueViewCamera?.classList.remove('active');
         if(blueViewCamera) blueViewCamera.textContent = '카메라 켜기';
         if(blueViewSeg) blueViewSeg.style.display = '';
+      }
+      if(blueSimConfirm){
+        blueSimConfirm.textContent = useCamera ? '카메라 끄기' : '카메라 켜기';
       }
       updateBlueSimMessage();
     }
@@ -2987,7 +2988,7 @@
 
     blueSimOpen?.addEventListener('click', (e)=>{ e.stopPropagation(); openBlueSimulator(); });
     blueSimClose?.addEventListener('click', closeBlueSimulator);
-    blueSimConfirm?.addEventListener('click', closeBlueSimulator);
+    blueSimConfirm?.addEventListener('click', ()=>setBlueSimView(blueSimView === 'camera' ? 'image' : 'camera'));
     blueSimOverlay?.addEventListener('click', (e)=>{ if(e.target === blueSimOverlay) closeBlueSimulator(); });
     blueStateOn?.addEventListener('click', ()=>setBlueSimState('on'));
     blueStateOff?.addEventListener('click', ()=>setBlueSimState('off'));
