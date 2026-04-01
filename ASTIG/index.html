@@ -2108,25 +2108,21 @@
       thicknessBar.classList.toggle('show', show);
       thicknessBar.setAttribute('aria-hidden', show ? 'false' : 'true');
     }
+
     function setBlueLensOrbitLock(isOn){
       const mv = document.getElementById('mv');
       if(!mv) return;
       if(isOn){
-        mv.cameraOrbit = '0deg 100deg 2.6m';
-        mv.setAttribute('camera-orbit', '0deg 100deg 2.6m');
-        mv.setAttribute('min-camera-orbit', '0deg 100deg 2.6m');
-        mv.setAttribute('max-camera-orbit', '0deg 100deg 2.6m');
-        mv.setAttribute('disable-zoom', '');
-        // 🔥 완전 터치 차단까지
-        mv.style.touchAction = 'none';
+   // 정면 위치로 맞춤
+        try{ mv.cameraOrbit = '0deg 100deg 2.6m'; }catch(e){}
+        try{ mv.cameraTarget = '0m 0.015m 0m'; }catch(e){}
+   // 제일 확실한 잠금: 조작 자체 비활성화
+        mv.removeAttribute('camera-controls');
       }else{
-        mv.removeAttribute('min-camera-orbit');
-        mv.removeAttribute('max-camera-orbit');
-        mv.removeAttribute('disable-zoom');
-        mv.style.touchAction = 'pan-y';
+   // 다시 자유 조작 허용
+        mv.setAttribute('camera-controls', '');
       }
-    }   
-    
+    }
   
     function syncPackshot(){
       if(!maxPackshot) return;
