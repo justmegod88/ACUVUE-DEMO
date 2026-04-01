@@ -1421,22 +1421,19 @@
       transform:scale(1);
     }
     #blueCompareBase #blueSimBloom{
-      position:absolute; inset:-4%;
-      background:
-        radial-gradient(20% 18% at 28% 18%, rgba(255,255,255,.72), rgba(255,255,255,.18) 26%, rgba(255,255,255,0) 56%),
-        radial-gradient(28% 24% at 31% 21%, rgba(255,255,255,.28), rgba(255,255,255,0) 64%);
-      mix-blend-mode:screen; opacity:.48; filter:blur(12px);
+      display:none !important;
+      opacity:0 !important;
       pointer-events:none;
     }
     #blueCompareOverlay #blueSimTint{
-      position:absolute; inset:0;
-      background:linear-gradient(180deg, rgba(0,174,239,.12), rgba(0,200,150,.10));
-      mix-blend-mode:screen; opacity:.34; pointer-events:none;
+      display:none !important;
+      opacity:0 !important;
+      pointer-events:none;
     }
     #blueCompareOverlay #blueSimBloomOn{
-      position:absolute; inset:-4%;
-      background:radial-gradient(36% 28% at 52% 44%, rgba(255,255,255,.16), rgba(255,255,255,0) 58%);
-      mix-blend-mode:screen; opacity:.36; filter:blur(10px); pointer-events:none;
+      display:none !important;
+      opacity:0 !important;
+      pointer-events:none;
     }
     #blueCompareBase #blueHotspot1{ --hotspot-left:50%; --hotspot-top:42%; --hotspot-size:210px; --hotspot-blur:13px; }
     #blueCompareBase #blueHotspot2{ --hotspot-left:72%; --hotspot-top:66%; --hotspot-size:128px; --hotspot-blur:11px; }
@@ -1444,8 +1441,8 @@
     #blueCompareBase #blueHotspot2{
       opacity:.95; box-shadow:0 0 0 6px rgba(255,255,255,.10), 0 0 46px rgba(255,255,255,.12);
     }
-    #blueCompareBase #blueCameraHalo{ opacity:.92; }
-    #blueCompareBase #blueCameraGlare{ opacity:.98; }
+    #blueCompareBase #blueCameraHalo{ display:none !important; opacity:0 !important; }
+    #blueCompareBase #blueCameraGlare{ display:none !important; opacity:0 !important; }
     #blueCompareOverlay #blueCameraHalo,
     #blueCompareOverlay #blueCameraGlare{ display:none !important; }
     #blueHotspot1On{ left:8.5%; top:20%; width:120px; height:120px; }
@@ -1575,25 +1572,25 @@
       mix-blend-mode:screen;
     }
     #blueCameraGlare{
-      width:var(--glare-size,210px);
-      height:var(--glare-size,210px);
+      width:var(--glare-size,250px);
+      height:var(--glare-size,250px);
       background:radial-gradient(circle,
-        rgba(255,255,255,.96) 0%,
-        rgba(255,255,255,.78) 16%,
-        rgba(255,255,255,.36) 36%,
-        rgba(255,255,255,.12) 58%,
-        rgba(255,255,255,0) 74%);
-      filter:blur(var(--glare-blur,10px));
+        rgba(255,255,255,.44) 0%,
+        rgba(255,255,255,.24) 14%,
+        rgba(255,255,255,.12) 34%,
+        rgba(255,255,255,.05) 58%,
+        rgba(255,255,255,0) 82%);
+      filter:blur(var(--glare-blur,16px));
     }
     #blueCameraHalo{
-      width:calc(var(--glare-size,210px) * 1.9);
-      height:calc(var(--glare-size,210px) * 1.9);
+      width:calc(var(--glare-size,250px) * 2.3);
+      height:calc(var(--glare-size,250px) * 2.3);
       background:radial-gradient(circle,
-        rgba(180,210,255,.32) 0%,
-        rgba(180,210,255,.12) 28%,
-        rgba(180,210,255,.04) 48%,
-        rgba(180,210,255,0) 70%);
-      filter:blur(calc(var(--glare-blur,10px) * 1.4));
+        rgba(180,210,255,.16) 0%,
+        rgba(180,210,255,.08) 24%,
+        rgba(180,210,255,.03) 48%,
+        rgba(180,210,255,0) 78%);
+      filter:blur(calc(var(--glare-blur,16px) * 1.8));
     }
     #blueSimOverlay.camera-on.bright-light #blueCameraGlare,
     #blueSimOverlay.camera-on.bright-light #blueCameraHalo{ opacity:1; }
@@ -1681,16 +1678,16 @@
       filter:blur(4px);
     }
     #blueSimOverlay.camera-on.state-off #blueCameraGlare{
-      width:calc(var(--glare-size,190px) * .84);
-      height:calc(var(--glare-size,190px) * .84);
-      filter:blur(calc(var(--glare-blur,8px) + 3px));
-      opacity:.46;
+      width:calc(var(--glare-size,240px) * 1.02);
+      height:calc(var(--glare-size,240px) * 1.02);
+      filter:blur(calc(var(--glare-blur,14px) + 5px));
+      opacity:.28;
     }
     #blueSimOverlay.camera-on.state-off #blueCameraHalo{
-      width:calc(var(--glare-size,190px) * 1.62);
-      height:calc(var(--glare-size,190px) * 1.62);
-      filter:blur(calc(var(--glare-blur,8px) * 1.28));
-      opacity:.24;
+      width:calc(var(--glare-size,240px) * 2.10);
+      height:calc(var(--glare-size,240px) * 2.10);
+      filter:blur(calc(var(--glare-blur,14px) * 1.9));
+      opacity:.16;
     }
     #blueSimOverlay.camera-on.state-on #blueCameraGlare{
       width:calc(var(--glare-size,190px) * .66);
@@ -2384,10 +2381,10 @@
 
     function resetBlueLightOverlay(){
       blueSimOverlay?.classList.remove('bright-light');
-      document.documentElement.style.setProperty('--glare-x','34%');
-      document.documentElement.style.setProperty('--glare-y','24%');
-      document.documentElement.style.setProperty('--glare-size','210px');
-      document.documentElement.style.setProperty('--glare-blur','10px');
+      document.documentElement.style.setProperty('--glare-x','24%');
+      document.documentElement.style.setProperty('--glare-y','34%');
+      document.documentElement.style.setProperty('--glare-size','240px');
+      document.documentElement.style.setProperty('--glare-blur','14px');
     }
 
     function stopBlueLightDetection(){
@@ -2441,19 +2438,19 @@
           const brightStrength = Math.max(0, Math.min(1, (maxL - 214) / 36));
           const isBright = maxL > 214 && (maxL - avgL) > 24;
           blueSimOverlay?.classList.toggle('bright-light', isBright);
-          const centerX = 50;
-          const centerY = 24;
+          const centerX = 24;
+          const centerY = 34;
           let targetX = centerX;
           let targetY = centerY;
-          let targetSize = 182;
-          let targetBlur = 8;
+          let targetSize = 240;
+          let targetBlur = 14;
           if(isBright){
             const detectedX = 100 - (maxX / w * 100);
             const detectedY = (maxY / h * 100);
-            targetX = centerX + (detectedX - centerX) * 0.38;
-            targetY = centerY + (detectedY - centerY) * 0.38;
-            targetSize = Math.round(168 + brightStrength * 52);
-            targetBlur = Math.round(7 + brightStrength * 4);
+            targetX = centerX + (detectedX - centerX) * 0.26;
+            targetY = centerY + (detectedY - centerY) * 0.26;
+            targetSize = Math.round(232 + brightStrength * 64);
+            targetBlur = Math.round(14 + brightStrength * 5);
           }
           blueGlarePos.x += (targetX - blueGlarePos.x) * 0.08;
           blueGlarePos.y += (targetY - blueGlarePos.y) * 0.08;
