@@ -2171,8 +2171,8 @@
       const useCam = blueSimView === 'camera';
       if(blueSimState === 'on'){
         blueSimMessageCopy.innerHTML = useCam
-          ? `<span class="blue">실시간 카메라</span>에서 <span class="blue">밝은 빛이 있을 때</span> 빛 번짐이 줄고 화면이 조금 더 선명해 보이도록 시뮬레이션했습니다.`
-          : `<span class="blue">기본 이미지</span>에서 <span class="blue">밝은 빛 환경</span>에서의 빛 번짐 감소와 선명도 변화를 시뮬레이션했습니다.`;
+          ? `<span class="blue"></span>블루라이트 차단으로 <span class="blue">빛 번짐과 눈부심을 줄여</span> 선명한 시야를 제공합니다. `
+          : `<span class="blue"></span>블루라이트 차단으로 <span class="blue">빛 번짐과 눈부심을 줄여</span> 선명한 시야를 제공합니다.`;
       }else{
         blueSimMessageCopy.innerHTML = useCam
           ? `<span class="blue">블루라이트 차단 OFF</span> 상태는 <span class="blue">일반 카메라 화면</span> 그대로 보이도록 설정했습니다.`
