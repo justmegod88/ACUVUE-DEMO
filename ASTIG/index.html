@@ -2108,7 +2108,17 @@
       thicknessBar.classList.toggle('show', show);
       thicknessBar.setAttribute('aria-hidden', show ? 'false' : 'true');
     }
-
+    function setBlueLensOrbitLock(isOn){
+      const mv = document.getElementById('mv');
+      if(!mv) return;
+      if(isOn){
+        mv.setAttribute('min-camera-orbit', '-10deg 100deg 2.6m');
+        mv.setAttribute('max-camera-orbit', '10deg 100deg 2.6m');
+      }else{
+        mv.removeAttribute('min-camera-orbit');
+        mv.removeAttribute('max-camera-orbit');
+      }
+    }
     function syncPackshot(){
       if(!maxPackshot) return;
       const overlayOpen = asdOverlay.classList.contains('show') || comfortOverlay.classList.contains('show') || pvpOn || bluePanelOpen;
@@ -3128,10 +3138,12 @@
     blueSimClose?.addEventListener('click', closeBlueSimulator);
     blueSimConfirm?.addEventListener('click', ()=>setBlueSimView(blueSimView === 'camera' ? 'image' : 'camera'));
     blueSimOverlay?.addEventListener('click', (e)=>{ if(e.target === blueSimOverlay) closeBlueSimulator(); });
+    blueSimClose?.addEventListener('click', ()=>{setBlueLensOrbitLock(false);});
     blueStateOn?.addEventListener('click', ()=>setBlueSimState('on'));
     blueStateOff?.addEventListener('click', ()=>setBlueSimState('off'));
     blueViewCamera?.addEventListener('click', ()=>setBlueSimView(blueSimView === 'camera' ? 'image' : 'camera'));
-
+    blueStateOn?.addEventListener('click', ()=>{setBlueLensOrbitLock(true);});
+    blueStateOff?.addEventListener('click', ()=>{setBlueLensOrbitLock(false);});
     setModel('lens_clear.glb', 'lens', { resetCamera:true });
 
     const tutorialLayer = document.getElementById('tutorialLayer');
