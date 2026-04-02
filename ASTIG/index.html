@@ -1536,7 +1536,10 @@
     .blueIconModeBtn svg{ width:26px; height:26px; display:block; }
     #blueDayBtn{ background:#FFD54F; color:#5b4500; }
     #blueNightBtn{ background:#6C5CE7; color:#fff; }
-    .blueIconModeBtn.active{ box-shadow:0 12px 26px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.28); transform:translateY(-1px); }
+    .blueIconModeBtn.active{
+      box-shadow:0 12px 26px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.28), 0 0 0 4px rgba(255,255,255,.92), 0 0 0 7px rgba(36,85,199,.22);
+      transform:translateY(-1px);
+    }
     .blueIconModeBtn:not(.active){ opacity:.88; filter:saturate(.92); }
     .blueIconModeBtn:active{ transform:scale(.97); }
     @media (max-width:560px){
@@ -1544,6 +1547,15 @@
       .blueIconModeBtn{ width:48px; height:48px; }
       .blueIconModeBtn svg{ width:22px; height:22px; }
     }
+
+    #blueCompareWrap.night-mode #blueHotspot1,
+    #blueCompareWrap.night-mode #blueHotspot2,
+    #blueCompareWrap.night-mode #blueHotspot1On,
+    #blueCompareWrap.night-mode #blueHotspot2On{
+      display:none !important;
+      opacity:0 !important;
+    }
+
     #blueTopGuide{
       position:absolute; left:50%; top:14px; transform:translateX(-50%); z-index:5;
       display:none; align-items:center; justify-content:center;
@@ -2268,7 +2280,7 @@
     let bluePanelOpen = false;
     let blueSimState = 'on';
     let blueSimView = 'image';
-    let blueSceneMode = 'day';
+    let blueSceneMode = 'night';
     let blueCameraStream = null;
     let pvpState = 'on';
     let pvpBlinkBusy = false;
@@ -2573,6 +2585,7 @@
       if(blueSimImageStageOn) blueSimImageStageOn.style.backgroundImage = `url("${onSrc}")`;
       if(blueDayBtn) blueDayBtn.classList.toggle('active', blueSceneMode === 'day');
       if(blueNightBtn) blueNightBtn.classList.toggle('active', blueSceneMode === 'night');
+      if(blueCompareWrap) blueCompareWrap.classList.toggle('night-mode', blueSceneMode === 'night');
     }
 
     function setBlueSimState(state){
