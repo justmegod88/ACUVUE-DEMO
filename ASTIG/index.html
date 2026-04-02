@@ -832,8 +832,6 @@
     #comfortCameraTop,
     #comfortCameraBottom{
       position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; background:#dfe6ef;
-      transform:scaleX(-1);
-      -webkit-transform:scaleX(-1);
     }
     #comfortCameraSplit{ position:absolute; inset:0; display:none; pointer-events:none; z-index:2; }
     #comfortScene.camera-on.mode-off #comfortCameraBase{ display:block; }
@@ -849,7 +847,6 @@
     .comfort-camera-half.top video,
     .comfort-camera-half.bottom video{
       position:absolute; inset:0; width:100%; height:100%; object-fit:cover; clip-path:none;
-      transform:scaleX(-1); -webkit-transform:scaleX(-1);
     }
     #comfortScene.camera-on.mode-on .comfort-camera-half.top{
       opacity:.34;
@@ -895,7 +892,7 @@
     .cf-box-bottom{ z-index:0; background:linear-gradient(180deg, rgba(255,255,255,.60), rgba(233,250,240,.24)); }
     .cf-target-a{
       position:absolute; left:50%; transform:translate(-50%,-50%); font-size:108px; line-height:1; font-weight:500; letter-spacing:-4px;
-      font-family:"Baskerville","Times New Roman",Georgia,serif; user-select:none; transition: top .55s cubic-bezier(.22,.8,.22,1), opacity .35s ease, transform .55s cubic-bezier(.22,.8,.22,1), color .35s ease; z-index:2;
+      font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",sans-serif; user-select:none; transition: top .55s cubic-bezier(.22,.8,.22,1), opacity .35s ease, transform .55s cubic-bezier(.22,.8,.22,1), color .35s ease; z-index:2;
       text-shadow:0 1px 0 rgba(255,255,255,.18);
     }
     .cf-a-red{ color:#19a55a; } .cf-a-blue{ color:#176fd6; }
@@ -971,13 +968,13 @@
     .cf-seg-btn:not(.active):not(.default-active){ color:#627588; }
     .cf-seg-btn:not(.active):active{ transform:scale(.985); }
     #comfortMessage{
-      background:#eef4fb; padding:16px 18px 16px; display:flex; align-items:center; justify-content:space-between; gap:14px; border-top:1px solid #d6e4fb;
+      background:#eef4fb; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid #d6e4fb;
     }
-    #comfortMessageCopy{ flex:1 1 auto; min-width:0; font-size:18px; line-height:1.42; font-weight:900; letter-spacing:-.25px; color:#111; word-break:keep-all; }
+    #comfortMessageCopy{ flex:1 1 auto; min-width:0; font-size:15px; line-height:1.45; font-weight:900; letter-spacing:-.22px; color:#111; word-break:keep-all; }
     #comfortMessageCopy .blue{ color:var(--smartfit-blue); }
     #comfortActions{ display:flex; gap:10px; align-items:center; flex:0 0 auto; }
     #cfCameraBtn{
-      flex:0 0 auto; min-width:118px; height:40px; padding:0 18px;
+      flex:0 0 auto; min-width:132px; height:42px; padding:0 18px;
       border:none; border-radius:999px; background:linear-gradient(180deg, #ffffff 0%, #f6f9ff 100%);
       color:var(--smartfit-blue-deep); font-size:13px; line-height:1; font-weight:900; cursor:pointer;
       box-shadow:0 6px 16px rgba(36,85,199,.12), inset 0 0 0 1px rgba(111,155,230,.55);
@@ -1531,7 +1528,7 @@
       transition:filter .28s ease;
     }
     #blueSimCameraStage{ display:none; background:#0b1f33; }
-    #blueCameraVideo{ width:100%; height:100%; object-fit:cover; display:block; transform:scaleX(-1); background:#0b1f33; }
+    #blueCameraVideo{ width:100%; height:100%; object-fit:cover; display:block; background:#0b1f33; }
     #blueCameraFallback{ position:absolute; inset:0; display:none; align-items:center; justify-content:center; text-align:center; padding:24px; color:#fff; background:rgba(11,31,51,.85); font-size:14px; line-height:1.5; font-weight:700; }
 
     #blueSimTint{
