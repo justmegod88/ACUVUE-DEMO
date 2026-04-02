@@ -28,10 +28,6 @@
       --smartfit-blue-soft:#EAF2FF;
       --smartfit-blue-line:#BDD1F5;
       --smartfit-text:#18345C;
-      --comfort-green:#2FAE66;
-      --comfort-green-deep:#228A50;
-      --comfort-green-soft:#EAF8F0;
-      --comfort-green-line:#B7E4C7;
     }
 
     html,body{
@@ -836,8 +832,6 @@
     #comfortCameraTop,
     #comfortCameraBottom{
       position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; background:#dfe6ef;
-      transform:scaleX(-1);
-      -webkit-transform:scaleX(-1);
     }
     #comfortCameraSplit{ position:absolute; inset:0; display:none; pointer-events:none; z-index:2; }
     #comfortScene.camera-on.mode-off #comfortCameraBase{ display:block; }
@@ -853,7 +847,6 @@
     .comfort-camera-half.top video,
     .comfort-camera-half.bottom video{
       position:absolute; inset:0; width:100%; height:100%; object-fit:cover; clip-path:none;
-      transform:scaleX(-1); -webkit-transform:scaleX(-1);
     }
     #comfortScene.camera-on.mode-on .comfort-camera-half.top{
       opacity:.34;
@@ -893,30 +886,30 @@
       position:absolute; left:50%; transform:translateX(-50%); width:100%; height:100%; border-radius:18px; border:2px solid rgba(255,255,255,.58);
       backdrop-filter: blur(1px); box-shadow:0 8px 24px rgba(0,0,0,.08); transition: top .45s ease, opacity .35s ease, background .35s ease, transform .45s ease;
     }
-    .cf-box-top{ z-index:0; background:rgba(47,174,102,.16); }
-    .cf-box-bottom{ z-index:0; background:rgba(47,174,102,.10); }
+    .cf-box-top{ z-index:0; background:rgba(251,221,231,.38); }
+    .cf-box-bottom{ z-index:0; background:rgba(245,222,232,.16); }
     .cf-target-a{
-      position:absolute; left:50%; transform:translate(-50%,-50%); font-size:98px; line-height:1; font-weight:700; letter-spacing:-2px;
-      font-family:-apple-system,system-ui; user-select:none; transition: top .55s cubic-bezier(.22,.8,.22,1), opacity .35s ease, transform .55s cubic-bezier(.22,.8,.22,1), color .35s ease; z-index:2;
+      position:absolute; left:50%; transform:translate(-50%,-50%); font-size:100px; line-height:1; font-weight:500; letter-spacing:-3px;
+      font-family:-apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", sans-serif; user-select:none; transition: top .55s cubic-bezier(.22,.8,.22,1), opacity .35s ease, transform .55s cubic-bezier(.22,.8,.22,1), color .35s ease; z-index:2;
     }
-    .cf-a-red{ color:var(--comfort-green); } .cf-a-blue{ color:#176fd6; }
+    .cf-a-red{ color:#23A455; } .cf-a-blue{ color:#176fd6; }
     .cf-target-box::before{ content:""; position:absolute; inset:0; border-radius:inherit; background:linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0)); pointer-events:none; }
     #cfTargetStage, .cf-target-box, .cf-target-a, #cfOptic{ transform-style:preserve-3d; }
     #comfortScene.mode-off #cfTargetStage, #comfortScene.mode-on #cfTargetStage, #comfortScene.mode-default #cfTargetStage{ transform:translate(-50%,-50%) rotate(0deg); }
     #comfortScene.mode-on .cf-optic-prism{ transform:rotate(0deg); } #comfortScene.mode-off .cf-optic-flat{ transform:rotate(0deg); }
     #comfortScene.mode-default .cf-box-top, #comfortScene.mode-default .cf-box-bottom{ top:0; opacity:.92; transform:translateX(-50%); }
-    #comfortScene.mode-default .cf-box-top{ background:rgba(47,174,102,.14); }
-    #comfortScene.mode-default .cf-box-bottom{ background:rgba(47,174,102,.08); }
-    #comfortScene.mode-default .cf-a-red{ top:20%; opacity:.16; transform:translate(-50%,-50%); animation:none; color:var(--comfort-green); }
-    #comfortScene.mode-default .cf-a-blue{ top:80%; opacity:.88; transform:translate(-50%,-50%); animation:none; color:#4A7BD1; }
+    #comfortScene.mode-default .cf-box-top{ background:rgba(208,240,219,.30); }
+    #comfortScene.mode-default .cf-box-bottom{ background:rgba(245,222,232,.14); }
+    #comfortScene.mode-default .cf-a-red{ top:20%; opacity:.18; transform:translate(-50%,-50%); animation:none; color:#3DAE68; }
+    #comfortScene.mode-default .cf-a-blue{ top:80%; opacity:.88; transform:translate(-50%,-50%); animation:none; color:#8b2da0; }
     #comfortScene.mode-off .cf-box-top, #comfortScene.mode-off .cf-box-bottom{ top:0; opacity:.92; transform:translateX(-50%); }
-    #comfortScene.mode-off .cf-box-top{ background:rgba(47,174,102,.18); } #comfortScene.mode-off .cf-box-bottom{ background:rgba(47,174,102,.10); }
-    #comfortScene.mode-off .cf-a-red{ top:50%; opacity:.30; transform:translate(-50%,-50%); animation:none; color:var(--comfort-green); }
-    #comfortScene.mode-off .cf-a-blue{ top:50%; opacity:.92; transform:translate(-50%,-50%); color:#4A7BD1; animation:none; }
-    #comfortScene.mode-on .cf-box-top{ top:-14px; opacity:.96; background:rgba(47,174,102,.24); animation:cfPinkFloat 1.45s ease-in-out infinite; }
-    #comfortScene.mode-on .cf-box-bottom{ top:14px; opacity:.82; background:rgba(183,228,199,.18); transform:translateX(-50%); }
-    #comfortScene.mode-on .cf-a-red{ top:33%; opacity:1; transform:translate(-50%,-50%); color:var(--comfort-green); animation:cfRedFloat 1.45s ease-in-out infinite; }
-    #comfortScene.mode-on .cf-a-blue{ top:69%; opacity:1; transform:translate(-50%,-50%); color:#4A7BD1; }
+    #comfortScene.mode-off .cf-box-top{ background:rgba(208,240,219,.34); } #comfortScene.mode-off .cf-box-bottom{ background:rgba(232,247,237,.18); }
+    #comfortScene.mode-off .cf-a-red{ top:50%; opacity:.32; transform:translate(-50%,-50%); animation:none; color:#3DAE68; }
+    #comfortScene.mode-off .cf-a-blue{ top:50%; opacity:.92; transform:translate(-50%,-50%); color:#8b2da0; animation:none; }
+    #comfortScene.mode-on .cf-box-top{ top:-14px; opacity:.96; background:rgba(208,240,219,.44); animation:cfPinkFloat 1.45s ease-in-out infinite; }
+    #comfortScene.mode-on .cf-box-bottom{ top:14px; opacity:.82; background:rgba(219,234,255,.28); transform:translateX(-50%); }
+    #comfortScene.mode-on .cf-a-red{ top:33%; opacity:1; transform:translate(-50%,-50%); color:#23A455; animation:cfRedFloat 1.45s ease-in-out infinite; }
+    #comfortScene.mode-on .cf-a-blue{ top:69%; opacity:1; transform:translate(-50%,-50%); color:#176fd6; }
     @keyframes cfRedFloat{
       0%{ transform:translate(-50%,-50%) translateY(0); }
       25%{ transform:translate(-50%,-50%) translateY(-4px); }
@@ -952,24 +945,68 @@
     }
     #cfLineBlue{ transition:none !important; }
     #cfLineRed{ transition:top .35s ease, width .35s ease, opacity .25s ease; }
-    .cf-guide-line.red{ border-color:var(--comfort-green); } .cf-guide-line.blue{ border-color:#176fd6; }
+    .cf-guide-line.red{ border-color:#23A455; } .cf-guide-line.blue{ border-color:#176fd6; }
     #comfortScene.mode-default .cf-guide-line{ opacity:0; }
     #comfortScene.mode-off .cf-guide-line, #comfortScene.mode-on .cf-guide-line{ opacity:1; }
     #cfSegWrap{
       position:absolute; left:50%; bottom:16px; transform:translateX(-50%); width:min(94%, 760px); z-index:10;
-      padding:0; border-radius:0; background:transparent; border:none; box-shadow:none; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto; gap:8px; align-items:center;
+      display:flex; align-items:center; gap:10px;
     }
-    .cf-camera-btn{ grid-column:auto; min-width:140px; padding:0 18px; }
+    .cf-toggle{
+      flex:1 1 auto;
+      display:flex; align-items:center; gap:0;
+      padding:4px;
+      border-radius:999px;
+      background:linear-gradient(180deg, rgba(255,255,255,.96) 0%, rgba(239,244,251,.96) 100%);
+      border:1.5px solid rgba(189,209,245,.95);
+      box-shadow:0 8px 20px rgba(11,31,51,.10), inset 0 1px 0 rgba(255,255,255,.65);
+      overflow:hidden;
+      min-width:0;
+    }
     .cf-seg-btn{
-      height:50px; border-radius:999px; border:1.5px solid var(--comfort-green-line); background:#ffffff;
-      color:#6c7c93; font-size:15px; font-weight:800; letter-spacing:-.25px; cursor:pointer; transition:all .18s ease;
-      box-shadow:none; padding:0 16px; white-space:nowrap; -webkit-appearance:none; appearance:none;
+      flex:1 1 0;
+      height:46px;
+      border:none;
+      background:transparent;
+      color:#7b8797;
+      font-size:15px;
+      font-weight:900;
+      letter-spacing:-.25px;
+      cursor:pointer;
+      transition:all .22s ease;
+      padding:0 12px;
+      white-space:nowrap;
+      -webkit-appearance:none; appearance:none;
+      border-radius:999px;
     }
     .cf-seg-btn.active, .cf-seg-btn.default-active{
-      background:linear-gradient(180deg, #37B96F 0%, #279E5D 100%); color:#ffffff; border-color:var(--comfort-green); box-shadow:0 4px 10px rgba(47,174,102,.16);
+      background:linear-gradient(180deg, #4C80E0 0%, #2F5EB8 100%);
+      color:#fff;
+      box-shadow:0 6px 14px rgba(47,94,184,.24), inset 0 1px 0 rgba(255,255,255,.28);
     }
-    .cf-seg-btn:not(.active):not(.default-active){ color:#627588; background:rgba(255,255,255,.94); }
+    .cf-seg-btn:not(.active):not(.default-active){ color:#7b8797; }
     .cf-seg-btn:not(.active):active{ transform:scale(.985); }
+    .cf-camera-btn{
+      flex:0 0 auto;
+      min-width:120px;
+      height:46px;
+      padding:0 18px;
+      border-radius:999px;
+      border:1.5px solid rgba(189,209,245,.95);
+      background:linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(244,248,255,.98) 100%);
+      color:#2F5EB8;
+      font-size:15px;
+      font-weight:900;
+      letter-spacing:-.2px;
+      box-shadow:0 8px 20px rgba(11,31,51,.08), inset 0 1px 0 rgba(255,255,255,.7);
+      white-space:nowrap;
+    }
+    .cf-camera-btn.active{
+      background:linear-gradient(180deg, #4C80E0 0%, #2F5EB8 100%);
+      color:#fff;
+      border-color:rgba(47,94,184,.95);
+      box-shadow:0 8px 18px rgba(47,94,184,.24), inset 0 1px 0 rgba(255,255,255,.25);
+    }
     #comfortMessage{
       background:#eef4fb; padding:16px 18px 16px; display:flex; align-items:center; justify-content:space-between; gap:14px; border-top:1px solid #d6e4fb;
     }
@@ -1039,14 +1076,15 @@
       .cf-target-box{ border-radius:16px; }
       #comfortScene.mode-on .cf-box-top{ top:-10px; }
       #comfortScene.mode-on .cf-box-bottom{ top:10px; }
-      .cf-target-a{ font-size:70px; letter-spacing:-1px; }
+      .cf-target-a{ font-size:72px; letter-spacing:-4px; }
       #cfOptic{ width:38px; height:76px; }
       .cf-optic-prism::before{ border-left-width:20px; border-right-width:20px; border-bottom-width:62px; }
       .cf-optic-prism::after{ border-left-width:16px; border-right-width:16px; border-bottom-width:50px; }
       .cf-guide-line{ border-top-width:2px; }
-      #cfSegWrap{ width:min(94%, 520px); bottom:10px; padding:0; gap:6px; border:none; background:transparent; box-shadow:none; grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto; }
-      .cf-camera-btn{ grid-column:auto; min-width:116px; padding:0 12px; }
-      .cf-seg-btn{ height:42px; font-size:12px; border-width:1.5px; padding:0 10px; }
+      #cfSegWrap{ width:min(94%, 520px); bottom:10px; gap:8px; }
+      .cf-toggle{ padding:4px; }
+      .cf-seg-btn{ height:42px; font-size:11px; padding:0 8px; }
+      .cf-camera-btn{ min-width:108px; height:42px; padding:0 14px; font-size:11px; }
       #comfortMessage{ padding:12px 14px 12px; gap:10px; }
       #comfortMessageCopy{ font-size:14px; line-height:1.42; }
       #comfortConfirm{ min-width:96px; width:96px; max-width:96px; height:44px; font-size:13px; border-radius:999px; padding:0 16px; }
@@ -1878,9 +1916,11 @@
         <div id="cfLineBlue" class="cf-guide-line blue"></div>
         <div id="cfOptic"><div class="cf-optic-prism"></div><div class="cf-optic-flat"></div></div>
         <div id="cfSegWrap">
-          <button id="cfBtnOff" class="cf-seg-btn active" type="button">프리즘 없음</button>
-          <button id="cfBtnOn" class="cf-seg-btn" type="button">프리즘 있음</button>
-          <button id="cfCameraBtn" class="cf-seg-btn cf-camera-btn" type="button">카메라 켜기</button>
+          <div class="cf-toggle">
+            <button id="cfBtnOff" class="cf-seg-btn active" type="button">프리즘 없음</button>
+            <button id="cfBtnOn" class="cf-seg-btn" type="button">프리즘 있음</button>
+          </div>
+          <button id="cfCameraBtn" class="cf-camera-btn" type="button">카메라 켜기</button>
         </div>
       </div>
       <div id="comfortMessage">
@@ -3114,7 +3154,7 @@
       }else{
         comfortScene.classList.add('mode-off'); cfBtnOff.classList.add('active');
         comfortMessageCopy.innerHTML = `난시 렌즈 광학부의 프리즘은 <span class="blue">단안 난시 소비자에게 중요합니다.</span>`;
-        if(comfortConfirm) comfortConfirm.style.display = 'none';
+        if(comfortConfirm) comfortConfirm.style.display = 'inline-flex';
       }
       applyComfortCameraUI();
       requestAnimationFrame(()=>positionComfortInteractiveElements(0));
