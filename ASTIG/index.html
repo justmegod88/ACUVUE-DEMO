@@ -2644,6 +2644,8 @@
     }
 
     async function openBlueSimulator(){
+      blueSceneMode = 'night';
+      if (typeof applyBlueSceneImages === 'function') applyBlueSceneImages();
       if(!bluePanelOpen) return;
       blueSimOverlay?.classList.add('show');
       blueSceneMode = 'day';
