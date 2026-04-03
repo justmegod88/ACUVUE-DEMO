@@ -191,6 +191,8 @@
       gap:8px;
       flex-wrap:wrap;
       align-items:center;
+      position:fixed;
+      overflow:visible;
     }
     .btn{
       flex:1;
@@ -1202,13 +1204,24 @@
       }
     }
 
-    
-    #maxPackshot{
-      position:fixed;
-      right:16px;
-      bottom:86px;
+    #packshotAnchor{
+      position:absolute;
+      right:10px;
+      bottom:64px;
       width:122px;
-      max-width:none;
+      height:auto;
+      z-index:72;
+      pointer-events:none;
+      overflow:visible;
+    }
+    #maxPackshot{
+      position:relative !important;
+      right:auto !important;
+      bottom:auto !important;
+      left:auto !important;
+      top:auto !important;
+      width:122px !important;
+      max-width:none !important;
       height:auto;
       z-index:72 !important;
       pointer-events:auto !important;
@@ -1384,7 +1397,8 @@
 
 
     @media (max-width:560px){
-      #maxPackshot{ right:14px; bottom:84px; width:118px; max-width:none; }
+      #packshotAnchor{ right:8px; bottom:58px; width:110px; }
+      #maxPackshot{ width:110px !important; }
       #maxPackshot.active{ transform:translateY(-3px) scale(1.02) !important; }
       #blueInfo{
         left:12px;
@@ -2203,11 +2217,7 @@
       <div class="toric-popup-disclaimer"><span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span></div>
     </div>
   </div>
-
-  <img id="maxPackshot" src="MAX.png" alt="아큐브 맥스 난시 팩샷" role="button" tabindex="0" aria-label="블루라이트 기능 열기" onerror="this.style.display='none';">
-
-
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
 
   <model-viewer
@@ -2227,6 +2237,7 @@
     <button id="btnReset" title="처음 위치로">↺</button>
     <button id="modeLens" class="btn primary">투명 렌즈 모드</button>
     <button id="modeHeat" class="btn">렌즈 두께 MAP</button>
+    <div id="packshotAnchor"><img id="maxPackshot" src="MAX.png" alt="아큐브 맥스 난시 팩샷" role="button" tabindex="0" aria-label="블루라이트 기능 열기" onerror="this.style.display='none';"></div>
   </div>
   <div id="globalToricDisclaimer">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</div>
 
@@ -2290,24 +2301,6 @@
     const comfortSubTitle = document.getElementById('comfortSubTitle');
     const comfortInfoBadge = document.getElementById('comfortInfoBadge');
     const maxPackshot = document.getElementById('maxPackshot');
-
-    function anchorMaxPackshot(){
-      if(!maxPackshot) return;
-      const btnWrap = document.getElementById('bottomBtns');
-      const mapBtn = document.getElementById('btnThickness');
-      const ref = mapBtn || btnWrap;
-      if(!ref) return;
-      const rect = ref.getBoundingClientRect();
-      const vw = window.innerWidth || document.documentElement.clientWidth || 390;
-      const packW = Math.min(vw <= 560 ? 118 : 122, Math.max(92, vw * 0.22));
-      maxPackshot.style.width = packW + 'px';
-      maxPackshot.style.maxWidth = 'none';
-      maxPackshot.style.left = 'auto';
-      maxPackshot.style.top = 'auto';
-      maxPackshot.style.right = Math.max(14, vw - rect.right + 10) + 'px';
-      const bottom = Math.max(82, (window.innerHeight - rect.top) + 10);
-      maxPackshot.style.bottom = bottom + 'px';
-    }
     const blueBackGlow = document.getElementById('blueBackGlow');
     const blueRayLayer = document.getElementById('blueRayLayer');
     const blueRayLayerBack = document.getElementById('blueRayLayerBack');
@@ -2441,12 +2434,24 @@
       thicknessBar.setAttribute('aria-hidden', show ? 'false' : 'true');
     }
 
+
+    function forcePackshotBottomRight(){
+      if(!maxPackshot || !bottomBtns) return;
+      const anchor = document.getElementById('packshotAnchor');
+      if(!anchor) return;
+      anchor.style.right = window.innerWidth <= 560 ? '8px' : '10px';
+      anchor.style.bottom = window.innerWidth <= 560 ? '58px' : '64px';
+      anchor.style.width = window.innerWidth <= 560 ? '110px' : '122px';
+      maxPackshot.style.width = '100%';
+      maxPackshot.style.display = (currentMode === 'lens' && !(asdOverlay.classList.contains('show') || comfortOverlay.classList.contains('show') || pvpOn || bluePanelOpen)) ? 'block' : 'none';
+    }
+
     function syncPackshot(){
       if(!maxPackshot) return;
       const overlayOpen = asdOverlay.classList.contains('show') || comfortOverlay.classList.contains('show') || pvpOn || bluePanelOpen;
       maxPackshot.style.display = (currentMode === 'lens' && !overlayOpen) ? 'block' : 'none';
-      if(maxPackshot.style.display === 'block') anchorMaxPackshot();
       maxPackshot.classList.toggle('active', bluePanelOpen);
+      forcePackshotBottomRight();
     }
 
     async function startComfortCamera(){
@@ -3513,6 +3518,9 @@
     blueCompareRange?.addEventListener('input', (e)=>updateBlueCompare(e.target.value));
 
     setModel('lens_clear.glb', 'lens', { resetCamera:true });
+    window.addEventListener('resize', forcePackshotBottomRight);
+    window.addEventListener('orientationchange', ()=>setTimeout(forcePackshotBottomRight, 120));
+    requestAnimationFrame(forcePackshotBottomRight);
 
     const tutorialLayer = document.getElementById('tutorialLayer');
     const tutorialMask = document.getElementById('tutorialMask');
