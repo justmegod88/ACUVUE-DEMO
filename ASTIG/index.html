@@ -756,7 +756,7 @@
     }
     #asdInfoBadge{
       width:36px; height:36px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex:0 0 auto;
-      margin-top:2px; font-size:16px; font-weight:900; color:#10b981; background:#d1fae5;
+      margin-top:2px; font-size:16px; font-weight:900; color:#2563eb; background:#d1fae5;
     }
     #asdHint button{
       flex:0 0 auto; flex-shrink:0; min-width:112px; width:112px; max-width:112px; height:52px; padding:0 16px; border:none; border-radius:18px;
@@ -768,7 +768,7 @@
     #asdHint .hintTitle{ display:block; margin-bottom:4px; font-size:16px; line-height:1.35; font-weight:900; color:#1e293b; letter-spacing:-.02em; }
     #asdHint .hintBody{ display:block; font-size:14px; line-height:1.6; font-weight:500; color:#475569; letter-spacing:-.02em; }
     #asdHint .hintBody .blue{ color:#2563eb; font-weight:800; }
-    #asdHint .hintBody .green{ color:#10b981; font-weight:800; }
+    #asdHint .hintBody .green{ color:#2563eb; font-weight:800; }
 
     #tutorialLayer{ position:fixed; inset:0; display:none; z-index:95; }
     #tutorialLayer.show{ display:block; }
@@ -833,11 +833,11 @@
       position:relative; height:min(92vw, 470px); min-height:360px; overflow:hidden;
       margin:0 16px 0; border-radius:32px;
       background:#0f172a;
-      border:none;
+      border:1.2px solid rgba(71,85,105,.62);
       box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,.035),
-        inset 0 0 28px rgba(120,128,142,.12),
-        inset 0 -34px 76px rgba(0,0,0,.10);
+        inset 0 0 0 1px rgba(255,255,255,.03),
+        inset 0 0 22px rgba(110,118,132,.10),
+        inset 0 -30px 72px rgba(0,0,0,.08);
     }
     #comfortPhotoLayer{
       position:absolute; inset:0; z-index:0; pointer-events:none;
@@ -852,8 +852,8 @@
       opacity:1;
     }
     #comfortScene.mode-on #comfortPhotoLayer{
-      filter:blur(1.8px) grayscale(.16) brightness(.90) saturate(.94);
-      transform:scale(1.035);
+      filter:blur(.6px) grayscale(.04) brightness(.97) saturate(.98);
+      transform:scale(1.012);
       opacity:.98;
     }
     #comfortScene.camera-on #comfortPhotoLayer{
@@ -862,19 +862,19 @@
     #comfortScene::before{
       content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
       background:
-        linear-gradient(180deg, rgba(118,126,140,.18) 0%, rgba(118,126,140,0) 16%),
-        linear-gradient(0deg, rgba(118,126,140,.14) 0%, rgba(118,126,140,0) 16%),
-        linear-gradient(90deg, rgba(118,126,140,.14) 0%, rgba(118,126,140,0) 11%),
-        linear-gradient(270deg, rgba(118,126,140,.14) 0%, rgba(118,126,140,0) 11%),
-        linear-gradient(180deg, rgba(15,23,42,.04) 0%, rgba(15,23,42,.09) 48%, rgba(2,6,23,.34) 100%);
-      opacity:.92;
+        linear-gradient(180deg, rgba(96,104,118,.16) 0%, rgba(96,104,118,0) 15%),
+        linear-gradient(0deg, rgba(96,104,118,.12) 0%, rgba(96,104,118,0) 15%),
+        linear-gradient(90deg, rgba(96,104,118,.12) 0%, rgba(96,104,118,0) 10%),
+        linear-gradient(270deg, rgba(96,104,118,.12) 0%, rgba(96,104,118,0) 10%),
+        linear-gradient(180deg, rgba(15,23,42,.03) 0%, rgba(15,23,42,.07) 48%, rgba(2,6,23,.22) 100%);
+      opacity:.9;
     }
     #comfortScene::after{
       content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
       background:
-        radial-gradient(80% 70% at 84% 36%, rgba(255,255,255,.12), rgba(255,255,255,0) 42%),
-        radial-gradient(120% 100% at 50% 50%, rgba(110,118,132,0) 72%, rgba(110,118,132,.12) 100%);
-      opacity:.55;
+        radial-gradient(80% 70% at 84% 36%, rgba(255,255,255,.10), rgba(255,255,255,0) 42%),
+        radial-gradient(120% 100% at 50% 50%, rgba(110,118,132,0) 74%, rgba(110,118,132,.10) 100%);
+      opacity:.5;
     }
     #comfortCameraStage{
       position:absolute; inset:0; z-index:1; display:none; overflow:hidden; background:#dfe6ef;
@@ -1064,8 +1064,8 @@
     .cf-seg-btn[data-state="on"].active::before{
       content:""; width:16px; height:16px; border-radius:999px; display:inline-block;
     }
-    .cf-seg-btn[data-state="off"].active::before{ background:#3b82f6; box-shadow:0 0 0 4px rgba(59,130,246,.12); }
-    .cf-seg-btn[data-state="on"].active::before{ background:#10b981; box-shadow:0 0 0 4px rgba(16,185,129,.12); }
+    .cf-seg-btn[data-state="off"].active::before{ background:#3b82f6; box-shadow:0 0 0 4px rgba(59,130,246,.08); }
+    .cf-seg-btn[data-state="on"].active::before{ background:#3b82f6; box-shadow:0 0 0 4px rgba(16,185,129,.12); }
     .cf-camera-btn{
       flex:0 0 auto; min-width:64px; width:64px; height:64px; padding:0; border-radius:22px;
       border:1px solid rgba(148,163,184,.18); background:#fff; color:#475569; font-size:0; font-weight:900; letter-spacing:-.2px;
@@ -1087,7 +1087,7 @@
     #comfortMessageCopy{ flex:1 1 auto; min-width:0; font-size:14px; line-height:1.6; font-weight:500; letter-spacing:-.02em; color:#475569; word-break:keep-all; }
     .comfort-info-title{ display:block; margin-bottom:4px; font-size:16px; line-height:1.35; font-weight:900; color:#1e293b; }
     #comfortMessageCopy .blue{ color:#2563eb; font-weight:800; }
-    #comfortMessageCopy .green{ color:#10b981; font-weight:800; }
+    #comfortMessageCopy .green{ color:#2563eb; font-weight:800; }
     #comfortConfirm{
       flex:0 0 auto; flex-shrink:0; min-width:112px; width:112px; max-width:112px; height:52px; padding:0 16px; border:none; border-radius:18px;
       background:#0f172a; color:#fff; font-size:15px; line-height:1; font-weight:900; cursor:pointer;
