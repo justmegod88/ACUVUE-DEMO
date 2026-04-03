@@ -807,58 +807,61 @@
     #tutBottom{ left:20px; right:20px; bottom:88px; display:none; }
     #tutTop{ left:20px; right:20px; top:126px; display:none; }
 
-
     #comfortOverlay{
-      position:fixed; inset:0; z-index:82; display:none;
-      background:rgba(11,31,51,.28); backdrop-filter: blur(10px);
+      position:fixed; inset:0; z-index:82; display:none; background:rgba(255,255,255,.16); backdrop-filter: blur(8px);
       align-items:center; justify-content:center; padding:18px; box-sizing:border-box;
     }
     #comfortOverlay.show{ display:flex; }
     #comfortWrap{
-      width:min(470px, 96vw);
-      border-radius:40px;
-      overflow:hidden;
-      background:#fff;
-      border:1px solid rgba(15,23,42,.06);
-      box-shadow:0 30px 70px rgba(15,23,42,.24);
+      width:min(820px, 96vw); border-radius:24px; overflow:hidden; background:#fff; border:1px solid rgba(36,85,199,.16); box-shadow:0 18px 44px rgba(15,40,95,.16);
     }
     #comfortHead{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:24px 24px 12px;
-      background:#fff;
+      height:50px; background:var(--smartfit-blue); display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+      border-bottom:1px solid rgba(255,255,255,.14);
     }
-    #comfortTitleWrap{ min-width:0; }
-    #comfortTitle{
-      font-size:24px; line-height:1.14; font-weight:900; letter-spacing:-.03em; color:#1e293b;
-    }
-    #comfortSubTitle{
-      margin-top:4px; font-size:11px; line-height:1.2; color:#94a3b8; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
-    }
-    #comfortClose{
-      width:40px; height:40px; border:none; border-radius:999px;
-      background:#f8fafc; color:#94a3b8; font-weight:800; font-size:20px; cursor:pointer;
-      display:flex; align-items:center; justify-content:center;
-      box-shadow:inset 0 0 0 1px rgba(148,163,184,.16);
-    }
-
+    #comfortTitle{ font-size:16px; font-weight:900; color:#fff; letter-spacing:-.25px; }
+    #comfortClose{ border:none; background:rgba(255,255,255,.12); font-size:18px; line-height:1; color:#fff; cursor:pointer; padding:0; width:32px; height:32px; border-radius:999px; }
     #comfortScene{
-      position:relative; height:min(92vw, 470px); min-height:360px; overflow:hidden;
-      margin:0 16px 0; border-radius:32px;
-      background:#0f172a url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=1200') center center / cover no-repeat;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.05), inset 0 -40px 90px rgba(0,0,0,.18);
+      position:relative;
+      height:min(64vw, 540px);
+      min-height:420px;
+      margin:14px 14px 0;
+      border-radius:28px;
+      background:#efefef url('face_V2.png') center center / cover no-repeat;
+      overflow:hidden;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.22), 0 14px 30px rgba(15,40,95,.08);
     }
-    #comfortScene::before{
-      content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
-      background:linear-gradient(180deg, rgba(15,23,42,.06) 0%, rgba(15,23,42,.12) 48%, rgba(2,6,23,.58) 100%);
+    #comfortStateBadge{
+      position:absolute;
+      left:18px;
+      bottom:14px;
+      z-index:6;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      backdrop-filter:blur(10px);
+      border:1px solid rgba(255,255,255,.34);
+      font-size:12px;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-.02em;
+      box-shadow:0 10px 24px rgba(15,23,42,.18);
+      background:rgba(16,185,129,.18);
+      color:#d1fae5;
     }
-    #comfortScene::after{
-      content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
-      background:radial-gradient(80% 70% at 84% 36%, rgba(255,255,255,.14), rgba(255,255,255,0) 42%);
-      opacity:.55;
+    #comfortStateBadge::before{
+      content:"";
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      background:currentColor;
+      opacity:.92;
+      box-shadow:0 0 0 5px rgba(255,255,255,.08);
     }
     #comfortCameraStage{
       position:absolute; inset:0; z-index:1; display:none; overflow:hidden; background:#dfe6ef;
-      border-radius:32px;
     }
     #comfortScene.camera-on #comfortCameraStage{ display:block; }
     #comfortCameraBase,
@@ -872,14 +875,20 @@
     #comfortScene.camera-on.mode-on #comfortCameraBase{ display:block; }
     #comfortScene.camera-on.mode-on #comfortCameraSplit{ display:block; }
     .comfort-camera-half{
-      position:absolute; inset:0; width:100%; height:100%; overflow:hidden; pointer-events:none;
+      position:absolute; inset:0; width:100%; height:100%; overflow:hidden;
+      pointer-events:none;
     }
-    .comfort-camera-half.top,.comfort-camera-half.bottom{ top:0; bottom:auto; }
-    .comfort-camera-half.top video,.comfort-camera-half.bottom video{
+    .comfort-camera-half.top,
+    .comfort-camera-half.bottom{ top:0; bottom:auto; }
+    .comfort-camera-half.top video,
+    .comfort-camera-half.bottom video{
       position:absolute; inset:0; width:100%; height:100%; object-fit:cover; clip-path:none;
     }
     #comfortScene.camera-on.mode-on .comfort-camera-half.top{
-      opacity:.34; filter:blur(1.2px); transform:translateY(-14px); -webkit-transform:translateY(-14px);
+      opacity:.34;
+      filter:blur(1.2px);
+      transform:translateY(-14px);
+      -webkit-transform:translateY(-14px);
     }
     #comfortScene.camera-on.mode-on .comfort-camera-half.top::after{
       content:""; position:absolute; inset:0; pointer-events:none;
@@ -895,72 +904,48 @@
     #comfortScene.camera-on #cfTargetStage,
     #comfortScene.camera-on #cfLineRed,
     #comfortScene.camera-on #cfLineBlue,
-    #comfortScene.camera-on #cfOptic{ display:none !important; }
-
-    #comfortStateBadge{
-      position:absolute; left:18px; bottom:18px; z-index:6;
-      display:inline-flex; align-items:center; gap:8px;
-      padding:10px 14px; border-radius:999px;
-      backdrop-filter:blur(10px);
-      border:1px solid rgba(255,255,255,.18);
-      font-size:12px; line-height:1; font-weight:900; letter-spacing:-.02em;
-      box-shadow:0 12px 30px rgba(15,23,42,.18);
+    #comfortScene.camera-on #cfOptic{
+      display:none !important;
     }
-    #comfortStateBadge::before{
-      content:""; width:8px; height:8px; border-radius:999px; background:currentColor; opacity:.9;
-      box-shadow:0 0 0 5px rgba(255,255,255,.08);
+    #comfortScene::before{
+      content:""; position:absolute; inset:0;
+      background:
+        radial-gradient(120px 150px at 30% 46%, rgba(255,255,255,.18), rgba(255,255,255,0) 62%),
+        radial-gradient(120px 150px at 69% 46%, rgba(255,255,255,.14), rgba(255,255,255,0) 62%);
+      pointer-events:none; z-index:0;
     }
-    #comfortScene.mode-off #comfortStateBadge{
-      background:rgba(16,185,129,.16); color:#d1fae5; border-color:rgba(16,185,129,.22);
-    }
-    #comfortScene.mode-on #comfortStateBadge{
-      background:rgba(245,158,11,.18); color:#fef3c7; border-color:rgba(245,158,11,.22);
-    }
-
     #cfTargetStage{
-      position:absolute; width:132px; height:176px; transform:translate(-50%,-50%); z-index:4; pointer-events:none;
+      position:absolute; width:118px; height:176px; transform:translate(-50%,-50%); z-index:4; pointer-events:none;
       transition:left .35s ease, top .35s ease, width .35s ease, height .35s ease;
-      border-radius:26px;
-      background:rgba(255,255,255,.10);
-      border:1px solid rgba(255,255,255,.18);
-      box-shadow:0 22px 40px rgba(2,6,23,.24), inset 0 0 0 1px rgba(255,255,255,.06);
-      backdrop-filter:blur(12px);
-      overflow:hidden;
-    }
-    #cfTargetStage::before{
-      content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
-      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0));
     }
     .cf-target-box{
-      position:absolute; left:50%; transform:translateX(-50%); width:100%; height:100%; border-radius:26px;
-      border:1px solid rgba(255,255,255,.14); backdrop-filter: blur(1px);
-      box-shadow:none;
-      transition: top .45s ease, opacity .35s ease, background .35s ease, transform .45s ease;
+      position:absolute; left:50%; transform:translateX(-50%); width:100%; height:100%; border-radius:18px; border:2px solid rgba(255,255,255,.58);
+      backdrop-filter: blur(1px); box-shadow:0 8px 24px rgba(0,0,0,.08); transition: top .45s ease, opacity .35s ease, background .35s ease, transform .45s ease;
     }
-    .cf-box-top{ z-index:0; background:rgba(255,255,255,.04); }
-    .cf-box-bottom{ z-index:0; background:rgba(255,255,255,.02); }
+    .cf-box-top{ z-index:0; background:rgba(251,221,231,.38); }
+    .cf-box-bottom{ z-index:0; background:rgba(245,222,232,.16); }
     .cf-target-a{
-      position:absolute; left:50%; transform:translate(-50%,-50%); font-size:88px; line-height:1; font-weight:800; letter-spacing:-3px;
-      font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",sans-serif; user-select:none;
-      transition: top .55s cubic-bezier(.22,.8,.22,1), opacity .35s ease, transform .55s cubic-bezier(.22,.8,.22,1), color .35s ease; z-index:2;
-      text-shadow:0 6px 18px rgba(2,6,23,.26);
+      position:absolute; left:50%; transform:translate(-50%,-50%); font-size:100px; line-height:1; font-weight:500; letter-spacing:-3px;
+      font-family:-apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", sans-serif; user-select:none; transition: top .55s cubic-bezier(.22,.8,.22,1), opacity .35s ease, transform .55s cubic-bezier(.22,.8,.22,1), color .35s ease; z-index:2;
     }
-    .cf-a-red{ color:#4ade80; }
-    .cf-a-blue{ color:#60a5fa; }
+    .cf-a-red{ color:#23A455; } .cf-a-blue{ color:#176fd6; }
+    .cf-target-box::before{ content:""; position:absolute; inset:0; border-radius:inherit; background:linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0)); pointer-events:none; }
+    #cfTargetStage, .cf-target-box, .cf-target-a, #cfOptic{ transform-style:preserve-3d; }
+    #comfortScene.mode-off #cfTargetStage, #comfortScene.mode-on #cfTargetStage, #comfortScene.mode-default #cfTargetStage{ transform:translate(-50%,-50%) rotate(0deg); }
+    #comfortScene.mode-on .cf-optic-prism{ transform:rotate(0deg); } #comfortScene.mode-off .cf-optic-flat{ transform:rotate(0deg); }
     #comfortScene.mode-default .cf-box-top, #comfortScene.mode-default .cf-box-bottom{ top:0; opacity:.92; transform:translateX(-50%); }
-    #comfortScene.mode-default .cf-box-top{ background:rgba(255,255,255,.07); }
-    #comfortScene.mode-default .cf-box-bottom{ background:rgba(255,255,255,.03); }
-    #comfortScene.mode-default .cf-a-red{ top:20%; opacity:.18; transform:translate(-50%,-50%); animation:none; color:#4ade80; }
-    #comfortScene.mode-default .cf-a-blue{ top:80%; opacity:.88; transform:translate(-50%,-50%); animation:none; color:#cbd5e1; }
+    #comfortScene.mode-default .cf-box-top{ background:rgba(208,240,219,.30); }
+    #comfortScene.mode-default .cf-box-bottom{ background:rgba(245,222,232,.14); }
+    #comfortScene.mode-default .cf-a-red{ top:20%; opacity:.18; transform:translate(-50%,-50%); animation:none; color:#3DAE68; }
+    #comfortScene.mode-default .cf-a-blue{ top:80%; opacity:.88; transform:translate(-50%,-50%); animation:none; color:#8b2da0; }
     #comfortScene.mode-off .cf-box-top, #comfortScene.mode-off .cf-box-bottom{ top:0; opacity:.92; transform:translateX(-50%); }
-    #comfortScene.mode-off .cf-box-top{ background:rgba(255,255,255,.09); }
-    #comfortScene.mode-off .cf-box-bottom{ background:rgba(255,255,255,.03); }
-    #comfortScene.mode-off .cf-a-red{ top:50%; opacity:.28; transform:translate(-50%,-50%); animation:none; color:#86efac; }
-    #comfortScene.mode-off .cf-a-blue{ top:50%; opacity:.98; transform:translate(-50%,-50%); color:#ffffff; animation:none; }
-    #comfortScene.mode-on .cf-box-top{ top:-14px; opacity:.96; background:rgba(74,222,128,.12); animation:cfPinkFloat 1.45s ease-in-out infinite; }
-    #comfortScene.mode-on .cf-box-bottom{ top:14px; opacity:.86; background:rgba(96,165,250,.12); transform:translateX(-50%); }
-    #comfortScene.mode-on .cf-a-red{ top:33%; opacity:1; transform:translate(-50%,-50%); color:#4ade80; animation:cfRedFloat 1.45s ease-in-out infinite; }
-    #comfortScene.mode-on .cf-a-blue{ top:69%; opacity:1; transform:translate(-50%,-50%); color:#60a5fa; }
+    #comfortScene.mode-off .cf-box-top{ background:rgba(208,240,219,.34); } #comfortScene.mode-off .cf-box-bottom{ background:rgba(232,247,237,.18); }
+    #comfortScene.mode-off .cf-a-red{ top:50%; opacity:.32; transform:translate(-50%,-50%); animation:none; color:#3DAE68; }
+    #comfortScene.mode-off .cf-a-blue{ top:50%; opacity:.92; transform:translate(-50%,-50%); color:#8b2da0; animation:none; }
+    #comfortScene.mode-on .cf-box-top{ top:-14px; opacity:.96; background:rgba(208,240,219,.44); animation:cfPinkFloat 1.45s ease-in-out infinite; }
+    #comfortScene.mode-on .cf-box-bottom{ top:14px; opacity:.82; background:rgba(219,234,255,.28); transform:translateX(-50%); }
+    #comfortScene.mode-on .cf-a-red{ top:33%; opacity:1; transform:translate(-50%,-50%); color:#23A455; animation:cfRedFloat 1.45s ease-in-out infinite; }
+    #comfortScene.mode-on .cf-a-blue{ top:69%; opacity:1; transform:translate(-50%,-50%); color:#176fd6; }
     @keyframes cfRedFloat{
       0%{ transform:translate(-50%,-50%) translateY(0); }
       25%{ transform:translate(-50%,-50%) translateY(-4px); }
@@ -975,117 +960,260 @@
       75%{ transform:translateX(-50%) translateY(-3px); }
       100%{ transform:translateX(-50%) translateY(0); }
     }
-
     #cfOptic{
-      position:absolute; width:48px; height:48px; transform:translate(-50%,-50%); z-index:7; transition:left .35s ease, top .35s ease, width .35s ease, height .35s ease; pointer-events:none;
+      position:absolute; width:58px; height:118px; transform:translate(-50%,-50%); z-index:7; transition:left .35s ease, top .35s ease, width .35s ease, height .35s ease; pointer-events:none;
     }
-    #cfOptic::before{
-      content:""; position:absolute; inset:0; border-radius:999px; background:rgba(96,165,250,.14); animation:comfortPulse 1.8s infinite;
+    #comfortScene.mode-on .cf-optic-prism{ display:block; } #comfortScene.mode-on .cf-optic-flat{ display:none; }
+    #comfortScene.mode-off .cf-optic-prism{ display:none; } #comfortScene.mode-off .cf-optic-flat{ display:block; }
+    #comfortScene.mode-default .cf-optic-prism, #comfortScene.mode-default .cf-optic-flat{ display:none; }
+    .cf-optic-prism,.cf-optic-flat{ position:absolute; inset:0; }
+    .cf-optic-prism::before{
+      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:0; height:0;
+      border-left:30px solid transparent; border-right:30px solid transparent; border-bottom:100px solid rgba(255,255,255,.46); filter:drop-shadow(0 4px 10px rgba(0,0,0,.10));
     }
-    #cfOptic::after{
-      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-      width:0; height:0; border-left:14px solid transparent; border-right:14px solid transparent; border-bottom:22px solid #60a5fa;
-      filter:drop-shadow(0 6px 12px rgba(37,99,235,.35));
+    .cf-optic-prism::after{
+      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-46%); width:0; height:0;
+      border-left:24px solid transparent; border-right:24px solid transparent; border-bottom:82px solid rgba(214,238,255,.30);
     }
-    @keyframes comfortPulse{
-      0%{ transform:scale(.72); opacity:.22; }
-      70%{ transform:scale(1.06); opacity:.38; }
-      100%{ transform:scale(1.18); opacity:0; }
-    }
-    .cf-optic-prism,.cf-optic-flat{ display:none !important; }
+    .cf-optic-flat::before{ display:none; }
     .cf-guide-line{
-      position:absolute; height:0; border-top:2px dashed rgba(255,255,255,.34); z-index:5; transform-origin:left center; pointer-events:none; opacity:0;
-      filter:drop-shadow(0 3px 8px rgba(15,23,42,.18));
+      position:absolute; height:0; border-top:3px dashed; z-index:5; transform-origin:left center; pointer-events:none; opacity:0;
     }
     #cfLineBlue{ transition:none !important; }
     #cfLineRed{ transition:top .35s ease, width .35s ease, opacity .25s ease; }
-    .cf-guide-line.red{ border-color:rgba(74,222,128,.55); }
-    .cf-guide-line.blue{ border-color:rgba(96,165,250,.55); }
+    .cf-guide-line.red{ border-color:#23A455; } .cf-guide-line.blue{ border-color:#176fd6; }
     #comfortScene.mode-default .cf-guide-line{ opacity:0; }
     #comfortScene.mode-off .cf-guide-line, #comfortScene.mode-on .cf-guide-line{ opacity:1; }
-
     #cfSegWrap{
-      position:relative; left:auto; bottom:auto; transform:none; width:auto; z-index:10;
-      display:flex; align-items:center; gap:10px; padding:14px 16px 16px; background:#fff;
+      position:relative;
+      left:auto;
+      bottom:auto;
+      transform:none;
+      width:auto;
+      z-index:10;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:16px 16px 18px;
+      margin:0 14px 16px;
+      border-bottom:1px solid #e7edf6;
     }
     .cf-toggle{
-      flex:1 1 auto; display:flex; align-items:center; gap:0; padding:6px;
-      border-radius:20px; background:#f1f5f9; border:1px solid rgba(148,163,184,.14); box-shadow:none; overflow:hidden; min-width:0;
+      flex:1 1 auto;
+      display:flex; align-items:center; gap:0;
+      padding:4px;
+      border-radius:20px;
+      background:linear-gradient(180deg, rgba(255,255,255,.96) 0%, rgba(239,244,251,.96) 100%);
+      border:1.5px solid rgba(189,209,245,.95);
+      box-shadow:0 8px 20px rgba(11,31,51,.10), inset 0 1px 0 rgba(255,255,255,.65);
+      overflow:hidden;
+      min-width:0;
     }
     .cf-seg-btn{
-      flex:1 1 0; height:52px; border:none; background:transparent; color:#64748b; font-size:15px; font-weight:800; letter-spacing:-.02em; cursor:pointer;
-      transition:all .22s ease; padding:0 12px; white-space:nowrap; -webkit-appearance:none; appearance:none; border-radius:16px;
-      display:flex; align-items:center; justify-content:center; gap:8px;
+      flex:1 1 0;
+      height:48px;
+      border:none;
+      background:transparent;
+      color:#7b8797;
+      font-size:15px;
+      font-weight:900;
+      letter-spacing:-.25px;
+      cursor:pointer;
+      transition:all .22s ease;
+      padding:0 12px;
+      white-space:nowrap;
+      -webkit-appearance:none; appearance:none;
+      border-radius:16px;
     }
-    .cf-seg-btn.active,.cf-seg-btn.default-active{ background:#fff; color:#1e293b; box-shadow:0 4px 12px rgba(15,23,42,.08); }
+    .cf-seg-btn.active, .cf-seg-btn.default-active{
+      background:#fff;
+      color:#1e293b;
+      box-shadow:0 4px 10px rgba(15,23,42,.08);
+    }
+    .cf-seg-btn:not(.active):not(.default-active){ color:#7b8797; }
+    .cf-seg-btn:not(.active):active{ transform:scale(.985); }
     .cf-seg-btn[data-state="off"].active::before,
     .cf-seg-btn[data-state="on"].active::before{
-      content:""; width:16px; height:16px; border-radius:999px; display:inline-block;
+      content:""; width:14px; height:14px; border-radius:999px; display:inline-block; margin-right:8px;
     }
     .cf-seg-btn[data-state="off"].active::before{ background:#10b981; box-shadow:0 0 0 4px rgba(16,185,129,.12); }
     .cf-seg-btn[data-state="on"].active::before{ background:#3b82f6; box-shadow:0 0 0 4px rgba(59,130,246,.12); }
+
     .cf-camera-btn{
-      flex:0 0 auto; min-width:64px; width:64px; height:64px; padding:0; border-radius:22px;
-      border:1px solid rgba(148,163,184,.18); background:#fff; color:#475569; font-size:0; font-weight:900; letter-spacing:-.2px;
-      box-shadow:0 8px 20px rgba(15,23,42,.08); white-space:nowrap; position:relative;
+      flex:0 0 auto;
+      width:56px;
+      min-width:56px;
+      height:56px;
+      padding:0;
+      border-radius:18px;
+      border:1px solid rgba(15,23,42,.06);
+      background:#0f172a;
+      color:transparent;
+      font-size:0;
+      box-shadow:0 10px 24px rgba(15,23,42,.18);
+      white-space:nowrap;
+      position:relative;
+      overflow:hidden;
     }
     .cf-camera-btn::before{
-      content:"📷"; font-size:22px; line-height:1;
+      content:"";
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:24px;
+      height:16px;
+      border:2px solid #fff;
+      border-radius:5px;
+      transform:translate(-50%,-50%);
+      box-sizing:border-box;
     }
-    .cf-camera-btn.active{ background:#0f172a; color:#fff; border-color:#0f172a; box-shadow:0 10px 24px rgba(15,23,42,.18); }
-
+    .cf-camera-btn::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:6px;
+      height:6px;
+      border:2px solid #fff;
+      border-radius:999px;
+      transform:translate(-50%,-50%);
+      box-sizing:border-box;
+      background:transparent;
+    }
+    .cf-camera-btn.active{
+      background:#0f172a;
+      border-color:#0f172a;
+      box-shadow:0 10px 24px rgba(15,23,42,.18);
+    }
     #comfortMessage{
-      background:rgba(248,250,252,.94); padding:18px 22px 18px; display:flex; align-items:flex-start; justify-content:space-between; gap:14px; border-top:1px solid rgba(226,232,240,.92);
+      background:#f8fafc;
+      margin:0 14px 0;
+      padding:18px 20px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+      border-top:none;
+      border-radius:20px;
+      box-shadow:0 4px 12px rgba(15,23,42,.04);
     }
     #comfortInfoBadge{
-      width:36px; height:36px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex:0 0 auto;
-      margin-top:2px; font-size:16px; font-weight:900; color:#2563eb; background:#dbeafe;
+      width:36px;
+      height:36px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex:0 0 auto;
+      margin-top:2px;
+      font-size:16px;
+      font-weight:900;
+      color:#10b981;
+      background:rgba(16,185,129,.12);
     }
-    #comfortMessageCopyWrap{ flex:1 1 auto; min-width:0; display:flex; gap:14px; }
-    #comfortMessageCopy{ flex:1 1 auto; min-width:0; font-size:14px; line-height:1.6; font-weight:500; letter-spacing:-.02em; color:#475569; word-break:keep-all; }
-    .comfort-info-title{ display:block; margin-bottom:4px; font-size:16px; line-height:1.35; font-weight:900; color:#1e293b; }
+    #comfortMessageCopyWrap{
+      flex:1 1 auto;
+      min-width:0;
+      display:flex;
+      gap:14px;
+    }
+    #comfortMessageCopy{
+      flex:1 1 auto;
+      min-width:0;
+      font-size:14px;
+      line-height:1.58;
+      font-weight:500;
+      letter-spacing:-.02em;
+      color:#475569;
+      word-break:keep-all;
+    }
+    .comfort-info-title{
+      display:block;
+      margin-bottom:4px;
+      font-size:16px;
+      line-height:1.35;
+      font-weight:900;
+      color:#1e293b;
+    }
     #comfortMessageCopy .blue{ color:#2563eb; font-weight:800; }
     #comfortMessageCopy .green{ color:#10b981; font-weight:800; }
     #comfortConfirm{
-      flex:0 0 auto; flex-shrink:0; min-width:112px; width:112px; max-width:112px; height:52px; padding:0 16px; border:none; border-radius:18px;
-      background:#0f172a; color:#fff; font-size:15px; line-height:1; font-weight:900; cursor:pointer;
-      box-shadow:0 14px 26px rgba(15,23,42,.16); box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center;
+      flex:0 0 auto;
+      flex-shrink:0;
+      min-width:112px;
+      width:112px;
+      max-width:112px;
+      height:52px;
+      padding:0 16px;
+      border:none;
+      border-radius:18px;
+      background:#0f172a;
+      color:#fff;
+      font-size:15px;
+      line-height:1;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 14px 26px rgba(15,23,42,.16);
+      box-sizing:border-box;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
     }
-    #comfortWrap .popup-reference-area{
-      margin-top:0; padding:14px 24px 0 !important; background:#fff !important; font-size:10px; line-height:1.45; color:#94a3b8;
-    }
-    #comfortWrap .popup-reference-area::before{ display:none; }
-    #comfortWrap .toric-popup-disclaimer{ padding:6px 24px 20px; background:#fff; font-size:10px; color:#94a3b8; }
 
+    #comfortWrap .popup-reference-area{
+      margin-top:0;
+      padding:10px 16px 0 !important;
+      background:#fff !important;
+      font-size:9px;
+      line-height:1.34;
+    }
+    #comfortWrap .toric-popup-disclaimer{
+      padding:4px 16px 10px;
+      background:#fff;
+      font-size:8.8px;
+    }
+    #comfortWrap .toric-popup-disclaimer .disc-note{ margin-bottom:0; }
+    #comfortWrap .popup-reference-area .ref-line{ margin-top:0; }
+    #comfortWrap .toric-popup-disclaimer,
+    #comfortWrap .popup-reference-area{ color:#6b7480; }
+
+    @media (max-width: 820px){
+      #comfortTitle{ font-size:16px; }
+      #comfortScene{ height:520px; min-height:360px; }
+      #cfTargetStage{ width:104px; height:158px; }
+      .cf-target-a{ font-size:90px; }
+      #cfOptic{ width:48px; height:98px; }
+      .cf-optic-prism::before{ border-left-width:24px; border-right-width:24px; border-bottom-width:82px; }
+      .cf-optic-prism::after{ border-left-width:20px; border-right-width:20px; border-bottom-width:68px; }
+      .cf-seg-btn{ font-size:15px; height:50px; }
+      #comfortMessage{ padding:14px 16px 14px; gap:12px; }
+      #comfortMessageCopy{ font-size:17px; }
+      #comfortConfirm{ min-width:96px; width:96px; max-width:96px; height:44px; font-size:13px; border-radius:999px; }
+    }
     @media (max-width: 560px){
       #comfortOverlay{ padding:8px; }
-      #comfortWrap{ width:100%; border-radius:30px; }
-      #comfortHead{ padding:20px 18px 10px; }
-      #comfortTitle{ font-size:20px; }
-      #comfortSubTitle{ font-size:10px; }
-      #comfortClose{ width:36px; height:36px; font-size:18px; }
+      #comfortWrap{ width:100%; border-radius:20px; }
+      #comfortHead{ height:48px; padding:0 14px; }
+      #comfortTitle{ font-size:15px; }
+      #comfortClose{ font-size:17px; width:32px; height:32px; }
       #comfortScene{ height:320px; min-height:320px; margin:0 10px 0; border-radius:26px; }
-      #comfortStateBadge{ left:14px; bottom:14px; padding:8px 12px; font-size:11px; }
-      #cfTargetStage{ width:102px; height:138px; border-radius:22px; }
-      .cf-target-box{ border-radius:22px; }
-      .cf-target-a{ font-size:70px; letter-spacing:-3px; }
-      #cfOptic{ width:40px; height:40px; }
-      #cfOptic::after{ border-left-width:12px; border-right-width:12px; border-bottom-width:18px; }
-      #cfSegWrap{ padding:12px 10px 12px; gap:8px; }
-      .cf-toggle{ padding:4px; border-radius:18px; }
-      .cf-seg-btn{ height:46px; font-size:12px; padding:0 8px; border-radius:14px; }
+      #cfTargetStage{ width:82px; height:126px; }
+      .cf-target-box{ border-radius:16px; }
+      #comfortScene.mode-on .cf-box-top{ top:-10px; }
+      #comfortScene.mode-on .cf-box-bottom{ top:10px; }
+      .cf-target-a{ font-size:72px; letter-spacing:-4px; }
+      #cfOptic{ width:38px; height:76px; }
+      .cf-optic-prism::before{ border-left-width:20px; border-right-width:20px; border-bottom-width:62px; }
+      .cf-optic-prism::after{ border-left-width:16px; border-right-width:16px; border-bottom-width:50px; }
+      .cf-guide-line{ border-top-width:2px; }
+      #cfSegWrap{ width:auto; margin:0 10px 12px; padding:12px 0 14px; gap:8px; }
+      .cf-toggle{ padding:4px; }
+      .cf-seg-btn{ height:46px; font-size:12px; padding:0 8px; }
       .cf-camera-btn{ width:54px; min-width:54px; height:54px; border-radius:18px; }
-      .cf-camera-btn::before{ font-size:18px; }
-      #comfortMessage{ padding:14px 14px 14px; gap:10px; }
-      #comfortInfoBadge{ width:32px; height:32px; border-radius:10px; font-size:14px; }
-      #comfortMessageCopyWrap{ gap:10px; }
-      #comfortMessageCopy{ font-size:13px; line-height:1.5; }
-      .comfort-info-title{ font-size:15px; }
-      #comfortConfirm{ min-width:96px; width:96px; max-width:96px; height:46px; font-size:13px; border-radius:16px; }
-      #comfortWrap .popup-reference-area{ padding:12px 16px 0 !important; font-size:9px; }
-      #comfortWrap .toric-popup-disclaimer{ padding:4px 16px 16px; font-size:9px; }
-    }
-
+      #comfortMessage{ padding:12px 14px 12px; gap:10px; }
+      #comfortMessageCopy{ font-size:14px; line-height:1.42; }
+      #comfortStateBadge{ left:14px; bottom:12px; padding:8px 12px; font-size:11px; }
+      #comfortConfirm{ min-width:96px; width:96px; max-width:96px; height:44px; font-size:13px; border-radius:16px; padding:0 16px; }
       #pvpOverlay{
         padding:12px 12px 10px;
         grid-template-columns:72px minmax(0,1fr) 66px;
@@ -1921,15 +2049,11 @@
     </div>
   </div>
 
-  
   <div id="comfortOverlay" aria-hidden="true">
     <div id="comfortWrap" onclick="event.stopPropagation()">
       <div id="comfortHead">
-        <div id="comfortTitleWrap">
-          <div id="comfortTitle">프리즘 저감 광학 설계</div>
-          <div id="comfortSubTitle">OPTICAL TECHNOLOGY VISUALIZATION</div>
-        </div>
-        <button id="comfortClose" type="button">×</button>
+        <div id="comfortTitle">프리즘이 적은 광학부</div>
+        <button id="comfortClose" type="button">X</button>
       </div>
       <div id="comfortScene" class="mode-off">
         <div id="comfortCameraStage" aria-hidden="true">
@@ -1956,22 +2080,21 @@
           <button id="cfBtnOff" class="cf-seg-btn active" data-state="off" type="button">프리즘 없음</button>
           <button id="cfBtnOn" class="cf-seg-btn" data-state="on" type="button">프리즘 있음</button>
         </div>
-        <button id="cfCameraBtn" class="cf-camera-btn" type="button" aria-label="카메라 켜기"></button>
+        <button id="cfCameraBtn" class="cf-camera-btn" type="button" aria-label="카메라 켜기">카메라 켜기</button>
       </div>
       <div id="comfortMessage">
         <div id="comfortMessageCopyWrap">
           <div id="comfortInfoBadge">i</div>
-          <div id="comfortMessageCopy"><span class="comfort-info-title">난시 렌즈의 중요성</span>정밀한 광학 설계로 프리즘을 억제하면 <span class="green">선명하고 편안한 시야</span>를 소비자에게 제공할 수 있습니다.</div>
+          <div id="comfortMessageCopy"><span class="comfort-info-title">난시 렌즈의 중요성</span>정밀한 광학 설계로 프리즘을 억제하면 <span class="green">선명하고 편안한 시야</span>를 제공할 수 있습니다.</div>
         </div>
         <button id="comfortConfirm" type="button">확인 완료</button>
       </div>
-      <div class="popup-reference-area" style="padding:12px 16px 0; background:#fff;">
-        <span class="ref-line">1. Sulley A, Hawke R, Osborn Lorenz K, et al. <em>Cont Lens Anterior Eye</em>. 2015;38(4):253–257.</span>
+      <div class="popup-reference-area" style="padding:12px 16px 0; background:#dbe5f1;">
+        <span class="ref-line">1. Sulley A, Hawke R, Osborn Lorenz K, et al. <em>Cont Lens Anterior Eye</em>. 2015;38(4):253–257.</span>      
       </div>
-      <div class="toric-popup-disclaimer"><span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 시뮬레이션입니다. KR_2026_233</span></div>
+      <div class="toric-popup-disclaimer"><span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span></div>
     </div>
   </div>
-
 
   <div id="tutorialLayer" aria-hidden="true">
     <div id="tutorialMask"></div><div id="tutorialFocus"></div>
@@ -2233,6 +2356,8 @@
     const comfortCameraSplit = document.getElementById('comfortCameraSplit');
     const comfortCameraFallback = document.getElementById('comfortCameraFallback');
     const comfortMessageCopy = document.getElementById('comfortMessageCopy');
+    const comfortStateBadge = document.getElementById('comfortStateBadge');
+    const comfortInfoBadge = document.getElementById('comfortInfoBadge');
     const cfTargetStage = document.getElementById('cfTargetStage');
     const cfOptic = document.getElementById('cfOptic');
     const cfLineRed = document.getElementById('cfLineRed');
@@ -2242,9 +2367,6 @@
     const cfARed = document.querySelector('.cf-a-red');
     const cfABlue = document.querySelector('.cf-a-blue');
     const comfortConfirm = document.getElementById('comfortConfirm');
-    const comfortStateBadge = document.getElementById('comfortStateBadge');
-    const comfortSubTitle = document.getElementById('comfortSubTitle');
-    const comfortInfoBadge = document.getElementById('comfortInfoBadge');
     const maxPackshot = document.getElementById('maxPackshot');
     const blueBackGlow = document.getElementById('blueBackGlow');
     const blueRayLayer = document.getElementById('blueRayLayer');
@@ -2427,7 +2549,6 @@
       if(cfCameraBtn){
         cfCameraBtn.classList.toggle('active', !!comfortCameraOn);
         cfCameraBtn.setAttribute('aria-label', comfortCameraOn ? '카메라 끄기' : '카메라 켜기');
-        cfCameraBtn.title = comfortCameraOn ? '카메라 끄기' : '카메라 켜기';
       }
       if(comfortCameraBase) comfortCameraBase.style.display = comfortCameraOn ? 'block' : 'none';
       if(comfortCameraSplit) comfortCameraSplit.style.display = (comfortCameraOn && comfortScene.classList.contains('mode-on')) ? 'block' : 'none';
@@ -3216,27 +3337,19 @@
     }
 
     function setComfortMode(mode){
-      comfortScene.classList.remove('mode-default', 'mode-on', 'mode-off');
-      cfBtnOn.classList.remove('active');
-      cfBtnOff.classList.remove('active');
+      comfortScene.classList.remove('mode-default', 'mode-on', 'mode-off'); cfBtnOn.classList.remove('active'); cfBtnOff.classList.remove('active');
       if(mode === 'on'){
-        comfortScene.classList.add('mode-on');
-        cfBtnOn.classList.add('active');
+        comfortScene.classList.add('mode-on'); cfBtnOn.classList.add('active');
         if(comfortStateBadge) comfortStateBadge.textContent = '프리즘 영향 발생 중';
-        if(comfortTitle) comfortTitle.textContent = '프리즘 저감 광학 설계';
-        if(comfortSubTitle) comfortSubTitle.textContent = 'OPTICAL TECHNOLOGY VISUALIZATION';
-        if(comfortInfoBadge){ comfortInfoBadge.style.background = '#dbeafe'; comfortInfoBadge.style.color = '#2563eb'; comfortInfoBadge.textContent = '!'; }
+        if(comfortInfoBadge){ comfortInfoBadge.textContent = '!'; comfortInfoBadge.style.color = '#2563eb'; comfortInfoBadge.style.background = 'rgba(37,99,235,.12)'; }
         comfortMessageCopy.innerHTML = `<span class="comfort-info-title">단안 프리즘 영향</span>단안에 프리즘 영향이 있는 경우 <span class="blue">양안 이미지 위치에 차이</span>가 발생하여 시각적 피로감이 발생할 수 있습니다.`;
-        if(comfortConfirm) comfortConfirm.style.display = 'inline-flex';
+        if(comfortConfirm){ comfortConfirm.textContent = '확인 완료'; comfortConfirm.style.display = 'inline-flex'; }
       }else{
-        comfortScene.classList.add('mode-off');
-        cfBtnOff.classList.add('active');
+        comfortScene.classList.add('mode-off'); cfBtnOff.classList.add('active');
         if(comfortStateBadge) comfortStateBadge.textContent = '최적화된 광학 상태';
-        if(comfortTitle) comfortTitle.textContent = '프리즘 저감 광학 설계';
-        if(comfortSubTitle) comfortSubTitle.textContent = 'OPTICAL TECHNOLOGY VISUALIZATION';
-        if(comfortInfoBadge){ comfortInfoBadge.style.background = '#d1fae5'; comfortInfoBadge.style.color = '#059669'; comfortInfoBadge.textContent = 'i'; }
-        comfortMessageCopy.innerHTML = `<span class="comfort-info-title">난시 렌즈의 중요성</span>정밀한 광학 설계로 프리즘을 억제하면 <span class="green">선명하고 편안한 시야</span>를 소비자에게 제공할 수 있습니다.`;
-        if(comfortConfirm) comfortConfirm.style.display = 'inline-flex';
+        if(comfortInfoBadge){ comfortInfoBadge.textContent = 'i'; comfortInfoBadge.style.color = '#10b981'; comfortInfoBadge.style.background = 'rgba(16,185,129,.12)'; }
+        comfortMessageCopy.innerHTML = `<span class="comfort-info-title">난시 렌즈의 중요성</span>정밀한 광학 설계로 프리즘을 억제하면 <span class="green">선명하고 편안한 시야</span>를 제공할 수 있습니다.`;
+        if(comfortConfirm){ comfortConfirm.textContent = '확인 완료'; comfortConfirm.style.display = 'inline-flex'; }
       }
       applyComfortCameraUI();
       requestAnimationFrame(()=>positionComfortInteractiveElements(0));
@@ -3498,3 +3611,4 @@
   </script>
 </body>
 </html>
+
