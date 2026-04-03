@@ -650,7 +650,7 @@
     #asdOverlay.show{ display:flex; }
 
     #asdCard{
-      width:min(470px, 96vw);
+      width:min(560px, 97vw);
       border-radius:40px;
       border:1px solid rgba(15,23,42,.06);
       background:#ffffff;
@@ -833,6 +833,7 @@
       position:relative; height:min(92vw, 470px); min-height:360px; overflow:hidden;
       margin:0 16px 0; border-radius:32px;
       background:#0f172a;
+      border:1px solid rgba(148,163,184,.22);
       box-shadow: inset 0 0 0 1px rgba(255,255,255,.05), inset 0 -40px 90px rgba(0,0,0,.18);
     }
     #comfortPhotoLayer{
@@ -1421,19 +1422,36 @@
     }
     #blueSimOverlay.show{ display:flex; }
     #blueSimWrap{
-      width:min(920px, 96vw); border-radius:24px; overflow:hidden; background:#fff;
-      border:1px solid rgba(36,85,199,.16); box-shadow:0 18px 44px rgba(15,40,95,.16);
+      width:min(470px, 96vw);
+      border-radius:40px;
+      overflow:hidden;
+      background:#fff;
+      border:1px solid rgba(15,23,42,.06);
+      box-shadow:0 30px 70px rgba(15,23,42,.24);
     }
     #blueSimHead{
-      height:50px; background:var(--smartfit-blue); display:flex; align-items:center; justify-content:space-between; padding:0 16px;
-      border-bottom:1px solid rgba(255,255,255,.14);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:24px 24px 12px;
+      background:#fff;
+      box-sizing:border-box;
     }
-    #blueSimTitle{ font-size:16px; font-weight:900; color:#fff; letter-spacing:-.25px; }
-    #blueSimClose{ border:none; background:rgba(255,255,255,.12); font-size:18px; line-height:1; color:#fff; cursor:pointer; padding:0; width:32px; height:32px; border-radius:999px; }
+    #blueSimTitleWrap{ min-width:0; }
+    #blueSimTitle{ font-size:24px; line-height:1.14; font-weight:900; color:#1e293b; letter-spacing:-.03em; }
+    #blueSimSubTitle{ margin-top:4px; font-size:11px; line-height:1.2; color:#94a3b8; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+    #blueSimClose{ width:40px; height:40px; border:none; border-radius:999px; background:#f8fafc; color:#94a3b8; font-weight:800; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:inset 0 0 0 1px rgba(148,163,184,.16); }
 
     #blueSimScene{
-      position:relative; height:min(66vw, 620px); min-height:380px; overflow:hidden;
+      position:relative;
+      height:min(92vw, 470px);
+      min-height:360px;
+      overflow:hidden;
+      margin:0 16px 0;
+      border-radius:32px;
       background:#cfd8e2;
+      border:1px solid rgba(148,163,184,.18);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06), inset 0 -40px 90px rgba(0,0,0,.08);
     }
     #blueCompareWrap{
       position:absolute; inset:0; overflow:hidden; --blue-compare:50%;
@@ -1702,19 +1720,49 @@
     .blueSegBtn.active{ background:#edf4ff; color:var(--smartfit-blue-deep); border-color:#6e9be6; box-shadow:0 4px 10px rgba(36,85,199,.10); }
 
     #blueSimMessage{
-      background:#eef4fb; padding:16px 18px 16px; display:flex; align-items:center; justify-content:space-between; gap:14px; border-top:1px solid #d6e4fb;
+      background:rgba(248,250,252,.94);
+      padding:18px 22px 18px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:flex-start;
+      gap:14px;
+      border-top:1px solid rgba(226,232,240,.92);
+      margin-top:16px;
     }
-    #blueSimMessageCopy{ flex:1 1 auto; min-width:0; font-size:18px; line-height:1.42; font-weight:900; letter-spacing:-.25px; color:#111; word-break:keep-all; }
-    #blueSimMessageCopy .blue{ color:var(--smartfit-blue); }
+    #blueSimInfoBadge{
+      width:36px; height:36px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+      margin-top:2px; font-size:16px; font-weight:900; color:#2563eb; background:#dbeafe;
+    }
+    #blueSimMessageCopy{
+      flex:1 1 auto;
+      min-width:0;
+      font-size:14px;
+      line-height:1.6;
+      font-weight:500;
+      letter-spacing:-.02em;
+      color:#475569;
+      word-break:keep-all;
+    }
+    #blueSimMessageTitle{
+      display:block;
+      margin-bottom:4px;
+      font-size:16px;
+      line-height:1.35;
+      font-weight:900;
+      color:#1e293b;
+      letter-spacing:-.02em;
+    }
+    #blueSimMessageCopy .blue{ color:var(--smartfit-blue); font-weight:800; }
     #blueSimConfirm{ display:none !important; 
       flex:0 0 auto; width:84px; height:40px; border:none; border-radius:999px; background:var(--smartfit-blue);
       color:#fff; font-size:13px; line-height:1; font-weight:900; cursor:pointer; box-shadow:0 6px 16px rgba(36,85,199,.16);
     }
 
     #blueSimWrap .popup-reference-area{
-      margin-top:0; padding:10px 16px 0 !important; background:#fff !important; font-size:9px; line-height:1.34;
+      margin-top:0; padding:14px 24px 0 !important; background:#fff !important; font-size:10px; line-height:1.45; color:#94a3b8;
     }
-    #blueSimWrap .toric-popup-disclaimer{ padding:4px 16px 10px; background:#fff; font-size:8.8px; }
+    #blueSimWrap .popup-reference-area::before{ display:none; }
+    #blueSimWrap .toric-popup-disclaimer{ padding:6px 24px 20px; background:#fff; font-size:10px; color:#94a3b8; }
     #blueSimOverlay.state-off #blueSimImageStage,
     #blueSimOverlay.state-off #blueSimImageStageOn,
     #blueSimOverlay.state-on #blueSimImageStage,
@@ -1797,11 +1845,13 @@
 
     @media (max-width: 560px){
       #blueSimOverlay{ padding:8px; }
-      #blueSimWrap{ width:100%; border-radius:20px; }
-      #blueSimHead{ height:48px; padding:0 14px; }
-      #blueSimTitle{ font-size:15px; }
-      #blueCameraGuide{ display:none !important;  top:10px; font-size:12px; min-height:36px; padding:0 14px; }
-      #blueSimScene{ height:340px; min-height:340px; }
+      #blueSimWrap{ width:100%; border-radius:30px; }
+      #blueSimHead{ padding:20px 18px 10px; }
+      #blueSimTitle{ font-size:20px; }
+      #blueSimSubTitle{ font-size:10px; }
+      #blueSimClose{ width:36px; height:36px; font-size:18px; }
+      #blueCameraGuide{ display:none !important; top:10px; font-size:12px; min-height:36px; padding:0 14px; }
+      #blueSimScene{ height:320px; min-height:320px; margin:0 10px 0; border-radius:26px; }
       #blueHotspot1, #blueHotspot1On{ width:78px; height:78px; left:7%; top:20%; }
       #blueHotspot2, #blueHotspot2On{ width:96px; height:60px; left:54%; top:45%; }
       #blueTopGuide{ top:56px; font-size:12px; min-height:34px; padding:0 14px; max-width:calc(100% - 28px); }
@@ -1812,9 +1862,32 @@
       #blueCallout2{ left:49%; top:49%; }
       #blueSimControls{ left:10px; right:10px; bottom:10px; gap:8px; }
       .blueSegBtn{ min-width:96px; height:42px; font-size:12px; padding:0 12px; }
-      #blueSimMessage{ padding:12px 14px 12px; gap:10px; }
-      #blueSimMessageCopy{ font-size:14px; line-height:1.42; }
+      #blueSimMessage{ padding:14px 14px 14px; gap:10px; margin-top:12px; }
+      #blueSimInfoBadge{ width:32px; height:32px; border-radius:10px; font-size:14px; }
+      #blueSimMessageCopy{ font-size:13px; line-height:1.5; }
+      #blueSimMessageTitle{ font-size:15px; }
       #blueSimConfirm{ width:96px; height:44px; font-size:13px; }
+      #blueSimWrap .popup-reference-area{ padding:12px 16px 0 !important; font-size:9px; }
+      #blueSimWrap .toric-popup-disclaimer{ padding:4px 16px 16px; font-size:9px; }
+    }
+
+
+    @media (max-width: 560px){
+      #asdOverlay{ padding:8px; }
+      #asdCard{ width:100%; border-radius:30px; }
+      #asdHeader{ padding:20px 18px 10px; }
+      #asdHeaderTitle{ font-size:20px; }
+      #asdHeaderSubTitle{ font-size:10px; }
+      #asdClose{ width:36px; height:36px; font-size:18px; }
+      #asdScene{ width:calc(100% - 20px); margin:0 10px; min-height:320px; border-radius:26px; }
+      #asdAngleBadge{ left:14px; bottom:14px; padding:8px 12px; font-size:11px; }
+      #asdControlBar{ padding:12px 10px 12px; gap:8px; }
+      .asdActionBtn{ height:50px; font-size:13px; border-radius:16px; }
+      #asdHint{ padding:14px 14px 14px; gap:10px; }
+      #asdInfoBadge{ width:32px; height:32px; border-radius:10px; font-size:14px; }
+      #asdHint .hintTitle{ font-size:15px; }
+      #asdHint .hintBody{ font-size:13px; line-height:1.5; }
+      #asdCard .toric-popup-disclaimer{ padding:4px 16px 16px; font-size:9px; }
     }
 
 </style>
@@ -2121,7 +2194,10 @@
   <div id="blueSimOverlay" class="state-on" aria-hidden="true">
     <div id="blueSimWrap" onclick="event.stopPropagation()">
       <div id="blueSimHead">
-        <div id="blueSimTitle">블루라이트 비전 시뮬레이터</div>
+        <div id="blueSimTitleWrap">
+          <div id="blueSimTitle">블루라이트 비전 시뮬레이터</div>
+          <div id="blueSimSubTitle">BLUE LIGHT VISION SIMULATOR</div>
+        </div>
         <button id="blueSimClose" type="button">X</button>
       </div>
       <div id="blueSimScene">
@@ -2179,9 +2255,10 @@
         </div>
       </div>
       <div id="blueSimMessage">
-        <div id="blueSimMessageCopy"><span class="blue">왼쪽은 OFF</span>, <span class="blue">오른쪽은 ON</span> 상태입니다. 가운데 슬라이더를 움직여 블루라이트 차단 전후 차이를 한 화면에서 비교해 보세요.</div>
+        <div id="blueSimInfoBadge">i</div>
+        <div id="blueSimMessageCopy"><span id="blueSimMessageTitle">블루라이트 차단 비교</span><span class="blue">왼쪽은 OFF</span>, <span class="blue">오른쪽은 ON</span> 상태입니다. 가운데 슬라이더를 움직여 블루라이트 차단 전후의 <span class="blue">빛 번짐과 선명함 차이</span>를 한 화면에서 비교해 보세요.</div>
       </div>
-      <div class="popup-reference-area" style="padding:12px 16px 0; background:#dbe5f1;">
+      <div class="popup-reference-area" style="padding:14px 24px 0; background:#fff;">
         <span class="ref-line">해당 시뮬레이션은 이해를 돕기 위한 데모 화면이며, 실제 시야 경험과는 차이가 있을 수 있습니다.</span>
       </div>
       <div class="toric-popup-disclaimer"><span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span></div>
