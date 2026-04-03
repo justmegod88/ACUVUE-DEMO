@@ -191,8 +191,6 @@
       gap:8px;
       flex-wrap:wrap;
       align-items:center;
-      position:fixed;
-      overflow:visible;
     }
     .btn{
       flex:1;
@@ -1204,24 +1202,12 @@
       }
     }
 
-    #packshotAnchor{
-      position:absolute;
-      right:10px;
-      bottom:104px;
-      width:122px;
-      height:auto;
-      z-index:72;
-      pointer-events:none;
-      overflow:visible;
-    }
     #maxPackshot{
-      position:relative !important;
-      right:auto !important;
-      bottom:auto !important;
-      left:auto !important;
-      top:auto !important;
-      width:122px !important;
-      max-width:none !important;
+      position:fixed;
+      left:0;
+      top:0;
+      width:116px;
+      max-width:none;
       height:auto;
       z-index:72 !important;
       pointer-events:auto !important;
@@ -1233,13 +1219,13 @@
       display:none;
       object-fit:contain;
       mix-blend-mode:multiply;
-      filter: drop-shadow(0 10px 18px rgba(11,31,51,.12));
-      transform: translateZ(0);
-      transition:transform .26s ease, filter .26s ease, opacity .26s ease !important;
+      filter: drop-shadow(0 12px 22px rgba(11,31,51,.14));
+      transform: translate3d(0,0,0);
+      transition:transform .22s ease, filter .22s ease, opacity .22s ease !important;
       transform-origin:center bottom;
     }
     #maxPackshot.active{
-      transform:translateY(-4px) scale(1.03) !important;
+      transform:translate3d(0,-4px,0) scale(1.03) !important;
       filter:drop-shadow(0 18px 28px rgba(0,94,184,.20)) !important;
     }
 
@@ -1397,9 +1383,8 @@
 
 
     @media (max-width:560px){
-      #packshotAnchor{ right:8px; bottom:58px; width:110px; }
-      #maxPackshot{ width:110px !important; }
-      #maxPackshot.active{ transform:translateY(-3px) scale(1.02) !important; }
+      #maxPackshot{ width:98px; }
+      #maxPackshot.active{ transform:translate3d(0,-3px,0) scale(1.02) !important; }
       #blueInfo{
         left:12px;
         right:12px;
@@ -2217,7 +2202,11 @@
       <div class="toric-popup-disclaimer"><span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span></div>
     </div>
   </div>
-<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+  <img id="maxPackshot" src="MAX.png" alt="아큐브 맥스 난시 팩샷" role="button" tabindex="0" aria-label="블루라이트 기능 열기" onerror="this.style.display='none';">
+
+
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
 
   <model-viewer
@@ -2237,7 +2226,6 @@
     <button id="btnReset" title="처음 위치로">↺</button>
     <button id="modeLens" class="btn primary">투명 렌즈 모드</button>
     <button id="modeHeat" class="btn">렌즈 두께 MAP</button>
-    <div id="packshotAnchor"><img id="maxPackshot" src="MAX.png" alt="아큐브 맥스 난시 팩샷" role="button" tabindex="0" aria-label="블루라이트 기능 열기" onerror="this.style.display='none';"></div>
   </div>
   <div id="globalToricDisclaimer">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</div>
 
@@ -2301,6 +2289,7 @@
     const comfortSubTitle = document.getElementById('comfortSubTitle');
     const comfortInfoBadge = document.getElementById('comfortInfoBadge');
     const maxPackshot = document.getElementById('maxPackshot');
+    const bottomBtns = document.getElementById('bottomBtns');
     const blueBackGlow = document.getElementById('blueBackGlow');
     const blueRayLayer = document.getElementById('blueRayLayer');
     const blueRayLayerBack = document.getElementById('blueRayLayerBack');
@@ -2434,16 +2423,18 @@
       thicknessBar.setAttribute('aria-hidden', show ? 'false' : 'true');
     }
 
-
-    function forcePackshotBottomRight(){
-      if(!maxPackshot || !bottomBtns) return;
-      const anchor = document.getElementById('packshotAnchor');
-      if(!anchor) return;
-      anchor.style.right = window.innerWidth <= 560 ? '8px' : '10px';
-      anchor.style.bottom = window.innerWidth <= 560 ? '58px' : '64px';
-      anchor.style.width = window.innerWidth <= 560 ? '110px' : '122px';
-      maxPackshot.style.width = '100%';
-      maxPackshot.style.display = (currentMode === 'lens' && !(asdOverlay.classList.contains('show') || comfortOverlay.classList.contains('show') || pvpOn || bluePanelOpen)) ? 'block' : 'none';
+    function updateMaxPackshotPosition(){
+      if(!maxPackshot || !bottomBtns || !modeHeat) return;
+      const btnsRect = bottomBtns.getBoundingClientRect();
+      const mapRect = modeHeat.getBoundingClientRect();
+      const packW = Math.min(window.innerWidth <= 560 ? 98 : 116, Math.max(88, window.innerWidth * 0.26));
+      maxPackshot.style.width = `${packW}px`;
+      const packH = packW * 0.40;
+      const gap = window.innerWidth <= 560 ? 14 : 16;
+      const left = Math.round(mapRect.left + (mapRect.width - packW) / 2);
+      const top = Math.round(btnsRect.top - packH - gap);
+      maxPackshot.style.left = `${Math.max(12, left)}px`;
+      maxPackshot.style.top = `${Math.max(140, top)}px`;
     }
 
     function syncPackshot(){
@@ -2451,7 +2442,7 @@
       const overlayOpen = asdOverlay.classList.contains('show') || comfortOverlay.classList.contains('show') || pvpOn || bluePanelOpen;
       maxPackshot.style.display = (currentMode === 'lens' && !overlayOpen) ? 'block' : 'none';
       maxPackshot.classList.toggle('active', bluePanelOpen);
-      forcePackshotBottomRight();
+      if(maxPackshot.style.display === 'block') updateMaxPackshotPosition();
     }
 
     async function startComfortCamera(){
@@ -3517,10 +3508,12 @@
     blueViewCamera?.addEventListener('click', ()=>setBlueSimView(blueSimView === 'camera' ? 'image' : 'camera'));
     blueCompareRange?.addEventListener('input', (e)=>updateBlueCompare(e.target.value));
 
+    window.addEventListener('resize', updateMaxPackshotPosition);
+    window.addEventListener('orientationchange', ()=>setTimeout(updateMaxPackshotPosition, 80));
+    window.addEventListener('scroll', updateMaxPackshotPosition, { passive:true });
+    requestAnimationFrame(updateMaxPackshotPosition);
+
     setModel('lens_clear.glb', 'lens', { resetCamera:true });
-    window.addEventListener('resize', forcePackshotBottomRight);
-    window.addEventListener('orientationchange', ()=>setTimeout(forcePackshotBottomRight, 120));
-    requestAnimationFrame(forcePackshotBottomRight);
 
     const tutorialLayer = document.getElementById('tutorialLayer');
     const tutorialMask = document.getElementById('tutorialMask');
