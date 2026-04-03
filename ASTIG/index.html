@@ -935,7 +935,7 @@
       background:rgba(59,130,246,.16); color:#dbeafe; border-color:rgba(59,130,246,.22);
     }
     #comfortScene.mode-on #comfortStateBadge{
-      background:rgba(34,197,94,.16); color:#dcfce7; border-color:rgba(34,197,94,.22);
+      background:rgba(34,197,94,.16); color:#fde7ef; border-color:rgba(34,197,94,.22);
     }
 
     #cfTargetStage{
@@ -1064,8 +1064,8 @@
     .cf-seg-btn[data-state="on"].active::before{
       content:""; width:16px; height:16px; border-radius:999px; display:inline-block;
     }
-    .cf-seg-btn[data-state="off"].active::before{ background:#3b82f6; box-shadow:0 0 0 4px rgba(59,130,246,.08); }
-    .cf-seg-btn[data-state="on"].active::before{ background:#3b82f6; box-shadow:0 0 0 4px rgba(16,185,129,.12); }
+    .cf-seg-btn[data-state="off"].active::before{ background:#ef5a8a; box-shadow:0 0 0 4px rgba(59,130,246,.08); }
+    .cf-seg-btn[data-state="on"].active::before{ background:#ef5a8a; box-shadow:0 0 0 4px rgba(16,185,129,.12); }
     .cf-camera-btn{
       flex:0 0 auto; min-width:64px; width:64px; height:64px; padding:0; border-radius:22px;
       border:1px solid rgba(148,163,184,.18); background:#fff; color:#475569; font-size:0; font-weight:900; letter-spacing:-.2px;
@@ -2026,7 +2026,7 @@
         <div id="asdInfoBadge">i</div>
         <div class="hintText">
           <span class="hintTitle">난시 렌즈의 중요성</span>
-          <span class="hintBody">정밀한 광학 설계로 프리즘을 억제하면 <span class="green">선명하고 편안한 시야</span>를 소비자에게 제공할 수 있습니다.</span>
+          <span class="hintBody">정밀한 광학 설계로 프리즘을 억제하면 <span class="green"><span style="color:#2563eb;font-weight:600;">선명하고 편안한 시야</span></span>를 소비자에게 제공할 수 있습니다.</span>
         </div>
       </div>
       <div class="toric-popup-disclaimer"><span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span></div>
@@ -2074,7 +2074,7 @@
       <div id="comfortMessage">
         <div id="comfortMessageCopyWrap">
           <div id="comfortInfoBadge">i</div>
-          <div id="comfortMessageCopy"><span class="comfort-info-title">난시 렌즈의 중요성</span>정밀한 광학 설계로 프리즘을 억제하면 <span class="green">선명하고 편안한 시야</span>를 소비자에게 제공할 수 있습니다.</div>
+          <div id="comfortMessageCopy"><span class="comfort-info-title">난시 렌즈의 중요성</span>정밀한 광학 설계로 프리즘을 억제하면 <span class="green"><span style="color:#2563eb;font-weight:600;">선명하고 편안한 시야</span></span>를 소비자에게 제공할 수 있습니다.</div>
         </div>
         <button id="comfortConfirm" type="button">확인 완료</button>
       </div>
@@ -3044,7 +3044,7 @@
       asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span><span class="hintBody"><span class="blue">‘깜박임 실행’ 버튼</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
     }
     function setASDHintSuccess(){
-      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈의 중요성</span><span class="hintBody">정밀한 광학 설계로 프리즘을 억제하면 <span class="green">선명하고 편안한 시야</span>를 소비자에게 제공할 수 있습니다.</span></div><button id="asdConfirmBtn" type="button">확인 완료</button>`;
+      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈의 중요성</span><span class="hintBody">정밀한 광학 설계로 프리즘을 억제하면 <span class="green"><span style="color:#2563eb;font-weight:600;">선명하고 편안한 시야</span></span>를 소비자에게 제공할 수 있습니다.</span></div><button id="asdConfirmBtn" type="button">확인 완료</button>`;
       document.getElementById('asdConfirmBtn')?.addEventListener('click', (e)=>{ e.stopPropagation(); closeASD(); markASDDone(true); });
     }
     function markASDDone(done){ asdDone = !!done; missionASD.classList.toggle('done', asdDone); }
@@ -3339,11 +3339,11 @@
       if(mode === 'on'){
         comfortScene.classList.add('mode-on');
         cfBtnOn.classList.add('active');
-        if(comfortStateBadge) comfortStateBadge.textContent = '프리즘 영향 발생 중';
+        if(comfortStateBadge) comfortStateBadge.textContent = '<span style="color:#ef5a8a;font-weight:600;">프리즘 영향 발생 중</span>';
         if(comfortTitle) comfortTitle.textContent = '프리즘 저감 광학 설계';
         if(comfortSubTitle) comfortSubTitle.textContent = 'OPTICAL TECHNOLOGY VISUALIZATION';
         if(comfortInfoBadge){ comfortInfoBadge.style.background = '#dbeafe'; comfortInfoBadge.style.color = '#2563eb'; comfortInfoBadge.textContent = '!'; }
-        comfortMessageCopy.innerHTML = `<span class="comfort-info-title">단안 프리즘 영향</span>단안에 프리즘 영향이 있는 경우 <span class="blue">양안 이미지 위치에 차이</span>가 발생하여 시각적 피로감이 발생할 수 있습니다.`;
+        comfortMessageCopy.innerHTML = `<span class="comfort-info-title">단안 프리즘 영향</span>단안에 프리즘 영향이 있는 경우 <span class="blue"><span style="color:#ef5a8a;font-weight:600;">양안 이미지 위치에 차이</span></span>가 발생하여 시각적 피로감이 발생할 수 있습니다.`;
         if(comfortConfirm) comfortConfirm.style.display = 'inline-flex';
       }else{
         comfortScene.classList.add('mode-off');
@@ -3352,7 +3352,7 @@
         if(comfortTitle) comfortTitle.textContent = '프리즘 저감 광학 설계';
         if(comfortSubTitle) comfortSubTitle.textContent = 'OPTICAL TECHNOLOGY VISUALIZATION';
         if(comfortInfoBadge){ comfortInfoBadge.style.background = '#d1fae5'; comfortInfoBadge.style.color = '#059669'; comfortInfoBadge.textContent = 'i'; }
-        comfortMessageCopy.innerHTML = `<span class="comfort-info-title">난시 렌즈의 중요성</span>정밀한 광학 설계로 프리즘을 억제하면 <span class="green">선명하고 편안한 시야</span>를 소비자에게 제공할 수 있습니다.`;
+        comfortMessageCopy.innerHTML = `<span class="comfort-info-title">난시 렌즈의 중요성</span>정밀한 광학 설계로 프리즘을 억제하면 <span class="green"><span style="color:#2563eb;font-weight:600;">선명하고 편안한 시야</span></span>를 소비자에게 제공할 수 있습니다.`;
         if(comfortConfirm) comfortConfirm.style.display = 'inline-flex';
       }
       applyComfortCameraUI();
