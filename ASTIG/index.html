@@ -825,8 +825,10 @@
     #comfortHeadSub{ margin-top:6px; font-size:11px; color:#94a3b8; font-weight:800; letter-spacing:.18em; }
     #comfortClose{ border:none; background:#f8fafc; font-size:22px; line-height:1; color:#94a3b8; cursor:pointer; padding:0; width:44px; height:44px; border-radius:999px; flex:0 0 auto; }
     #comfortScene{
-      position:relative; height:min(66vw, 620px); min-height:420px; background:#0f172a; overflow:hidden;
-      border-top:1px solid #f1f5f9; border-bottom:1px solid #f1f5f9;
+      position:relative; height:min(62vw, 560px); min-height:380px; background:#0f172a; overflow:hidden;
+      margin:18px 24px 0;
+      border-radius:28px;
+      border:none;
     }
     #cfScenePhoto{
       position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; z-index:0;
@@ -837,7 +839,7 @@
     #comfortScene.mode-on #cfScenePhoto{ filter:blur(1.5px) grayscale(.18) brightness(.88); }
     #cfSceneGradient{ position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(180deg, rgba(11,31,51,.06) 0%, rgba(11,31,51,.02) 34%, rgba(11,31,51,.54) 100%); }
     #cfPrismBadge{
-      position:absolute; left:28px; bottom:98px; z-index:8;
+      position:absolute; left:28px; bottom:24px; z-index:8;
       display:inline-flex; align-items:center; gap:10px;
       padding:12px 20px; border-radius:999px; font-size:12px; font-weight:900;
       backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.32); transition:.25s ease;
@@ -940,7 +942,7 @@
     #cfSegWrap{
       position:relative; left:auto; right:auto; bottom:auto; transform:none; z-index:10;
       display:flex; align-items:center; gap:14px;
-      padding:16px 24px 0;
+      padding:18px 24px 0;
       background:#fff;
     }
     .cf-toggle{
@@ -1024,9 +1026,10 @@
       #comfortTitle{ font-size:20px; }
       #comfortHeadSub{ font-size:10px; margin-top:4px; }
       #comfortClose{ font-size:18px; width:40px; height:40px; }
-      #comfortScene{ height:320px; min-height:320px; }
+      #comfortScene{ height:320px; min-height:320px; margin:16px 16px 0; border-radius:24px; }
       #cfTargetStage{ width:82px; height:126px; }
       .cf-target-box{ border-radius:16px; }
+      #cfPrismBadge{ left:18px; bottom:18px; padding:10px 16px; font-size:11px; }
       #comfortScene.mode-on .cf-box-top{ top:-10px; }
       #comfortScene.mode-on .cf-box-bottom{ top:10px; }
       .cf-target-a{ font-size:72px; letter-spacing:-4px; }
@@ -1904,7 +1907,7 @@
         <button id="comfortClose" type="button">×</button>
       </div>
       <div id="comfortScene" class="mode-off">
-        <img id="cfScenePhoto" src="face_V2.png" alt="Prism simulation model" onerror="this.onerror=null;this.src='face_V2.png';">
+        <img id="cfScenePhoto" src="face_V3.png" alt="Prism simulation model" onerror="this.onerror=null;this.src='face_V2.png';">
         <div id="cfSceneGradient"></div>
         <div id="comfortCameraStage" aria-hidden="true">
           <video id="comfortCameraBase" autoplay playsinline muted></video>
