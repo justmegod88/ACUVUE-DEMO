@@ -978,9 +978,9 @@
     #comfortScene.mode-off .cf-box-bottom{ background:rgba(255,255,255,.03); }
     #comfortScene.mode-off .cf-a-red{ top:50%; opacity:.28; transform:translate(-50%,-50%); animation:none; color:#86efac; }
     #comfortScene.mode-off .cf-a-blue{ top:50%; opacity:.98; transform:translate(-50%,-50%); color:#ffffff; animation:none; }
-    #comfortScene.mode-on .cf-box-top{ top:-16px; opacity:.96; background:rgba(74,222,128,.12); animation:cfPinkFloat 1.45s ease-in-out infinite; }
-    #comfortScene.mode-on .cf-box-bottom{ top:0; opacity:.88; background:rgba(255,255,255,.08); transform:translateX(-50%); }
-    #comfortScene.mode-on .cf-a-red{ top:34%; opacity:1; transform:translate(-50%,-50%); color:#4ade80; animation:cfRedFloat 1.45s ease-in-out infinite; }
+    #comfortScene.mode-on .cf-box-top{ top:-30px; opacity:.96; background:rgba(74,222,128,.12); animation:cfPinkFloat 2.8s ease-in-out infinite; }
+    #comfortScene.mode-on .cf-box-bottom{ top:0; opacity:.92; background:rgba(96,165,250,.14); transform:translateX(-50%); }
+    #comfortScene.mode-on .cf-a-red{ top:25%; opacity:1; transform:translate(-50%,-50%); color:#4ade80; animation:cfRedFloat 2.8s ease-in-out infinite; }
     #comfortScene.mode-on .cf-a-blue{ top:50%; opacity:1; transform:translate(-50%,-50%); color:#60a5fa; }
     #comfortScene.mode-on #cfTargetStage{
       border-color:rgba(255,255,255,.26);
@@ -1005,16 +1005,16 @@
     }
     @keyframes cfRedFloat{
       0%{ transform:translate(-50%,-50%) translateY(0); }
-      25%{ transform:translate(-50%,-50%) translateY(-4px); }
+      25%{ transform:translate(-50%,-50%) translateY(-2px); }
       50%{ transform:translate(-50%,-50%) translateY(1px); }
-      75%{ transform:translate(-50%,-50%) translateY(-3px); }
+      75%{ transform:translate(-50%,-50%) translateY(-1px); }
       100%{ transform:translate(-50%,-50%) translateY(0); }
     }
     @keyframes cfPinkFloat{
       0%{ transform:translateX(-50%) translateY(0); }
-      25%{ transform:translateX(-50%) translateY(-4px); }
+      25%{ transform:translateX(-50%) translateY(-2px); }
       50%{ transform:translateX(-50%) translateY(1px); }
-      75%{ transform:translateX(-50%) translateY(-3px); }
+      75%{ transform:translateX(-50%) translateY(-1px); }
       100%{ transform:translateX(-50%) translateY(0); }
     }
 
@@ -1036,13 +1036,13 @@
     }
     .cf-optic-prism,.cf-optic-flat{ display:none !important; }
     .cf-guide-line{
-      position:absolute; height:0; border-top:2px dashed rgba(255,255,255,.34); z-index:5; transform-origin:left center; pointer-events:none; opacity:0;
+      position:absolute; height:0; border-top:3px dashed rgba(255,255,255,.34); z-index:5; transform-origin:left center; pointer-events:none; opacity:0;
       filter:drop-shadow(0 3px 8px rgba(15,23,42,.18));
     }
     #cfLineBlue{ transition:none !important; }
     #cfLineRed{ transition:top .35s ease, width .35s ease, opacity .25s ease; }
-    .cf-guide-line.red{ border-color:rgba(74,222,128,.55); }
-    .cf-guide-line.blue{ border-color:rgba(96,165,250,.55); }
+    .cf-guide-line.red{ border-color:rgba(74,222,128,.82); }
+    .cf-guide-line.blue{ border-color:rgba(96,165,250,.82); }
     #comfortScene.mode-default .cf-guide-line{ opacity:0; }
     #comfortScene.mode-off .cf-guide-line, #comfortScene.mode-on .cf-guide-line{ opacity:1; }
 
@@ -3376,8 +3376,8 @@
       const mobile = w <= 560;
       const tablet = w <= 820 && w > 560;
 
-      const eyeLeft = { x: w * 0.39, y: h * 0.46 };
-      const eyeRight = { x: w * 0.72, y: h * 0.46 };
+      const eyeLeft = { x: w * 0.36, y: h * 0.465 };
+      const eyeRight = { x: w * 0.72, y: h * 0.465 };
 
       const cardW = mobile ? 74 : (tablet ? 82 : 90);
       const cardH = mobile ? 106 : (tablet ? 116 : 126);
@@ -3389,8 +3389,8 @@
       const baseCardCy = h * 0.50;
       const cardCy = baseCardCy;
 
-      const redCardCenterY = baseCardCy - 16 + redFloatOffset;
-      const blueCardCenterY = baseCardCy;
+      const redCardCenterY = baseCardCy - 26 + redFloatOffset;
+      const blueCardCenterY = baseCardCy + 2;
 
       cfTargetStage.style.width = cardW + 'px';
       cfTargetStage.style.height = cardH + 'px';
@@ -3398,7 +3398,7 @@
 
       if(modeOn){
         if(cfBoxTop){
-          cfBoxTop.style.top = '-16px';
+          cfBoxTop.style.top = '-30px';
           cfBoxTop.style.transform = 'translateX(-50%)';
         }
         if(cfBoxBottom){
@@ -3408,12 +3408,12 @@
 
         if(cfARed){
           cfARed.style.left = '50%';
-          cfARed.style.top = '34%';
+          cfARed.style.top = '25%';
           cfARed.style.transform = 'translate(-50%,-50%)';
         }
         if(cfABlue){
           cfABlue.style.left = '50%';
-          cfABlue.style.top = '50%';
+          cfABlue.style.top = '52%';
           cfABlue.style.transform = 'translate(-50%,-50%)';
         }
       }
@@ -3435,7 +3435,7 @@
         }
         if(cfABlue){
           cfABlue.style.left = '50%';
-          cfABlue.style.top = '50%';
+          cfABlue.style.top = '52%';
           cfABlue.style.transform = 'translate(-50%,-50%)';
         }
       }
