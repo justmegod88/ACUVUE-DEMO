@@ -939,7 +939,7 @@
     }
 
     #cfTargetStage{
-      position:absolute; width:92px; height:150px; transform:translate(-50%,-50%); z-index:4; pointer-events:none;
+      position:absolute; width:104px; height:170px; transform:translate(-50%,-50%); z-index:4; pointer-events:none;
       transition:left .35s ease, top .35s ease, width .35s ease, height .35s ease;
       border-radius:26px;
       background:rgba(255,255,255,.10);
@@ -978,10 +978,10 @@
     #comfortScene.mode-off .cf-box-bottom{ background:rgba(255,255,255,.03); }
     #comfortScene.mode-off .cf-a-red{ top:50%; opacity:.28; transform:translate(-50%,-50%); animation:none; color:#86efac; }
     #comfortScene.mode-off .cf-a-blue{ top:50%; opacity:.98; transform:translate(-50%,-50%); color:#ffffff; animation:none; }
-    #comfortScene.mode-on .cf-box-top{ top:-44px; opacity:.96; background:rgba(74,222,128,.12); animation:cfPinkFloat 3.4s ease-in-out infinite; }
-    #comfortScene.mode-on .cf-box-bottom{ top:0; opacity:.92; background:rgba(96,165,250,.14); transform:translateX(-50%); }
-    #comfortScene.mode-on .cf-a-red{ top:15%; opacity:1; transform:translate(-50%,-50%); color:#4ade80; animation:cfRedFloat 3.4s ease-in-out infinite; }
-    #comfortScene.mode-on .cf-a-blue{ top:50%; opacity:1; transform:translate(-50%,-50%); color:#60a5fa; }
+    #comfortScene.mode-on .cf-box-top{ top:-48px; opacity:.98; background:rgba(74,222,128,.14); animation:cfPinkFloat 3.6s ease-in-out infinite; box-shadow:0 12px 24px rgba(74,222,128,.12), inset 0 0 0 1px rgba(255,255,255,.22); }
+    #comfortScene.mode-on .cf-box-bottom{ top:22px; opacity:.96; background:rgba(96,165,250,.12); transform:translateX(-50%); box-shadow:0 12px 24px rgba(96,165,250,.10), inset 0 0 0 1px rgba(255,255,255,.20); }
+    #comfortScene.mode-on .cf-a-red{ top:18%; opacity:1; transform:translate(-50%,-50%); color:#4ade80; animation:cfRedFloat 3.6s ease-in-out infinite; }
+    #comfortScene.mode-on .cf-a-blue{ top:56%; opacity:1; transform:translate(-50%,-50%); color:#60a5fa; }
     #comfortScene.mode-on #cfTargetStage{
       border-color:rgba(255,255,255,.26);
       box-shadow:0 26px 46px rgba(2,6,23,.28), inset 0 0 0 1px rgba(255,255,255,.08), 0 0 0 1px rgba(96,165,250,.16);
@@ -1019,18 +1019,18 @@
     }
 
     #cfOptic{
-      position:absolute; width:42px; height:42px; transform:translate(-50%,-50%); z-index:7; transition:left .35s ease, top .35s ease, width .35s ease, height .35s ease; pointer-events:none;
-      opacity:.68;
-      filter:drop-shadow(0 6px 12px rgba(96,165,250,.22));
+      position:absolute; width:48px; height:48px; transform:translate(-50%,-50%); z-index:7; transition:left .35s ease, top .35s ease, width .35s ease, height .35s ease; pointer-events:none;
+      opacity:.72;
+      filter:drop-shadow(0 8px 16px rgba(96,165,250,.25));
     }
     #cfOptic::before{
       content:""; position:absolute; inset:-10px; border-radius:999px;
-      background:radial-gradient(circle, rgba(96,165,250,.18) 0%, rgba(96,165,250,.08) 42%, rgba(96,165,250,0) 72%);
+      background:radial-gradient(circle, rgba(96,165,250,.30) 0%, rgba(96,165,250,.14) 40%, rgba(96,165,250,0) 74%);
       animation:comfortPulse 1.8s infinite;
     }
     #cfOptic::after{
       content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-      width:0; height:0; border-left:12px solid transparent; border-right:12px solid transparent; border-bottom:19px solid rgba(96,165,250,.68);
+      width:0; height:0; border-left:14px solid transparent; border-right:14px solid transparent; border-bottom:22px solid rgba(96,165,250,.72);
       filter:drop-shadow(0 6px 12px rgba(37,99,235,.35));
     }
     @keyframes comfortPulse{
@@ -1045,12 +1045,12 @@
       animation:cfSparkle 1.8s ease-in-out infinite;
       opacity:0;
     }
-    .cf-prism-spark.s1{ left:-4px; top:12px; animation-delay:0s; }
-    .cf-prism-spark.s2{ right:-2px; top:4px; width:6px; height:6px; animation-delay:.45s; }
-    .cf-prism-spark.s3{ left:18px; bottom:-2px; width:7px; height:7px; animation-delay:.9s; }
+    .cf-prism-spark.s1{ left:-10px; top:8px; width:10px; height:10px; animation-delay:0s; }
+    .cf-prism-spark.s2{ right:-8px; top:-2px; width:8px; height:8px; animation-delay:.45s; }
+    .cf-prism-spark.s3{ left:22px; bottom:-8px; width:9px; height:9px; animation-delay:.9s; }
     @keyframes cfSparkle{
-      0%,100%{ transform:scale(.55); opacity:.18; }
-      50%{ transform:scale(1.2); opacity:1; }
+      0%,100%{ transform:scale(.45); opacity:.22; }
+      50%{ transform:scale(1.45); opacity:1; }
     }
     #comfortScene.mode-on .cf-prism-spark{ opacity:1; }
     .cf-optic-prism,.cf-optic-flat{ display:none !important; }
@@ -1078,13 +1078,13 @@
       transition:all .22s ease; padding:0 12px; white-space:nowrap; -webkit-appearance:none; appearance:none; border-radius:16px;
       display:flex; align-items:center; justify-content:center; gap:8px;
     }
-    .cf-seg-btn.active,.cf-seg-btn.default-active{ color:#fff; box-shadow:0 8px 18px rgba(15,23,42,.10); }
+    .cf-seg-btn.active,.cf-seg-btn.default-active{ background:#fff; color:#1e293b; box-shadow:0 4px 12px rgba(15,23,42,.08); }
     .cf-seg-btn[data-state="off"].active::before,
     .cf-seg-btn[data-state="on"].active::before{
       content:""; width:16px; height:16px; border-radius:999px; display:inline-block;
     }
-    .cf-seg-btn[data-state="off"].active{ background:linear-gradient(180deg,#156BFF 0%, #0D57D7 100%); }
-    .cf-seg-btn[data-state="on"].active{ background:linear-gradient(180deg,#FF5C5C 0%, #D91F1F 100%); }
+    .cf-seg-btn[data-state="off"].active::before{ content:""; width:16px; height:16px; border-radius:999px; display:inline-block; background:#4ade80; box-shadow:0 0 0 4px rgba(74,222,128,.10); }
+    .cf-seg-btn[data-state="on"].active::before{ content:""; width:16px; height:16px; border-radius:999px; display:inline-block; background:#3b82f6; box-shadow:0 0 0 4px rgba(59,130,246,.08); }
     .cf-camera-btn{
       flex:0 0 auto; min-width:64px; width:64px; height:64px; padding:0; border-radius:22px;
       border:1px solid rgba(148,163,184,.18); background:#fff; color:#475569; font-size:0; font-weight:900; letter-spacing:-.2px;
@@ -1127,7 +1127,7 @@
       #comfortClose{ width:36px; height:36px; font-size:18px; }
       #comfortScene{ height:320px; min-height:320px; margin:0 10px 0; border-radius:26px; }
       #comfortStateBadge{ left:14px; bottom:14px; padding:8px 12px; font-size:11px; }
-      #cfTargetStage{ width:80px; height:126px; border-radius:20px; }
+      #cfTargetStage{ width:90px; height:142px; border-radius:20px; }
       .cf-target-box{ border-radius:20px; }
       .cf-target-a{ font-size:50px; letter-spacing:-2px; }
       #cfOptic{ width:40px; height:40px; }
@@ -3398,18 +3398,18 @@
       const eyeLeft = { x: w * 0.34, y: h * 0.468 };
       const eyeRight = { x: w * 0.74, y: h * 0.468 };
 
-      const cardW = mobile ? 70 : (tablet ? 78 : 86);
-      const cardH = mobile ? 118 : (tablet ? 128 : 140);
+      const cardW = mobile ? 82 : (tablet ? 90 : 96);
+      const cardH = mobile ? 146 : (tablet ? 156 : 168);
 
       const modeOn = comfortScene.classList.contains('mode-on');
       const modeOff = comfortScene.classList.contains('mode-off');
 
-      const cardCx = w * 0.50;
+      const cardCx = w * 0.53;
       const baseCardCy = h * 0.50;
       const cardCy = baseCardCy;
 
-      const redCardCenterY = baseCardCy - 42 + redFloatOffset;
-      const blueCardCenterY = baseCardCy + 2;
+      const redCardCenterY = baseCardCy - 52 + redFloatOffset;
+      const blueCardCenterY = baseCardCy + 20;
 
       cfTargetStage.style.width = cardW + 'px';
       cfTargetStage.style.height = cardH + 'px';
@@ -3417,22 +3417,22 @@
 
       if(modeOn){
         if(cfBoxTop){
-          cfBoxTop.style.top = '-44px';
+          cfBoxTop.style.top = '-48px';
           cfBoxTop.style.transform = 'translateX(-50%)';
         }
         if(cfBoxBottom){
-          cfBoxBottom.style.top = '0px';
+          cfBoxBottom.style.top = '22px';
           cfBoxBottom.style.transform = 'translateX(-50%)';
         }
 
         if(cfARed){
           cfARed.style.left = '50%';
-          cfARed.style.top = '15%';
+          cfARed.style.top = '18%';
           cfARed.style.transform = 'translate(-50%,-50%)';
         }
         if(cfABlue){
           cfABlue.style.left = '50%';
-          cfABlue.style.top = '52%';
+          cfABlue.style.top = '56%';
           cfABlue.style.transform = 'translate(-50%,-50%)';
         }
       }
@@ -3443,7 +3443,7 @@
           cfBoxTop.style.transform = 'translateX(-50%)';
         }
         if(cfBoxBottom){
-          cfBoxBottom.style.top = '0px';
+          cfBoxBottom.style.top = '22px';
           cfBoxBottom.style.transform = 'translateX(-50%)';
         }
 
@@ -3454,7 +3454,7 @@
         }
         if(cfABlue){
           cfABlue.style.left = '50%';
-          cfABlue.style.top = '52%';
+          cfABlue.style.top = '56%';
           cfABlue.style.transform = 'translate(-50%,-50%)';
         }
       }
