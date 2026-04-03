@@ -952,15 +952,15 @@
       background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,0));
     }
     .cf-target-box{
-      position:absolute; left:50%; transform:translateX(-50%); width:100%; height:100%; border-radius:26px;
-      border:1px solid rgba(255,255,255,.12); backdrop-filter: blur(1px);
+      position:absolute; left:50%; transform:translateX(-50%); width:100%; height:100%; border-radius:22px;
+      border:1px solid rgba(255,255,255,.16); backdrop-filter: blur(1px);
       box-shadow:none;
       transition: top .45s ease, opacity .35s ease, background .35s ease, transform .45s ease;
     }
     .cf-box-top{ z-index:0; background:rgba(255,255,255,.04); }
     .cf-box-bottom{ z-index:0; background:rgba(255,255,255,.02); }
     .cf-target-a{
-      position:absolute; left:50%; transform:translate(-50%,-50%); font-size:88px; line-height:1; font-weight:800; letter-spacing:-3px;
+      position:absolute; left:50%; transform:translate(-50%,-50%); font-size:58px; line-height:1; font-weight:800; letter-spacing:-2px;
       font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",sans-serif; user-select:none;
       transition: top .55s cubic-bezier(.22,.8,.22,1), opacity .35s ease, transform .55s cubic-bezier(.22,.8,.22,1), color .35s ease; z-index:2;
       text-shadow:0 6px 18px rgba(2,6,23,.20);
@@ -979,10 +979,10 @@
     #comfortScene.mode-off .cf-box-bottom{ background:rgba(255,255,255,.03); }
     #comfortScene.mode-off .cf-a-red{ top:50%; opacity:.28; transform:translate(-50%,-50%); animation:none; color:#86efac; }
     #comfortScene.mode-off .cf-a-blue{ top:50%; opacity:.98; transform:translate(-50%,-50%); color:#ffffff; animation:none; }
-    #comfortScene.mode-on .cf-box-top{ top:-14px; opacity:.96; background:rgba(74,222,128,.08); animation:cfPinkFloat 1.45s ease-in-out infinite; }
-    #comfortScene.mode-on .cf-box-bottom{ top:14px; opacity:.82; background:rgba(96,165,250,.08); transform:translateX(-50%); }
-    #comfortScene.mode-on .cf-a-red{ top:38%; opacity:1; transform:translate(-50%,-50%); color:#4ade80; animation:cfRedFloat 1.45s ease-in-out infinite; }
-    #comfortScene.mode-on .cf-a-blue{ top:62%; opacity:1; transform:translate(-50%,-50%); color:#60a5fa; }
+    #comfortScene.mode-on .cf-box-top{ top:-10px; opacity:.92; background:rgba(74,222,128,.10); animation:cfPinkFloat 1.45s ease-in-out infinite; }
+    #comfortScene.mode-on .cf-box-bottom{ top:10px; opacity:.80; background:rgba(96,165,250,.10); transform:translateX(-50%); }
+    #comfortScene.mode-on .cf-a-red{ top:50%; opacity:1; transform:translate(-50%,-50%); color:#4ade80; animation:cfRedFloat 1.45s ease-in-out infinite; }
+    #comfortScene.mode-on .cf-a-blue{ top:50%; opacity:1; transform:translate(-50%,-50%); color:#60a5fa; }
     #comfortScene.mode-on #cfTargetStage{
       border-color:rgba(255,255,255,.22);
       box-shadow:0 20px 40px rgba(2,6,23,.20), inset 0 0 0 1px rgba(255,255,255,.08), 0 0 0 1px rgba(96,165,250,.12);
@@ -1109,9 +1109,9 @@
       #comfortClose{ width:36px; height:36px; font-size:18px; }
       #comfortScene{ height:320px; min-height:320px; margin:0 10px 0; border-radius:26px; }
       #comfortStateBadge{ left:14px; bottom:14px; padding:8px 12px; font-size:11px; }
-      #cfTargetStage{ width:102px; height:138px; border-radius:22px; }
-      .cf-target-box{ border-radius:22px; }
-      .cf-target-a{ font-size:70px; letter-spacing:-3px; }
+      #cfTargetStage{ width:72px; height:110px; border-radius:18px; }
+      .cf-target-box{ border-radius:18px; }
+      .cf-target-a{ font-size:44px; letter-spacing:-1.5px; }
       #cfOptic{ width:40px; height:40px; }
       #cfOptic::after{ border-left-width:12px; border-right-width:12px; border-bottom-width:18px; }
       #cfSegWrap{ padding:12px 10px 12px; gap:8px; }
@@ -3310,24 +3310,28 @@
 
       const eyeLeft = { x: w * 0.405, y: h * 0.455 };
       const eyeRight = { x: w * 0.585, y: h * 0.455 };
+      const leftPupil = { x: eyeLeft.x + (mobile ? -2 : -3), y: eyeLeft.y + (mobile ? 3 : 4) };
+      const rightPupil = { x: eyeRight.x + (mobile ? 2 : 3), y: eyeRight.y + (mobile ? 3 : 4) };
+      const noseAnchorX = (leftPupil.x + rightPupil.x) / 2 - (mobile ? 6 : 8);
+      const noseAnchorY = eyeLeft.y + (mobile ? 18 : 22);
 
-      const cardW = mobile ? 82 : (tablet ? 104 : 118);
-      const cardH = mobile ? 126 : (tablet ? 158 : 176);
+      const cardW = mobile ? 62 : (tablet ? 72 : 82);
+      const cardH = mobile ? 96 : (tablet ? 108 : 122);
 
       const modeOn = comfortScene.classList.contains('mode-on');
       const modeOff = comfortScene.classList.contains('mode-off');
 
-      const baseCardCx = mobile ? w * 0.205 : w * 0.195;
-      const baseCardCy = eyeLeft.y;
+      const baseCardCx = noseAnchorX;
+      const baseCardCy = noseAnchorY;
 
       const cardCx = baseCardCx;
-      const cardCy = modeOff ? (baseCardCy + 10) : (baseCardCy + 2);
+      const cardCy = modeOff ? (baseCardCy + 2) : baseCardCy;
 
-      const splitOffset = mobile ? 16 : (tablet ? 18 : 20);
-      const redCardCenterY = baseCardCy - splitOffset + redFloatOffset;
-      const blueCardCenterY = baseCardCy + splitOffset;
-      const redACenterPercent = ((cardH * 0.5 - splitOffset) / cardH) * 100;
-      const blueACenterPercent = ((cardH * 0.5 + splitOffset) / cardH) * 100;
+      const splitOffset = mobile ? 10 : (tablet ? 11 : 12);
+      const redCardCenterY = cardCy - splitOffset + redFloatOffset;
+      const blueCardCenterY = cardCy + splitOffset;
+      const redACenterPercent = 50;
+      const blueACenterPercent = 50;
 
       cfTargetStage.style.width = cardW + 'px';
       cfTargetStage.style.height = cardH + 'px';
@@ -3386,7 +3390,7 @@
       cfOptic.style.height = opticH + 'px';
       cfSetCenterPercent(cfOptic, opticCx, opticCy, rect);
 
-      const cardRightCenterX = cardCx + cardW * 0.50;
+      const cardRightCenterX = cardCx + cardW * 0.46;
       const redLineStartY = redCardCenterY;
       const blueLineStartY = blueCardCenterY;
 
@@ -3398,8 +3402,8 @@
           cfLineRed,
           cardRightCenterX,
           redLineStartY,
-          eyeLeft.x,
-          eyeLeft.y,
+          leftPupil.x,
+          leftPupil.y,
           rect
         );
 
@@ -3407,8 +3411,8 @@
           cfLineBlue,
           cardRightCenterX,
           blueLineStartY,
-          eyeRight.x,
-          eyeRight.y,
+          rightPupil.x,
+          rightPupil.y,
           rect
         );
       }
@@ -3421,8 +3425,8 @@
           cfLineRed,
           cardRightCenterX,
           cardCy - 2,
-          eyeLeft.x,
-          eyeLeft.y,
+          leftPupil.x,
+          leftPupil.y,
           rect
         );
 
@@ -3430,8 +3434,8 @@
           cfLineBlue,
           cardRightCenterX,
           cardCy + 2,
-          eyeRight.x,
-          eyeRight.y,
+          rightPupil.x,
+          rightPupil.y,
           rect
         );
       }
