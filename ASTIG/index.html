@@ -935,11 +935,11 @@
       background:rgba(59,130,246,.16); color:#125EDC; border-color:rgba(59,130,246,.22);
     }
     #comfortScene.mode-on #comfortStateBadge{
-      background:#FDE3E3; color:#A93636; border-color:rgba(226,40,40,.16);
+      background:#FDE3E3; color:#A93636; border-color:rgba(226,40,40,.18);
     }
 
     #cfTargetStage{
-      position:absolute; width:96px; height:136px; transform:translate(-50%,-50%); z-index:4; pointer-events:none;
+      position:absolute; width:92px; height:128px; transform:translate(-50%,-50%); z-index:4; pointer-events:none;
       transition:left .35s ease, top .35s ease, width .35s ease, height .35s ease;
       border-radius:26px;
       background:rgba(255,255,255,.10);
@@ -961,7 +961,7 @@
     .cf-box-top{ z-index:0; background:rgba(255,255,255,.04); }
     .cf-box-bottom{ z-index:0; background:rgba(255,255,255,.02); }
     .cf-target-a{
-      position:absolute; left:50%; transform:translate(-50%,-50%); font-size:64px; line-height:1; font-weight:800; letter-spacing:-2px;
+      position:absolute; left:50%; transform:translate(-50%,-50%); font-size:60px; line-height:1; font-weight:800; letter-spacing:-2px;
       font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",sans-serif; user-select:none;
       transition: top .55s cubic-bezier(.22,.8,.22,1), opacity .35s ease, transform .55s cubic-bezier(.22,.8,.22,1), color .35s ease; z-index:2;
       text-shadow:0 6px 18px rgba(2,6,23,.26);
@@ -978,8 +978,8 @@
     #comfortScene.mode-off .cf-box-bottom{ background:rgba(255,255,255,.03); }
     #comfortScene.mode-off .cf-a-red{ top:50%; opacity:.28; transform:translate(-50%,-50%); animation:none; color:#86efac; }
     #comfortScene.mode-off .cf-a-blue{ top:50%; opacity:.98; transform:translate(-50%,-50%); color:#ffffff; animation:none; }
-    #comfortScene.mode-on .cf-box-top{ top:-18px; opacity:.96; background:rgba(74,222,128,.12); animation:cfPinkFloat 1.45s ease-in-out infinite; }
-    #comfortScene.mode-on .cf-box-bottom{ top:0; opacity:.88; background:rgba(255,255,255,.10); transform:translateX(-50%); }
+    #comfortScene.mode-on .cf-box-top{ top:-16px; opacity:.96; background:rgba(74,222,128,.12); animation:cfPinkFloat 1.45s ease-in-out infinite; }
+    #comfortScene.mode-on .cf-box-bottom{ top:0; opacity:.88; background:rgba(255,255,255,.08); transform:translateX(-50%); }
     #comfortScene.mode-on .cf-a-red{ top:34%; opacity:1; transform:translate(-50%,-50%); color:#4ade80; animation:cfRedFloat 1.45s ease-in-out infinite; }
     #comfortScene.mode-on .cf-a-blue{ top:50%; opacity:1; transform:translate(-50%,-50%); color:#60a5fa; }
     #comfortScene.mode-on #cfTargetStage{
@@ -1059,16 +1059,13 @@
       transition:all .22s ease; padding:0 12px; white-space:nowrap; -webkit-appearance:none; appearance:none; border-radius:16px;
       display:flex; align-items:center; justify-content:center; gap:8px;
     }
-    .cf-seg-btn.active,.cf-seg-btn.default-active{
-      color:#fff;
-      box-shadow:0 8px 18px rgba(15,23,42,.10);
+    .cf-seg-btn.active,.cf-seg-btn.default-active{ color:#fff; box-shadow:0 8px 18px rgba(15,23,42,.10); }
+    .cf-seg-btn[data-state="off"].active::before,
+    .cf-seg-btn[data-state="on"].active::before{
+      content:""; width:16px; height:16px; border-radius:999px; display:inline-block;
     }
-    .cf-seg-btn[data-state="off"].active{
-      background:linear-gradient(180deg,#156BFF 0%, #0D57D7 100%);
-    }
-    .cf-seg-btn[data-state="on"].active{
-      background:linear-gradient(180deg,#FF5C5C 0%, #D91F1F 100%);
-    }
+    .cf-seg-btn[data-state="off"].active{ background:linear-gradient(180deg,#156BFF 0%, #0D57D7 100%); }
+    .cf-seg-btn[data-state="on"].active{ background:linear-gradient(180deg,#FF5C5C 0%, #D91F1F 100%); }
     .cf-camera-btn{
       flex:0 0 auto; min-width:64px; width:64px; height:64px; padding:0; border-radius:22px;
       border:1px solid rgba(148,163,184,.18); background:#fff; color:#475569; font-size:0; font-weight:900; letter-spacing:-.2px;
@@ -1111,9 +1108,9 @@
       #comfortClose{ width:36px; height:36px; font-size:18px; }
       #comfortScene{ height:320px; min-height:320px; margin:0 10px 0; border-radius:26px; }
       #comfortStateBadge{ left:14px; bottom:14px; padding:8px 12px; font-size:11px; }
-      #cfTargetStage{ width:82px; height:116px; border-radius:20px; }
+      #cfTargetStage{ width:78px; height:110px; border-radius:20px; }
       .cf-target-box{ border-radius:20px; }
-      .cf-target-a{ font-size:54px; letter-spacing:-2px; }
+      .cf-target-a{ font-size:50px; letter-spacing:-2px; }
       #cfOptic{ width:40px; height:40px; }
       #cfOptic::after{ border-left-width:12px; border-right-width:12px; border-bottom-width:18px; }
       #cfSegWrap{ padding:12px 10px 12px; gap:8px; }
@@ -3346,12 +3343,12 @@
         if(comfortTitle) comfortTitle.textContent = '프리즘 저감 광학 설계';
         if(comfortSubTitle) comfortSubTitle.textContent = 'OPTICAL TECHNOLOGY VISUALIZATION';
         if(comfortInfoBadge){ comfortInfoBadge.style.background = '#FFE7E7'; comfortInfoBadge.style.color = '#DB2C2C'; comfortInfoBadge.textContent = '!'; }
-        comfortMessageCopy.innerHTML = `<span class="comfort-info-title">단안 프리즘 영향</span>단안에 프리즘 영향이 있는 경우 <span class="blue"><span style="color:#ef4444;font-weight:700;">양안 이미지 위치에 차이</span></span>가 발생하여 시각적 피로감이 발생할 수 있습니다.`;
+        comfortMessageCopy.innerHTML = `<span class="comfort-info-title">단안 프리즘 영향</span>단안에 프리즘 영향이 있는 경우 <span class="blue"><span style="color:#3b82f6;font-weight:600;"><span style="color:#2563eb;font-weight:600;"><span style="color:#ef4444;font-weight:600;">양안 이미지 위치에 차이</span></span></span></span>가 발생하여 시각적 피로감이 발생할 수 있습니다.`;
         if(comfortConfirm) comfortConfirm.style.display = 'inline-flex';
       }else{
         comfortScene.classList.add('mode-off');
         cfBtnOff.classList.add('active');
-        if(comfortStateBadge) comfortStateBadge.textContent = '프리즘 영향 없음';
+        if(comfortStateBadge) comfortStateBadge.textContent = '최적화된 광학 상태';
         if(comfortTitle) comfortTitle.textContent = '프리즘 저감 광학 설계';
         if(comfortSubTitle) comfortSubTitle.textContent = 'OPTICAL TECHNOLOGY VISUALIZATION';
         if(comfortInfoBadge){ comfortInfoBadge.style.background = '#E4EEFF'; comfortInfoBadge.style.color = '#1F6FFF'; comfortInfoBadge.textContent = 'i'; }
@@ -3379,23 +3376,21 @@
       const mobile = w <= 560;
       const tablet = w <= 820 && w > 560;
 
-      const eyeLeft = { x: w * 0.608, y: h * 0.408 };
-      const eyeRight = { x: w * 0.867, y: h * 0.410 };
+      const eyeLeft = { x: w * 0.39, y: h * 0.46 };
+      const eyeRight = { x: w * 0.72, y: h * 0.46 };
 
-      const cardW = mobile ? 82 : (tablet ? 104 : 118);
-      const cardH = mobile ? 126 : (tablet ? 158 : 176);
+      const cardW = mobile ? 74 : (tablet ? 82 : 90);
+      const cardH = mobile ? 106 : (tablet ? 116 : 126);
 
       const modeOn = comfortScene.classList.contains('mode-on');
       const modeOff = comfortScene.classList.contains('mode-off');
 
-      const baseCardCx = mobile ? w * 0.23 : w * 0.225;
-      const baseCardCy = (eyeLeft.y + eyeRight.y) / 2 + 4;
+      const cardCx = w * 0.50;
+      const baseCardCy = h * 0.50;
+      const cardCy = baseCardCy;
 
-      const cardCx = baseCardCx;
-      const cardCy = modeOff ? (baseCardCy + 14) : baseCardCy;
-
-      const redCardCenterY = baseCardCy - 20 + redFloatOffset;
-      const blueCardCenterY = baseCardCy + 20;
+      const redCardCenterY = baseCardCy - 16 + redFloatOffset;
+      const blueCardCenterY = baseCardCy;
 
       cfTargetStage.style.width = cardW + 'px';
       cfTargetStage.style.height = cardH + 'px';
@@ -3403,7 +3398,7 @@
 
       if(modeOn){
         if(cfBoxTop){
-          cfBoxTop.style.top = '-18px';
+          cfBoxTop.style.top = '-16px';
           cfBoxTop.style.transform = 'translateX(-50%)';
         }
         if(cfBoxBottom){
