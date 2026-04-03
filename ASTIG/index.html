@@ -979,8 +979,8 @@
     #comfortScene.mode-off .cf-box-bottom{ top:0; opacity:.98; transform:translateX(-50%); background:rgba(255,255,255,.14); }
     #comfortScene.mode-off .cf-a-red{ top:50%; opacity:0; transform:translate(-50%,-50%); animation:none; color:#4ade80; }
     #comfortScene.mode-off .cf-a-blue{ top:50%; opacity:.98; transform:translate(-50%,-50%); color:#ffffff; animation:none; }
-    #comfortScene.mode-on .cf-box-top{ top:-26px; opacity:.98; background:rgba(205,245,228,.22); animation:none; box-shadow:0 10px 18px rgba(2,6,23,.08), inset 0 0 0 1px rgba(255,255,255,.18), 0 0 0 1px rgba(160,220,200,.22); border-bottom:1px solid rgba(255,255,255,.30); }
-    #comfortScene.mode-on .cf-box-bottom{ top:0; opacity:.98; background:rgba(255,255,255,.14); transform:translateX(-50%); box-shadow:0 10px 18px rgba(2,6,23,.06), inset 0 0 0 1px rgba(255,255,255,.16); }
+    #comfortScene.mode-on .cf-box-top{ top:-26px; opacity:.98; background:rgba(205,245,228,.22); animation:none; box-shadow:0 10px 18px rgba(2,6,23,.08), inset 0 0 0 1px rgba(255,255,255,.18), 0 0 0 1px rgba(160,220,200,.22); border-bottom:1px solid rgba(255,255,255,.34); }
+    #comfortScene.mode-on .cf-box-bottom{ top:0; opacity:.98; background:rgba(255,255,255,.14); transform:translateX(-50%); box-shadow:0 10px 18px rgba(2,6,23,.06), inset 0 0 0 1px rgba(255,255,255,.16), 0 0 0 1px rgba(210,220,235,.18); }
     #comfortScene.mode-on .cf-a-red{ top:34%; opacity:1; transform:translate(-50%,-50%); color:#4ade80; animation:none; }
     #comfortScene.mode-on .cf-a-blue{ top:50%; opacity:1; transform:translate(-50%,-50%); color:#60a5fa; }
     #comfortScene.mode-on #cfTargetStage{
@@ -3459,10 +3459,10 @@
         }
       }
 
-      const opticW = mobile ? 186 : (tablet ? 210 : 228);
-      const opticH = mobile ? 186 : (tablet ? 210 : 228);
-      const opticCx = eyeLeft.x - 18;
-      const opticCy = eyeLeft.y - 10;
+      const opticW = mobile ? 250 : (tablet ? 285 : 315);
+      const opticH = mobile ? 250 : (tablet ? 285 : 315);
+      const opticCx = eyeLeft.x + 4;
+      const opticCy = eyeLeft.y + 6;
 
       cfOptic.style.width = opticW + 'px';
       cfOptic.style.height = opticH + 'px';
