@@ -845,12 +845,19 @@
     #comfortScene.mode-on #cfScenePhoto{ filter:blur(1.5px) grayscale(.18) brightness(.88); }
     #cfSceneGradient{ position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(180deg, rgba(11,31,51,.06) 0%, rgba(11,31,51,.02) 34%, rgba(11,31,51,.54) 100%); }
     #cfPrismBadge{
-      position:absolute; left:24px; bottom:24px; z-index:8;
-      padding:12px 18px; border-radius:999px; font-size:12px; font-weight:900;
-      backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.28); transition:.25s ease;
+      position:absolute; left:28px; bottom:98px; z-index:8;
+      display:inline-flex; align-items:center; gap:10px;
+      padding:12px 20px; border-radius:999px; font-size:12px; font-weight:900;
+      backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.32); transition:.25s ease;
+      box-shadow:0 12px 26px rgba(11,31,51,.12);
     }
-    #comfortScene.mode-off #cfPrismBadge{ background:rgba(16,185,129,.18); color:#ecfdf5; box-shadow:0 10px 24px rgba(11,31,51,.14); }
-    #comfortScene.mode-on #cfPrismBadge{ background:rgba(245,158,11,.18); color:#fef3c7; box-shadow:0 10px 24px rgba(11,31,51,.14); }
+    #cfPrismBadge::before{
+      content:""; width:12px; height:12px; border-radius:999px; flex:0 0 auto;
+      background:currentColor; box-shadow:0 0 0 4px rgba(255,255,255,.14);
+      opacity:.95;
+    }
+    #comfortScene.mode-off #cfPrismBadge{ background:rgba(16,185,129,.18); color:#d1fae5; }
+    #comfortScene.mode-on #cfPrismBadge{ background:rgba(245,158,11,.24); color:#fef3c7; }
     #cfEyeIndicator{
       position:absolute; top:43%; right:31%; width:54px; height:54px; z-index:7; opacity:0; transform:scale(.65); transition:all .45s ease; pointer-events:none;
     }
@@ -939,27 +946,62 @@
     .cf-guide-line.red{ border-color:#34d399; } .cf-guide-line.blue{ border-color:#60a5fa; }
     #comfortScene.mode-off .cf-guide-line, #comfortScene.mode-on .cf-guide-line{ opacity:1; }
     #cfSegWrap{
-      position:absolute; left:24px; right:24px; bottom:24px; transform:none; z-index:10;
-      display:flex; align-items:center; gap:12px;
+      position:absolute; left:24px; right:24px; bottom:18px; transform:none; z-index:10;
+      display:flex; align-items:center; gap:14px;
     }
     .cf-toggle{
-      flex:1 1 auto; display:flex; align-items:center; gap:0; padding:6px;
-      border-radius:22px; background:#e2e8f0; border:1px solid rgba(203,213,225,.95); box-shadow:none; overflow:hidden; min-width:0;
+      flex:1 1 auto; display:flex; align-items:center; gap:0; padding:8px;
+      border-radius:24px; background:#eef2f7; border:1px solid rgba(203,213,225,.92);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.72); overflow:hidden; min-width:0;
     }
-    .cf-seg-btn{ flex:1 1 0; height:58px; border:none; background:transparent; color:#64748b; font-size:16px; font-weight:900; letter-spacing:-.25px; cursor:pointer; transition:all .22s ease; padding:0 12px; white-space:nowrap; -webkit-appearance:none; appearance:none; border-radius:18px; }
-    .cf-seg-btn.active{ background:#fff; color:#1e293b; box-shadow:0 2px 8px rgba(15,23,42,.06); }
-    .cf-camera-btn{ flex:0 0 auto; width:58px; min-width:58px; height:58px; padding:0; border-radius:20px; border:1px solid #e2e8f0; background:#fff; color:#64748b; font-size:0; box-shadow:none; position:relative; }
-    .cf-camera-btn::before{ content:"📷"; font-size:22px; line-height:1; }
+    .cf-seg-btn{
+      flex:1 1 0; height:56px; border:none; background:transparent; color:#64748b; font-size:16px; font-weight:900;
+      letter-spacing:-.25px; cursor:pointer; transition:all .22s ease; padding:0 16px; white-space:nowrap;
+      -webkit-appearance:none; appearance:none; border-radius:18px;
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    }
+    .cf-seg-btn::before{
+      content:""; width:14px; height:14px; border-radius:999px; flex:0 0 auto; opacity:.42;
+      background:#94a3b8; box-shadow:0 0 0 4px rgba(255,255,255,.18);
+      transition:opacity .22s ease, background .22s ease, box-shadow .22s ease;
+    }
+    #cfBtnOff::before{ background:#10b981; }
+    #cfBtnOn::before{ background:#3b82f6; }
+    .cf-seg-btn.active{
+      background:#fff; color:#1e293b; box-shadow:0 2px 10px rgba(15,23,42,.06);
+    }
+    .cf-seg-btn.active::before{
+      opacity:1; box-shadow:0 0 0 6px rgba(59,130,246,.10);
+    }
+    #cfBtnOff.active::before{ box-shadow:0 0 0 6px rgba(16,185,129,.12); }
+    .cf-camera-btn{
+      flex:0 0 auto; width:58px; min-width:58px; height:58px; padding:0; border-radius:20px; border:1px solid #0f172a;
+      background:#0f172a; color:#fff; font-size:0; box-shadow:0 10px 18px rgba(15,23,42,.16); position:relative;
+    }
+    .cf-camera-btn::before{ content:"📷"; font-size:22px; line-height:1; filter:brightness(0) invert(1); }
     .cf-camera-btn.active{ background:#0f172a; color:#fff; border-color:#0f172a; }
-    .cf-camera-btn.active::before{ filter:brightness(0) invert(1); }
-    #comfortMessage{ background:rgba(248,250,252,.96); padding:24px 28px 24px; display:flex; align-items:flex-start; justify-content:space-between; gap:18px; border-top:1px solid #f1f5f9; }
-    #comfortMessageIcon{ width:44px; height:44px; border-radius:14px; background:#dcfce7; color:#10b981; display:inline-flex; align-items:center; justify-content:center; flex:0 0 auto; }
+    #comfortMessage{
+      background:#f8fafc; padding:24px 24px 26px; display:flex; align-items:center; justify-content:space-between;
+      gap:18px; border-top:1px solid #eef2f7;
+    }
+    #comfortMessageIcon{
+      width:48px; height:48px; border-radius:14px; background:#dcfce7; color:#10b981;
+      display:inline-flex; align-items:center; justify-content:center; flex:0 0 auto;
+    }
+    #comfortScene.mode-on + #comfortMessage #comfortMessageIcon{
+      background:#dbeafe; color:#2563eb;
+    }
     #comfortMessageIcon svg{ width:22px; height:22px; display:block; }
     #comfortMessageCopyWrap{ flex:1 1 auto; min-width:0; }
-    #comfortMessageTitle{ font-size:16px; line-height:1.35; font-weight:900; color:#1e293b; margin:0 0 8px; }
-    #comfortMessageCopy{ font-size:14px; line-height:1.5; font-weight:700; letter-spacing:-.1px; color:#64748b; word-break:keep-all; }
+    #comfortMessageTitle{ font-size:17px; line-height:1.28; font-weight:900; color:#1e293b; margin:0 0 8px; }
+    #comfortMessageCopy{ font-size:14px; line-height:1.52; font-weight:700; letter-spacing:-.1px; color:#475569; word-break:keep-all; }
     #comfortMessageCopy .blue{ color:#2563eb; font-weight:900; }
-    #comfortConfirm{ flex:0 0 auto; min-width:112px; width:112px; max-width:112px; height:52px; padding:0 16px; border:none; border-radius:18px; background:#0f172a; color:#fff; font-size:14px; line-height:1; font-weight:900; cursor:pointer; box-shadow:0 14px 24px rgba(15,23,42,.14); box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; }
+    #comfortScene.mode-off + #comfortMessage #comfortMessageCopy .blue{ color:#10b981; }
+    #comfortConfirm{
+      flex:0 0 auto; min-width:118px; width:118px; max-width:118px; height:54px; padding:0 18px; border:none; border-radius:22px;
+      background:#0f172a; color:#fff; font-size:14px; line-height:1; font-weight:900; cursor:pointer;
+      box-shadow:0 14px 24px rgba(15,23,42,.14); box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center;
+    }
 
     #comfortWrap .popup-reference-area{ margin-top:0; padding:14px 28px 0 !important; background:#fff !important; font-size:10px; line-height:1.4; }
     #comfortWrap .toric-popup-disclaimer{ padding:8px 28px 24px; background:#fff; font-size:10px; }
@@ -998,17 +1040,19 @@
       .cf-optic-prism::before{ border-left-width:20px; border-right-width:20px; border-bottom-width:62px; }
       .cf-optic-prism::after{ border-left-width:16px; border-right-width:16px; border-bottom-width:50px; }
       .cf-guide-line{ border-top-width:2px; }
-      #cfPrismBadge{ left:16px; bottom:16px; padding:10px 14px; font-size:11px; }
+      #cfPrismBadge{ left:16px; bottom:88px; padding:10px 14px; font-size:11px; gap:8px; }
+      #cfPrismBadge::before{ width:10px; height:10px; }
       #cfEyeIndicator{ width:46px; height:46px; right:28%; top:41%; }
       #cfSegWrap{ left:14px; right:14px; bottom:14px; gap:8px; }
-      .cf-toggle{ padding:4px; }
-      .cf-seg-btn{ height:48px; font-size:13px; padding:0 8px; }
+      .cf-toggle{ padding:6px; }
+      .cf-seg-btn{ height:48px; font-size:13px; padding:0 8px; gap:8px; }
+      .cf-seg-btn::before{ width:12px; height:12px; }
       .cf-camera-btn{ width:48px; min-width:48px; height:48px; }
-      #comfortMessage{ padding:18px 18px 18px; gap:12px; }
+      #comfortMessage{ padding:18px 18px 18px; gap:12px; align-items:flex-start; }
       #comfortMessageIcon{ width:40px; height:40px; border-radius:12px; }
       #comfortMessageTitle{ font-size:15px; margin-bottom:6px; }
-      #comfortMessageCopy{ font-size:13px; line-height:1.42; }
-      #comfortConfirm{ min-width:96px; width:96px; max-width:96px; height:44px; font-size:13px; border-radius:16px; padding:0 16px; }
+      #comfortMessageCopy{ font-size:13px; line-height:1.45; }
+      #comfortConfirm{ min-width:96px; width:96px; max-width:96px; height:44px; font-size:13px; border-radius:18px; padding:0 16px; }
       #pvpOverlay{
         padding:12px 12px 10px;
         grid-template-columns:72px minmax(0,1fr) 66px;
