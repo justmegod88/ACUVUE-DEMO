@@ -650,75 +650,31 @@
     #asdOverlay.show{ display:flex; }
 
     #asdCard{
-      width:min(920px, 96vw);
-      border-radius:18px;
-      border:1px solid rgba(36,85,199,.16);
+      width:min(470px, 96vw);
+      border-radius:40px;
+      border:1px solid rgba(15,23,42,.06);
       background:#ffffff;
       overflow:hidden;
-      box-shadow:0 18px 40px rgba(15,40,95,.14);
+      box-shadow:0 30px 70px rgba(15,23,42,.24);
       position:relative;
     }
-    /* ASD 타이틀 두께 2/3로 축소 */
     #asdHeader{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding:7px 16px;
-      min-height:40px;
-      background:var(--smartfit-blue);
-      border-bottom:1px solid rgba(255,255,255,.14);
+      padding:24px 24px 12px;
+      background:#fff;
       box-sizing:border-box;
     }
-    #asdHeaderTitle{ font-size:16px; font-weight:900; color:#fff; letter-spacing:-.25px; }
-    #asdClose{ width:32px; height:32px; border:none; background:rgba(255,255,255,.12); color:#fff; font-weight:800; font-size:17px; cursor:pointer; box-shadow:none; border-radius:999px; }
-
-    #asdHint{
-      padding:16px 16px 17px;
-      color:var(--smartfit-text);
-      font-size:18px;
-      line-height:1.42;
-      font-weight:800;
-      opacity:1;
-      border-top:1px solid #d6e4fb;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-      background:#eef4fb;
-    }
-    #asdHint button{
-      border:1px solid rgba(36,85,199,.92);
-      background:var(--smartfit-blue);
-      color:#ffffff;
-      font-weight:900;
-      font-size:13px;
-      width:84px;
-      min-width:84px;
-      max-width:84px;
-      height:40px;
-      padding:0 12px;
-      border-radius:999px;
-      -webkit-tap-highlight-color: transparent;
-      cursor:pointer;
-      flex:0 0 auto;
-      flex-shrink:0;
-      white-space:nowrap;
-      box-shadow:0 6px 16px rgba(36,85,199,.16);
-      align-self:flex-end;
-      box-sizing:border-box;
-      line-height:1;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-    }
-    #asdHint .hintText{ flex:1 1 auto; min-width:0; word-break:keep-all; }
-    #asdHint .hintTitle{ display:block; color:var(--acuvue-blue); font-size:17px; font-weight:900; margin-bottom:8px; letter-spacing:-.2px; }
-    #asdHint .hintBody{ display:block; font-size:20px; line-height:1.38; font-weight:900; color:#111; letter-spacing:-.2px; }
-    #asdHint .hintBody .blue{ color:var(--acuvue-blue); }
+    #asdHeaderTitleWrap{ min-width:0; }
+    #asdHeaderTitle{ font-size:24px; line-height:1.14; font-weight:900; color:#1e293b; letter-spacing:-.03em; }
+    #asdHeaderSubTitle{ margin-top:4px; font-size:11px; line-height:1.2; color:#94a3b8; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+    #asdClose{ width:40px; height:40px; border:none; border-radius:999px; background:#f8fafc; color:#94a3b8; font-weight:800; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:inset 0 0 0 1px rgba(148,163,184,.16); }
 
     #asdScene{
-      position:relative; width:100%; background:rgba(0,94,184,.03); overflow:hidden;
-      aspect-ratio: 1/1; min-height: 360px; --irisX: 13px; --irisY: 26px;
+      position:relative; width:calc(100% - 32px); margin:0 16px; background:rgba(0,94,184,.03); overflow:hidden;
+      aspect-ratio: 1/1; min-height: 360px; border-radius:32px; --irisX: 13px; --irisY: 26px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.05), inset 0 -40px 90px rgba(0,0,0,.12);
     }
     #asdEyeMV{
       position:absolute; inset:0; width:100%; height:100%; display:block; background:transparent;
@@ -768,19 +724,51 @@
     #asdLidTop::after{ bottom:-12px; }
     #asdLidBot::after{ top:-12px; transform: scaleY(-1); }
 
-    #asdBlinkBtn, #asdRotateBtn{
-      position:absolute; bottom:14px; width:54px; height:54px; border-radius:999px;
-      font-weight:900; font-size:13px; display:flex; align-items:center; justify-content:center; z-index:5;
-      -webkit-tap-highlight-color: transparent; user-select:none; cursor:pointer; box-shadow: 0 10px 22px rgba(11,31,51,.12);
-    }
-    #asdBlinkBtn{ right:14px; border:1px solid rgba(0,94,184,.55); background:var(--acuvue-blue); color:#fff; box-shadow: 0 12px 26px rgba(0,94,184,.20); }
-    #asdRotateBtn{ right:76px; border:1px solid rgba(0,94,184,.35); background:rgba(255,255,255,.92); color:var(--acuvue-blue); }
-
     #asdAngleBadge{
-      position:absolute; left:14px; bottom:18px; color:var(--acuvue-blue); font-size:13px; font-weight:900;
-      background:rgba(255,255,255,.86); border:1px solid rgba(0,94,184,.35); border-radius:999px; padding:6px 10px; z-index:5;
-      box-shadow: 0 10px 22px rgba(11,31,51,.10);
+      position:absolute; left:18px; bottom:18px; z-index:6;
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 14px; border-radius:999px;
+      background:rgba(255,255,255,.90); color:#2563eb; border:1px solid rgba(59,130,246,.16);
+      font-size:14px; line-height:1; font-weight:900; letter-spacing:-.02em;
+      box-shadow:0 12px 30px rgba(15,23,42,.18);
+      backdrop-filter:blur(10px);
     }
+    #asdAngleBadge::before{
+      content:""; width:10px; height:10px; border-radius:999px; background:currentColor; opacity:.92;
+      box-shadow:0 0 0 5px rgba(59,130,246,.10);
+    }
+    #asdControlBar{
+      position:relative; left:auto; bottom:auto; transform:none; width:auto;
+      display:flex; align-items:center; gap:10px; padding:14px 16px 16px; background:#fff;
+    }
+    .asdActionBtn{
+      flex:1 1 0; height:56px; border-radius:20px; border:1px solid rgba(148,163,184,.18);
+      background:#fff; color:#1e293b; font-size:16px; font-weight:900; letter-spacing:-.02em;
+      box-shadow:0 8px 20px rgba(15,23,42,.08); cursor:pointer; -webkit-appearance:none; appearance:none;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+    }
+    .asdActionBtn:active{ transform:scale(.98); }
+    #asdRotateBtn{ color:#2563eb; background:#f8fbff; }
+    #asdBlinkBtn{ color:#fff; background:#2563eb; border-color:#2563eb; box-shadow:0 14px 26px rgba(37,99,235,.16); }
+
+    #asdHint{
+      background:rgba(248,250,252,.94); padding:18px 22px 18px; display:flex; align-items:flex-start; justify-content:space-between; gap:14px; border-top:1px solid rgba(226,232,240,.92);
+    }
+    #asdInfoBadge{
+      width:36px; height:36px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+      margin-top:2px; font-size:16px; font-weight:900; color:#10b981; background:#d1fae5;
+    }
+    #asdHint button{
+      flex:0 0 auto; flex-shrink:0; min-width:112px; width:112px; max-width:112px; height:52px; padding:0 16px; border:none; border-radius:18px;
+      background:#0f172a; color:#fff; font-size:15px; line-height:1; font-weight:900; cursor:pointer;
+      box-shadow:0 14px 26px rgba(15,23,42,.16); box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center;
+      align-self:center;
+    }
+    #asdHint .hintText{ flex:1 1 auto; min-width:0; word-break:keep-all; }
+    #asdHint .hintTitle{ display:block; margin-bottom:4px; font-size:16px; line-height:1.35; font-weight:900; color:#1e293b; letter-spacing:-.02em; }
+    #asdHint .hintBody{ display:block; font-size:14px; line-height:1.6; font-weight:500; color:#475569; letter-spacing:-.02em; }
+    #asdHint .hintBody .blue{ color:#2563eb; font-weight:800; }
+    #asdHint .hintBody .green{ color:#10b981; font-weight:800; }
 
     #tutorialLayer{ position:fixed; inset:0; display:none; z-index:95; }
     #tutorialLayer.show{ display:block; }
@@ -1173,33 +1161,20 @@
       #pvpSimMessage{ padding:12px 14px 12px; gap:10px; }
       #pvpSimMessageCopy{ font-size:14px; line-height:1.42; }
       #pvpSimConfirm{ width:96px; height:44px; font-size:13px; }
-      #asdHeader{
-        padding:6px 14px;
-        min-height:38px;
-      }
-      #asdHeaderTitle{
-        font-size:15px;
-      }
-      #asdHint{
-        padding:14px 14px 15px;
-        gap:10px;
-      }
-      #asdHint .hintTitle{
-        font-size:15px;
-        margin-bottom:6px;
-      }
-      #asdHint .hintBody{
-        font-size:16px;
-        line-height:1.4;
-      }
-      #asdHint button{
-        width:96px;
-        min-width:96px;
-        max-width:96px;
-        height:44px;
-        padding:0 16px;
-        font-size:13px;
-      }
+      #asdCard{ width:100%; border-radius:30px; }
+      #asdHeader{ padding:20px 18px 10px; }
+      #asdHeaderTitle{ font-size:20px; }
+      #asdHeaderSubTitle{ font-size:10px; }
+      #asdClose{ width:36px; height:36px; font-size:18px; }
+      #asdScene{ width:calc(100% - 20px); margin:0 10px; min-height:320px; border-radius:26px; }
+      #asdAngleBadge{ left:14px; bottom:14px; padding:8px 12px; font-size:11px; }
+      #asdControlBar{ padding:12px 10px 12px; gap:8px; }
+      .asdActionBtn{ height:48px; font-size:13px; border-radius:16px; }
+      #asdHint{ padding:14px 14px 14px; gap:10px; }
+      #asdInfoBadge{ width:32px; height:32px; border-radius:10px; font-size:14px; }
+      #asdHint .hintTitle{ font-size:15px; }
+      #asdHint .hintBody{ font-size:13px; line-height:1.5; }
+      #asdHint button{ min-width:96px; width:96px; max-width:96px; height:46px; font-size:13px; border-radius:16px; }
     }
 
     #modeHeat{
@@ -1943,24 +1918,30 @@
   <div id="asdOverlay" aria-hidden="true">
     <div id="asdCard">
       <div id="asdHeader">
-        <div id="asdHeaderTitle">ASD™ 축안정화</div>
+        <div id="asdHeaderTitleWrap">
+          <div id="asdHeaderTitle">ASD™ 축안정화</div>
+          <div id="asdHeaderSubTitle">OPTICAL STABILIZATION VISUALIZATION</div>
+        </div>
         <button id="asdClose" type="button">X</button>
       </div>
       <div id="asdScene">
         <img id="asdEyeMV" src="a.png" alt="Eye background" onerror="this.onerror=null; this.src='a.gif';">
         <div id="asdLensRim"></div>
-        <img id="asdLensImg" src="lens.png" alt="Lens overlay" onerror="this.style.display='none'; document.getElementById('asdHint').textContent='lens.png / lens2.png 파일을 같은 폴더에 넣어주세요.';">
+        <img id="asdLensImg" src="lens.png" alt="Lens overlay" onerror="this.style.display='none'; document.getElementById('asdHint').innerHTML='<div id='asdInfoBadge'>i</div><div class='hintText'><span class='hintTitle'>파일을 확인해 주세요.</span><span class='hintBody'><span class='blue'>lens.png / lens2.png</span> 파일을 같은 폴더에 넣어주세요.</span></div>';">
         <div id="asdMaskShade"></div>
         <img id="asdUpperLid" src="upper_lid.png" alt="Upper eyelid overlay" onerror="this.style.display='none';">
         <div id="asdBlinkLid"><div id="asdLidTop"></div><div id="asdLidBot"></div></div>
-        <div id="asdAngleBadge">20°</div>
-        <button id="asdRotateBtn" type="button">축이탈</button>
-        <button id="asdBlinkBtn" type="button">깜박임</button>
+        <div id="asdAngleBadge">좌측 20° 회전 발생</div>
+      </div>
+      <div id="asdControlBar">
+        <button id="asdRotateBtn" class="asdActionBtn" type="button">축이탈 유발</button>
+        <button id="asdBlinkBtn" class="asdActionBtn" type="button">깜박임 실행</button>
       </div>
       <div id="asdHint">
+        <div id="asdInfoBadge">i</div>
         <div class="hintText">
-          <span class="hintTitle">난시렌즈는 축이 회전하면 시야가 흐려집니다.</span>
-          <span class="hintBody"><span class="blue">‘깜박임’ 버튼</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span>
+          <span class="hintTitle">난시 렌즈의 중요성</span>
+          <span class="hintBody">정밀한 광학 설계로 프리즘을 억제하면 <span class="green">선명하고 편안한 시야</span>를 소비자에게 제공할 수 있습니다.</span>
         </div>
       </div>
       <div class="toric-popup-disclaimer"><span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span></div>
@@ -2971,10 +2952,10 @@
     }
 
     function setASDHintDefault(){
-      asdHint.innerHTML = `<div class="hintText"><span class="hintTitle">난시렌즈는 축이 회전되면 시야가 흐려집니다.</span><span class="hintBody"><span class="blue">‘깜박임’ 버튼</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
+      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span><span class="hintBody"><span class="blue">‘깜박임 실행’ 버튼</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
     }
     function setASDHintSuccess(){
-      asdHint.innerHTML = `<div class="hintText"><span class="hintTitle">기억해주세요!</span><span class="hintBody"><span class="blue">아큐브® ASD™</span>는 자연스러운 순목(눈 깜박임)으로 렌즈 움직임을 안정화하여 선명한 시야를 제공합니다.</span></div><button id="asdConfirmBtn" type="button">확인</button>`;
+      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈의 중요성</span><span class="hintBody">정밀한 광학 설계로 프리즘을 억제하면 <span class="green">선명하고 편안한 시야</span>를 소비자에게 제공할 수 있습니다.</span></div><button id="asdConfirmBtn" type="button">확인 완료</button>`;
       document.getElementById('asdConfirmBtn')?.addEventListener('click', (e)=>{ e.stopPropagation(); closeASD(); markASDDone(true); });
     }
     function markASDDone(done){ asdDone = !!done; missionASD.classList.toggle('done', asdDone); }
