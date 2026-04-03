@@ -935,7 +935,7 @@
       background:rgba(59,130,246,.16); color:#dbeafe; border-color:rgba(59,130,246,.22);
     }
     #comfortScene.mode-on #comfortStateBadge{
-      background:rgba(34,197,94,.16); color:#fde7ef; border-color:rgba(34,197,94,.22);
+      background:rgba(34,197,94,.16); color:#fee2e2; border-color:rgba(34,197,94,.22);
     }
 
     #cfTargetStage{
@@ -1064,8 +1064,8 @@
     .cf-seg-btn[data-state="on"].active::before{
       content:""; width:16px; height:16px; border-radius:999px; display:inline-block;
     }
-    .cf-seg-btn[data-state="off"].active::before{ background:#ef5a8a; box-shadow:0 0 0 4px rgba(59,130,246,.08); }
-    .cf-seg-btn[data-state="on"].active::before{ background:#ef5a8a; box-shadow:0 0 0 4px rgba(16,185,129,.12); }
+    .cf-seg-btn[data-state="off"].active::before{ background:#3b82f6; box-shadow:0 0 0 4px rgba(59,130,246,.08); }
+    .cf-seg-btn[data-state="on"].active::before{ background:#3b82f6; box-shadow:0 0 0 4px rgba(16,185,129,.12); }
     .cf-camera-btn{
       flex:0 0 auto; min-width:64px; width:64px; height:64px; padding:0; border-radius:22px;
       border:1px solid rgba(148,163,184,.18); background:#fff; color:#475569; font-size:0; font-weight:900; letter-spacing:-.2px;
@@ -2067,7 +2067,7 @@
       <div id="cfSegWrap">
         <div class="cf-toggle">
           <button id="cfBtnOff" class="cf-seg-btn active" data-state="off" type="button">프리즘 없음</button>
-          <button id="cfBtnOn" class="cf-seg-btn" data-state="on" type="button">프리즘 있음</button>
+          <button id="cfBtnOn" class="cf-seg-btn" data-state="on" type="button"><span style="color:#3b82f6;">프리즘 있음</span></button>
         </div>
         <button id="cfCameraBtn" class="cf-camera-btn" type="button" aria-label="카메라 켜기"></button>
       </div>
@@ -3339,11 +3339,11 @@
       if(mode === 'on'){
         comfortScene.classList.add('mode-on');
         cfBtnOn.classList.add('active');
-        if(comfortStateBadge) comfortStateBadge.textContent = '<span style="color:#ef5a8a;font-weight:600;">프리즘 영향 발생 중</span>';
+        if(comfortStateBadge) comfortStateBadge.textContent = '프리즘 영향 발생 중';
         if(comfortTitle) comfortTitle.textContent = '프리즘 저감 광학 설계';
         if(comfortSubTitle) comfortSubTitle.textContent = 'OPTICAL TECHNOLOGY VISUALIZATION';
         if(comfortInfoBadge){ comfortInfoBadge.style.background = '#dbeafe'; comfortInfoBadge.style.color = '#2563eb'; comfortInfoBadge.textContent = '!'; }
-        comfortMessageCopy.innerHTML = `<span class="comfort-info-title">단안 프리즘 영향</span>단안에 프리즘 영향이 있는 경우 <span class="blue"><span style="color:#ef5a8a;font-weight:600;">양안 이미지 위치에 차이</span></span>가 발생하여 시각적 피로감이 발생할 수 있습니다.`;
+        comfortMessageCopy.innerHTML = `<span class="comfort-info-title">단안 프리즘 영향</span>단안에 프리즘 영향이 있는 경우 <span class="blue"><span style="color:#3b82f6;font-weight:600;"><span style="color:#2563eb;font-weight:600;"><span style="color:#ef4444;font-weight:600;">양안 이미지 위치에 차이</span></span></span></span>가 발생하여 시각적 피로감이 발생할 수 있습니다.`;
         if(comfortConfirm) comfortConfirm.style.display = 'inline-flex';
       }else{
         comfortScene.classList.add('mode-off');
