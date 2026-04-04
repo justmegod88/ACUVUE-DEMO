@@ -814,17 +814,17 @@
     #asdGuideSideLeft,
     #asdGuideSideRight{
       position:absolute;
-      width:7%;
-      height:11%;
+      width:6%;
+      height:10%;
       border-radius:999px;
-      background:linear-gradient(180deg, rgba(6,182,212,.52), rgba(14,165,233,.28));
-      box-shadow:inset 0 0 0 1px rgba(56,189,248,.22), 0 0 14px rgba(14,165,233,.16);
-      opacity:.88;
+      background:linear-gradient(180deg, rgba(34,211,238,.24), rgba(56,189,248,.12));
+      box-shadow:inset 0 0 0 1px rgba(56,189,248,.10), 0 0 10px rgba(14,165,233,.08);
+      opacity:.72;
       pointer-events:none;
-      transition:top .18s ease, transform .18s ease;
+      transition:top .18s ease, left .18s ease, right .18s ease;
     }
-    #asdGuideSideLeft{ left:15.6%; top:57%; transform:translate(-50%,-50%); }
-    #asdGuideSideRight{ right:15.6%; top:57%; transform:translate(50%,-50%); }
+    #asdGuideSideLeft{ left:12%; top:57%; transform:translate(-50%,-50%); }
+    #asdGuideSideRight{ right:12%; top:57%; transform:translate(50%,-50%); }
     #asdGuideAxis{
       position:absolute; left:12%; right:12%; top:57%;
       border-top:3px dashed rgba(68,67,73,.55);
@@ -3798,21 +3798,23 @@
         rightTop = 57 - shift;
       }
 
+      const leftPos = '12%';
+      const rightPos = '12%';
+
       if (asdGuideDotLeft && asdGuideDotRight){
-        asdGuideDotLeft.style.left = '12%';
-        asdGuideDotRight.style.right = '12%';
+        asdGuideDotLeft.style.left = leftPos;
+        asdGuideDotRight.style.right = rightPos;
         asdGuideDotLeft.style.top = `${leftTop}%`;
         asdGuideDotRight.style.top = `${rightTop}%`;
       }
 
-      const sideOffset = 3.6;
-      if (document.getElementById('asdGuideSideLeft') && document.getElementById('asdGuideSideRight')){
-        const asdGuideSideLeft = document.getElementById('asdGuideSideLeft');
-        const asdGuideSideRight = document.getElementById('asdGuideSideRight');
+      const asdGuideSideLeft = document.getElementById('asdGuideSideLeft');
+      const asdGuideSideRight = document.getElementById('asdGuideSideRight');
+      if (asdGuideSideLeft && asdGuideSideRight){
+        asdGuideSideLeft.style.left = leftPos;
+        asdGuideSideRight.style.right = rightPos;
         asdGuideSideLeft.style.top = `${leftTop}%`;
         asdGuideSideRight.style.top = `${rightTop}%`;
-        asdGuideSideLeft.style.transform = `translate(-50%,-50%) rotate(${asdAngleValue}deg)`;
-        asdGuideSideRight.style.transform = `translate(50%,-50%) rotate(${asdAngleValue}deg)`;
       }
     }
 
