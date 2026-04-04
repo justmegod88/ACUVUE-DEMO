@@ -804,7 +804,7 @@
       position:absolute; left:50%; top:52%; width:80%; height:80%;
       transform:translate(-50%,-50%) rotate(0deg);
       border-radius:999px; border:2px solid rgba(71,125,190,.30);
-      box-shadow:inset 0 0 0 8px rgba(84,136,196,.04), inset 0 0 0 1px rgba(59,117,183,.22);
+      box-shadow:none;
       transition:transform .18s ease;
     }
     #asdGuideCircle::before{
@@ -814,17 +814,17 @@
     #asdGuideSideLeft,
     #asdGuideSideRight{
       position:absolute;
-      width:6%;
-      height:10%;
+      width:5%;
+      height:9%;
       border-radius:999px;
-      background:linear-gradient(180deg, rgba(34,211,238,.24), rgba(56,189,248,.12));
-      box-shadow:inset 0 0 0 1px rgba(56,189,248,.10), 0 0 10px rgba(14,165,233,.08);
-      opacity:.72;
+      background:linear-gradient(180deg, rgba(34,211,238,.18), rgba(56,189,248,.08));
+      box-shadow:inset 0 0 0 1px rgba(56,189,248,.08);
+      opacity:.60;
       pointer-events:none;
       transition:top .18s ease, left .18s ease, right .18s ease;
     }
-    #asdGuideSideLeft{ left:12%; top:57%; transform:translate(-50%,-50%); }
-    #asdGuideSideRight{ right:12%; top:57%; transform:translate(50%,-50%); }
+    #asdGuideSideLeft{ left:15%; top:57%; transform:translate(-50%,-50%); }
+    #asdGuideSideRight{ right:15%; top:57%; transform:translate(50%,-50%); }
     #asdGuideAxis{
       position:absolute; left:12%; right:12%; top:57%;
       border-top:3px dashed rgba(68,67,73,.55);
@@ -3784,37 +3784,43 @@
       if (asdGuideAxis) asdGuideAxis.style.transform = `rotate(${asdAngleValue}deg)`;
       if (asdGuideCircle) asdGuideCircle.style.transform = `translate(-50%,-50%) rotate(${(asdAngleValue * 0.18).toFixed(2)}deg)`;
 
-      const mag = Math.min(25, Math.abs(asdAngleValue));
-      const shift = mag * 0.34;
+      const centerX = 50;
+      const centerY = 57;
+      const lineHalf = 38; // matches left/right 12%
+      const inward = 3;    // cyan marker stays inside yellow dot
+      const rad = asdAngleValue * Math.PI / 180;
 
-      let leftTop = 57;
-      let rightTop = 57;
+      const dx = lineHalf * Math.cos(rad);
+      const dy = lineHalf * Math.sin(rad);
 
-      if (asdAngleValue > 0){
-        leftTop = 57 - shift;
-        rightTop = 57 + shift;
-      } else if (asdAngleValue < 0){
-        leftTop = 57 + shift;
-        rightTop = 57 - shift;
-      }
-
-      const leftPos = '12%';
-      const rightPos = '12%';
+      const leftX = centerX - dx;
+      const leftY = centerY - dy;
+      const rightX = centerX + dx;
+      const rightY = centerY + dy;
 
       if (asdGuideDotLeft && asdGuideDotRight){
-        asdGuideDotLeft.style.left = leftPos;
-        asdGuideDotRight.style.right = rightPos;
-        asdGuideDotLeft.style.top = `${leftTop}%`;
-        asdGuideDotRight.style.top = `${rightTop}%`;
+        asdGuideDotLeft.style.left = `${leftX}%`;
+        asdGuideDotLeft.style.right = 'auto';
+        asdGuideDotLeft.style.top = `${leftY}%`;
+
+        asdGuideDotRight.style.left = `${rightX}%`;
+        asdGuideDotRight.style.right = 'auto';
+        asdGuideDotRight.style.top = `${rightY}%`;
       }
 
       const asdGuideSideLeft = document.getElementById('asdGuideSideLeft');
       const asdGuideSideRight = document.getElementById('asdGuideSideRight');
       if (asdGuideSideLeft && asdGuideSideRight){
-        asdGuideSideLeft.style.left = leftPos;
-        asdGuideSideRight.style.right = rightPos;
-        asdGuideSideLeft.style.top = `${leftTop}%`;
-        asdGuideSideRight.style.top = `${rightTop}%`;
+        const cdx = inward * Math.cos(rad);
+        const cdy = inward * Math.sin(rad);
+
+        asdGuideSideLeft.style.left = `${leftX + cdx}%`;
+        asdGuideSideLeft.style.right = 'auto';
+        asdGuideSideLeft.style.top = `${leftY + cdy}%`;
+
+        asdGuideSideRight.style.left = `${rightX - cdx}%`;
+        asdGuideSideRight.style.right = 'auto';
+        asdGuideSideRight.style.top = `${rightY - cdy}%`;
       }
     }
 
