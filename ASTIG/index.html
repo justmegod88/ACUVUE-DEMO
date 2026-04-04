@@ -344,70 +344,114 @@
       right:12px;
       bottom:34px;
       z-index:60;
-      background:#ffffff;
-      border:1px solid rgba(36,85,199,.16);
-      border-radius:18px;
-      padding:14px 14px 12px;
       display:none;
-      grid-template-columns:78px minmax(0,1fr) 72px;
-      gap:10px 12px;
-      align-items:center;
-      backdrop-filter:none;
-      box-shadow:0 16px 32px rgba(15,40,95,.12);
+      border-radius:24px;
+      border:1px solid rgba(189,209,245,.95);
+      background:#f7fbff;
+      box-shadow:0 16px 34px rgba(15,40,95,.10);
       overflow:hidden;
       box-sizing:border-box;
+      backdrop-filter: blur(14px);
     }
-    #pvpOverlay.show{ display:grid; }
-    #pvpOverlay img{
-      width:78px;
-      height:78px;
-      object-fit:cover;
-      border-radius:14px;
-      border:1px solid rgba(36,85,199,.12);
-      background:#f7faff;
-      box-shadow:none;
-      flex:0 0 auto;
+    #pvpOverlay.show{ display:block; }
+    #pvpOverlay::before{
+      content:"";
+      position:absolute;
+      left:0; right:0; top:0;
+      height:1px;
+      background:rgba(189,209,245,.95);
+      pointer-events:none;
     }
+    #pvpOverlay::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:24px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.72);
+      pointer-events:none;
+      opacity:.42;
+    }
+    #pvpThumb{ display:none; }
     #pvpText{
-      color:var(--smartfit-text);
-      font-size:14px;
-      line-height:1.44;
-      min-width:0;
-      grid-column:2;
-      align-self:center;
+      padding:16px 18px 14px;
+      color:var(--text-sub);
+      font-size:13.8px;
+      line-height:1.48;
+      letter-spacing:-.15px;
+      word-break:keep-all;
     }
-    #pvpTitle{ font-weight:900; margin-bottom:4px; color:#0f2240; font-size:15px; }
-    #hint{ opacity:1; color:#334b6a; }
-
-    #pvpConfirm{
+    #pvpTitle{
+      color:var(--text-navy);
+      font-weight:900;
+      font-size:17px;
+      line-height:1.15;
+      letter-spacing:-.35px;
+      margin:0 0 8px;
+    }
+    #hint{ opacity:1; color:var(--text-sub); }
+    #pvpOverlay .popup-reference-area{
+      margin-top:0;
+      grid-column:auto;
+      padding:10px 18px 0;
+      text-align:left;
+      font-size:9px;
+      line-height:1.34;
+      color:#59616d;
+      font-weight:500;
+      letter-spacing:-.03px;
+      word-break:keep-all;
+      position:relative;
+      background:#f7fbff;
+    }
+    #pvpOverlay .popup-reference-area::before{
+      content:"";
+      position:absolute;
+      left:0; right:0; top:0;
+      height:1px;
+      background:rgba(11,31,51,.08);
+    }
+    #pvpActions{
+      padding:10px 12px 14px;
+      border-top:1px solid rgba(11,31,51,.08);
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .pvp-action-btn{
       color:#ffffff;
       font-weight:900;
-      opacity:1;
       cursor:pointer;
       user-select:none;
-      width:68px;
-      min-width:68px;
-      max-width:68px;
-      height:38px;
-      padding:0 10px;
-      border-radius:999px;
-      border:1px solid rgba(36,85,199,.92);
-      background:var(--smartfit-blue);
-      -webkit-tap-highlight-color: transparent;
-      flex:0 0 auto;
-      flex-shrink:0;
+      border:none;
       white-space:nowrap;
-      display:none;
-      box-shadow:0 6px 16px rgba(36,85,199,.16);
-      font-size:13px;
-      line-height:1;
       box-sizing:border-box;
+      display:inline-flex;
       align-items:center;
       justify-content:center;
-      align-self:center;
-      justify-self:end;
-      margin-top:0;
+      flex-shrink:0;
+      -webkit-tap-highlight-color: transparent;
+      font-size:13px;
+      line-height:1;
+      height:44px;
+      border-radius:999px;
+      padding:0 18px;
+      box-shadow:0 6px 16px rgba(36,85,199,.16);
     }
+    #pvpVisionOpen{
+      width:auto;
+      min-width:132px;
+      border:1px solid rgba(64,125,58,.95);
+      background:linear-gradient(180deg, #2FA84F 0%, #238C3F 100%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 8px 18px rgba(25,92,43,.22);
+    }
+    #pvpConfirm{
+      min-width:96px;
+      border:1px solid rgba(36,85,199,.92);
+      background:var(--smartfit-blue);
+      display:none;
+    }
+    #pvpVisionOpen:active,
     #pvpConfirm:active{ transform:scale(.98); }
 
 
@@ -693,10 +737,7 @@
       opacity:.70; pointer-events:none; will-change: transform, opacity; mix-blend-mode:normal; filter:saturate(1.08) contrast(1.06);
     }
     #asdLensRim{
-      position:absolute; left:50%; top:52%; width:80%; height:80%; transform:translate(-50%,-50%);
-      border-radius:999px; pointer-events:none;
-      box-shadow: 0 0 0 1px rgba(11,31,51,.10), 0 18px 46px rgba(11,31,51,.16), inset 0 0 24px rgba(255,255,255,.18);
-      opacity:.45;
+      display:none !important;
     }
     #asdMaskShade{
       position:absolute; inset:0; pointer-events:none;
@@ -1225,8 +1266,8 @@
       #cfTargetStage{ width:82px; height:136px; border-radius:20px; }
       .cf-target-box{ border-radius:20px; }
       .cf-target-a{ font-size:50px; letter-spacing:-2px; }
-      #cfOptic{ width:56px; height:56px; }
-      #cfOptic::after{ border-left-width:16px; border-right-width:16px; border-bottom-width:26px; }
+      #cfOptic{ width:64px; height:64px; }
+      #cfOptic::after{ border-left-width:18px; border-right-width:18px; border-bottom-width:30px; }
       #cfSegWrap{ padding:12px 10px 12px; gap:8px; }
       .cf-toggle{ padding:4px; border-radius:18px; }
       .cf-seg-btn{ height:46px; font-size:12px; padding:0 8px; border-radius:14px; }
@@ -1243,31 +1284,37 @@
     }
 
       #pvpOverlay{
-        padding:12px 12px 10px;
-        grid-template-columns:72px minmax(0,1fr) 66px;
-        gap:8px 10px;
-      }
-      #pvpOverlay img{
-        width:72px;
-        height:72px;
-        border-radius:12px;
+        left:12px;
+        right:12px;
+        bottom:34px;
+        border-radius:22px;
       }
       #pvpText{
+        padding:14px 16px 12px;
         font-size:13px;
-        line-height:1.4;
+        line-height:1.42;
       }
       #pvpTitle{
-        font-size:14px;
-        margin-bottom:3px;
+        font-size:15px;
+        margin-bottom:6px;
+      }
+      #pvpOverlay .popup-reference-area{
+        padding:10px 16px 0;
+        font-size:8.8px;
+      }
+      #pvpActions{
+        padding:12px 16px 16px;
+        gap:12px;
+      }
+      #pvpVisionOpen{
+        min-width:132px;
+        font-size:13px;
       }
       #pvpConfirm{
-        width:66px;
-        min-width:66px;
-        max-width:66px;
-        height:36px;
-        padding:0 8px;
-        font-size:11px;
-        align-self:center;
+        min-width:96px;
+        height:44px;
+        padding:0 16px;
+        font-size:13px;
       }
 
       #pvpSimOverlay{ padding:8px; }
@@ -1311,10 +1358,10 @@
     #maxPackshot{
       position:absolute;
       left:50%;
-      top:-108px;
+      top:-90px;
       transform:translateX(-50%);
-      width:112px;
-      max-width:112px;
+      width:126px;
+      max-width:126px;
       height:auto;
       z-index:72 !important;
       pointer-events:auto !important;
@@ -1489,7 +1536,7 @@
 
 
     @media (max-width:560px){
-      #maxPackshot{ top:-96px; width:96px; max-width:96px; }
+      #maxPackshot{ top:-82px; width:108px; max-width:108px; }
       #maxPackshot.active{ transform:translateX(-50%) translateY(-4px) scale(1.02) !important; }
       #blueInfo{
         left:12px;
@@ -2065,12 +2112,16 @@
     <img id="pvpThumb" src="PVP.png" alt="PVP" onerror="this.onerror=null; this.src='PVP.jpeg';">
     <div id="pvpText">
       <div id="pvpTitle">PVP 습윤 인자</div>
-      <div id="hint"><span class="pvp-highlight">렌즈 내 PVP 습윤인자</span>가 하루 종일 촉촉함을 제공합니다.</div>
+      <div id="hint">렌즈 내 <span class="pvp-highlight">PVP 습윤인자</span>가 하루 종일 촉촉함을 제공합니다.</div>
     </div>
-    <div id="pvpConfirm" role="button" tabindex="0">확인</div>
+    <div id="pvpActions">
+      <button id="pvpVisionOpen" class="pvp-action-btn" type="button">비전 시뮬레이터</button>
+      <div id="pvpConfirm" class="pvp-action-btn" role="button" tabindex="0">확인</div>
+    </div>
     <div class="popup-reference-area">
       <span class="ref-line">1.Reducing Friction in the Eye: A Comparative Study of Lubrication by Surface Anchored Synthetic and Natural Ocular Mucin Analogues.Sterner O, et al. <em>ACS Applied Materials &amp; Interfaces</em>. 2017;9(23):20150~20160.</span>
     </div>
+    <div class="toric-popup-disclaimer"><span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span></div>
   </div>
 
   <div id="pvpSimOverlay" class="state-on" aria-hidden="true">
@@ -2449,6 +2500,7 @@
     const pvpOverlay = document.getElementById('pvpOverlay');
     const pvpBig = document.getElementById('pvpBig');
     const pvpConfirm = document.getElementById('pvpConfirm');
+    const pvpVisionOpen = document.getElementById('pvpVisionOpen');
     const pvpSimOverlay = document.getElementById('pvpSimOverlay');
     const pvpSimClose = document.getElementById('pvpSimClose');
     const pvpSimConfirm = document.getElementById('pvpSimConfirm');
@@ -3358,6 +3410,14 @@
       updatePVPMessage();
     }
 
+    function openPVPSimulator(){
+      if(!pvpOn) return;
+      pvpSimOverlay?.classList.add('show');
+      pvpSimOverlay?.setAttribute('aria-hidden', 'false');
+      pvpSimOverlay?.classList.remove('is-blinking');
+      setPVPState(pvpState || 'on');
+    }
+
     function playPVPBlink(){
       if(pvpBlinkBusy) return;
       pvpBlinkBusy = true;
@@ -3420,6 +3480,8 @@
     pvpConfirm.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); confirmPVP(); } });
     pvpBig?.addEventListener('click', (e)=>{ e.stopPropagation(); confirmPVP(); });
     pvpOverlay?.addEventListener('click', (e)=>{ e.stopPropagation(); });
+    pvpVisionOpen?.addEventListener('click', (e)=>{ e.stopPropagation(); openPVPSimulator(); });
+    pvpVisionOpen?.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openPVPSimulator(); } });
     pvpSimConfirm?.addEventListener('click', (e)=>{ e.stopPropagation(); confirmPVP(); });
     pvpStateOn?.addEventListener('click', ()=> setPVPState('on'));
     pvpStateOff?.addEventListener('click', ()=> setPVPState('off'));
@@ -3578,9 +3640,9 @@
         }
       }
 
-      const opticW = mobile ? 220 : (tablet ? 248 : 276);
-      const opticH = mobile ? 220 : (tablet ? 248 : 276);
-      const opticCx = eyeLeft.x + 2;
+      const opticW = mobile ? 244 : (tablet ? 270 : 300);
+      const opticH = mobile ? 244 : (tablet ? 270 : 300);
+      const opticCx = eyeLeft.x - (mobile ? 14 : (tablet ? 16 : 18));
       const opticCy = eyeLeft.y + 4;
 
       cfOptic.style.width = opticW + 'px';
