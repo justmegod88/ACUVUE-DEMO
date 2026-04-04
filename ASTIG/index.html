@@ -739,7 +739,7 @@
     }
     #asdControlBar{
       position:relative; left:auto; bottom:auto; transform:none; width:auto;
-      display:flex; align-items:center; gap:10px; padding:14px 16px 16px; background:#fff;
+      display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) 56px; align-items:center; gap:10px; padding:14px 16px 16px; background:#fff;
     }
     .asdActionBtn{
       flex:1 1 0; height:56px; border-radius:20px; border:1px solid rgba(148,163,184,.18);
@@ -754,9 +754,11 @@
       flex:0 0 56px;
       width:56px;
       min-width:56px;
+      max-width:56px;
       padding:0;
       color:#64748b;
       background:#fff;
+      justify-self:end;
     }
     #asdCameraBtn.active{
       color:#2563eb;
@@ -852,6 +854,13 @@
       right:9%;
       top:73%;
       transform:translate(50%,-50%);
+    }
+
+    #asdCameraGuide,
+    #asdGuideCircle,
+    #asdGuideAxis,
+    .asdGuideDot{
+      pointer-events:none !important;
     }
 
     #asdHint{
@@ -3277,7 +3286,9 @@
         overshootAndReturn();
       }
     }
-    asdBlinkBtn?.addEventListener('click', (e)=>{ e.stopPropagation(); handleASDBlink(); });
+    if(asdBlinkBtn){
+      asdBlinkBtn.addEventListener('click', function(e){ e.stopPropagation(); handleASDBlink(); });
+    }
 
     function stopASDCamera(){
       if(asdCameraStream){
@@ -3324,11 +3335,13 @@
       }
     }
 
-    asdCameraBtn?.addEventListener('click', async (e)=>{
-      e.stopPropagation();
-      if(asdCameraOn) stopASDCamera();
-      else await startASDCamera();
-    });
+    if(asdCameraBtn){
+      asdCameraBtn.addEventListener('click', async function(e){
+        e.stopPropagation();
+        if(asdCameraOn) stopASDCamera();
+        else await startASDCamera();
+      });
+    }
 
     function handleASDRotateRandom(){
       markASDDone(false); setASDHintDefault();
