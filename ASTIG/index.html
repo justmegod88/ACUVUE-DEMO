@@ -787,10 +787,23 @@
       position:absolute; inset:0; z-index:5; display:none; pointer-events:none;
     }
     #asdOverlay.camera-on #asdCameraGuide{ display:block; }
+    #asdGuideLidTop,
+    #asdGuideLidBottom{
+      position:absolute; left:0; right:0; height:20%;
+      background:linear-gradient(180deg, rgba(107,114,128,.24) 0%, rgba(107,114,128,.12) 35%, rgba(107,114,128,0) 100%);
+      pointer-events:none;
+    }
+    #asdGuideLidTop{
+      top:0;
+    }
+    #asdGuideLidBottom{
+      bottom:0;
+      transform:scaleY(-1);
+    }
     #asdGuideCircle{
       position:absolute; left:50%; top:52%; width:80%; height:80%;
       transform:translate(-50%,-50%) rotate(0deg);
-      border-radius:999px; border:2px solid rgba(71,125,190,.28);
+      border-radius:999px; border:2px solid rgba(71,125,190,.30);
       box-shadow:inset 0 0 0 8px rgba(84,136,196,.04), inset 0 0 0 1px rgba(59,117,183,.22);
       transition:transform .18s ease;
     }
@@ -798,6 +811,18 @@
       content:""; position:absolute; inset:11%;
       border-radius:999px; border:2px solid rgba(57,112,176,.18);
     }
+    #asdGuideSideLeft,
+    #asdGuideSideRight{
+      position:absolute; top:50%; width:11%; height:48%;
+      transform:translateY(-50%);
+      border-radius:999px;
+      background:linear-gradient(180deg, rgba(125,211,252,.32), rgba(125,211,252,.10));
+      box-shadow:inset 0 0 0 1px rgba(125,211,252,.18);
+      opacity:.55;
+      pointer-events:none;
+    }
+    #asdGuideSideLeft{ left:11.5%; }
+    #asdGuideSideRight{ right:11.5%; }
     #asdGuideAxis{
       position:absolute; left:12%; right:12%; top:57%;
       border-top:3px dashed rgba(68,67,73,.55);
@@ -808,11 +833,15 @@
       position:absolute; width:18px; height:18px; border-radius:999px;
       background:#f59e0b;
       box-shadow:0 0 0 8px rgba(245,158,11,.10), 0 4px 10px rgba(245,158,11,.35);
-      transition:top .18s ease;
+      transition:top .18s ease, background .18s ease, box-shadow .18s ease, left .18s ease, right .18s ease;
       pointer-events:none;
     }
-    #asdGuideDotLeft{ left:15%; top:54%; transform:translate(-50%,-50%); }
-    #asdGuideDotRight{ right:9%; top:73%; transform:translate(50%,-50%); }
+    #asdGuideDotLeft{ left:12%; top:57%; transform:translate(-50%,-50%); }
+    #asdGuideDotRight{ right:12%; top:57%; transform:translate(50%,-50%); }
+    #asdOverlay.asd-stable .asdGuideDot{
+      background:#22c55e;
+      box-shadow:0 0 0 8px rgba(34,197,94,.12), 0 4px 10px rgba(34,197,94,.30);
+    }
 
     #asdHint{
       background:rgba(248,250,252,.94); padding:18px 22px 18px; display:flex; align-items:flex-start; justify-content:space-between; gap:14px; border-top:1px solid rgba(226,232,240,.92);
@@ -2097,7 +2126,11 @@
         </div>
         <img id="asdEyeMV" src="a.png" alt="Eye background" onerror="this.onerror=null; this.src='a.gif';">
         <div id="asdCameraGuide" aria-hidden="true">
+          <div id="asdGuideLidTop"></div>
+          <div id="asdGuideLidBottom"></div>
           <div id="asdGuideCircle"></div>
+          <div id="asdGuideSideLeft"></div>
+          <div id="asdGuideSideRight"></div>
           <div id="asdGuideAxis"></div>
           <div id="asdGuideDotLeft" class="asdGuideDot"></div>
           <div id="asdGuideDotRight" class="asdGuideDot"></div>
