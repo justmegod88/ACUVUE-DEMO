@@ -1263,6 +1263,36 @@
     #comfortWrap .popup-reference-area::before{ display:none; }
     #comfortWrap .toric-popup-disclaimer{ padding:6px 24px 20px; background:#fff; font-size:10px; color:#94a3b8; }
 
+
+    #asdBlinkGroup{ display:none; flex:1 1 0; gap:8px; }
+    #asdOverlay.camera-on #asdBlinkBtn{ display:none; }
+    #asdOverlay.camera-on #asdBlinkGroup{ display:flex; }
+    #asdBlinkGroup .asdActionBtn{ flex:1 1 0; }
+    #asdBlinkManualBtn{ color:#2563eb; background:#fff; }
+    #asdBlinkAutoBtn{ color:#fff; background:#2563eb; border-color:#2563eb; box-shadow:0 14px 26px rgba(37,99,235,.16); }
+    #asdBlinkAutoBtn.active{ background:#0f172a; border-color:#0f172a; }
+    #asdCaptureStill{
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:none; z-index:2;
+      filter:blur(0px) saturate(1.02) brightness(1.02);
+      transition:filter .22s ease, opacity .18s ease;
+    }
+    #asdOverlay.auto-front #asdCaptureStill{ display:block; }
+    #asdFrontPip{
+      position:absolute; right:16px; top:16px; width:33%; max-width:180px; aspect-ratio:3/4; border-radius:22px;
+      overflow:hidden; z-index:7; display:none; background:#dfe6ef; border:2px solid rgba(255,255,255,.85);
+      box-shadow:0 14px 30px rgba(15,23,42,.22);
+    }
+    #asdOverlay.auto-front #asdFrontPip{ display:block; }
+    #asdFrontVideo{ width:100%; height:100%; object-fit:cover; transform:scaleX(-1); display:block; }
+    #asdFrontGuide{
+      position:absolute; left:50%; bottom:14px; transform:translateX(-50%); z-index:8; display:none;
+      padding:10px 16px; border-radius:999px; background:rgba(37,99,235,.92); color:#fff; font-size:13px; font-weight:900;
+      box-shadow:0 10px 24px rgba(37,99,235,.24); text-align:center; line-height:1.2;
+    }
+    #asdOverlay.auto-front #asdFrontGuide{ display:block; }
+    #asdBlinkCanvas{ display:none; }
+    #asdHint, .toric-popup-disclaimer, #globalToricDisclaimer{ display:none !important; }
+
     @media (max-width: 560px){
       #comfortOverlay{ padding:8px; }
       #comfortWrap{ width:100%; border-radius:30px; }
@@ -1359,6 +1389,9 @@
       #asdAngleBadge{ left:14px; bottom:14px; padding:8px 12px; font-size:11px; }
       #asdControlBar{ padding:12px 10px 12px; gap:8px; }
       .asdActionBtn{ height:48px; font-size:13px; border-radius:16px; }
+      #asdBlinkGroup{ gap:6px; }
+      #asdFrontPip{ right:12px; top:12px; width:34%; border-radius:18px; }
+      #asdFrontGuide{ bottom:10px; padding:8px 12px; font-size:12px; }
       #asdHint{ padding:14px 14px 14px; gap:10px; }
       #asdInfoBadge{ width:32px; height:32px; border-radius:10px; font-size:14px; }
       #asdHint .hintTitle{ font-size:15px; }
@@ -2120,12 +2153,12 @@
   </div>
 
   <div id="pvpBig">
-    <img id="pvpBigImg" src="https://d1qldkl5c71vyf.cloudfront.net/astig/PVP.gif" alt="PVP Big" onerror="this.onerror=null; this.src='PVP.png';">
+    <img id="pvpBigImg" src="https://d1qldkl5c71vyf.cloudfront.net/astig/PVP.gif" alt="PVP Big" onerror="this.onerror=null; this.src='PVP.jpeg';">
   </div>
 
   <div id="pvpOverlay">
     <div id="pvpMain">
-      <img id="pvpThumb" src="PVP.png" alt="PVP" data-fallback="0" onerror="if(this.dataset.fallback==='0'){this.dataset.fallback='1'; this.src='PVP.png';}else if(this.dataset.fallback==='1'){this.dataset.fallback='2'; this.src='PVP.jpeg';}else{this.onerror=null;}">
+      <img id="pvpThumb" src="pvp.png" alt="PVP" data-fallback="0" onerror="if(this.dataset.fallback==='0'){this.dataset.fallback='1'; this.src='PVP.png';}else if(this.dataset.fallback==='1'){this.dataset.fallback='2'; this.src='PVP.jpeg';}else{this.onerror=null;}">
       <div id="pvpText">
         <div id="pvpTitle">PVP 습윤인자</div>
         <div id="hint">렌즈 내 PVP 습윤인자가 <span class="pvp-highlight">하루 종일 촉촉함을 </span>제공합니다.</div>
@@ -2134,13 +2167,52 @@
         <div id="pvpConfirm" class="pvp-action-btn" role="button" tabindex="0">확인</div>
       </div>
     </div>
-    <div class="toric-popup-disclaimer">
-      <span class="disc-note">1.Reducing Friction in the Eye: A Comparative Study of Lubrication by Surface Anchored Synthetic and Natural Ocular Mucin Analogues.Sterner O, et al. <em>ACS Applied Materials &amp; Interfaces</em>. 2017;9(23):20150~20160.</span></div>
+    <div class="popup-reference-area">
+      <span class="ref-line">1.Reducing Friction in the Eye: A Comparative Study of Lubrication by Surface Anchored Synthetic and Natural Ocular Mucin Analogues.Sterner O, et al. <em>ACS Applied Materials &amp; Interfaces</em>. 2017;9(23):20150~20160.</span></div>
     </div>
   </div>
 
+  <div id="pvpSimOverlay" class="state-on" aria-hidden="true">
+    <div id="pvpSimWrap" onclick="event.stopPropagation()">
+      <div id="pvpSimHead">
+        <div id="pvpSimTitle">PVP 습윤인자 시뮬레이터</div>
+        <button id="pvpSimClose" type="button">X</button>
+      </div>
+      <div id="pvpSimScene">
+        <img id="pvpSceneBase" src="pvp_scene_base.png" alt="PVP 시뮬레이터 배경" onerror="this.onerror=null; this.src='a.png';">
+        <div id="pvpSurfaceRing"></div>
+        <div id="pvpLensStage">
+          <img id="pvpLensBase" src="lens.png" alt="기본 렌즈" onerror="this.onerror=null; this.src='lens2.png';">
+          <img id="pvpLensOn" src="pvp_lens_on.png" alt="PVP ON 렌즈 플레이스홀더" onerror="this.onerror=null; this.src='lens.png';">
+          <img id="pvpLensOff" src="pvp_lens_off.png" alt="PVP OFF 렌즈 플레이스홀더" onerror="this.onerror=null; this.src='lens2.png';">
+          <div id="pvpMoistureFx"></div>
+          <div id="pvpDryFx"></div>
+        </div>
+        <div id="pvpBlinkLid"><div id="pvpLidTop"></div><div id="pvpLidBot"></div></div>
+        <div id="pvpStateBadge">PVP ON</div>
+        <div id="pvpCalloutTop"><span class="pvpDot"></span><span class="pvpPill">깜박여도 수분막 유지</span></div>
+        <div id="pvpCalloutBottom"><span class="pvpDot"></span><span class="pvpPill">눈물막 안정 도움</span></div>
+        <div id="pvpSimControls">
+          <div class="pvpSeg" id="pvpStateSeg">
+            <button id="pvpStateOn" class="pvpSegBtn active" type="button">PVP ON</button>
+            <button id="pvpStateOff" class="pvpSegBtn" type="button">PVP OFF</button>
+          </div>
+          <div class="pvpSeg single" id="pvpBlinkSeg">
+            <button id="pvpBlinkTrigger" class="pvpSegBtn" type="button">깜박임</button>
+          </div>
+        </div>
+      </div>
+      <div id="pvpSimMessage">
+        <div id="pvpSimMessageCopy"><span class="blue">PVP ON</span> 상태에서는 깜박일 때마다 렌즈 표면의 <span class="blue">수분 유지와 눈물막 안정</span>을 돕는 느낌으로 표현했습니다.</div>
+        <button id="pvpSimConfirm" type="button">확인</button>
+      </div>
+      <div class="popup-reference-area" style="padding:12px 16px 0; background:#dbe5f1;">
+        <span class="ref-line">PVP 관련 이미지는 추후 교체 가능한 플레이스홀더입니다. pvp_scene_base.png / pvp_lens_on.png / pvp_lens_off.png 파일명으로 넣어주세요.</span>
+      </div>
+      <div class="toric-popup-disclaimer"><span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span></div>
+    </div>
+  </div>
 
-  
   <div id="asdOverlay" aria-hidden="true">
     <div id="asdCard">
       <div id="asdHeader">
@@ -2175,6 +2247,10 @@
       <div id="asdControlBar">
         <button id="asdRotateBtn" class="asdActionBtn" type="button">축회전 유발</button>
         <button id="asdBlinkBtn" class="asdActionBtn" type="button">깜박임 실행</button>
+        <div id="asdBlinkGroup">
+          <button id="asdBlinkManualBtn" class="asdActionBtn" type="button">깜박임 수동</button>
+          <button id="asdBlinkAutoBtn" class="asdActionBtn" type="button">깜박임 자동</button>
+        </div>
         <button id="asdCameraBtn" class="asdActionBtn" type="button" aria-label="카메라">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z"></path>
@@ -2189,7 +2265,7 @@
           <span class="hintBody">아큐브ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</span>
         </div>
       </div>
-      <div class="toric-popup-disclaimer"><span class="disc-note">해당 시뮬레이션은 이해를 돕기 위한 데모 화면이며, 실제 시야 경험과는 차이가 있을 수 있습니다. KR_2026_233</span></div>
+      <div class="toric-popup-disclaimer"><span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span></div>
     </div>
   </div>
 
@@ -2241,7 +2317,7 @@
       <div class="popup-reference-area" style="padding:12px 16px 0; background:#fff;">
         <span class="ref-line">1. Sulley A, Hawke R, Osborn Lorenz K, et al. <em>Cont Lens Anterior Eye</em>. 2015;38(4):253–257.  2. Cripps, A. (2022). PRISM: a help and a hindrance (CPD Code: C-102818). Association of British Dispensing Opticians.</span>
       </div>
-      <div class="toric-popup-disclaimer"><span class="disc-note">해당 시뮬레이션은 이해를 돕기 위한 데모 화면이며, 실제 시야 경험과는 차이가 있을 수 있습니다. KR_2026_233</span></div>
+      <div class="toric-popup-disclaimer"><span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 시뮬레이션입니다. KR_2026_233</span></div>
     </div>
   </div>
 
@@ -2431,10 +2507,9 @@
         <div id="blueSimMessageCopy"><span id="blueSimMessageTitle">블루라이트 차단 비교</span><span class="blue">왼쪽은 OFF</span>, <span class="blue">오른쪽은 ON</span> 상태입니다. 가운데 슬라이더를 움직여 블루라이트 차단 전후의 <span class="blue">빛 번짐과 선명함 차이</span>를 한 화면에서 비교해 보세요.</div>
       </div>
       <div class="popup-reference-area" style="padding:14px 24px 0; background:#fff;">
-        <span class="ref-line">Hammond, B. R., Jr., Fletcher, L. M., & Elliott, J. G. (2013).Glare disability, photostress recovery, and chromatic contrast: Relation to macular pigment.Investigative Ophthalmology & Visual Science, 54(1), 476–481.https://doi.org/10.1167/iovs.12-10411
-</span>
+        <span class="ref-line">해당 시뮬레이션은 이해를 돕기 위한 데모 화면이며, 실제 시야 경험과는 차이가 있을 수 있습니다.</span>
       </div>
-      <div class="toric-popup-disclaimer"><span class="disc-note">해당 시뮬레이션은 이해를 돕기 위한 데모 화면이며, 실제 시야 경험과는 차이가 있을 수 있습니다. KR_2026_264</span></div>
+      <div class="toric-popup-disclaimer"><span class="disc-note">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</span></div>
     </div>
   </div>
 
@@ -3518,7 +3593,7 @@
         cfBtnOn.classList.add('active');
         if(comfortStateBadge) comfortStateBadge.textContent = '프리즘 영향 발생 중';
         if(comfortTitle) comfortTitle.textContent = '프리즘이 적은 광학부';
-        if(comfortSubTitle) comfortSubTitle.textContent = 'PRISM IMPACT VISUALIZATION';
+        if(comfortSubTitle) comfortSubTitle.textContent = 'OPTICAL TECHNOLOGY VISUALIZATION';
         if(comfortInfoBadge){ comfortInfoBadge.style.background = '#FFE7E7'; comfortInfoBadge.style.color = '#DB2C2C'; comfortInfoBadge.textContent = '!'; }
         comfortMessageCopy.innerHTML = `<span class="comfort-info-title">단안 프리즘 영향</span>단안에 프리즘 영향이 있는 경우 <span class="blue"><span style="color:#3b82f6;font-weight:600;"><span style="color:#2563eb;font-weight:600;"><span style="color:#ef4444;font-weight:600;">양안 이미지 위치에 차이</span></span></span></span>가 발생하여 시각적 피로감이 발생할 수 있습니다.`;
         if(comfortConfirm) comfortConfirm.style.display = 'inline-flex';
@@ -3527,7 +3602,7 @@
         cfBtnOff.classList.add('active');
         if(comfortStateBadge) comfortStateBadge.textContent = '프리즘 영향 없음';
         if(comfortTitle) comfortTitle.textContent = '프리즘이 적은 광학부';
-        if(comfortSubTitle) comfortSubTitle.textContent = 'PRISM IMPACTY VISUALIZATION';
+        if(comfortSubTitle) comfortSubTitle.textContent = 'OPTICAL TECHNOLOGY VISUALIZATION';
         if(comfortInfoBadge){ comfortInfoBadge.style.background = '#E4EEFF'; comfortInfoBadge.style.color = '#1F6FFF'; comfortInfoBadge.textContent = 'i'; }
         comfortMessageCopy.innerHTML = `<span class="comfort-info-title">단안 프리즘 영향</span>단안 난시 소비자에게 <span class="green"><span style="color:#2563eb;font-weight:600;">난시렌즈의 광학부 프리즘</span></span>은 중요한 영향을 미칩니다.`;
         if(comfortConfirm) comfortConfirm.style.display = 'inline-flex';
@@ -3798,83 +3873,64 @@
     const asdClose = document.getElementById('asdClose');
     const asdRotateBtn = document.getElementById('asdRotateBtn');
     const asdBlinkBtn = document.getElementById('asdBlinkBtn');
+    const asdBlinkManualBtn = document.getElementById('asdBlinkManualBtn');
+    const asdBlinkAutoBtn = document.getElementById('asdBlinkAutoBtn');
     const asdCameraBtn = document.getElementById('asdCameraBtn');
     const asdCameraVideo = document.getElementById('asdCameraVideo');
+    const asdCaptureStill = document.getElementById('asdCaptureStill');
+    const asdFrontVideo = document.getElementById('asdFrontVideo');
+    const asdBlinkCanvas = document.getElementById('asdBlinkCanvas');
     const asdGuideAxis = document.getElementById('asdGuideAxis');
     const asdGuideCircle = document.getElementById('asdGuideCircle');
     const asdGuideDotLeft = document.getElementById('asdGuideDotLeft');
     const asdGuideDotRight = document.getElementById('asdGuideDotRight');
-    const asdEyeMV = document.getElementById('asdEyeMV');
-    const asdUpperLid = document.getElementById('asdUpperLid');
     const asdLensImg = document.getElementById('asdLensImg');
     const asdAngleBadge = document.getElementById('asdAngleBadge');
-
-    if(!missionASD || !asdOverlay || !asdRotateBtn || !asdBlinkBtn || !asdCameraBtn || !asdCameraVideo || !asdLensImg || !asdAngleBadge){
+    if(!missionASD || !asdOverlay || !asdRotateBtn || !asdBlinkBtn || !asdBlinkManualBtn || !asdBlinkAutoBtn || !asdCameraBtn || !asdCameraVideo || !asdLensImg || !asdAngleBadge){
       return;
     }
 
-    let asdCameraStream = null;
+    let rearStream = null;
+    let frontStream = null;
     let asdCameraOn = false;
+    let autoMode = false;
+    let detectRaf = null;
     let asdAngleValue = 20;
     let asdBlinkBusy = false;
+    let blinkState = 'open';
+    let baseline = null;
+    let lastBlinkAt = 0;
 
-    function syncAngleFromGlobal(){
-      if (typeof window.asdAngle === 'number') asdAngleValue = window.asdAngle;
-    }
-    function writeAngleToGlobal(){
-      window.asdAngle = asdAngleValue;
-    }
+    function syncAngleFromGlobal(){ if (typeof window.asdAngle === 'number') asdAngleValue = window.asdAngle; }
+    function writeAngleToGlobal(){ window.asdAngle = asdAngleValue; }
 
     function renderGuide(){
       if (asdGuideAxis) asdGuideAxis.style.transform = `rotate(${asdAngleValue}deg)`;
       if (asdGuideCircle) asdGuideCircle.style.transform = `translate(-50%,-50%) rotate(${(asdAngleValue * 0.18).toFixed(2)}deg)`;
-
-      const centerX = 50;
-      const centerY = 52;
-      const outerRadius = 40;   // outer circle radius -> 10%/90%
-      const cyanRadius = 31.2;  // inner boundary where cyan marks should sit
-      const rad = asdAngleValue * Math.PI / 180;
-      const cos = Math.cos(rad);
-      const sin = Math.sin(rad);
-
-      // Yellow/green dots: exact dashed-line endpoints on the outer circle
-      const leftX = centerX - outerRadius * cos;
-      const leftY = centerY - outerRadius * sin;
-      const rightX = centerX + outerRadius * cos;
-      const rightY = centerY + outerRadius * sin;
-
+      const centerX = 50, centerY = 52, outerRadius = 40, cyanRadius = 31.2;
+      const rad = asdAngleValue * Math.PI / 180, cos = Math.cos(rad), sin = Math.sin(rad);
+      const leftX = centerX - outerRadius * cos, leftY = centerY - outerRadius * sin;
+      const rightX = centerX + outerRadius * cos, rightY = centerY + outerRadius * sin;
       if (asdGuideDotLeft && asdGuideDotRight){
-        asdGuideDotLeft.style.left = `${leftX}%`;
-        asdGuideDotLeft.style.top = `${leftY}%`;
-        asdGuideDotRight.style.left = `${rightX}%`;
-        asdGuideDotRight.style.top = `${rightY}%`;
+        asdGuideDotLeft.style.left = `${leftX}%`; asdGuideDotLeft.style.top = `${leftY}%`;
+        asdGuideDotRight.style.left = `${rightX}%`; asdGuideDotRight.style.top = `${rightY}%`;
       }
-
-      // Cyan marks: larger, clearer, and attached to the inner boundary
-      const asdGuideSideLeft = document.getElementById('asdGuideSideLeft');
-      const asdGuideSideRight = document.getElementById('asdGuideSideRight');
-      if (asdGuideSideLeft && asdGuideSideRight){
-        const leftCyanX = centerX - cyanRadius * cos;
-        const leftCyanY = centerY - cyanRadius * sin;
-        const rightCyanX = centerX + cyanRadius * cos;
-        const rightCyanY = centerY + cyanRadius * sin;
-
-        asdGuideSideLeft.style.left = `${leftCyanX}%`;
-        asdGuideSideLeft.style.top = `${leftCyanY}%`;
-        asdGuideSideLeft.style.transform = `translate(-50%,-50%) rotate(${asdAngleValue}deg)`;
-
-        asdGuideSideRight.style.left = `${rightCyanX}%`;
-        asdGuideSideRight.style.top = `${rightCyanY}%`;
-        asdGuideSideRight.style.transform = `translate(-50%,-50%) rotate(${asdAngleValue}deg)`;
+      const leftMark = document.getElementById('asdGuideSideLeft');
+      const rightMark = document.getElementById('asdGuideSideRight');
+      if (leftMark && rightMark){
+        const leftCyanX = centerX - cyanRadius * cos, leftCyanY = centerY - cyanRadius * sin;
+        const rightCyanX = centerX + cyanRadius * cos, rightCyanY = centerY + cyanRadius * sin;
+        leftMark.style.left = `${leftCyanX}%`; leftMark.style.top = `${leftCyanY}%`;
+        leftMark.style.transform = `translate(-50%,-50%) rotate(${asdAngleValue}deg)`;
+        rightMark.style.left = `${rightCyanX}%`; rightMark.style.top = `${rightCyanY}%`;
+        rightMark.style.transform = `translate(-50%,-50%) rotate(${asdAngleValue}deg)`;
       }
     }
 
     function renderAngle(){
       syncAngleFromGlobal();
       asdAngleValue = typeof window.asdAngle === 'number' ? window.asdAngle : asdAngleValue;
-      if (asdLensImg){
-        asdLensImg.style.transform = `translate(calc(-50% + var(--irisX, 0px)), calc(-50% + var(--irisY, 0px))) rotate(${asdAngleValue}deg)`;
-      }
+      if (asdLensImg) asdLensImg.style.transform = `translate(calc(-50% + var(--irisX, 0px)), calc(-50% + var(--irisY, 0px))) rotate(${asdAngleValue}deg)`;
       if (asdAngleBadge){
         if (asdAngleValue > 0) asdAngleBadge.textContent = `좌측 ${asdAngleValue}° 회전 발생`;
         else if (asdAngleValue < 0) asdAngleBadge.textContent = `우측 ${Math.abs(asdAngleValue)}° 회전 발생`;
@@ -3882,139 +3938,184 @@
       }
       asdOverlay.classList.toggle('asd-stable', Math.abs(asdAngleValue) === 0);
       renderGuide();
-      if (asdCameraOn && asdCameraVideo){
-        const blur = Math.min(8, Math.abs(asdAngleValue) * 0.16);
-        asdCameraVideo.style.filter = Math.abs(asdAngleValue) === 0
-          ? 'blur(0px) saturate(1.02) brightness(1.02)'
-          : `blur(${blur.toFixed(2)}px) saturate(.92)`;
+      const blur = Math.min(8, Math.abs(asdAngleValue) * 0.16);
+      if (asdCameraOn && !autoMode && asdCameraVideo){
+        asdCameraVideo.style.filter = Math.abs(asdAngleValue) === 0 ? 'blur(0px) saturate(1.02) brightness(1.02)' : `blur(${blur.toFixed(2)}px) saturate(.92)`;
+      }
+      if (autoMode && asdCaptureStill){
+        asdCaptureStill.style.filter = Math.abs(asdAngleValue) === 0 ? 'blur(0px) saturate(1.02) brightness(1.02)' : `blur(${blur.toFixed(2)}px) saturate(.92)`;
       }
     }
 
+    function randomRotate(){
+      const steps = [-25,-20,-15,-10,-5,5,10,15,20,25];
+      let next = steps[Math.floor(Math.random() * steps.length)];
+      if (next === asdAngleValue) next = steps[(steps.indexOf(next) + 1) % steps.length];
+      asdAngleValue = next; writeAngleToGlobal(); renderAngle();
+    }
+
+    function stabilizeStep(){
+      if (asdBlinkBusy) return;
+      asdBlinkBusy = true;
+      if (asdAngleValue > 0) asdAngleValue = Math.max(0, asdAngleValue - 5);
+      else if (asdAngleValue < 0) asdAngleValue = Math.min(0, asdAngleValue + 5);
+      writeAngleToGlobal(); renderAngle();
+      setTimeout(()=>{ asdBlinkBusy = false; }, 240);
+    }
+
     function resetASDPatchedState(){
-      asdAngleValue = 20;
+      const defaults = [-20,-15,-10,10,15,20];
+      asdAngleValue = defaults[Math.floor(Math.random()*defaults.length)];
       writeAngleToGlobal();
       renderAngle();
     }
 
-    async function startASDCamera(){
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-        alert('이 브라우저에서는 카메라 기능을 지원하지 않습니다.');
-        return;
-      }
+    async function startRearCamera(){
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ alert('이 브라우저에서는 카메라 기능을 지원하지 않습니다.'); return false; }
       try{
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'environment' },
-          audio: false
-        });
-        asdCameraStream = stream;
+        stopFrontCamera();
+        if (rearStream) rearStream.getTracks().forEach(track => track.stop());
+        rearStream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:{ ideal:'environment' } }, audio:false });
         asdCameraVideo.classList.remove('ready');
-        asdCameraVideo.srcObject = stream;
-        const markReady = function(){
-          asdCameraVideo.classList.add('ready');
-          try{ asdCameraVideo.play(); }catch(e){}
-        };
-        asdCameraVideo.onloadedmetadata = markReady;
-        asdCameraVideo.onloadeddata = markReady;
-        asdCameraOn = true;
+        asdCameraVideo.srcObject = rearStream;
+        const ready = ()=>{ asdCameraVideo.classList.add('ready'); try{ asdCameraVideo.play(); }catch(e){} };
+        asdCameraVideo.onloadedmetadata = ready; asdCameraVideo.onloadeddata = ready;
+        asdCameraOn = true; autoMode = false;
         asdOverlay.classList.add('camera-on');
+        asdOverlay.classList.remove('auto-front');
         asdCameraBtn.classList.add('active');
+        asdBlinkAutoBtn.classList.remove('active');
         renderAngle();
+        return true;
+      }catch(e){ alert('카메라 권한을 허용해야 사용할 수 있습니다.'); return false; }
+    }
+
+    function stopRearCamera(){
+      if (rearStream){ rearStream.getTracks().forEach(track => track.stop()); rearStream = null; }
+      try{ asdCameraVideo.pause(); }catch(e){}
+      asdCameraVideo.srcObject = null; asdCameraVideo.classList.remove('ready');
+    }
+
+    async function startFrontCamera(){
+      try{
+        frontStream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:'user' }, audio:false });
+        asdFrontVideo.srcObject = frontStream;
+        try{ await asdFrontVideo.play(); }catch(e){}
+        return true;
       }catch(e){
-        alert('카메라 권한을 허용해야 사용할 수 있습니다.');
+        alert('전면 카메라 권한이 필요합니다.');
+        return false;
       }
     }
 
-    function stopASDCamera(){
-      if (asdCameraStream){
-        asdCameraStream.getTracks().forEach(track => track.stop());
-        asdCameraStream = null;
-      }
-      try{ asdCameraVideo.pause(); }catch(e){}
-      asdCameraVideo.srcObject = null;
-      asdCameraVideo.classList.remove('ready');
-      asdCameraOn = false;
-      asdOverlay.classList.remove('camera-on');
+    function stopFrontCamera(){
+      if (detectRaf){ cancelAnimationFrame(detectRaf); detectRaf = null; }
+      if (frontStream){ frontStream.getTracks().forEach(track => track.stop()); frontStream = null; }
+      try{ asdFrontVideo.pause(); }catch(e){}
+      asdFrontVideo.srcObject = null;
+      baseline = null; blinkState = 'open';
+    }
+
+    function stopAllCamera(){
+      stopRearCamera(); stopFrontCamera();
+      asdCameraOn = false; autoMode = false;
+      asdOverlay.classList.remove('camera-on','auto-front');
       asdCameraBtn.classList.remove('active');
+      asdBlinkAutoBtn.classList.remove('active');
+    }
+
+    function captureRearFrame(){
+      if (!asdCameraVideo.videoWidth || !asdCameraVideo.videoHeight) return false;
+      const c = document.createElement('canvas');
+      c.width = asdCameraVideo.videoWidth; c.height = asdCameraVideo.videoHeight;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(asdCameraVideo, 0, 0, c.width, c.height);
+      asdCaptureStill.src = c.toDataURL('image/jpeg', 0.92);
+      return true;
+    }
+
+    function computeBlinkMetric(){
+      if (!asdFrontVideo.videoWidth || !asdFrontVideo.videoHeight) return null;
+      const canvas = asdBlinkCanvas;
+      const ctx = canvas.getContext('2d', { willReadFrequently:true });
+      const w = canvas.width, h = canvas.height;
+      ctx.drawImage(asdFrontVideo, 0, 0, w, h);
+      const rx = Math.floor(w*0.28), ry = Math.floor(h*0.16), rw = Math.floor(w*0.44), rh = Math.floor(h*0.22);
+      const data = ctx.getImageData(rx, ry, rw, rh).data;
+      let total = 0;
+      for (let i=0;i<data.length;i+=4){ total += (data[i] + data[i+1] + data[i+2]) / 3; }
+      return total / (data.length/4);
+    }
+
+    function runBlinkDetection(){
+      const now = performance.now();
+      const m = computeBlinkMetric();
+      if (m != null){
+        baseline = baseline == null ? m : baseline * 0.92 + m * 0.08;
+        const closeThreshold = baseline * 0.82;
+        const openThreshold = baseline * 0.90;
+        if (blinkState === 'open' && m < closeThreshold){ blinkState = 'closed'; }
+        else if (blinkState === 'closed' && m > openThreshold){
+          blinkState = 'open';
+          if (now - lastBlinkAt > 700){
+            lastBlinkAt = now;
+            stabilizeStep();
+          }
+        }
+      }
+      detectRaf = requestAnimationFrame(runBlinkDetection);
+    }
+
+    async function startAutoRecognition(){
+      if (!asdCameraOn){ const ok = await startRearCamera(); if(!ok) return; }
+      captureRearFrame();
+      stopRearCamera();
+      const ok = await startFrontCamera();
+      if (!ok){ await startRearCamera(); return; }
+      autoMode = true;
+      asdOverlay.classList.add('camera-on','auto-front');
+      asdBlinkAutoBtn.classList.add('active');
+      renderAngle();
+      runBlinkDetection();
     }
 
     function openASDPatched(e){
       if (e) e.preventDefault();
-      if (typeof window.openASD === 'function') {
-        window.openASD();
-      } else {
-        asdOverlay.classList.add('show');
-        asdOverlay.setAttribute('aria-hidden','false');
-      }
+      if (typeof window.openASD === 'function') window.openASD();
+      else { asdOverlay.classList.add('show'); asdOverlay.setAttribute('aria-hidden','false'); }
+      stopAllCamera();
       resetASDPatchedState();
     }
 
     function closeASDPatched(e){
       if (e) e.preventDefault();
-      stopASDCamera();
-      if (typeof window.closeASD === 'function') {
-        window.closeASD();
-      } else {
-        asdOverlay.classList.remove('show');
-        asdOverlay.setAttribute('aria-hidden','true');
-      }
+      stopAllCamera();
+      if (typeof window.closeASD === 'function') window.closeASD();
+      else { asdOverlay.classList.remove('show'); asdOverlay.setAttribute('aria-hidden','true'); }
     }
 
     missionASD.onclick = openASDPatched;
     missionASD.addEventListener('click', openASDPatched, true);
-
     asdClose.onclick = closeASDPatched;
     asdClose.addEventListener('click', closeASDPatched, true);
+    asdOverlay.addEventListener('click', function(ev){ if (ev.target === asdOverlay) closeASDPatched(); }, true);
 
-    asdOverlay.addEventListener('click', function(ev){
-      if (ev.target === asdOverlay) closeASDPatched();
-    }, true);
-
-    asdRotateBtn.onclick = function(ev){
-      ev.preventDefault();
-      ev.stopPropagation();
-      if (asdBlinkBusy) return;
-
-      const steps = [-25,-20,-15,-10,-5,5,10,15,20,25];
-      let next = steps[Math.floor(Math.random() * steps.length)];
-      if (next === asdAngleValue){
-        next = steps[(steps.indexOf(next) + 1) % steps.length];
-      }
-
-      asdAngleValue = next;
-      writeAngleToGlobal();
-      renderAngle();
-    };
-    asdBlinkBtn.onclick = function(ev){
-      ev.preventDefault();
-      ev.stopPropagation();
-      if (asdBlinkBusy) return;
-
-      asdBlinkBusy = true;
-
-      if (asdAngleValue > 0) asdAngleValue = Math.max(0, asdAngleValue - 5);
-      else if (asdAngleValue < 0) asdAngleValue = Math.min(0, asdAngleValue + 5);
-
-      writeAngleToGlobal();
-      renderAngle();
-
-      setTimeout(function(){ asdBlinkBusy = false; }, 260);
-    };
+    asdRotateBtn.onclick = function(ev){ ev.preventDefault(); ev.stopPropagation(); if (asdBlinkBusy) return; randomRotate(); };
+    asdBlinkBtn.onclick = function(ev){ ev.preventDefault(); ev.stopPropagation(); stabilizeStep(); };
+    asdBlinkManualBtn.onclick = function(ev){ ev.preventDefault(); ev.stopPropagation(); stabilizeStep(); };
+    asdBlinkAutoBtn.onclick = async function(ev){ ev.preventDefault(); ev.stopPropagation(); await startAutoRecognition(); };
     asdCameraBtn.onclick = async function(ev){
-      ev.preventDefault();
-      ev.stopPropagation();
-      if (asdCameraOn) stopASDCamera();
-      else await startASDCamera();
+      ev.preventDefault(); ev.stopPropagation();
+      if (asdCameraOn) stopAllCamera();
+      else await startRearCamera();
     };
 
-    window.addEventListener('beforeunload', stopASDCamera);
+    window.addEventListener('beforeunload', stopAllCamera);
     renderAngle();
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initASDPatch);
-  } else {
-    initASDPatch();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initASDPatch);
+  else initASDPatch();
 })();
 </script>
 
