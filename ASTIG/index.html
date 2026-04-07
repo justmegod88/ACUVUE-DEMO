@@ -2116,11 +2116,11 @@
     }
 
     #asdOverlay.camera-on #asdAngleBadge{
-      left:18px; bottom:18px; top:auto; min-height:34px; padding:6px 10px; gap:7px;
-      font-size:12px; box-shadow:0 8px 18px rgba(15,23,42,.12);
+      left:18px; bottom:18px; top:auto; min-height:32px; padding:5px 9px; gap:6px;
+      font-size:11px; box-shadow:0 7px 16px rgba(15,23,42,.11);
     }
     #asdOverlay.camera-on #asdAngleBadge::before{
-      width:8px; height:8px; box-shadow:0 0 0 3px rgba(59,130,246,.10);
+      width:7px; height:7px; box-shadow:0 0 0 3px rgba(59,130,246,.10);
     }
 
 </style>
@@ -3912,16 +3912,25 @@ function initASDPatch(){
     function applyCameraFilter(){
       if (!asdCameraVideo) return;
       const blur = getBlur();
+      const liveFilter = Math.abs(asdAngleValue) === 0
+        ? 'blur(0px) saturate(1.02) brightness(1.02)'
+        : `blur(${blur.toFixed(2)}px) saturate(.92)`;
+      const capturedFilter = Math.abs(asdAngleValue) === 0
+        ? 'blur(0px) saturate(1.02) brightness(1.02)'
+        : `blur(${(blur + 0.8).toFixed(2)}px) saturate(.92) brightness(${Math.max(0.8, 1 - Math.abs(asdAngleValue) * 0.006).toFixed(2)})`;
+
+      if (asdCaptureImage){
+        asdCaptureImage.style.filter = capturedFilter;
+      }
+
       if (asdCameraOn && asdMode === 'manual'){
         asdCameraVideo.style.display = 'block';
-        asdCameraVideo.style.filter = Math.abs(asdAngleValue) === 0
-          ? 'blur(0px) saturate(1.02) brightness(1.02)'
-          : `blur(${blur.toFixed(2)}px) saturate(.92)`;
+        asdCameraVideo.style.filter = liveFilter;
       } else if (asdCameraOn && asdMode === 'auto' && !asdRearCaptured){
         asdCameraVideo.style.display = 'block';
-        asdCameraVideo.style.filter = Math.abs(asdAngleValue) === 0
-          ? 'blur(0px) saturate(1.02) brightness(1.02)'
-          : `blur(${blur.toFixed(2)}px) saturate(.92)`;
+        asdCameraVideo.style.filter = liveFilter;
+      } else if (asdCameraOn && asdMode === 'auto' && asdRearCaptured){
+        asdCameraVideo.style.filter = liveFilter;
       }
     }
     function refreshHint(){
