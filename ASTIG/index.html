@@ -2106,8 +2106,7 @@
       background:#fff; border:2px solid rgba(255,255,255,.92); box-shadow:0 14px 26px rgba(0,0,0,.18); display:none;
     }
     #asdOverlay.camera-on.auto-running #asdMiniFace{ display:block; }
-    #asdMiniFaceLabel{ display:none !important; }
-    #asdMiniFaceVideo, #asdMiniFaceCanvas{
+        #asdMiniFaceVideo, #asdMiniFaceCanvas{
       position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 24%;
     }
     #asdMiniFaceLabel{
@@ -4096,14 +4095,63 @@ function initASDPatch(){
       asdFaceLandmarkerReady = true;
     }
 
+    function isAndroidDevice(){
+      try{ return /Android/i.test(navigator.userAgent || ''); }catch(e){ return false; }
+    }
+
+    async function getASDMiniCameraStream(){
+      const media = navigator.mediaDevices;
+      if (!media || !media.getUserMedia) return null;
+
+      const base = { width:{ideal:320}, height:{ideal:480} };
+      const attempts = [];
+
+      if (isAndroidDevice()){
+        attempts.push({ video:{ ...base, facingMode:{ exact:'user' } }, audio:false });
+        attempts.push({ video:{ ...base, facingMode:{ ideal:'user' } }, audio:false });
+        attempts.push({ video:{ ...base }, audio:false });
+      } else {
+        attempts.push({ video:{ ...base, facingMode:'user' }, audio:false });
+      }
+
+      for (const constraints of attempts){
+        try{
+          return await media.getUserMedia(constraints);
+        }catch(err){
+          console.warn('ASD mini camera attempt failed', constraints, err);
+        }
+      }
+
+      if (isAndroidDevice() && media.enumerateDevices){
+        try{
+          const temp = await media.getUserMedia({ video:true, audio:false });
+          temp.getTracks().forEach(track => track.stop());
+          const devices = await media.enumerateDevices();
+          const front = devices.find(device => {
+            if (device.kind !== 'videoinput') return false;
+            const label = (device.label || '').toLowerCase();
+            return label.includes('front') || label.includes('user') || label.includes('selfie');
+          });
+          if (front && front.deviceId){
+            return await media.getUserMedia({
+              video:{ ...base, deviceId:{ exact: front.deviceId } },
+              audio:false
+            });
+          }
+        }catch(err){
+          console.warn('ASD mini camera enumerate fallback failed', err);
+        }
+      }
+
+      return null;
+    }
+
     async function startASDMiniCamera(){
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !asdMiniFaceVideo) return;
       try{
         await stopASDMiniCamera();
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'user', width: {ideal:320}, height: {ideal:480} },
-          audio: false
-        });
+        const stream = await getASDMiniCameraStream();
+        if (!stream) throw new Error('ASD mini front camera unavailable');
         asdMiniFaceStream = stream;
         asdMiniFaceVideo.srcObject = stream;
         await asdMiniFaceVideo.play().catch(()=>{});
