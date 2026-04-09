@@ -427,9 +427,31 @@
       height:1px;
       background:rgba(11,31,51,.08);
     }
+    #pvpCloseBtn{
+      position:absolute;
+      top:12px;
+      right:12px;
+      width:28px;
+      height:28px;
+      border:none;
+      border-radius:999px;
+      background:rgba(15,23,42,.08);
+      color:#64748b;
+      font-size:18px;
+      line-height:1;
+      font-weight:800;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      z-index:12;
+      box-shadow:inset 0 0 0 1px rgba(148,163,184,.16);
+    }
+    #pvpCloseBtn:active{ transform:scale(.98); }
+
     #pvpActions{
       flex:0 0 auto;
-      display:flex;
+      display:none;
       align-items:center;
       justify-content:center;
       margin-left:auto;
@@ -2199,6 +2221,7 @@
   </div>
 
   <div id="pvpOverlay">
+    <button id="pvpCloseBtn" type="button" aria-label="닫기">×</button>
     <div id="pvpMain">
       <img id="pvpThumb" src="PVP.png" alt="PVP" data-fallback="0" onerror="if(this.dataset.fallback==='0'){this.dataset.fallback='1'; this.src='PVP.png';}else if(this.dataset.fallback==='1'){this.dataset.fallback='2'; this.src='PVP.jpeg';}else{this.onerror=null;}">
       <div id="pvpText">
@@ -2206,8 +2229,7 @@
         <div id="hint">렌즈 내 PVP 습윤인자가 <span class="pvp-highlight">하루 종일 촉촉함을 </span>제공합니다.</div>
    </div>
       <div id="pvpActions">
-        <div id="pvpConfirm" class="pvp-action-btn" role="button" tabindex="0">확인</div>
-      </div>
+</div>
     </div>
     <div class="toric-popup-disclaimer">
       <span class="disc-note">1.Reducing Friction in the Eye: A Comparative Study of Lubrication by Surface Anchored Synthetic and Natural Ocular Mucin Analogues.Sterner O, et al. <em>ACS Applied Materials &amp; Interfaces</em>. 2017;9(23):20150~20160.</span></div>
@@ -2563,6 +2585,7 @@
     const pvpOverlay = document.getElementById('pvpOverlay');
     const pvpBig = document.getElementById('pvpBig');
     const pvpConfirm = document.getElementById('pvpConfirm');
+    const pvpCloseBtn = document.getElementById('pvpCloseBtn');
     const pvpVisionOpen = document.getElementById('pvpVisionOpen');
     const pvpSimOverlay = document.getElementById('pvpSimOverlay');
     const pvpSimClose = document.getElementById('pvpSimClose');
