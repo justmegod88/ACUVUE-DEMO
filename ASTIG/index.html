@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <title>ACUVUE<sup class="sup-reg">®</sup> ASTIG</title>
+  <title>ACUVUE ASTIG</title>
 
   <style>
     :root{
@@ -427,9 +427,31 @@
       height:1px;
       background:rgba(11,31,51,.08);
     }
+    #pvpClose{
+      position:absolute;
+      top:12px;
+      right:12px;
+      width:28px;
+      height:28px;
+      border:none;
+      border-radius:999px;
+      background:rgba(15,23,42,.08);
+      color:#64748b;
+      font-size:18px;
+      line-height:1;
+      font-weight:800;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      box-shadow:inset 0 0 0 1px rgba(148,163,184,.16);
+      z-index:5;
+    }
+    #pvpClose:active{ transform:scale(.98); }
+
     #pvpActions{
       flex:0 0 auto;
-      display:flex;
+      display:none;
       align-items:center;
       justify-content:center;
       margin-left:auto;
@@ -455,7 +477,13 @@
       box-shadow:0 6px 16px rgba(36,85,199,.16);
     }
     #pvpVisionOpen{ display:none !important; }
-#pvpConfirm:active{ transform:scale(.98); }
+    #pvpConfirm{
+      min-width:96px;
+      border:1px solid rgba(36,85,199,.92);
+      background:var(--smartfit-blue);
+      display:none;
+    }
+    #pvpConfirm:active{ transform:scale(.98); }
 
 
     /* restored classic PVP popup behavior */
@@ -698,7 +726,6 @@
     #asdOverlay.show{ display:flex; }
 
     #asdCard{
-      position:relative;
       width:min(560px, 97vw);
       border-radius:40px;
       border:1px solid rgba(15,23,42,.06);
@@ -943,7 +970,6 @@
     }
     #comfortOverlay.show{ display:flex; }
     #comfortWrap{
-      position:relative;
       width:min(470px, 96vw);
       border-radius:40px;
       overflow:hidden;
@@ -1232,12 +1258,35 @@
       box-shadow:0 8px 20px rgba(15,23,42,.08); white-space:nowrap; position:relative;
     }
     .cf-camera-btn::before{
-      content:"📷"; font-size:22px; line-height:1;
+      content:"";
+      width:22px;
+      height:16px;
+      display:block;
+      margin:auto;
+      box-sizing:border-box;
+      border:2px solid currentColor;
+      border-radius:4px;
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+    }
+    .cf-camera-btn::after{
+      content:"";
+      width:7px;
+      height:7px;
+      border:2px solid currentColor;
+      border-radius:999px;
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      box-sizing:border-box;
     }
     .cf-camera-btn.active{ background:#0f172a; color:#fff; border-color:#0f172a; box-shadow:0 10px 20px rgba(15,23,42,.12); }
 
     #comfortMessage{
-      background:rgba(248,250,252,.94); padding:18px 22px 18px; display:flex; align-items:flex-start; justify-content:space-between; gap:14px; border-top:1px solid rgba(226,232,240,.92);
+      background:rgba(248,250,252,.94); padding:18px 22px 18px; display:flex; align-items:flex-start; justify-content:flex-start; gap:14px; border-top:1px solid rgba(226,232,240,.92);
     }
     #comfortInfoBadge{
       width:36px; height:36px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex:0 0 auto;
@@ -1315,7 +1364,14 @@
       #pvpActions{
         margin-left:0;
       }
-#pvpSimOverlay{ padding:8px; }
+      #pvpConfirm{
+        min-width:96px;
+        height:44px;
+        padding:0 16px;
+        font-size:13px;
+      }
+
+      #pvpSimOverlay{ padding:8px; }
       #pvpSimWrap{ width:100%; border-radius:20px; }
       #pvpSimHead{ height:48px; padding:0 14px; }
       #pvpSimTitle{ font-size:15px; }
@@ -2107,29 +2163,7 @@
     }
 
 
-    .sup-reg{font-size:.5em; position:relative; top:-0.38em; margin-left:1px;}
-  
-    .popup-x-btn{
-      position:absolute;
-      top:12px;
-      right:12px;
-      width:28px;
-      height:28px;
-      border:none;
-      border-radius:999px;
-      background:rgba(15,23,42,.08);
-      color:#64748b;
-      font-size:18px;
-      line-height:1;
-      font-weight:800;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      box-shadow:inset 0 0 0 1px rgba(148,163,184,.16);
-      z-index:10;
-    }
-    .popup-x-btn:active{ transform:scale(.98); }
+    .sup-reg{font-size:.5em;position:relative;top:-0.38em;margin-left:1px;}
   </style>
 </head>
 <body>
@@ -2176,6 +2210,7 @@
   </div>
 
   <div id="pvpOverlay">
+    <button id="pvpClose" type="button" aria-label="닫기">×</button>
     <div id="pvpMain">
       <img id="pvpThumb" src="PVP.png" alt="PVP" data-fallback="0" onerror="if(this.dataset.fallback==='0'){this.dataset.fallback='1'; this.src='PVP.png';}else if(this.dataset.fallback==='1'){this.dataset.fallback='2'; this.src='PVP.jpeg';}else{this.onerror=null;}">
       <div id="pvpText">
@@ -2183,8 +2218,7 @@
         <div id="hint">렌즈 내 PVP 습윤인자가 <span class="pvp-highlight">하루 종일 촉촉함을 </span>제공합니다.</div>
    </div>
       <div id="pvpActions">
-        <div id="pvpConfirm" class="pvp-action-btn" role="button" tabindex="0">확인</div>
-      </div>
+</div>
     </div>
     <div class="toric-popup-disclaimer">
       <span class="disc-note">1.Reducing Friction in the Eye: A Comparative Study of Lubrication by Surface Anchored Synthetic and Natural Ocular Mucin Analogues.Sterner O, et al. <em>ACS Applied Materials &amp; Interfaces</em>. 2017;9(23):20150~20160.</span></div>
@@ -2195,7 +2229,6 @@
   
   <div id="asdOverlay" aria-hidden="true">
     <div id="asdCard">
-      <button id="asdCloseX" class="popup-x-btn" type="button" aria-label="닫기">×</button>
       <div id="asdHeader">
         <div id="asdHeaderTitleWrap">
           <div id="asdHeaderTitle">ASD™ 축안정화</div>
@@ -2299,7 +2332,8 @@
           <div id="comfortInfoBadge">i</div>
           <div id="comfortMessageCopy"><span class="comfort-info-title">난시 렌즈 축 안정의 중요성</span>아큐브 ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</div>
         </div>
-</div>
+        
+      </div>
       <div class="popup-reference-area" style="padding:12px 16px 0; background:#fff;">
         <span class="ref-line">1. Sulley A, Hawke R, Osborn Lorenz K, et al. <em>Cont Lens Anterior Eye</em>. 2015;38(4):253–257.  2. Cripps, A. (2022). PRISM: a help and a hindrance (CPD Code: C-102818). Association of British Dispensing Opticians.</span>
       </div>
@@ -2535,14 +2569,11 @@
     const modeHeat = document.getElementById('modeHeat');
     const btnReset = document.getElementById('btnReset');
     const asdOverlay = document.getElementById('asdOverlay');
-    const asdClose = 
-    document.getElementById('asdCloseX')?.addEventListener('click', ()=> closeAsd());
-    document.getElementById('comfortCloseX')?.addEventListener('click', ()=> closeComfort());
-
-    document.getElementById('asdClose');
+    const asdClose = document.getElementById('asdClose');
     const pvpOverlay = document.getElementById('pvpOverlay');
     const pvpBig = document.getElementById('pvpBig');
     const pvpConfirm = document.getElementById('pvpConfirm');
+    const pvpClose = document.getElementById('pvpClose');
     const pvpVisionOpen = document.getElementById('pvpVisionOpen');
     const pvpSimOverlay = document.getElementById('pvpSimOverlay');
     const pvpSimClose = document.getElementById('pvpSimClose');
@@ -3275,8 +3306,9 @@
       asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span><span class="hintBody"><span class="blue">‘깜박임 진행 버튼’</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
     }
     function setASDHintSuccess(){
-      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈 축 안정의 중요성</span><span class="hintBody">아큐브 ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</span></div>`;
-}
+      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈 축 안정의 중요성</span><span class="hintBody">아큐브 ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</span></div><button id="asdConfirmBtn" type="button">확인 완료</button>`;
+      document.getElementById('asdConfirmBtn')?.addEventListener('click', (e)=>{ e.stopPropagation(); closeASD(); markASDDone(true); });
+    }
     function markASDDone(done){ asdDone = !!done; missionASD.classList.toggle('done', asdDone); }
     function pickASDLensSrc(){ return (currentMode === 'heat') ? 'lens2.png' : 'lens.png'; }
     function setASDLensSrc(){ if(!asdLensImg) return; asdLensImg.src = pickASDLensSrc() + '?v=' + Date.now(); }
@@ -3519,8 +3551,7 @@
     missionPVP.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') togglePVP(); });
 
     function confirmPVP(){ closePVP(true); }
-    pvpConfirm.addEventListener('click', (e)=>{ e.stopPropagation(); confirmPVP(); });
-    pvpConfirm.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); confirmPVP(); } });
+    document.getElementById('pvpClose')?.addEventListener('click', (e)=>{ e.stopPropagation(); setPVPOverlay(false); });
     pvpBig?.addEventListener('click', (e)=>{ e.stopPropagation(); confirmPVP(); });
     pvpOverlay?.addEventListener('click', (e)=>{ e.stopPropagation(); });
     pvpVisionOpen?.addEventListener('click', (e)=>{ e.stopPropagation(); openPVPSimulator(); });
@@ -3587,7 +3618,7 @@
         if(comfortSubTitle) comfortSubTitle.textContent = 'PRISM IMPACT VISUALIZATION';
         if(comfortInfoBadge){ comfortInfoBadge.style.background = '#FFE7E7'; comfortInfoBadge.style.color = '#DB2C2C'; comfortInfoBadge.textContent = '!'; }
         comfortMessageCopy.innerHTML = `<span class="comfort-info-title">단안 프리즘 영향</span>단안에 프리즘 영향이 있는 경우 <span class="blue"><span style="color:#3b82f6;font-weight:600;"><span style="color:#2563eb;font-weight:600;"><span style="color:#ef4444;font-weight:600;">양안 이미지 위치에 차이</span></span></span></span>가 발생하여 시각적 피로감이 발생할 수 있습니다.`;
-        if(comfortConfirm) comfortConfirm.style.display = 'inline-flex';
+
       }else{
         comfortScene.classList.add('mode-off');
         cfBtnOff.classList.add('active');
@@ -3596,7 +3627,7 @@
         if(comfortSubTitle) comfortSubTitle.textContent = 'PRISM IMPACT VISUALIZATION';
         if(comfortInfoBadge){ comfortInfoBadge.style.background = '#E4EEFF'; comfortInfoBadge.style.color = '#1F6FFF'; comfortInfoBadge.textContent = 'i'; }
         comfortMessageCopy.innerHTML = `<span class="comfort-info-title">단안 프리즘 영향</span>단안 난시 소비자에게 <span class="green"><span style="color:#2563eb;font-weight:600;">난시렌즈의 광학부 프리즘</span></span>은 중요한 영향을 미칩니다.`;
-        if(comfortConfirm) comfortConfirm.style.display = 'inline-flex';
+
       }
       applyComfortCameraUI();
       requestAnimationFrame(()=>positionComfortInteractiveElements(0));
@@ -3750,7 +3781,7 @@
     missionComfort.addEventListener('click', toggleComfort);
     missionComfort.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') toggleComfort(); });
     comfortClose?.addEventListener('click', ()=>closeComfort());
-    comfortConfirm?.addEventListener('click', ()=>closeComfort(true));
+
     comfortOverlay?.addEventListener('click', (e)=>{ if(e.target === comfortOverlay) closeComfort(); });
     cfBtnOn?.addEventListener('click', ()=>setComfortMode('on'));
     cfBtnOff?.addEventListener('click', ()=>setComfortMode('off'));
