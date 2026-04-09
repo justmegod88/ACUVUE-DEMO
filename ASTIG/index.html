@@ -455,13 +455,7 @@
       box-shadow:0 6px 16px rgba(36,85,199,.16);
     }
     #pvpVisionOpen{ display:none !important; }
-    #pvpConfirm{
-      min-width:96px;
-      border:1px solid rgba(36,85,199,.92);
-      background:var(--smartfit-blue);
-      display:none;
-    }
-    #pvpConfirm:active{ transform:scale(.98); }
+#pvpConfirm:active{ transform:scale(.98); }
 
 
     /* restored classic PVP popup behavior */
@@ -704,6 +698,7 @@
     #asdOverlay.show{ display:flex; }
 
     #asdCard{
+      position:relative;
       width:min(560px, 97vw);
       border-radius:40px;
       border:1px solid rgba(15,23,42,.06);
@@ -948,6 +943,7 @@
     }
     #comfortOverlay.show{ display:flex; }
     #comfortWrap{
+      position:relative;
       width:min(470px, 96vw);
       border-radius:40px;
       overflow:hidden;
@@ -1319,14 +1315,7 @@
       #pvpActions{
         margin-left:0;
       }
-      #pvpConfirm{
-        min-width:96px;
-        height:44px;
-        padding:0 16px;
-        font-size:13px;
-      }
-
-      #pvpSimOverlay{ padding:8px; }
+#pvpSimOverlay{ padding:8px; }
       #pvpSimWrap{ width:100%; border-radius:20px; }
       #pvpSimHead{ height:48px; padding:0 14px; }
       #pvpSimTitle{ font-size:15px; }
@@ -2119,6 +2108,28 @@
 
 
     .sup-reg{font-size:.5em; position:relative; top:-0.38em; margin-left:1px;}
+  
+    .popup-x-btn{
+      position:absolute;
+      top:12px;
+      right:12px;
+      width:28px;
+      height:28px;
+      border:none;
+      border-radius:999px;
+      background:rgba(15,23,42,.08);
+      color:#64748b;
+      font-size:18px;
+      line-height:1;
+      font-weight:800;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      box-shadow:inset 0 0 0 1px rgba(148,163,184,.16);
+      z-index:10;
+    }
+    .popup-x-btn:active{ transform:scale(.98); }
   </style>
 </head>
 <body>
@@ -2184,6 +2195,7 @@
   
   <div id="asdOverlay" aria-hidden="true">
     <div id="asdCard">
+      <button id="asdCloseX" class="popup-x-btn" type="button" aria-label="닫기">×</button>
       <div id="asdHeader">
         <div id="asdHeaderTitleWrap">
           <div id="asdHeaderTitle">ASD™ 축안정화</div>
@@ -2403,7 +2415,7 @@
       <b>블루라이트 <span class="pct">55%</span> 차단</b>
     </div>
     <div id="blueInfoBody">
-      아큐브® MAX 원데이 난시는 
+      아큐브<sup class="sup-reg">®</sup> MAX 원데이 난시는 
       <span class="blue-highlight">블루라이트를 55% 차단하여 디지털에 노출된 눈을 보호</span>합니다.
       블루라이트 차단을 위한 <span class="tint-highlight">블루그린 틴트</span>를 확인해 주세요.
     </div>
@@ -2523,7 +2535,11 @@
     const modeHeat = document.getElementById('modeHeat');
     const btnReset = document.getElementById('btnReset');
     const asdOverlay = document.getElementById('asdOverlay');
-    const asdClose = document.getElementById('asdClose');
+    const asdClose = 
+    document.getElementById('asdCloseX')?.addEventListener('click', ()=> closeAsd());
+    document.getElementById('comfortCloseX')?.addEventListener('click', ()=> closeComfort());
+
+    document.getElementById('asdClose');
     const pvpOverlay = document.getElementById('pvpOverlay');
     const pvpBig = document.getElementById('pvpBig');
     const pvpConfirm = document.getElementById('pvpConfirm');
