@@ -1254,11 +1254,10 @@
     .cf-seg-btn[data-state="on"].active::before{ content:""; width:16px; height:16px; border-radius:999px; display:inline-block; background:#4ade80; box-shadow:0 0 0 4px rgba(74,222,128,.10); }
     .cf-camera-btn{
       flex:0 0 auto; min-width:64px; width:64px; height:64px; padding:0; border-radius:22px;
-      border:1px solid rgba(148,163,184,.18); background:#fff; color:#64748b; font-size:0; font-weight:900; letter-spacing:-.2px;
+      border:1px solid rgba(148,163,184,.18); background:#fff; color:#475569; font-size:0; font-weight:900; letter-spacing:-.2px;
       box-shadow:0 8px 20px rgba(15,23,42,.08); white-space:nowrap; position:relative;
       display:flex; align-items:center; justify-content:center;
     }
-    .cf-camera-btn::before{ content:none; }
     .cf-camera-btn svg{ width:22px; height:22px; display:block; }
     .cf-camera-btn.active{ background:#eff6ff; color:#2563eb; border-color:rgba(37,99,235,.22); box-shadow:0 12px 24px rgba(37,99,235,.12); }
 
@@ -1303,7 +1302,7 @@
       .cf-toggle{ padding:4px; border-radius:18px; }
       .cf-seg-btn{ height:46px; font-size:12px; padding:0 8px; border-radius:14px; }
       .cf-camera-btn{ width:54px; min-width:54px; height:54px; border-radius:18px; }
-      .cf-camera-btn svg{ width:18px; height:18px; }
+      .cf-camera-btn svg{ width:20px; height:20px; }
       #comfortMessage{ padding:14px 14px 14px; gap:10px; }
       #comfortInfoBadge{ width:32px; height:32px; border-radius:10px; font-size:14px; }
       #comfortMessageCopyWrap{ gap:10px; }
@@ -2336,7 +2335,7 @@
           <button id="cfBtnOff" class="cf-seg-btn active" data-state="off" type="button">프리즘 없음</button>
           <button id="cfBtnOn" class="cf-seg-btn" data-state="on" type="button">프리즘 있음</button>
         </div>
-        <button id="cfCameraBtn" class="cf-camera-btn" type="button" aria-label="카메라">
+        <button id="cfCameraBtn" class="cf-camera-btn" type="button" aria-label="카메라 켜기">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z"></path>
             <circle cx="12" cy="13" r="3.5"></circle>
@@ -2348,7 +2347,7 @@
           <div id="comfortInfoBadge">i</div>
           <div id="comfortMessageCopy"><span class="comfort-info-title">난시 렌즈 축 안정의 중요성</span>아큐브 ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</div>
         </div>
-        <button id="comfortConfirm" type="button">확인 완료</button>
+        <button id="comfortConfirm" type="button" style="display:none;">확인 완료</button>
       </div>
       <div class="popup-reference-area" style="padding:12px 16px 0; background:#fff;">
         <span class="ref-line">1. Sulley A, Hawke R, Osborn Lorenz K, et al. <em>Cont Lens Anterior Eye</em>. 2015;38(4):253–257.  2. Cripps, A. (2022). PRISM: a help and a hindrance (CPD Code: C-102818). Association of British Dispensing Opticians.</span>
@@ -2472,7 +2471,7 @@
     </div>
     <div id="blueInfoMission">
       <button class="confirm" id="blueSimOpen" type="button">비전 시뮬레이터</button>
-      <button class="confirm" id="blueConfirm" type="button">확인</button>
+      <button class="confirm" id="blueConfirm" type="button" style="display:none;">확인</button>
     </div>
   </div>
 
@@ -2768,7 +2767,7 @@
       pvpOverlay.classList.toggle('show', show);
       pvpBig.classList.toggle('show', show);
       if(pvpConfirm){
-        pvpConfirm.style.display = show ? 'inline-flex' : 'none';
+        pvpConfirm.style.display = 'none';
       }
     }
     function showThickness(show){
@@ -3569,12 +3568,12 @@
     missionPVP.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') togglePVP(); });
 
     function confirmPVP(){ closePVP(true); }
-    pvpConfirm.addEventListener('click', (e)=>{ e.stopPropagation(); confirmPVP(); });
-    pvpConfirm.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); confirmPVP(); } });
-    pvpBig?.addEventListener('click', (e)=>{ e.stopPropagation(); confirmPVP(); });
-    pvpOverlay?.addEventListener('click', (e)=>{ e.stopPropagation(); });
+    pvpConfirm?.addEventListener('click', (e)=>{ e.stopPropagation(); confirmPVP(); });
+    pvpConfirm?.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); confirmPVP(); } });
     pvpCloseBtn?.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); closePVP(false); });
     pvpCloseBtn?.addEventListener('touchend', (e)=>{ e.preventDefault(); e.stopPropagation(); closePVP(false); }, { passive:false });
+    pvpBig?.addEventListener('click', (e)=>{ e.stopPropagation(); confirmPVP(); });
+    pvpOverlay?.addEventListener('click', (e)=>{ e.stopPropagation(); });
     pvpVisionOpen?.addEventListener('click', (e)=>{ e.stopPropagation(); openPVPSimulator(); });
     pvpVisionOpen?.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openPVPSimulator(); } });
     pvpSimConfirm?.addEventListener('click', (e)=>{ e.stopPropagation(); confirmPVP(); });
