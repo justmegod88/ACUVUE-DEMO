@@ -427,9 +427,31 @@
       height:1px;
       background:rgba(11,31,51,.08);
     }
+    #pvpCloseBtn{
+      position:absolute;
+      top:12px;
+      right:12px;
+      width:28px;
+      height:28px;
+      border:none;
+      border-radius:999px;
+      background:rgba(15,23,42,.08);
+      color:#64748b;
+      font-size:18px;
+      line-height:1;
+      font-weight:800;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      box-shadow:inset 0 0 0 1px rgba(148,163,184,.16);
+      z-index:12;
+    }
+    #pvpCloseBtn:active{ transform:scale(.98); }
+
     #pvpActions{
       flex:0 0 auto;
-      display:flex;
+      display:none;
       align-items:center;
       justify-content:center;
       margin-left:auto;
@@ -1236,7 +1258,28 @@
       box-shadow:0 8px 20px rgba(15,23,42,.08); white-space:nowrap; position:relative;
     }
     .cf-camera-btn::before{
-      content:"📷"; font-size:22px; line-height:1;
+      content:"";
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:18px;
+      height:12px;
+      border:2px solid currentColor;
+      border-radius:3px;
+      transform:translate(-50%,-50%);
+      box-sizing:border-box;
+    }
+    .cf-camera-btn::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:5px;
+      height:5px;
+      border:2px solid currentColor;
+      border-radius:999px;
+      transform:translate(-50%,-50%);
+      box-sizing:border-box;
     }
     .cf-camera-btn.active{ background:#0f172a; color:#fff; border-color:#0f172a; box-shadow:0 10px 20px rgba(15,23,42,.12); }
 
@@ -2123,11 +2166,13 @@
       width:7px; height:7px; box-shadow:0 0 0 3px rgba(59,130,246,.10);
     }
 
-</style>
+
+    .sup-reg{font-size:.5em;position:relative;top:-0.38em;margin-left:1px;}
+  </style>
 </head>
 <body>
   <div id="missionBarWrap">
-    <div id="missionBarHeader">아큐브® 난시 렌즈 기술</div>
+    <div id="missionBarHeader">아큐브<sup class="sup-reg">®</sup> 난시 렌즈 기술</div>
     <div id="missionBar">
       <div id="missionASD" class="missionCard" role="button" tabindex="0">
         <div class="missionNo">01</div>
@@ -2169,7 +2214,7 @@
   </div>
 
   <div id="pvpOverlay">
-<button id="pvpCloseBtn" style="position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;border:none;background:rgba(0,0,0,0.1);font-size:16px;z-index:10;">×</button>
+    <button id="pvpCloseBtn" type="button" aria-label="닫기">×</button>
     <div id="pvpMain">
       <img id="pvpThumb" src="PVP.png" alt="PVP" data-fallback="0" onerror="if(this.dataset.fallback==='0'){this.dataset.fallback='1'; this.src='PVP.png';}else if(this.dataset.fallback==='1'){this.dataset.fallback='2'; this.src='PVP.jpeg';}else{this.onerror=null;}">
       <div id="pvpText">
@@ -2177,8 +2222,7 @@
         <div id="hint">렌즈 내 PVP 습윤인자가 <span class="pvp-highlight">하루 종일 촉촉함을 </span>제공합니다.</div>
    </div>
       <div id="pvpActions">
-        
-      </div>
+</div>
     </div>
     <div class="toric-popup-disclaimer">
       <span class="disc-note">1.Reducing Friction in the Eye: A Comparative Study of Lubrication by Surface Anchored Synthetic and Natural Ocular Mucin Analogues.Sterner O, et al. <em>ACS Applied Materials &amp; Interfaces</em>. 2017;9(23):20150~20160.</span></div>
@@ -2409,7 +2453,7 @@
       <b>블루라이트 <span class="pct">55%</span> 차단</b>
     </div>
     <div id="blueInfoBody">
-      아큐브® MAX 원데이 난시는 
+      아큐브<sup class="sup-reg">®</sup> MAX 원데이 난시는 
       <span class="blue-highlight">블루라이트를 55% 차단하여 디지털에 노출된 눈을 보호</span>합니다.
       블루라이트 차단을 위한 <span class="tint-highlight">블루그린 틴트</span>를 확인해 주세요.
     </div>
@@ -2495,7 +2539,32 @@
   </div>
 
   
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+// PVP close button handler
+document.addEventListener('DOMContentLoaded', function(){
+  var pvpCloseBtn = document.getElementById('pvpCloseBtn');
+  if(pvpCloseBtn){
+    pvpCloseBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      var overlay = document.getElementById('pvpOverlay');
+      var big = document.getElementById('pvpBig');
+      if(typeof setPVPOverlay === 'function'){
+        try{ setPVPOverlay(false); }catch(err){}
+      }
+      if(overlay){
+        overlay.classList.remove('show');
+        overlay.style.display = '';
+      }
+      if(big){
+        big.classList.remove('show');
+        big.style.display = '';
+      }
+      document.body.classList.remove('pvp-open');
+    });
+  }
+});
+</script>
   <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
 
   <model-viewer
@@ -3265,9 +3334,9 @@
       asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span><span class="hintBody"><span class="blue">‘깜박임 진행 버튼’</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
     }
     function setASDHintSuccess(){
-      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈 축 안정의 중요성</span><span class="hintBody">아큐브 ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</span></div>`;
-      document.getElementById('asdConfirmBtn')?.addEventListener('click', (e)=>{ e.stopPropagation(); closeASD(); markASDDone(true); });
-    }
+      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈 축 안정의 중요성</span><span class="hintBody">아큐브 ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</span></div>
+`;
+}
     function markASDDone(done){ asdDone = !!done; missionASD.classList.toggle('done', asdDone); }
     function pickASDLensSrc(){ return (currentMode === 'heat') ? 'lens2.png' : 'lens.png'; }
     function setASDLensSrc(){ if(!asdLensImg) return; asdLensImg.src = pickASDLensSrc() + '?v=' + Date.now(); }
