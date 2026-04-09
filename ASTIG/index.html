@@ -3958,8 +3958,13 @@ function initASDPatch(){
         asdModeManual.classList.toggle('active', asdMode === 'manual');
         asdModeAuto.classList.toggle('active', asdMode === 'auto');
       }
+      const showAutoStartLabel = (asdMode === 'auto' && !asdRearCaptured);
       if(asdBlinkBtn){
-        asdBlinkBtn.textContent = (asdMode === 'manual') ? '깜박임 진행 버튼' : (asdAutoPromptActive ? '눈을 깜박여 주세요' : '자동 인식 시작 버튼');
+        asdBlinkBtn.textContent = showAutoStartLabel ? '자동 인식 시작 버튼' : '깜박임 진행 버튼';
+      }
+      if(asdHint){
+        const guideLabel = showAutoStartLabel ? '‘자동인식 시작 버튼’' : '‘깜박임 진행 버튼’';
+        asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span><span class="hintBody"><span class="blue">${guideLabel}</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
       }
       asdOverlay.classList.toggle('auto-running', asdCameraOn && asdMode === 'auto' && asdAutoPromptActive);
       asdOverlay.classList.toggle('auto-captured', asdCameraOn && asdMode === 'auto' && asdRearCaptured);
