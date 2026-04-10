@@ -737,7 +737,7 @@
     #asdHeader{
       display:flex;
       align-items:center;
-      justify-content:space-between;
+      justify-content:flex-end;
       padding:24px 24px 12px;
       background:#fff;
       box-sizing:border-box;
@@ -4111,10 +4111,12 @@ function initASDPatch(){
       asdOverlay.classList.remove('camera-on','auto-running','auto-captured');
       asdCameraBtn.classList.remove('active');
       asdAutoPromptActive = false;
+      asdRearCaptured = false;
       clearASDPlaceholderImage();
       stopASDDetectLoop();
       stopASDMiniCamera();
-      refreshHint();
+      clearASDMiniCanvas();
+      updateModeUI();
     }
 
     async function ensureASDFaceLandmarker(){
