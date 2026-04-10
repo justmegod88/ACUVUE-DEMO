@@ -1187,16 +1187,16 @@
       if (state === 'match') return;
       if (state === 'pupilGreater') {
         screen.classList.add('mask-periphery');
-        screen.style.setProperty('--blur-amt', `${10 + (strength * 8)}px`);
+        screen.style.setProperty('--blur-amt', `${12 + (strength * 10)}px`);
         screen.style.setProperty('--blur-opacity', `${0.52 + (strength * 0.28)}`);
         screen.style.setProperty('--clear-stop', `${58 - (strength * 8)}%`);
         screen.style.setProperty('--blur-start', `${72 - (strength * 6)}%`);
-        screen.style.setProperty('--near-blur-amt', `${9 + (strength * 8)}px`);
+        screen.style.setProperty('--near-blur-amt', `${11 + (strength * 10)}px`);
         screen.style.setProperty('--near-blur-opacity', `${0.58 + (strength * 0.22)}`);
         return;
       }
       screen.classList.add('mask-overall');
-      screen.style.setProperty('--blur-amt', `${8 + (strength * 10)}px`);
+      screen.style.setProperty('--blur-amt', `${10 + (strength * 12)}px`);
       screen.style.setProperty('--blur-opacity', `${0.35 + (strength * 0.45)}`);
     }
 
