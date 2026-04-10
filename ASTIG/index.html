@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <title>ACUVUE<sup class="sup-reg">®</sup> ASTIG</title>
+  <title>ACUVUE ASTIG</title>
 
   <style>
     :root{
@@ -455,7 +455,13 @@
       box-shadow:0 6px 16px rgba(36,85,199,.16);
     }
     #pvpVisionOpen{ display:none !important; }
-#pvpConfirm:active{ transform:scale(.98); }
+    #pvpConfirm{
+      min-width:96px;
+      border:1px solid rgba(36,85,199,.92);
+      background:var(--smartfit-blue);
+      display:none;
+    }
+    #pvpConfirm:active{ transform:scale(.98); }
 
 
     /* restored classic PVP popup behavior */
@@ -698,7 +704,6 @@
     #asdOverlay.show{ display:flex; }
 
     #asdCard{
-      position:relative;
       width:min(560px, 97vw);
       border-radius:40px;
       border:1px solid rgba(15,23,42,.06);
@@ -943,7 +948,6 @@
     }
     #comfortOverlay.show{ display:flex; }
     #comfortWrap{
-      position:relative;
       width:min(470px, 96vw);
       border-radius:40px;
       overflow:hidden;
@@ -1248,7 +1252,12 @@
     .comfort-info-title{ display:block; margin-bottom:4px; font-size:16px; line-height:1.35; font-weight:900; color:#1e293b; }
     #comfortMessageCopy .blue{ color:#2563eb; font-weight:800; }
     #comfortMessageCopy .green{ color:#2563eb; font-weight:800; }
-#comfortWrap .popup-reference-area{
+    #comfortConfirm{
+      flex:0 0 auto; flex-shrink:0; min-width:112px; width:112px; max-width:112px; height:52px; padding:0 16px; border:none; border-radius:18px;
+      background:#0f172a; color:#fff; font-size:15px; line-height:1; font-weight:900; cursor:pointer;
+      box-shadow:0 14px 26px rgba(15,23,42,.16); box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center;
+    }
+    #comfortWrap .popup-reference-area{
       margin-top:0; padding:14px 24px 0 !important; background:#fff !important; font-size:10px; line-height:1.45; color:#94a3b8;
     }
     #comfortWrap .popup-reference-area::before{ display:none; }
@@ -1278,7 +1287,8 @@
       #comfortMessageCopyWrap{ gap:10px; }
       #comfortMessageCopy{ font-size:13px; line-height:1.5; }
       .comfort-info-title{ font-size:15px; }
-#comfortWrap .popup-reference-area{ padding:12px 16px 0 !important; font-size:9px; }
+      #comfortConfirm{ min-width:96px; width:96px; max-width:96px; height:46px; font-size:13px; border-radius:16px; }
+      #comfortWrap .popup-reference-area{ padding:12px 16px 0 !important; font-size:9px; }
       #comfortWrap .toric-popup-disclaimer{ padding:4px 16px 16px; font-size:9px; }
     }
 
@@ -1315,7 +1325,14 @@
       #pvpActions{
         margin-left:0;
       }
-#pvpSimOverlay{ padding:8px; }
+      #pvpConfirm{
+        min-width:96px;
+        height:44px;
+        padding:0 16px;
+        font-size:13px;
+      }
+
+      #pvpSimOverlay{ padding:8px; }
       #pvpSimWrap{ width:100%; border-radius:20px; }
       #pvpSimHead{ height:48px; padding:0 14px; }
       #pvpSimTitle{ font-size:15px; }
@@ -2106,35 +2123,11 @@
       width:7px; height:7px; box-shadow:0 0 0 3px rgba(59,130,246,.10);
     }
 
-
-    .sup-reg{font-size:.5em; position:relative; top:-0.38em; margin-left:1px;}
-  
-    .popup-x-btn{
-      position:absolute;
-      top:12px;
-      right:12px;
-      width:28px;
-      height:28px;
-      border:none;
-      border-radius:999px;
-      background:rgba(15,23,42,.08);
-      color:#64748b;
-      font-size:18px;
-      line-height:1;
-      font-weight:800;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      box-shadow:inset 0 0 0 1px rgba(148,163,184,.16);
-      z-index:10;
-    }
-    .popup-x-btn:active{ transform:scale(.98); }
-  </style>
+</style>
 </head>
 <body>
   <div id="missionBarWrap">
-    <div id="missionBarHeader">아큐브<sup class="sup-reg">®</sup> 난시 렌즈 기술</div>
+    <div id="missionBarHeader">아큐브® 난시 렌즈 기술</div>
     <div id="missionBar">
       <div id="missionASD" class="missionCard" role="button" tabindex="0">
         <div class="missionNo">01</div>
@@ -2176,6 +2169,7 @@
   </div>
 
   <div id="pvpOverlay">
+<button id="pvpCloseBtn" style="position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;border:none;background:rgba(0,0,0,0.1);font-size:16px;z-index:10;">×</button>
     <div id="pvpMain">
       <img id="pvpThumb" src="PVP.png" alt="PVP" data-fallback="0" onerror="if(this.dataset.fallback==='0'){this.dataset.fallback='1'; this.src='PVP.png';}else if(this.dataset.fallback==='1'){this.dataset.fallback='2'; this.src='PVP.jpeg';}else{this.onerror=null;}">
       <div id="pvpText">
@@ -2183,7 +2177,7 @@
         <div id="hint">렌즈 내 PVP 습윤인자가 <span class="pvp-highlight">하루 종일 촉촉함을 </span>제공합니다.</div>
    </div>
       <div id="pvpActions">
-        <div id="pvpConfirm" class="pvp-action-btn" role="button" tabindex="0">확인</div>
+        
       </div>
     </div>
     <div class="toric-popup-disclaimer">
@@ -2195,7 +2189,6 @@
   
   <div id="asdOverlay" aria-hidden="true">
     <div id="asdCard">
-      <button id="asdCloseX" class="popup-x-btn" type="button" aria-label="닫기">×</button>
       <div id="asdHeader">
         <div id="asdHeaderTitleWrap">
           <div id="asdHeaderTitle">ASD™ 축안정화</div>
@@ -2299,7 +2292,8 @@
           <div id="comfortInfoBadge">i</div>
           <div id="comfortMessageCopy"><span class="comfort-info-title">난시 렌즈 축 안정의 중요성</span>아큐브 ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</div>
         </div>
-</div>
+        <button id="comfortConfirm" type="button">확인 완료</button>
+      </div>
       <div class="popup-reference-area" style="padding:12px 16px 0; background:#fff;">
         <span class="ref-line">1. Sulley A, Hawke R, Osborn Lorenz K, et al. <em>Cont Lens Anterior Eye</em>. 2015;38(4):253–257.  2. Cripps, A. (2022). PRISM: a help and a hindrance (CPD Code: C-102818). Association of British Dispensing Opticians.</span>
       </div>
@@ -2415,7 +2409,7 @@
       <b>블루라이트 <span class="pct">55%</span> 차단</b>
     </div>
     <div id="blueInfoBody">
-      아큐브<sup class="sup-reg">®</sup> MAX 원데이 난시는 
+      아큐브® MAX 원데이 난시는 
       <span class="blue-highlight">블루라이트를 55% 차단하여 디지털에 노출된 눈을 보호</span>합니다.
       블루라이트 차단을 위한 <span class="tint-highlight">블루그린 틴트</span>를 확인해 주세요.
     </div>
@@ -2535,11 +2529,7 @@
     const modeHeat = document.getElementById('modeHeat');
     const btnReset = document.getElementById('btnReset');
     const asdOverlay = document.getElementById('asdOverlay');
-    const asdClose = 
-    document.getElementById('asdCloseX')?.addEventListener('click', ()=> closeAsd());
-    document.getElementById('comfortCloseX')?.addEventListener('click', ()=> closeComfort());
-
-    document.getElementById('asdClose');
+    const asdClose = document.getElementById('asdClose');
     const pvpOverlay = document.getElementById('pvpOverlay');
     const pvpBig = document.getElementById('pvpBig');
     const pvpConfirm = document.getElementById('pvpConfirm');
@@ -3276,7 +3266,8 @@
     }
     function setASDHintSuccess(){
       asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈 축 안정의 중요성</span><span class="hintBody">아큐브 ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</span></div>`;
-}
+      document.getElementById('asdConfirmBtn')?.addEventListener('click', (e)=>{ e.stopPropagation(); closeASD(); markASDDone(true); });
+    }
     function markASDDone(done){ asdDone = !!done; missionASD.classList.toggle('done', asdDone); }
     function pickASDLensSrc(){ return (currentMode === 'heat') ? 'lens2.png' : 'lens.png'; }
     function setASDLensSrc(){ if(!asdLensImg) return; asdLensImg.src = pickASDLensSrc() + '?v=' + Date.now(); }
