@@ -3894,7 +3894,23 @@ function initASDPatch(){
     let asdAngleValue = 20;
     let asdBlinkBusy = false;
     let asdAutoPromptActive = false;
-    const ASD_PLACEHOLDER_DATA = 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#eef4fb"/><stop offset="100%" stop-color="#dce7f6"/></linearGradient></defs><rect width="1200" height="1200" fill="url(#g)"/><circle cx="600" cy="600" r="360" fill="none" stroke="#7fa4df" stroke-width="6" opacity=".45"/><circle cx="280" cy="520" r="26" fill="#f7a11c"/><circle cx="920" cy="660" r="26" fill="#f7a11c"/><rect x="320" y="450" width="66" height="150" rx="33" fill="#80d4df" opacity=".35" transform="rotate(12 353 525)"/><rect x="810" y="585" width="66" height="150" rx="33" fill="#80d4df" opacity=".35" transform="rotate(12 843 660)"/><line x1="305" y1="535" x2="900" y2="640" stroke="#6f7480" stroke-width="8" stroke-dasharray="28 24" opacity=".7"/><rect x="120" y="880" width="260" height="86" rx="43" fill="white" stroke="#d6e3f1" stroke-width="4"/><circle cx="170" cy="923" r="12" fill="#2563eb"/><text x="198" y="935" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#2563eb">플레이스홀더</text></svg>`);
+    const ASD_PLACEHOLDER_DATA = 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#eef4fb"/><stop offset="100%" stop-color="#dce7f6"/></linearGradient></defs><rect width="1200" height="1200" fill="url(#g)"/><circle cx="600" cy="600" r="360" fill="none" stroke="#7fa4df" stroke-width="6" opacity=".45"/><circle cx="280" cy="520" r="26" fill="#f7a11c"/><circle cx="920" cy="660" r="26" fill="#f7a11c"/><rect x="320" y="450" width="66" height="150" rx="33" fill="#80d4df" opacity=".35" transform="rotate(12 353 525)"/><rect x="810" y="585" width="66" height="150" rx="33" fill="#80d4df" opacity=".35" transform="rotate(12 843 660)"/><line x1="305" y1="535" x2="900" y2="640" stroke="#6f7480" stroke-width="8" stroke-dasharray="28 24" opacity=".7"/><rect x="120" y="880" width="260" height="86" rx="43" fill="white" stroke="#d6e3f1" stroke-width="4"/><circle cx="170" cy="923" r="12" fill="#2563eb"/><text x="198" y="935" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#2563eb">이미지 로드 실패</text></svg>`);
+    const ASD_PLACEHOLDER_PHOTOS = [
+      'https://loremflickr.com/1200/1200/city,building?lock=11',
+      'https://loremflickr.com/1200/1200/street,sign?lock=12',
+      'https://loremflickr.com/1200/1200/landscape,road?lock=13',
+      'https://loremflickr.com/1200/1200/city,street?lock=14',
+      'https://loremflickr.com/1200/1200/mountain,landscape?lock=15',
+      'https://loremflickr.com/1200/1200/architecture,building?lock=16',
+      'https://loremflickr.com/1200/1200/travel,sign?lock=17',
+      'https://loremflickr.com/1200/1200/road,city?lock=18'
+    ];
+
+    function getRandomASDPlaceholderPhoto(){
+      const list = ASD_PLACEHOLDER_PHOTOS.filter(Boolean);
+      if(!list.length) return ASD_PLACEHOLDER_DATA;
+      return list[Math.floor(Math.random() * list.length)] + '&t=' + Date.now();
+    }
 
     function setASDPlaceholderImage(){
       if(!asdCaptureImage) return;
@@ -3902,7 +3918,7 @@ function initASDPatch(){
         this.onerror = null;
         this.src = ASD_PLACEHOLDER_DATA;
       };
-      asdCaptureImage.src = 'background.png';
+      asdCaptureImage.src = getRandomASDPlaceholderPhoto();
       asdRearCaptured = true;
       asdCaptureImage.classList.add('placeholder');
     }
