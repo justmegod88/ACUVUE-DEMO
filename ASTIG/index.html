@@ -2174,8 +2174,26 @@
     }
     #blueCloseBtn:active{ transform:scale(.98); }
 
-  </style>
-<style id="rmark-style">.rmark{font-size:.50em;position:relative;top:-0.45em;line-height:0;vertical-align:baseline;display:inline-block;}</style></head>
+  
+/* conference camera mirror */
+#asdCameraVideo,
+#asdMiniCameraVideo,
+#asdMiniVideo,
+#miniCameraVideo{
+  transform: scaleX(-1) !important;
+}
+
+</style>
+<style id="rmark-style">.rmark{font-size:.50em;position:relative;top:-0.45em;line-height:0;vertical-align:baseline;display:inline-block;}
+/* conference camera mirror */
+#asdCameraVideo,
+#asdMiniCameraVideo,
+#asdMiniVideo,
+#miniCameraVideo{
+  transform: scaleX(-1) !important;
+}
+
+</style></head>
 <body>
 <div id="missionBarWrap">
 <div id="missionBarHeader">아큐브<span class="rmark">®</span> 난시 렌즈 기술</div>
@@ -3846,622 +3864,11 @@
       positionComfortInteractiveElements(0);
     });
   </script>
-<script>
-(function(){
-  
-function initASDPatch(){
-    const missionASD = document.getElementById('missionASD');
-    const asdOverlay = document.getElementById('asdOverlay');
-    const asdClose = document.getElementById('asdClose');
-    const asdRotateBtn = document.getElementById('asdRotateBtn');
-    const asdBlinkBtn = document.getElementById('asdBlinkBtn');
-    const asdCameraBtn = document.getElementById('asdCameraBtn');
-    const asdCameraVideo = document.getElementById('asdCameraVideo');
-    const asdCaptureImage = document.getElementById('asdCaptureImage');
-    const asdModeManual = document.getElementById('asdModeManual');
-    const asdModeAuto = document.getElementById('asdModeAuto');
-    const asdMiniFace = document.getElementById('asdMiniFace');
-    const asdMiniFaceVideo = document.getElementById('asdMiniFaceVideo');
-    const asdMiniFaceCanvas = document.getElementById('asdMiniFaceCanvas');
-    const asdGuideAxis = document.getElementById('asdGuideAxis');
-    const asdGuideCircle = document.getElementById('asdGuideCircle');
-    const asdGuideDotLeft = document.getElementById('asdGuideDotLeft');
-    const asdGuideDotRight = document.getElementById('asdGuideDotRight');
-    const asdEyeMV = document.getElementById('asdEyeMV');
-    const asdUpperLid = document.getElementById('asdUpperLid');
-    const asdLensImg = document.getElementById('asdLensImg');
-    const asdAngleBadge = document.getElementById('asdAngleBadge');
-    const asdHint = document.getElementById('asdHint');
-    const miniCtx = asdMiniFaceCanvas ? asdMiniFaceCanvas.getContext('2d') : null;
-
-    if(!missionASD || !asdOverlay || !asdRotateBtn || !asdBlinkBtn || !asdCameraBtn || !asdCameraVideo || !asdLensImg || !asdAngleBadge){
-      return;
-    }
-
-    let asdVision = null;
-    let asdFaceLandmarker = null;
-    let asdFaceLandmarkerReady = false;
-    let asdDetectLoopId = null;
-    let asdBlinkState = 'open';
-    let asdClosedFrames = 0;
-    let asdOpenFrames = 0;
-    let asdBlinkCooldownUntil = 0;
-
-    let asdCameraStream = null;
-    let asdMiniFaceStream = null;
-    let asdCameraOn = false;
-    let asdRearCaptured = false;
-    let asdMode = 'manual';
-    let asdAngleValue = 20;
-    let asdBlinkBusy = false;
-    let asdAutoPromptActive = false;
-    const ASD_PLACEHOLDER_DATA = 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#eef4fb"/><stop offset="100%" stop-color="#dce7f6"/></linearGradient></defs><rect width="1200" height="1200" fill="url(#g)"/><circle cx="600" cy="600" r="360" fill="none" stroke="#7fa4df" stroke-width="6" opacity=".45"/><circle cx="280" cy="520" r="26" fill="#f7a11c"/><circle cx="920" cy="660" r="26" fill="#f7a11c"/><rect x="320" y="450" width="66" height="150" rx="33" fill="#80d4df" opacity=".35" transform="rotate(12 353 525)"/><rect x="810" y="585" width="66" height="150" rx="33" fill="#80d4df" opacity=".35" transform="rotate(12 843 660)"/><line x1="305" y1="535" x2="900" y2="640" stroke="#6f7480" stroke-width="8" stroke-dasharray="28 24" opacity=".7"/><rect x="120" y="880" width="260" height="86" rx="43" fill="white" stroke="#d6e3f1" stroke-width="4"/><circle cx="170" cy="923" r="12" fill="#2563eb"/><text x="198" y="935" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#2563eb">플레이스홀더</text></svg>`);
-
-    function setASDPlaceholderImage(){
-      if(!asdCaptureImage) return;
-      asdCaptureImage.onerror = function(){
-        this.onerror = null;
-        this.src = ASD_PLACEHOLDER_DATA;
-      };
-      asdCaptureImage.src = 'background.png';
-      asdCaptureImage.classList.add('placeholder');
-      asdRearCaptured = true;
-    }
-
-    function clearASDPlaceholderImage(){
-      if(!asdCaptureImage) return;
-      asdCaptureImage.classList.remove('placeholder');
-      asdCaptureImage.src = '';
-      asdRearCaptured = false;
-    }
-
-
-    function syncAngleFromGlobal(){
-      if (typeof window.asdAngle === 'number') asdAngleValue = window.asdAngle;
-    }
-    function writeAngleToGlobal(){
-      window.asdAngle = asdAngleValue;
-    }
-    function getBlur(){
-      const a = Math.abs(asdAngleValue);
-      if (a>=25) return 8;
-      if (a>=20) return 6.4;
-      if (a>=15) return 5.1;
-      if (a>=10) return 3.8;
-      if (a>=5) return 2.2;
-      return 0;
-    }
-    function applyCameraFilter(){
-      if (!asdCameraVideo) return;
-      const blur = getBlur();
-      const liveFilter = Math.abs(asdAngleValue) === 0
-        ? 'blur(0px) saturate(1.02) brightness(1.02)'
-        : `blur(${blur.toFixed(2)}px) saturate(.92)`;
-      const capturedFilter = Math.abs(asdAngleValue) === 0
-        ? 'blur(0px) saturate(1.02) brightness(1.02)'
-        : `blur(${(blur + 0.8).toFixed(2)}px) saturate(.92) brightness(${Math.max(0.8, 1 - Math.abs(asdAngleValue) * 0.006).toFixed(2)})`;
-
-      if (asdCaptureImage){
-        asdCaptureImage.style.filter = capturedFilter;
-      }
-
-      if (asdCameraOn && asdMode === 'manual'){
-        asdCameraVideo.style.display = 'block';
-        asdCameraVideo.style.filter = liveFilter;
-      } else if (asdCameraOn && asdMode === 'auto' && !asdRearCaptured){
-        asdCameraVideo.style.display = 'block';
-        asdCameraVideo.style.filter = liveFilter;
-      } else if (asdCameraOn && asdMode === 'auto' && asdRearCaptured){
-        asdCameraVideo.style.filter = liveFilter;
-      }
-    }
-    function refreshHint(){
-      if(!asdHint) return;
-      if(Math.abs(asdAngleValue) === 0){
-        setASDHintSuccess();
-      } else {
-        setASDHintDefault();
-      }
-    }
-    function updateModeUI(){
-      if(asdModeManual && asdModeAuto){
-        asdModeManual.classList.toggle('active', asdMode !== 'auto');
-        asdModeAuto.classList.toggle('active', asdMode === 'auto');
-      }
-      if(asdBlinkBtn){
-        asdBlinkBtn.textContent = getASDActionText();
-      }
-      asdOverlay.classList.toggle('auto-running', asdCameraOn && asdMode === 'auto' && asdRearCaptured);
-      asdOverlay.classList.toggle('auto-captured', asdCameraOn && asdMode === 'auto' && asdRearCaptured);
-      refreshHint();
-      applyCameraFilter();
-    }
-
-    function renderGuide(){
-      if (asdGuideAxis) asdGuideAxis.style.transform = `rotate(${asdAngleValue}deg)`;
-      if (asdGuideCircle) asdGuideCircle.style.transform = `translate(-50%,-50%) rotate(${(asdAngleValue * 0.18).toFixed(2)}deg)`;
-
-      const centerX = 50;
-      const centerY = 52;
-      const outerRadius = 40;
-      const cyanRadius = 31.2;
-      const rad = asdAngleValue * Math.PI / 180;
-      const cos = Math.cos(rad);
-      const sin = Math.sin(rad);
-
-      const leftX = centerX - outerRadius * cos;
-      const leftY = centerY - outerRadius * sin;
-      const rightX = centerX + outerRadius * cos;
-      const rightY = centerY + outerRadius * sin;
-
-      if (asdGuideDotLeft && asdGuideDotRight){
-        asdGuideDotLeft.style.left = `${leftX}%`;
-        asdGuideDotLeft.style.top = `${leftY}%`;
-        asdGuideDotRight.style.left = `${rightX}%`;
-        asdGuideDotRight.style.top = `${rightY}%`;
-      }
-
-      const asdGuideSideLeft = document.getElementById('asdGuideSideLeft');
-      const asdGuideSideRight = document.getElementById('asdGuideSideRight');
-      if (asdGuideSideLeft && asdGuideSideRight){
-        const leftCyanX = centerX - cyanRadius * cos;
-        const leftCyanY = centerY - cyanRadius * sin;
-        const rightCyanX = centerX + cyanRadius * cos;
-        const rightCyanY = centerY + cyanRadius * sin;
-
-        asdGuideSideLeft.style.left = `${leftCyanX}%`;
-        asdGuideSideLeft.style.top = `${leftCyanY}%`;
-        asdGuideSideLeft.style.transform = `translate(-50%,-50%) rotate(${asdAngleValue}deg)`;
-
-        asdGuideSideRight.style.left = `${rightCyanX}%`;
-        asdGuideSideRight.style.top = `${rightCyanY}%`;
-        asdGuideSideRight.style.transform = `translate(-50%,-50%) rotate(${asdAngleValue}deg)`;
-      }
-    }
-
-    function renderAngle(){
-      syncAngleFromGlobal();
-      asdAngleValue = typeof window.asdAngle === 'number' ? window.asdAngle : asdAngleValue;
-      if (asdLensImg){
-        asdLensImg.style.transform = `translate(calc(-50% + var(--irisX, 0px)), calc(-50% + var(--irisY, 0px))) rotate(${asdAngleValue}deg)`;
-      }
-      if (asdAngleBadge){
-        if (asdAngleValue > 0) asdAngleBadge.textContent = `좌측 ${asdAngleValue}° 회전 발생`;
-        else if (asdAngleValue < 0) asdAngleBadge.textContent = `우측 ${Math.abs(asdAngleValue)}° 회전 발생`;
-        else asdAngleBadge.textContent = '축 안정';
-      }
-      asdOverlay.classList.toggle('asd-stable', Math.abs(asdAngleValue) === 0);
-      renderGuide();
-      updateModeUI();
-    }
-
-    function resetASDPatchedState(){
-      asdMode = 'manual';
-      asdRearCaptured = false;
-      asdAutoPromptActive = false;
-      asdAngleValue = 20;
-      writeAngleToGlobal();
-      stopASDDetectLoop();
-      stopASDMiniCamera();
-      clearASDPlaceholderImage();
-      renderAngle();
-    }
-
-    async function startASDCamera(){
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-        alert('이 브라우저에서는 카메라 기능을 지원하지 않습니다.');
-        return;
-      }
-      try{
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'user' },
-          audio: false
-        });
-        if (asdCameraStream){
-          asdCameraStream.getTracks().forEach(track => track.stop());
-        }
-        asdCameraStream = stream;
-        asdCameraVideo.classList.remove('ready');
-        asdCameraVideo.srcObject = stream;
-        const markReady = function(){
-          asdCameraVideo.classList.add('ready');
-          try{ asdCameraVideo.play(); }catch(e){}
-        };
-        asdCameraVideo.onloadedmetadata = markReady;
-        asdCameraVideo.onloadeddata = markReady;
-        asdCameraOn = true;
-        asdOverlay.classList.add('camera-on');
-        asdCameraBtn.classList.add('active');
-        renderAngle();
-      }catch(e){
-        alert('카메라 권한을 허용해야 사용할 수 있습니다.');
-      }
-    }
-
-    function stopASDCamera(){
-      if (asdCameraStream){
-        asdCameraStream.getTracks().forEach(track => track.stop());
-        asdCameraStream = null;
-      }
-      try{ asdCameraVideo.pause(); }catch(e){}
-      asdCameraVideo.srcObject = null;
-      asdCameraVideo.classList.remove('ready');
-      asdCameraOn = false;
-      asdOverlay.classList.remove('camera-on','auto-running','auto-captured');
-      asdCameraBtn.classList.remove('active');
-      asdRearCaptured = false;
-      asdAutoPromptActive = false;
-      clearASDPlaceholderImage();
-      stopASDDetectLoop();
-      stopASDMiniCamera();
-      refreshHint();
-    }
-
-    async function ensureASDFaceLandmarker(){
-      if(asdFaceLandmarkerReady) return;
-      if(!asdVision){
-        asdVision = await import("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.mjs");
-      }
-      const { FaceLandmarker, FilesetResolver } = asdVision;
-      const filesetResolver = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/wasm");
-      asdFaceLandmarker = await FaceLandmarker.createFromOptions(filesetResolver, {
-        baseOptions: {
-          modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task"
-        },
-        outputFaceBlendshapes: false,
-        runningMode: "VIDEO",
-        numFaces: 1
-      });
-      asdFaceLandmarkerReady = true;
-    }
-
-    function isAndroidDevice(){
-      try{ return /Android/i.test(navigator.userAgent || ''); }catch(e){ return false; }
-    }
-
-    async function getASDMiniCameraStream(){
-      const media = navigator.mediaDevices;
-      if (!media || !media.getUserMedia) return null;
-
-      const base = { width:{ideal:320}, height:{ideal:480} };
-      const attempts = [];
-
-      if (isAndroidDevice()){
-        attempts.push({ video:{ ...base, facingMode:{ exact:'user' } }, audio:false });
-        attempts.push({ video:{ ...base, facingMode:{ ideal:'user' } }, audio:false });
-        attempts.push({ video:{ ...base }, audio:false });
-      } else {
-        attempts.push({ video:{ ...base, facingMode:'user' }, audio:false });
-      }
-
-      for (const constraints of attempts){
-        try{
-          return await media.getUserMedia(constraints);
-        }catch(err){
-          console.warn('ASD mini camera attempt failed', constraints, err);
-        }
-      }
-
-      if (isAndroidDevice() && media.enumerateDevices){
-        try{
-          const temp = await media.getUserMedia({ video:true, audio:false });
-          temp.getTracks().forEach(track => track.stop());
-          const devices = await media.enumerateDevices();
-          const front = devices.find(device => {
-            if (device.kind !== 'videoinput') return false;
-            const label = (device.label || '').toLowerCase();
-            return label.includes('front') || label.includes('user') || label.includes('selfie');
-          });
-          if (front && front.deviceId){
-            return await media.getUserMedia({
-              video:{ ...base, deviceId:{ exact: front.deviceId } },
-              audio:false
-            });
-          }
-        }catch(err){
-          console.warn('ASD mini camera enumerate fallback failed', err);
-        }
-      }
-
-      return null;
-    }
-
-    async function startASDMiniCamera(){
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !asdMiniFaceVideo) return;
-      try{
-        await stopASDMiniCamera();
-        const stream = await getASDMiniCameraStream();
-        if (!stream) throw new Error('ASD mini front camera unavailable');
-        asdMiniFaceStream = stream;
-        asdMiniFaceVideo.srcObject = stream;
-        await asdMiniFaceVideo.play().catch(()=>{});
-        asdMiniFaceVideo.style.transform = 'scaleX(-1) scale(1.6)';
-        if(asdMiniFaceCanvas) asdMiniFaceCanvas.style.transform = 'scaleX(-1) scale(1.6)';
-      }catch(e){
-        console.warn('ASD mini camera unavailable', e);
-      }
-    }
-
-    async function stopASDMiniCamera(){
-      if(asdMiniFaceStream){
-        asdMiniFaceStream.getTracks().forEach(t => t.stop());
-        asdMiniFaceStream = null;
-      }
-      if(asdMiniFaceVideo) asdMiniFaceVideo.srcObject = null;
-    }
-
-    function clearASDMiniCanvas(){
-      if(!asdMiniFaceCanvas || !miniCtx) return;
-      miniCtx.clearRect(0,0, asdMiniFaceCanvas.width || 1, asdMiniFaceCanvas.height || 1);
-    }
-
-    function pointDistance(a,b){
-      const dx=a.x-b.x, dy=a.y-b.y;
-      return Math.hypot(dx,dy);
-    }
-    function eyeAspectRatio(landmarks, idx){
-      const p1=landmarks[idx[0]], p2=landmarks[idx[1]], p3=landmarks[idx[2]], p4=landmarks[idx[3]], p5=landmarks[idx[4]], p6=landmarks[idx[5]];
-      const vertical = pointDistance(p2,p6)+pointDistance(p3,p5);
-      const horizontal = 2*pointDistance(p1,p4);
-      return horizontal ? vertical/horizontal : 0;
-    }
-    function detectASDBlinkFromLandmarks(landmarks){
-      const leftIdx=[33,160,158,133,153,144], rightIdx=[362,385,387,263,373,380];
-      const ear = (eyeAspectRatio(landmarks,leftIdx)+eyeAspectRatio(landmarks,rightIdx))/2;
-      const now = Date.now(), CLOSED=0.19, OPEN=0.24;
-      if (ear < CLOSED){
-        asdClosedFrames += 1;
-        asdOpenFrames = 0;
-        if (asdBlinkState === 'open') asdBlinkState = 'closing';
-      } else if (ear > OPEN){
-        asdOpenFrames += 1;
-        if ((asdBlinkState==='closing' || asdBlinkState==='closed') && asdClosedFrames>=1 && now > asdBlinkCooldownUntil){
-          asdBlinkCooldownUntil = now + 900;
-          asdBlinkState='open';
-          asdClosedFrames=0;
-          asdOpenFrames=0;
-          triggerASDAutoCorrection();
-          return;
-        }
-        asdBlinkState='open';
-        asdClosedFrames=0;
-      } else {
-        if (asdBlinkState === 'closing') asdBlinkState='closed';
-      }
-    }
-
-    function drawASDMiniLandmarks(landmarks){
-      if(!asdMiniFaceCanvas || !miniCtx || !asdRearCaptured) return;
-      const rect = asdMiniFaceCanvas.getBoundingClientRect();
-      const ratio = window.devicePixelRatio || 1;
-      const w = Math.max(1, Math.round(rect.width * ratio));
-      const h = Math.max(1, Math.round(rect.height * ratio));
-      if (asdMiniFaceCanvas.width !== w || asdMiniFaceCanvas.height !== h){
-        asdMiniFaceCanvas.width = w;
-        asdMiniFaceCanvas.height = h;
-      }
-      miniCtx.clearRect(0,0,w,h);
-      miniCtx.strokeStyle='rgba(255,255,255,.88)';
-      miniCtx.lineWidth=Math.max(1.5, w*0.01);
-      const left=[33,160,158,133,153,144,33], right=[362,385,387,263,373,380,362];
-      function path(indices){
-        miniCtx.beginPath();
-        indices.forEach((i,idx)=>{
-          const p=landmarks[i], x=p.x*w, y=p.y*h;
-          if(idx===0) miniCtx.moveTo(x,y); else miniCtx.lineTo(x,y);
-        });
-        miniCtx.stroke();
-      }
-      path(left); path(right);
-    }
-
-    function stopASDDetectLoop(){
-      if(asdDetectLoopId){
-        cancelAnimationFrame(asdDetectLoopId);
-        asdDetectLoopId = null;
-      }
-      asdBlinkState = 'open';
-      asdClosedFrames = 0;
-      asdOpenFrames = 0;
-    }
-
-    async function runASDDetectLoop(){
-      stopASDDetectLoop();
-      if(asdMode !== 'auto' || !asdFaceLandmarkerReady || !asdMiniFaceVideo) return;
-      const detect = ()=>{
-        if(asdMiniFaceVideo.readyState >= 2 && asdAngleValue !== 0 && asdRearCaptured){
-          try{
-            const result = asdFaceLandmarker.detectForVideo(asdMiniFaceVideo, performance.now());
-            if(result && result.faceLandmarks && result.faceLandmarks.length > 0){
-              detectASDBlinkFromLandmarks(result.faceLandmarks[0]);
-              drawASDMiniLandmarks(result.faceLandmarks[0]);
-            } else {
-              clearASDMiniCanvas();
-            }
-          }catch(e){ clearASDMiniCanvas(); }
-        } else {
-          clearASDMiniCanvas();
-        }
-        asdDetectLoopId = requestAnimationFrame(detect);
-      };
-      detect();
-    }
-
-    function captureASDRearFrame(){
-      setASDPlaceholderImage();
-    }
-
-    async function runASDAutoFlow(){
-      if(!asdCameraOn) await startASDCamera();
-      stopASDDetectLoop();
-      await stopASDMiniCamera();
-      clearASDPlaceholderImage();
-      asdAutoPromptActive = true;
-      const steps = [-20,-15,-10,-5,5,10,15,20];
-      asdAngleValue = steps[Math.floor(Math.random() * steps.length)];
-      writeAngleToGlobal();
-      renderAngle();
-      captureASDRearFrame();
-      await ensureASDFaceLandmarker();
-      await startASDMiniCamera();
-      runASDDetectLoop();
-      updateModeUI();
-    }
-
-    function playASDBlinkAnimation(){
-      const lidTop = document.getElementById('asdLidTop');
-      const lidBot = document.getElementById('asdLidBot');
-      if(lidTop && lidBot){
-        lidTop.animate([
-          { transform:'translateY(-110%)', opacity:0 },
-          { transform:'translateY(-6%)', opacity:1, offset:.45 },
-          { transform:'translateY(-110%)', opacity:0 }
-        ], { duration:260, easing:'ease-in-out' });
-        lidBot.animate([
-          { transform:'translateY(110%)', opacity:0 },
-          { transform:'translateY(6%)', opacity:1, offset:.45 },
-          { transform:'translateY(110%)', opacity:0 }
-        ], { duration:260, easing:'ease-in-out' });
-      }
-    }
-
-    async function applyBlinkStep(){
-      if (asdAngleValue > 0) asdAngleValue = Math.max(0, asdAngleValue - 5);
-      else if (asdAngleValue < 0) asdAngleValue = Math.min(0, asdAngleValue + 5);
-      writeAngleToGlobal();
-      renderAngle();
-      if(asdCameraOn && asdMode === 'auto' && asdAngleValue === 0){
-        stopASDDetectLoop();
-        await stopASDMiniCamera();
-        asdAutoPromptActive = false;
-        updateModeUI();
-      }
-    }
-
-    async function triggerASDAutoCorrection(){
-      if(asdAngleValue === 0 || asdBlinkBusy) return;
-      asdBlinkBusy = true;
-      playASDBlinkAnimation();
-      await applyBlinkStep();
-      setTimeout(()=>{ asdBlinkBusy = false; }, 260);
-    }
-
-    function openASDPatched(e){
-      if (e) e.preventDefault();
-      if (typeof window.openASD === 'function') {
-        window.openASD();
-      } else {
-        asdOverlay.classList.add('show');
-        asdOverlay.setAttribute('aria-hidden','false');
-      }
-      resetASDPatchedState();
-    }
-
-    function closeASDPatched(e){
-      if (e) e.preventDefault();
-      stopASDDetectLoop();
-      stopASDMiniCamera();
-      stopASDCamera();
-      if (typeof window.closeASD === 'function') {
-        window.closeASD();
-      } else {
-        asdOverlay.classList.remove('show');
-        asdOverlay.setAttribute('aria-hidden','true');
-      }
-    }
-
-    missionASD.onclick = openASDPatched;
-    missionASD.addEventListener('click', openASDPatched, true);
-    asdClose.onclick = closeASDPatched;
-    asdClose.addEventListener('click', closeASDPatched, true);
-    asdOverlay.addEventListener('click', function(ev){
-      if (ev.target === asdOverlay) closeASDPatched();
-    }, true);
-
-    asdRotateBtn.onclick = async function(ev){
-      ev.preventDefault();
-      ev.stopPropagation();
-      if (asdBlinkBusy) return;
-      const steps = [-20,-15,-10,-5,5,10,15,20];
-      let next = steps[Math.floor(Math.random() * steps.length)];
-      if (next === asdAngleValue){
-        next = steps[(steps.indexOf(next) + 1) % steps.length];
-      }
-      asdAngleValue = next;
-      writeAngleToGlobal();
-      renderAngle();
-      if(asdCameraOn && asdMode === 'auto'){
-        await runASDAutoFlow();
-      }
-    };
-
-    asdBlinkBtn.onclick = async function(ev){
-      ev.preventDefault();
-      ev.stopPropagation();
-      if (asdBlinkBusy) return;
-      if(asdMode === 'auto'){
-        await runASDAutoFlow();
-        return;
-      }
-      asdBlinkBusy = true;
-      playASDBlinkAnimation();
-      await applyBlinkStep();
-      setTimeout(function(){ asdBlinkBusy = false; }, 260);
-    };
-
-    asdCameraBtn.onclick = async function(ev){
-      ev.preventDefault();
-      ev.stopPropagation();
-      if (asdCameraOn) stopASDCamera();
-      else await startASDCamera();
-    };
-
-    if(asdModeManual && asdModeAuto){
-      asdModeManual.addEventListener('click', async function(ev){
-        ev.preventDefault();
-        ev.stopPropagation();
-        asdMode = 'manual';
-        asdRearCaptured = false;
-        asdAutoPromptActive = false;
-        stopASDDetectLoop();
-        await stopASDMiniCamera();
-        clearASDPlaceholderImage();
-        if(asdCameraOn) await startASDCamera();
-        updateModeUI();
-      });
-      asdModeAuto.addEventListener('click', async function(ev){
-        ev.preventDefault();
-        ev.stopPropagation();
-        asdMode = 'auto';
-        asdRearCaptured = false;
-        asdAutoPromptActive = false;
-        stopASDDetectLoop();
-        await stopASDMiniCamera();
-        clearASDPlaceholderImage();
-        if(asdCameraOn) await startASDCamera();
-        updateModeUI();
-      });
-    }
-
-    window.addEventListener('beforeunload', function(){
-      stopASDDetectLoop();
-      stopASDMiniCamera();
-      stopASDCamera();
-    });
-    renderAngle();
-  }
-
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initASDPatch);
-  } else {
-    initASDPatch();
-  }
-})();
-</script>
 
 <script>
 (function(){
+  let autoBlinkPrompt = false;
+
   function getEls(){
     return {
       overlay: document.getElementById('asdOverlay'),
@@ -4469,120 +3876,114 @@ function initASDPatch(){
       manualBtn: document.getElementById('asdModeManual'),
       actionBtn: document.getElementById('asdBlinkBtn'),
       hint: document.getElementById('asdHint'),
-      angleBadge: document.getElementById('asdAngleBadge'),
-      captureImage: document.getElementById('asdCaptureImage')
+      angleBadge: document.getElementById('asdAngleBadge')
     };
-  }
-
-  function setHintHTML(mode, prompt){
-    const els = getEls();
-    if(!els.hint) return;
-    const btnText = (mode === 'auto' && prompt) ? '눈을 깜박여 주세요'
-                  : (mode === 'auto') ? '자동인식 시작 버튼'
-                  : '깜박임 진행 버튼';
-    els.hint.innerHTML =
-      '<div id="asdInfoBadge">i</div>' +
-      '<div class="hintText">' +
-      '<span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span>' +
-      '<span class="hintBody"><span class="blue">‘' + btnText + '’</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span>' +
-      '</div>';
   }
 
   function getMode(){
     const els = getEls();
-    if(els.autoBtn && els.autoBtn.classList.contains('active')) return 'auto';
+    if (els.autoBtn && els.autoBtn.classList.contains('active')) return 'auto';
     return 'manual';
   }
 
-  function isPromptActive(){
-    const els = getEls();
-    const txt = (els.actionBtn?.textContent || '').replace(/\s+/g,'').trim();
-    return txt === '눈을깜박여주세요';
-  }
-
   function isStable(){
-    const badge = document.getElementById('asdAngleBadge');
-    return !!badge && /축\s*안정/.test(badge.textContent || '');
+    const els = getEls();
+    const txt = (els.angleBadge?.textContent || '').replace(/\s+/g,'');
+    return txt.includes('축안정');
   }
 
-  function syncASDLabels(){
+  function renderHint(mode, prompt){
     const els = getEls();
-    if(!els.actionBtn || !els.hint) return;
+    if (!els.hint) return;
+    const label = (mode === 'auto' && prompt)
+      ? '눈을 깜박여 주세요'
+      : (mode === 'auto' ? '자동인식 시작 버튼' : '깜박임 진행 버튼');
+
+    els.hint.innerHTML =
+      '<div id="asdInfoBadge">i</div>' +
+      '<div class="hintText">' +
+      '<span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span>' +
+      '<span class="hintBody"><span class="blue">‘' + label + '’</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span>' +
+      '</div>';
+  }
+
+  function syncASDUI(){
+    const els = getEls();
+    if (!els.actionBtn) return;
+
     const mode = getMode();
-    let prompt = isPromptActive();
+    const stable = isStable();
 
-    if(mode !== 'auto'){
-      prompt = false;
+    if (mode !== 'auto'){
+      autoBlinkPrompt = false;
       els.actionBtn.textContent = '깜박임 진행 버튼';
-      setHintHTML('manual', false);
+      renderHint('manual', false);
       return;
     }
 
-    if(isStable()){
-      prompt = false;
+    if (stable){
+      autoBlinkPrompt = false;
       els.actionBtn.textContent = '자동인식 시작 버튼';
-      setHintHTML('auto', false);
+      renderHint('auto', false);
       return;
     }
 
-    if(prompt){
+    if (autoBlinkPrompt){
       els.actionBtn.textContent = '눈을 깜박여 주세요';
-      setHintHTML('auto', true);
+      renderHint('auto', true);
       return;
     }
 
     els.actionBtn.textContent = '자동인식 시작 버튼';
-    setHintHTML('auto', false);
+    renderHint('auto', false);
   }
 
   function install(){
     const els = getEls();
-    if(!els.actionBtn || !els.autoBtn || !els.manualBtn || !els.hint) return false;
+    if (!els.actionBtn || !els.autoBtn || !els.manualBtn || !els.hint) return false;
 
-    // Initial sync
-    syncASDLabels();
+    syncASDUI();
 
-    // Mode buttons
     els.manualBtn.addEventListener('click', function(){
-      setTimeout(syncASDLabels, 0);
-      setTimeout(syncASDLabels, 80);
+      autoBlinkPrompt = false;
+      setTimeout(syncASDUI, 0);
+      setTimeout(syncASDUI, 80);
     }, true);
 
     els.autoBtn.addEventListener('click', function(){
-      setTimeout(syncASDLabels, 0);
-      setTimeout(syncASDLabels, 80);
+      autoBlinkPrompt = false;
+      setTimeout(syncASDUI, 0);
+      setTimeout(syncASDUI, 80);
     }, true);
 
-    // Action button: only auto mode changes to blink prompt immediately
     els.actionBtn.addEventListener('click', function(){
-      if(getMode() === 'auto' && !isStable()){
-        els.actionBtn.textContent = '눈을 깜박여 주세요';
-        setHintHTML('auto', true);
+      if (getMode() === 'auto' && !isStable()){
+        autoBlinkPrompt = true;
       }
-      setTimeout(syncASDLabels, 0);
-      setTimeout(syncASDLabels, 120);
-      setTimeout(syncASDLabels, 300);
+      setTimeout(syncASDUI, 0);
+      setTimeout(syncASDUI, 120);
+      setTimeout(syncASDUI, 300);
     }, true);
 
-    // Sync when ASD opens
-    const overlay = els.overlay;
-    if(overlay){
-      const mo = new MutationObserver(syncASDLabels);
-      mo.observe(overlay, { attributes:true, attributeFilter:['class','aria-hidden'] });
+    if (els.overlay){
+      const mo = new MutationObserver(function(){
+        syncASDUI();
+      });
+      mo.observe(els.overlay, {attributes:true, attributeFilter:['class','style']});
     }
 
-    // Sync when angle text changes to / from "축 안정"
-    if(els.angleBadge){
-      const mo2 = new MutationObserver(syncASDLabels);
-      mo2.observe(els.angleBadge, { childList:true, characterData:true, subtree:true });
+    if (els.angleBadge){
+      const mo2 = new MutationObserver(function(){
+        syncASDUI();
+      });
+      mo2.observe(els.angleBadge, {childList:true, characterData:true, subtree:true});
     }
 
-    // Periodic safety sync so other legacy handlers cannot leave stale labels behind
-    setInterval(syncASDLabels, 500);
+    setInterval(syncASDUI, 500);
     return true;
   }
 
-  if(document.readyState === 'loading'){
+  if (document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', install);
   } else {
     install();
