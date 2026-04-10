@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
-<title>ACUVUE ASTIG</title>
+<title>ACUVUE<sup class="reg-mark">®</sup> ASTIG</title>
 <style>
     :root{
       --acuvue-blue:#005EB8;
@@ -2175,48 +2175,22 @@
     #blueCloseBtn:active{ transform:scale(.98); }
 
   
-/* conference camera mirror */
-#asdCameraVideo,
+.reg-mark{font-size:.42em;line-height:0;position:relative;top:-0.78em;display:inline-block;margin-left:.02em;vertical-align:baseline;}
+
+/* recreated version: main original scale, mini camera only 1.6x */
+#asdCameraVideo{transform:none !important;}
 #asdMiniCameraVideo,
 #asdMiniVideo,
 #miniCameraVideo{
-  transform: scaleX(-1) !important;
-}
-
-
-/* force mirror conference/front camera views */
-video,
-#asdCameraVideo,
-#asdMiniCameraVideo,
-#asdMiniVideo,
-#miniCameraVideo{
-  transform: scaleX(-1) !important;
+  transform:scale(1.6) !important;
+  transform-origin:center center !important;
 }
 
 </style>
-<style id="rmark-style">.rmark{font-size:.50em;position:relative;top:-0.45em;line-height:0;vertical-align:baseline;display:inline-block;}
-/* conference camera mirror */
-#asdCameraVideo,
-#asdMiniCameraVideo,
-#asdMiniVideo,
-#miniCameraVideo{
-  transform: scaleX(-1) !important;
-}
-
-
-/* force mirror conference/front camera views */
-video,
-#asdCameraVideo,
-#asdMiniCameraVideo,
-#asdMiniVideo,
-#miniCameraVideo{
-  transform: scaleX(-1) !important;
-}
-
-</style></head>
+</head>
 <body>
 <div id="missionBarWrap">
-<div id="missionBarHeader">아큐브<span class="rmark">®</span> 난시 렌즈 기술</div>
+<div id="missionBarHeader">아큐브<sup class="reg-mark">®</sup> 난시 렌즈 기술</div>
 <div id="missionBar">
 <div class="missionCard" id="missionASD" role="button" tabindex="0">
 <div class="missionNo">01</div>
@@ -2324,7 +2298,7 @@ video,
 <div id="asdInfoBadge">i</div>
 <div class="hintText">
 <span class="hintTitle">난시 렌즈 축 안정의 중요성</span>
-<span class="hintBody">아큐브ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</span>
+<span class="hintBody">아큐브<sup class="reg-mark">®</sup>ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</span>
 </div>
 </div>
 <div class="toric-popup-disclaimer"><span class="disc-note">해당 시뮬레이션은 이해를 돕기 위한 데모 화면이며, 실제 시야 경험과는 차이가 있을 수 있습니다. KR_2026_287</span></div>
@@ -2375,7 +2349,7 @@ video,
 <div id="comfortMessage">
 <div id="comfortMessageCopyWrap">
 <div id="comfortInfoBadge">i</div>
-<div id="comfortMessageCopy"><span class="comfort-info-title">난시 렌즈 축 안정의 중요성</span>아큐브 ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</div>
+<div id="comfortMessageCopy"><span class="comfort-info-title">난시 렌즈 축 안정의 중요성</span>아큐브<sup class="reg-mark">®</sup> ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</div>
 </div>
 <button id="comfortConfirm" style="display:none;" type="button">확인 완료</button>
 </div>
@@ -2388,7 +2362,7 @@ video,
 <div aria-hidden="true" id="tutorialLayer">
 <div id="tutorialMask"></div><div id="tutorialFocus"></div>
 <div class="tutBox" id="tutLeft" style="display:none;"><div class="tutTitle">가이드 1</div><div class="tutText">렌즈를 좌우로 드래그하여 움직여 보세요.<br/>확대와 축소를 통해 렌즈 구조를 더 선명하게 확인할 수 있습니다.</div><button class="tutBtn" id="tutNext1">확인</button></div>
-<div class="tutBox" id="tutBottom" style="display:none;"><div class="tutTitle">가이드 2</div><div class="tutText">‘렌즈 두께 MAP’을 클릭하여<br/>아큐브<span class="rmark">®</span> 인피니티 엣지(가장 얇은 보라색 영역)을 확인해 보세요!</div><button class="tutBtn" id="tutNext2">확인</button></div>
+<div class="tutBox" id="tutBottom" style="display:none;"><div class="tutTitle">가이드 2</div><div class="tutText">‘렌즈 두께 MAP’을 클릭하여<br/>아큐브<sup class="reg-mark">®</sup> 인피니티 엣지(가장 얇은 보라색 영역)을 확인해 보세요!</div><button class="tutBtn" id="tutNext2">확인</button></div>
 <div class="tutBox" id="tutTop" style="display:none;"><div class="tutTitle">가이드 3</div><div class="tutText">각 카드를 눌러 체험을 진행해 보세요.<br/></div><button class="tutBtn" id="tutDone">확인</button></div>
 </div>
 <div aria-hidden="true" id="blueBackGlow"></div>
@@ -2450,7 +2424,7 @@ video,
 <b>블루라이트 <span class="pct">55%</span> 차단</b>
 </div>
 <div id="blueInfoBody">
-      아큐브<span class="rmark">®</span> MAX 원데이 난시는 
+      아큐브<sup class="reg-mark">®</sup> MAX 원데이 난시는 
       <span class="blue-highlight">블루라이트를 55% 차단하여 디지털에 노출된 눈을 보호</span>합니다.
       블루라이트 차단을 위한 <span class="tint-highlight">블루그린 틴트</span>를 확인해 주세요.
     </div>
@@ -2658,6 +2632,23 @@ video,
     let asdLastDir = -1;
     let asdBlinkBusy = false;
     let asdAutoPromptActive = false;
+    const ASD_PLACEHOLDER_DATA = 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#eef4fb"/><stop offset="100%" stop-color="#dce7f6"/></linearGradient></defs><rect width="1200" height="1200" fill="url(#g)"/><circle cx="600" cy="600" r="360" fill="none" stroke="#7fa4df" stroke-width="6" opacity=".45"/><circle cx="280" cy="520" r="26" fill="#f7a11c"/><circle cx="920" cy="660" r="26" fill="#f7a11c"/><rect x="320" y="450" width="66" height="150" rx="33" fill="#80d4df" opacity=".35" transform="rotate(12 353 525)"/><rect x="810" y="585" width="66" height="150" rx="33" fill="#80d4df" opacity=".35" transform="rotate(12 843 660)"/><line x1="305" y1="535" x2="900" y2="640" stroke="#6f7480" stroke-width="8" stroke-dasharray="28 24" opacity=".7"/><rect x="120" y="880" width="260" height="86" rx="43" fill="white" stroke="#d6e3f1" stroke-width="4"/><circle cx="170" cy="923" r="12" fill="#2563eb"/><text x="198" y="935" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#2563eb">플레이스홀더</text></svg>`);
+    function setASDPlaceholderImage(){
+      if(!asdCaptureImage) return;
+      asdCaptureImage.onerror = function(){
+        this.onerror = null;
+        this.src = ASD_PLACEHOLDER_DATA;
+      };
+      asdCaptureImage.src = 'background.png';
+      asdRearCaptured = true;
+      asdCaptureImage.classList.add('placeholder');
+    }
+    function clearASDPlaceholderImage(){
+      if(!asdCaptureImage) return;
+      asdCaptureImage.classList.remove('placeholder');
+      asdCaptureImage.src = '';
+      asdRearCaptured = false;
+    }
     let lastOrbit = null;
     let lastTarget = null;
     let defaultFov = null;
@@ -2753,7 +2744,7 @@ video,
         return false;
       }
       try{
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio:false });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio:false });
         comfortCameraStream = stream;
         [comfortCameraBase, comfortCameraTop, comfortCameraBottom].forEach(async (el)=>{
           if(!el) return;
@@ -2813,7 +2804,7 @@ video,
         return false;
       }
       try{
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio:false });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio:false });
         blueCameraStream = stream;
         if(blueCameraVideo){ blueCameraVideo.srcObject = stream; await blueCameraVideo.play().catch(()=>{}); }
         if(blueCameraVideoOn){ blueCameraVideoOn.srcObject = stream; await blueCameraVideoOn.play().catch(()=>{}); }
@@ -3283,20 +3274,12 @@ video,
       proceed();
     }
 
-    function getASDActionText(){
-      if (typeof asdMode !== 'undefined' && asdMode === 'auto'){
-        if (typeof asdAutoPromptActive !== 'undefined' && asdAutoPromptActive && typeof asdAngleValue !== 'undefined' && Math.abs(asdAngleValue) > 0){
-          return '눈을 깜박여 주세요';
-        }
-        return '자동인식 시작 버튼';
-      }
-      return '깜박임 진행 버튼';
-    }
-    function getASDHintBody(){
-      return `<span class="blue">‘${getASDActionText()}’</span>을 눌러 회전된 축을 안정화 시켜 보세요.`;
-    }
     function setASDHintDefault(){
-      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span><span class="hintBody">${getASDHintBody()}</span></div>`;
+      const cta = (asdMode === 'auto') ? '자동인식 시작 버튼' : '깜박임 진행 버튼';
+      const guide = (asdMode === 'auto')
+        ? '난시 렌즈는 축이 회전되면 시야가 흐려집니다. 자동 인식을 시작해 보세요.'
+        : '난시 렌즈는 축이 회전되면 시야가 흐려집니다.';
+      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">${guide}</span><span class="hintBody"><span class="blue">‘${cta}’</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
     }
     function setASDHintSuccess(){
       asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈 축 안정의 중요성</span><span class="hintBody">아큐브 ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</span></div><button id="asdConfirmBtn" type="button">확인 완료</button>`;
@@ -3884,216 +3867,612 @@ video,
       positionComfortInteractiveElements(0);
     });
   </script>
-
-
 <script>
 (function(){
-  function els(){
-    return {
-      autoBtn: document.getElementById('asdModeAuto'),
-      manualBtn: document.getElementById('asdModeManual'),
-      blinkBtn: document.getElementById('asdBlinkBtn'),
-      hint: document.getElementById('asdHint'),
-      angleBadge: document.getElementById('asdAngleBadge')
-    };
-  }
+  
+function initASDPatch(){
+    const missionASD = document.getElementById('missionASD');
+    const asdOverlay = document.getElementById('asdOverlay');
+    const asdClose = document.getElementById('asdClose');
+    const asdRotateBtn = document.getElementById('asdRotateBtn');
+    const asdBlinkBtn = document.getElementById('asdBlinkBtn');
+    const asdCameraBtn = document.getElementById('asdCameraBtn');
+    const asdCameraVideo = document.getElementById('asdCameraVideo');
+    const asdCaptureImage = document.getElementById('asdCaptureImage');
+    const asdModeManual = document.getElementById('asdModeManual');
+    const asdModeAuto = document.getElementById('asdModeAuto');
+    const asdMiniFace = document.getElementById('asdMiniFace');
+    const asdMiniFaceVideo = document.getElementById('asdMiniFaceVideo');
+    const asdMiniFaceCanvas = document.getElementById('asdMiniFaceCanvas');
+    const asdGuideAxis = document.getElementById('asdGuideAxis');
+    const asdGuideCircle = document.getElementById('asdGuideCircle');
+    const asdGuideDotLeft = document.getElementById('asdGuideDotLeft');
+    const asdGuideDotRight = document.getElementById('asdGuideDotRight');
+    const asdEyeMV = document.getElementById('asdEyeMV');
+    const asdUpperLid = document.getElementById('asdUpperLid');
+    const asdLensImg = document.getElementById('asdLensImg');
+    const asdAngleBadge = document.getElementById('asdAngleBadge');
+    const asdHint = document.getElementById('asdHint');
+    const miniCtx = asdMiniFaceCanvas ? asdMiniFaceCanvas.getContext('2d') : null;
 
-  function isAutoMode(){
-    const e = els();
-    return !!(e.autoBtn && e.autoBtn.classList.contains('active'));
-  }
-
-  function isStable(){
-    const e = els();
-    const txt = (e.angleBadge && e.angleBadge.innerText ? e.angleBadge.innerText : '').replace(/\s+/g, '');
-    return txt.includes('축안정');
-  }
-
-  function renderHint(label){
-    const e = els();
-    if (!e.hint) return;
-    e.hint.innerHTML =
-      '<div id="asdInfoBadge">i</div>' +
-      '<div class="hintText">' +
-      '<span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span>' +
-      '<span class="hintBody">‘<span class="blue">' + label + '</span>’을 눌러 회전된 축을 안정화 시켜 보세요.</span>' +
-      '</div>';
-  }
-
-  function currentPromptState(){
-    const e = els();
-    if (!e.blinkBtn) return false;
-    return (e.blinkBtn.innerText || '').replace(/\s+/g,'') === '눈을깜박여주세요';
-  }
-
-  function setBlinkPrompt(){
-    const e = els();
-    if (!e.blinkBtn) return;
-    e.blinkBtn.innerText = '눈을 깜박여 주세요';
-    renderHint('눈을 깜박여 주세요');
-  }
-
-  function setAutoStart(){
-    const e = els();
-    if (!e.blinkBtn) return;
-    e.blinkBtn.innerText = '자동인식 시작 버튼';
-    renderHint('자동인식 시작 버튼');
-  }
-
-  function setManualBlink(){
-    const e = els();
-    if (!e.blinkBtn) return;
-    e.blinkBtn.innerText = '깜박임 진행 버튼';
-    renderHint('깜박임 진행 버튼');
-  }
-
-  function syncUI(){
-    const e = els();
-    if (!e.blinkBtn || !e.hint) return;
-
-    if (!isAutoMode()){
-      setManualBlink();
+    if(!missionASD || !asdOverlay || !asdRotateBtn || !asdBlinkBtn || !asdCameraBtn || !asdCameraVideo || !asdLensImg || !asdAngleBadge){
       return;
     }
 
-    if (isStable()){
-      setAutoStart();
-      return;
+    let asdVision = null;
+    let asdFaceLandmarker = null;
+    let asdFaceLandmarkerReady = false;
+    let asdDetectLoopId = null;
+    let asdBlinkState = 'open';
+    let asdClosedFrames = 0;
+    let asdOpenFrames = 0;
+    let asdBlinkCooldownUntil = 0;
+
+    let asdCameraStream = null;
+    let asdMiniFaceStream = null;
+    let asdCameraOn = false;
+    let asdRearCaptured = false;
+    let asdMode = 'manual';
+    let asdAngleValue = 20;
+    let asdBlinkBusy = false;
+    let asdAutoPromptActive = false;
+
+    function syncAngleFromGlobal(){
+      if (typeof window.asdAngle === 'number') asdAngleValue = window.asdAngle;
     }
-
-    if (currentPromptState()){
-      setBlinkPrompt();
-      return;
+    function writeAngleToGlobal(){
+      window.asdAngle = asdAngleValue;
     }
-
-    setAutoStart();
-  }
-
-  function install(){
-    const e = els();
-    if (!e.blinkBtn || !e.hint) return false;
-
-    if (e.manualBtn){
-      e.manualBtn.addEventListener('click', function(){
-        setTimeout(syncUI, 0);
-        setTimeout(syncUI, 100);
-      }, true);
+    function getBlur(){
+      const a = Math.abs(asdAngleValue);
+      if (a>=25) return 8;
+      if (a>=20) return 6.4;
+      if (a>=15) return 5.1;
+      if (a>=10) return 3.8;
+      if (a>=5) return 2.2;
+      return 0;
     }
+    function applyCameraFilter(){
+      if (!asdCameraVideo) return;
+      const blur = getBlur();
+      const liveFilter = Math.abs(asdAngleValue) === 0
+        ? 'blur(0px) saturate(1.02) brightness(1.02)'
+        : `blur(${blur.toFixed(2)}px) saturate(.92)`;
+      const capturedFilter = Math.abs(asdAngleValue) === 0
+        ? 'blur(0px) saturate(1.02) brightness(1.02)'
+        : `blur(${(blur + 0.8).toFixed(2)}px) saturate(.92) brightness(${Math.max(0.8, 1 - Math.abs(asdAngleValue) * 0.006).toFixed(2)})`;
 
-    if (e.autoBtn){
-      e.autoBtn.addEventListener('click', function(){
-        setTimeout(function(){ setAutoStart(); }, 0);
-        setTimeout(syncUI, 100);
-      }, true);
-    }
-
-    e.blinkBtn.addEventListener('click', function(){
-      if (isAutoMode() && !isStable()){
-        setBlinkPrompt();
+      if (asdCaptureImage){
+        asdCaptureImage.style.filter = capturedFilter;
       }
-      setTimeout(syncUI, 80);
-      setTimeout(syncUI, 250);
-      setTimeout(syncUI, 500);
+
+      if (asdCameraOn && asdMode === 'manual'){
+        asdCameraVideo.style.display = 'block';
+        asdCameraVideo.style.filter = liveFilter;
+      } else if (asdCameraOn && asdMode === 'auto' && !asdRearCaptured){
+        asdCameraVideo.style.display = 'block';
+        asdCameraVideo.style.filter = liveFilter;
+      } else if (asdCameraOn && asdMode === 'auto' && asdRearCaptured){
+        asdCameraVideo.style.filter = liveFilter;
+      }
+    }
+    function refreshHint(){
+      if(!asdHint) return;
+      if(Math.abs(asdAngleValue) === 0){
+        setASDHintSuccess();
+      } else {
+        setASDHintDefault();
+      }
+    }
+    function updateModeUI(){
+      if(asdModeManual && asdModeAuto){
+        asdModeManual.classList.toggle('active', asdMode === 'manual');
+        asdModeAuto.classList.toggle('active', asdMode === 'auto');
+      }
+      if(asdBlinkBtn){
+        asdBlinkBtn.textContent = (asdMode === 'auto') ? '자동인식 시작 버튼' : '깜박임 진행 버튼';
+      }
+      asdOverlay.classList.toggle('auto-running', asdCameraOn && asdMode === 'auto' && asdAutoPromptActive);
+      asdOverlay.classList.toggle('auto-captured', asdCameraOn && asdMode === 'auto' && asdRearCaptured);
+      refreshHint();
+      applyCameraFilter();
+    }
+
+    function renderGuide(){
+      if (asdGuideAxis) asdGuideAxis.style.transform = `rotate(${asdAngleValue}deg)`;
+      if (asdGuideCircle) asdGuideCircle.style.transform = `translate(-50%,-50%) rotate(${(asdAngleValue * 0.18).toFixed(2)}deg)`;
+
+      const centerX = 50;
+      const centerY = 52;
+      const outerRadius = 40;
+      const cyanRadius = 31.2;
+      const rad = asdAngleValue * Math.PI / 180;
+      const cos = Math.cos(rad);
+      const sin = Math.sin(rad);
+
+      const leftX = centerX - outerRadius * cos;
+      const leftY = centerY - outerRadius * sin;
+      const rightX = centerX + outerRadius * cos;
+      const rightY = centerY + outerRadius * sin;
+
+      if (asdGuideDotLeft && asdGuideDotRight){
+        asdGuideDotLeft.style.left = `${leftX}%`;
+        asdGuideDotLeft.style.top = `${leftY}%`;
+        asdGuideDotRight.style.left = `${rightX}%`;
+        asdGuideDotRight.style.top = `${rightY}%`;
+      }
+
+      const asdGuideSideLeft = document.getElementById('asdGuideSideLeft');
+      const asdGuideSideRight = document.getElementById('asdGuideSideRight');
+      if (asdGuideSideLeft && asdGuideSideRight){
+        const leftCyanX = centerX - cyanRadius * cos;
+        const leftCyanY = centerY - cyanRadius * sin;
+        const rightCyanX = centerX + cyanRadius * cos;
+        const rightCyanY = centerY + cyanRadius * sin;
+
+        asdGuideSideLeft.style.left = `${leftCyanX}%`;
+        asdGuideSideLeft.style.top = `${leftCyanY}%`;
+        asdGuideSideLeft.style.transform = `translate(-50%,-50%) rotate(${asdAngleValue}deg)`;
+
+        asdGuideSideRight.style.left = `${rightCyanX}%`;
+        asdGuideSideRight.style.top = `${rightCyanY}%`;
+        asdGuideSideRight.style.transform = `translate(-50%,-50%) rotate(${asdAngleValue}deg)`;
+      }
+    }
+
+    function renderAngle(){
+      syncAngleFromGlobal();
+      asdAngleValue = typeof window.asdAngle === 'number' ? window.asdAngle : asdAngleValue;
+      if (asdLensImg){
+        asdLensImg.style.transform = `translate(calc(-50% + var(--irisX, 0px)), calc(-50% + var(--irisY, 0px))) rotate(${asdAngleValue}deg)`;
+      }
+      if (asdAngleBadge){
+        if (asdAngleValue > 0) asdAngleBadge.textContent = `좌측 ${asdAngleValue}° 회전 발생`;
+        else if (asdAngleValue < 0) asdAngleBadge.textContent = `우측 ${Math.abs(asdAngleValue)}° 회전 발생`;
+        else asdAngleBadge.textContent = '축 안정';
+      }
+      asdOverlay.classList.toggle('asd-stable', Math.abs(asdAngleValue) === 0);
+      renderGuide();
+      updateModeUI();
+    }
+
+    function resetASDPatchedState(){
+      asdMode = 'manual';
+      asdAutoPromptActive = false;
+      asdAngleValue = 20;
+      writeAngleToGlobal();
+      stopASDDetectLoop();
+      stopASDMiniCamera();
+      clearASDPlaceholderImage();
+      renderAngle();
+    }
+
+    async function startASDCamera(){
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+        alert('이 브라우저에서는 카메라 기능을 지원하지 않습니다.');
+        return;
+      }
+      try{
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: 'user',
+            width: { ideal: 1920 },
+            height: { ideal: 1080 }
+          },
+          audio: false
+        });
+        if (asdCameraStream){
+          asdCameraStream.getTracks().forEach(track => track.stop());
+        }
+        asdCameraStream = stream;
+        asdCameraVideo.classList.remove('ready');
+        asdCameraVideo.srcObject = stream;
+        asdCameraVideo.style.transform = 'scaleX(-1)';
+        asdCameraVideo.style.transformOrigin = 'center center';
+        const markReady = function(){
+          asdCameraVideo.classList.add('ready');
+          try{ asdCameraVideo.play(); }catch(e){}
+        };
+        asdCameraVideo.onloadedmetadata = markReady;
+        asdCameraVideo.onloadeddata = markReady;
+        asdCameraOn = true;
+        asdOverlay.classList.add('camera-on');
+        asdCameraBtn.classList.add('active');
+        if(asdMode === 'auto'){
+          setASDPlaceholderImage();
+        }
+        renderAngle();
+      }catch(e){
+        alert('카메라 권한을 허용해야 사용할 수 있습니다.');
+      }
+    }
+
+    function stopASDCamera(){
+      if (asdCameraStream){
+        asdCameraStream.getTracks().forEach(track => track.stop());
+        asdCameraStream = null;
+      }
+      try{ asdCameraVideo.pause(); }catch(e){}
+      asdCameraVideo.srcObject = null;
+      asdCameraVideo.classList.remove('ready');
+      asdCameraOn = false;
+      asdOverlay.classList.remove('camera-on','auto-running','auto-captured');
+      asdCameraBtn.classList.remove('active');
+      asdAutoPromptActive = false;
+      clearASDPlaceholderImage();
+      stopASDDetectLoop();
+      stopASDMiniCamera();
+      refreshHint();
+    }
+
+    async function ensureASDFaceLandmarker(){
+      if(asdFaceLandmarkerReady) return;
+      if(!asdVision){
+        asdVision = await import("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.mjs");
+      }
+      const { FaceLandmarker, FilesetResolver } = asdVision;
+      const filesetResolver = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/wasm");
+      asdFaceLandmarker = await FaceLandmarker.createFromOptions(filesetResolver, {
+        baseOptions: {
+          modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task"
+        },
+        outputFaceBlendshapes: false,
+        runningMode: "VIDEO",
+        numFaces: 1
+      });
+      asdFaceLandmarkerReady = true;
+    }
+
+    function isAndroidDevice(){
+      try{ return /Android/i.test(navigator.userAgent || ''); }catch(e){ return false; }
+    }
+
+    async function getASDMiniCameraStream(){
+      const media = navigator.mediaDevices;
+      if (!media || !media.getUserMedia) return null;
+
+      const base = { width:{ideal:320}, height:{ideal:480} };
+      const attempts = [];
+
+      if (isAndroidDevice()){
+        attempts.push({ video:{ ...base, facingMode:{ exact:'user' } }, audio:false });
+        attempts.push({ video:{ ...base, facingMode:{ ideal:'user' } }, audio:false });
+        attempts.push({ video:{ ...base }, audio:false });
+      } else {
+        attempts.push({ video:{ ...base, facingMode:'user' }, audio:false });
+      }
+
+      for (const constraints of attempts){
+        try{
+          return await media.getUserMedia(constraints);
+        }catch(err){
+          console.warn('ASD mini camera attempt failed', constraints, err);
+        }
+      }
+
+      if (isAndroidDevice() && media.enumerateDevices){
+        try{
+          const temp = await media.getUserMedia({ video:true, audio:false });
+          temp.getTracks().forEach(track => track.stop());
+          const devices = await media.enumerateDevices();
+          const front = devices.find(device => {
+            if (device.kind !== 'videoinput') return false;
+            const label = (device.label || '').toLowerCase();
+            return label.includes('front') || label.includes('user') || label.includes('selfie');
+          });
+          if (front && front.deviceId){
+            return await media.getUserMedia({
+              video:{ ...base, deviceId:{ exact: front.deviceId } },
+              audio:false
+            });
+          }
+        }catch(err){
+          console.warn('ASD mini camera enumerate fallback failed', err);
+        }
+      }
+
+      return null;
+    }
+
+    async function startASDMiniCamera(){
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !asdMiniFaceVideo) return;
+      try{
+        await stopASDMiniCamera();
+        const stream = await getASDMiniCameraStream();
+        if (!stream) throw new Error('ASD mini front camera unavailable');
+        asdMiniFaceStream = stream;
+        asdMiniFaceVideo.srcObject = stream;
+        await asdMiniFaceVideo.play().catch(()=>{});
+        asdMiniFaceVideo.style.transform = 'scaleX(-1) scale(1.6)';
+        if(asdMiniFaceCanvas) asdMiniFaceCanvas.style.transform = 'scaleX(-1) scale(1.6)';
+      }catch(e){
+        console.warn('ASD mini camera unavailable', e);
+      }
+    }
+
+    async function stopASDMiniCamera(){
+      if(asdMiniFaceStream){
+        asdMiniFaceStream.getTracks().forEach(t => t.stop());
+        asdMiniFaceStream = null;
+      }
+      if(asdMiniFaceVideo) asdMiniFaceVideo.srcObject = null;
+    }
+
+    function clearASDMiniCanvas(){
+      if(!asdMiniFaceCanvas || !miniCtx) return;
+      miniCtx.clearRect(0,0, asdMiniFaceCanvas.width || 1, asdMiniFaceCanvas.height || 1);
+    }
+
+    function pointDistance(a,b){
+      const dx=a.x-b.x, dy=a.y-b.y;
+      return Math.hypot(dx,dy);
+    }
+    function eyeAspectRatio(landmarks, idx){
+      const p1=landmarks[idx[0]], p2=landmarks[idx[1]], p3=landmarks[idx[2]], p4=landmarks[idx[3]], p5=landmarks[idx[4]], p6=landmarks[idx[5]];
+      const vertical = pointDistance(p2,p6)+pointDistance(p3,p5);
+      const horizontal = 2*pointDistance(p1,p4);
+      return horizontal ? vertical/horizontal : 0;
+    }
+    function detectASDBlinkFromLandmarks(landmarks){
+      const leftIdx=[33,160,158,133,153,144], rightIdx=[362,385,387,263,373,380];
+      const ear = (eyeAspectRatio(landmarks,leftIdx)+eyeAspectRatio(landmarks,rightIdx))/2;
+      const now = Date.now(), CLOSED=0.19, OPEN=0.24;
+      if (ear < CLOSED){
+        asdClosedFrames += 1;
+        asdOpenFrames = 0;
+        if (asdBlinkState === 'open') asdBlinkState = 'closing';
+      } else if (ear > OPEN){
+        asdOpenFrames += 1;
+        if ((asdBlinkState==='closing' || asdBlinkState==='closed') && asdClosedFrames>=1 && now > asdBlinkCooldownUntil){
+          asdBlinkCooldownUntil = now + 900;
+          asdBlinkState='open';
+          asdClosedFrames=0;
+          asdOpenFrames=0;
+          triggerASDAutoCorrection();
+          return;
+        }
+        asdBlinkState='open';
+        asdClosedFrames=0;
+      } else {
+        if (asdBlinkState === 'closing') asdBlinkState='closed';
+      }
+    }
+
+    function drawASDMiniLandmarks(landmarks){
+      if(!asdMiniFaceCanvas || !miniCtx || !asdRearCaptured) return;
+      const rect = asdMiniFaceCanvas.getBoundingClientRect();
+      const ratio = window.devicePixelRatio || 1;
+      const w = Math.max(1, Math.round(rect.width * ratio));
+      const h = Math.max(1, Math.round(rect.height * ratio));
+      if (asdMiniFaceCanvas.width !== w || asdMiniFaceCanvas.height !== h){
+        asdMiniFaceCanvas.width = w;
+        asdMiniFaceCanvas.height = h;
+      }
+      miniCtx.clearRect(0,0,w,h);
+      miniCtx.strokeStyle='rgba(255,255,255,.88)';
+      miniCtx.lineWidth=Math.max(1.5, w*0.01);
+      const left=[33,160,158,133,153,144,33], right=[362,385,387,263,373,380,362];
+      function path(indices){
+        miniCtx.beginPath();
+        indices.forEach((i,idx)=>{
+          const p=landmarks[i], x=p.x*w, y=p.y*h;
+          if(idx===0) miniCtx.moveTo(x,y); else miniCtx.lineTo(x,y);
+        });
+        miniCtx.stroke();
+      }
+      path(left); path(right);
+    }
+
+    function stopASDDetectLoop(){
+      if(asdDetectLoopId){
+        cancelAnimationFrame(asdDetectLoopId);
+        asdDetectLoopId = null;
+      }
+      asdBlinkState = 'open';
+      asdClosedFrames = 0;
+      asdOpenFrames = 0;
+    }
+
+    async function runASDDetectLoop(){
+      stopASDDetectLoop();
+      if(asdMode !== 'auto' || !asdFaceLandmarkerReady || !asdMiniFaceVideo) return;
+      const detect = ()=>{
+        if(asdMiniFaceVideo.readyState >= 2 && asdAngleValue !== 0 && asdRearCaptured){
+          try{
+            const result = asdFaceLandmarker.detectForVideo(asdMiniFaceVideo, performance.now());
+            if(result && result.faceLandmarks && result.faceLandmarks.length > 0){
+              detectASDBlinkFromLandmarks(result.faceLandmarks[0]);
+              drawASDMiniLandmarks(result.faceLandmarks[0]);
+            } else {
+              clearASDMiniCanvas();
+            }
+          }catch(e){ clearASDMiniCanvas(); }
+        } else {
+          clearASDMiniCanvas();
+        }
+        asdDetectLoopId = requestAnimationFrame(detect);
+      };
+      detect();
+    }
+
+    function captureASDRearFrame(){
+      if(!asdCameraVideo || !asdCameraVideo.videoWidth || !asdCaptureImage) return;
+      const c = document.createElement('canvas');
+      c.width = asdCameraVideo.videoWidth;
+      c.height = asdCameraVideo.videoHeight;
+      const x = c.getContext('2d');
+      x.drawImage(asdCameraVideo, 0, 0);
+      asdCaptureImage.src = c.toDataURL('image/jpeg', .92);
+      asdRearCaptured = true;
+      updateModeUI();
+    }
+
+    async function runASDAutoFlow(){
+      if(!asdCameraOn) await startASDCamera();
+      stopASDDetectLoop();
+      await stopASDMiniCamera();
+      asdAutoPromptActive = true;
+      setASDPlaceholderImage();
+      const steps = [-20,-15,-10,-5,5,10,15,20];
+      asdAngleValue = steps[Math.floor(Math.random() * steps.length)];
+      writeAngleToGlobal();
+      renderAngle();
+      await ensureASDFaceLandmarker();
+      await startASDMiniCamera();
+      runASDDetectLoop();
+      updateModeUI();
+    }
+
+    function playASDBlinkAnimation(){
+      const lidTop = document.getElementById('asdLidTop');
+      const lidBot = document.getElementById('asdLidBot');
+      if(lidTop && lidBot){
+        lidTop.animate([
+          { transform:'translateY(-110%)', opacity:0 },
+          { transform:'translateY(-6%)', opacity:1, offset:.45 },
+          { transform:'translateY(-110%)', opacity:0 }
+        ], { duration:260, easing:'ease-in-out' });
+        lidBot.animate([
+          { transform:'translateY(110%)', opacity:0 },
+          { transform:'translateY(6%)', opacity:1, offset:.45 },
+          { transform:'translateY(110%)', opacity:0 }
+        ], { duration:260, easing:'ease-in-out' });
+      }
+    }
+
+    async function applyBlinkStep(){
+      if (asdAngleValue > 0) asdAngleValue = Math.max(0, asdAngleValue - 5);
+      else if (asdAngleValue < 0) asdAngleValue = Math.min(0, asdAngleValue + 5);
+      writeAngleToGlobal();
+      renderAngle();
+      if(asdCameraOn && asdMode === 'auto' && asdAngleValue === 0){
+        stopASDDetectLoop();
+        await stopASDMiniCamera();
+        asdRearCaptured = false;
+        setASDPlaceholderImage();
+        await startASDCamera();
+        asdAutoPromptActive = false;
+        updateModeUI();
+      }
+    }
+
+    async function triggerASDAutoCorrection(){
+      if(asdAngleValue === 0 || asdBlinkBusy) return;
+      asdBlinkBusy = true;
+      playASDBlinkAnimation();
+      await applyBlinkStep();
+      setTimeout(()=>{ asdBlinkBusy = false; }, 260);
+    }
+
+    function openASDPatched(e){
+      if (e) e.preventDefault();
+      if (typeof window.openASD === 'function') {
+        window.openASD();
+      } else {
+        asdOverlay.classList.add('show');
+        asdOverlay.setAttribute('aria-hidden','false');
+      }
+      resetASDPatchedState();
+    }
+
+    function closeASDPatched(e){
+      if (e) e.preventDefault();
+      stopASDDetectLoop();
+      stopASDMiniCamera();
+      stopASDCamera();
+      if (typeof window.closeASD === 'function') {
+        window.closeASD();
+      } else {
+        asdOverlay.classList.remove('show');
+        asdOverlay.setAttribute('aria-hidden','true');
+      }
+    }
+
+    missionASD.onclick = openASDPatched;
+    missionASD.addEventListener('click', openASDPatched, true);
+    asdClose.onclick = closeASDPatched;
+    asdClose.addEventListener('click', closeASDPatched, true);
+    asdOverlay.addEventListener('click', function(ev){
+      if (ev.target === asdOverlay) closeASDPatched();
     }, true);
 
-    if (e.angleBadge){
-      const mo = new MutationObserver(syncUI);
-      mo.observe(e.angleBadge, { childList: true, characterData: true, subtree: true });
-    }
-
-    setInterval(syncUI, 200);
-    syncUI();
-    return true;
-  }
-
-  if (document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', install);
-  } else {
-    install();
-  }
-})();
-</script>
-
-
-<script>
-(function(){
-  function els(){
-    return {
-      autoBtn: document.getElementById('asdModeAuto'),
-      blinkBtn: document.getElementById('asdBlinkBtn'),
-      hint: document.getElementById('asdHint'),
-      angleBadge: document.getElementById('asdAngleBadge')
+    asdRotateBtn.onclick = async function(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      if (asdBlinkBusy) return;
+      const steps = [-20,-15,-10,-5,5,10,15,20];
+      let next = steps[Math.floor(Math.random() * steps.length)];
+      if (next === asdAngleValue){
+        next = steps[(steps.indexOf(next) + 1) % steps.length];
+      }
+      asdAngleValue = next;
+      writeAngleToGlobal();
+      renderAngle();
+      if(asdCameraOn && asdMode === 'auto'){
+        await runASDAutoFlow();
+      }
     };
-  }
 
-  function isAuto(){
-    const e = els();
-    return e.autoBtn && e.autoBtn.classList.contains('active');
-  }
+    asdBlinkBtn.onclick = async function(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      if (asdBlinkBusy) return;
+      if(asdCameraOn && asdMode === 'auto'){
+        await runASDAutoFlow();
+        return;
+      }
+      asdBlinkBusy = true;
+      playASDBlinkAnimation();
+      await applyBlinkStep();
+      setTimeout(function(){ asdBlinkBusy = false; }, 260);
+    };
 
-  function isStable(){
-    const e = els();
-    return (e.angleBadge?.innerText || '').includes('축 안정');
-  }
+    asdCameraBtn.onclick = async function(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      if (asdCameraOn) stopASDCamera();
+      else await startASDCamera();
+    };
 
-  function setDefaultHint(label){
-    const e = els();
-    if(!e.hint) return;
-    e.hint.innerHTML =
-      '<div id="asdInfoBadge">i</div>' +
-      '<div class="hintText">' +
-      '<span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span>' +
-      '<span class="hintBody">‘<span class="blue">'+label+'</span>’을 눌러 회전된 축을 안정화 시켜 보세요.</span>' +
-      '</div>';
-  }
-
-  function setSuccessHint(){
-    const e = els();
-    if(!e.hint) return;
-    e.hint.innerHTML =
-      '<div id="asdInfoBadge">i</div>' +
-      '<div class="hintText">' +
-      '<span class="hintTitle">난시 렌즈 축 안정의 중요성</span>' +
-      '<span class="hintBody">아큐브 ASD™는 자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야를 제공합니다.</span>' +
-      '</div>';
-  }
-
-  function sync(){
-    const e = els();
-    if(!e.blinkBtn) return;
-
-    if(!isAuto()){
-      e.blinkBtn.innerText = '깜박임 진행 버튼';
-      setDefaultHint('깜박임 진행 버튼');
-      return;
+    if(asdModeManual && asdModeAuto){
+      asdModeManual.addEventListener('click', async function(ev){
+        ev.preventDefault();
+        ev.stopPropagation();
+        asdMode = 'manual';
+        asdAutoPromptActive = false;
+        stopASDDetectLoop();
+        await stopASDMiniCamera();
+        clearASDPlaceholderImage();
+        if(asdCameraOn) await startASDCamera();
+        updateModeUI();
+      });
+      asdModeAuto.addEventListener('click', async function(ev){
+        ev.preventDefault();
+        ev.stopPropagation();
+        asdMode = 'auto';
+        asdAutoPromptActive = false;
+        stopASDDetectLoop();
+        await stopASDMiniCamera();
+        if(asdCameraOn) setASDPlaceholderImage();
+        updateModeUI();
+      });
     }
 
-    if(isStable()){
-      e.blinkBtn.innerText = '자동인식 시작 버튼';
-      setSuccessHint();
-      return;
-    }
-
-    if(e.blinkBtn.innerText === '눈을 깜박여 주세요'){
-      setDefaultHint('눈을 깜박여 주세요');
-      return;
-    }
-
-    e.blinkBtn.innerText = '자동인식 시작 버튼';
-    setDefaultHint('자동인식 시작 버튼');
+    window.addEventListener('beforeunload', function(){
+      stopASDDetectLoop();
+      stopASDMiniCamera();
+      stopASDCamera();
+    });
+    renderAngle();
   }
 
-  document.addEventListener('click', function(e){
-    if(e.target.id === 'asdBlinkBtn' && isAuto()){
-      document.getElementById('asdBlinkBtn').innerText = '눈을 깜박여 주세요';
-    }
-    setTimeout(sync, 50);
-  });
 
-  setInterval(sync, 200);
-  sync();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initASDPatch);
+  } else {
+    initASDPatch();
+  }
 })();
 </script>
-
 </body>
 </html>
