@@ -2183,9 +2183,29 @@
   transform: scaleX(-1) !important;
 }
 
+
+/* force mirror conference/front camera views */
+video,
+#asdCameraVideo,
+#asdMiniCameraVideo,
+#asdMiniVideo,
+#miniCameraVideo{
+  transform: scaleX(-1) !important;
+}
+
 </style>
 <style id="rmark-style">.rmark{font-size:.50em;position:relative;top:-0.45em;line-height:0;vertical-align:baseline;display:inline-block;}
 /* conference camera mirror */
+#asdCameraVideo,
+#asdMiniCameraVideo,
+#asdMiniVideo,
+#miniCameraVideo{
+  transform: scaleX(-1) !important;
+}
+
+
+/* force mirror conference/front camera views */
+video,
 #asdCameraVideo,
 #asdMiniCameraVideo,
 #asdMiniVideo,
@@ -3865,121 +3885,124 @@
     });
   </script>
 
+
 <script>
 (function(){
-  let autoBlinkPrompt = false;
-
-  function getEls(){
+  function els(){
     return {
-      overlay: document.getElementById('asdOverlay'),
       autoBtn: document.getElementById('asdModeAuto'),
       manualBtn: document.getElementById('asdModeManual'),
-      actionBtn: document.getElementById('asdBlinkBtn'),
+      blinkBtn: document.getElementById('asdBlinkBtn'),
       hint: document.getElementById('asdHint'),
       angleBadge: document.getElementById('asdAngleBadge')
     };
   }
 
-  function getMode(){
-    const els = getEls();
-    if (els.autoBtn && els.autoBtn.classList.contains('active')) return 'auto';
-    return 'manual';
+  function isAutoMode(){
+    const e = els();
+    return !!(e.autoBtn && e.autoBtn.classList.contains('active'));
   }
 
   function isStable(){
-    const els = getEls();
-    const txt = (els.angleBadge?.textContent || '').replace(/\s+/g,'');
+    const e = els();
+    const txt = (e.angleBadge && e.angleBadge.innerText ? e.angleBadge.innerText : '').replace(/\s+/g, '');
     return txt.includes('축안정');
   }
 
-  function renderHint(mode, prompt){
-    const els = getEls();
-    if (!els.hint) return;
-    const label = (mode === 'auto' && prompt)
-      ? '눈을 깜박여 주세요'
-      : (mode === 'auto' ? '자동인식 시작 버튼' : '깜박임 진행 버튼');
-
-    els.hint.innerHTML =
+  function renderHint(label){
+    const e = els();
+    if (!e.hint) return;
+    e.hint.innerHTML =
       '<div id="asdInfoBadge">i</div>' +
       '<div class="hintText">' +
       '<span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span>' +
-      '<span class="hintBody"><span class="blue">‘' + label + '’</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span>' +
+      '<span class="hintBody">‘<span class="blue">' + label + '</span>’을 눌러 회전된 축을 안정화 시켜 보세요.</span>' +
       '</div>';
   }
 
-  function syncASDUI(){
-    const els = getEls();
-    if (!els.actionBtn) return;
+  function currentPromptState(){
+    const e = els();
+    if (!e.blinkBtn) return false;
+    return (e.blinkBtn.innerText || '').replace(/\s+/g,'') === '눈을깜박여주세요';
+  }
 
-    const mode = getMode();
-    const stable = isStable();
+  function setBlinkPrompt(){
+    const e = els();
+    if (!e.blinkBtn) return;
+    e.blinkBtn.innerText = '눈을 깜박여 주세요';
+    renderHint('눈을 깜박여 주세요');
+  }
 
-    if (mode !== 'auto'){
-      autoBlinkPrompt = false;
-      els.actionBtn.textContent = '깜박임 진행 버튼';
-      renderHint('manual', false);
+  function setAutoStart(){
+    const e = els();
+    if (!e.blinkBtn) return;
+    e.blinkBtn.innerText = '자동인식 시작 버튼';
+    renderHint('자동인식 시작 버튼');
+  }
+
+  function setManualBlink(){
+    const e = els();
+    if (!e.blinkBtn) return;
+    e.blinkBtn.innerText = '깜박임 진행 버튼';
+    renderHint('깜박임 진행 버튼');
+  }
+
+  function syncUI(){
+    const e = els();
+    if (!e.blinkBtn || !e.hint) return;
+
+    if (!isAutoMode()){
+      setManualBlink();
       return;
     }
 
-    if (stable){
-      autoBlinkPrompt = false;
-      els.actionBtn.textContent = '자동인식 시작 버튼';
-      renderHint('auto', false);
+    if (isStable()){
+      setAutoStart();
       return;
     }
 
-    if (autoBlinkPrompt){
-      els.actionBtn.textContent = '눈을 깜박여 주세요';
-      renderHint('auto', true);
+    if (currentPromptState()){
+      setBlinkPrompt();
       return;
     }
 
-    els.actionBtn.textContent = '자동인식 시작 버튼';
-    renderHint('auto', false);
+    setAutoStart();
   }
 
   function install(){
-    const els = getEls();
-    if (!els.actionBtn || !els.autoBtn || !els.manualBtn || !els.hint) return false;
+    const e = els();
+    if (!e.blinkBtn || !e.hint) return false;
 
-    syncASDUI();
+    if (e.manualBtn){
+      e.manualBtn.addEventListener('click', function(){
+        setTimeout(syncUI, 0);
+        setTimeout(syncUI, 100);
+      }, true);
+    }
 
-    els.manualBtn.addEventListener('click', function(){
-      autoBlinkPrompt = false;
-      setTimeout(syncASDUI, 0);
-      setTimeout(syncASDUI, 80);
-    }, true);
+    if (e.autoBtn){
+      e.autoBtn.addEventListener('click', function(){
+        setTimeout(function(){ setAutoStart(); }, 0);
+        setTimeout(syncUI, 100);
+      }, true);
+    }
 
-    els.autoBtn.addEventListener('click', function(){
-      autoBlinkPrompt = false;
-      setTimeout(syncASDUI, 0);
-      setTimeout(syncASDUI, 80);
-    }, true);
-
-    els.actionBtn.addEventListener('click', function(){
-      if (getMode() === 'auto' && !isStable()){
-        autoBlinkPrompt = true;
+    e.blinkBtn.addEventListener('click', function(){
+      if (isAutoMode() && !isStable()){
+        setBlinkPrompt();
       }
-      setTimeout(syncASDUI, 0);
-      setTimeout(syncASDUI, 120);
-      setTimeout(syncASDUI, 300);
+      setTimeout(syncUI, 80);
+      setTimeout(syncUI, 250);
+      setTimeout(syncUI, 500);
     }, true);
 
-    if (els.overlay){
-      const mo = new MutationObserver(function(){
-        syncASDUI();
-      });
-      mo.observe(els.overlay, {attributes:true, attributeFilter:['class','style']});
+    if (e.angleBadge){
+      const mo = new MutationObserver(syncUI);
+      mo.observe(e.angleBadge, { childList: true, characterData: true, subtree: true });
     }
 
-    if (els.angleBadge){
-      const mo2 = new MutationObserver(function(){
-        syncASDUI();
-      });
-      mo2.observe(els.angleBadge, {childList:true, characterData:true, subtree:true});
-    }
-
-    setInterval(syncASDUI, 500);
+    setInterval(syncUI, 200);
+    syncUI();
     return true;
   }
 
@@ -3988,6 +4011,87 @@
   } else {
     install();
   }
+})();
+</script>
+
+
+<script>
+(function(){
+  function els(){
+    return {
+      autoBtn: document.getElementById('asdModeAuto'),
+      blinkBtn: document.getElementById('asdBlinkBtn'),
+      hint: document.getElementById('asdHint'),
+      angleBadge: document.getElementById('asdAngleBadge')
+    };
+  }
+
+  function isAuto(){
+    const e = els();
+    return e.autoBtn && e.autoBtn.classList.contains('active');
+  }
+
+  function isStable(){
+    const e = els();
+    return (e.angleBadge?.innerText || '').includes('축 안정');
+  }
+
+  function setDefaultHint(label){
+    const e = els();
+    if(!e.hint) return;
+    e.hint.innerHTML =
+      '<div id="asdInfoBadge">i</div>' +
+      '<div class="hintText">' +
+      '<span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span>' +
+      '<span class="hintBody">‘<span class="blue">'+label+'</span>’을 눌러 회전된 축을 안정화 시켜 보세요.</span>' +
+      '</div>';
+  }
+
+  function setSuccessHint(){
+    const e = els();
+    if(!e.hint) return;
+    e.hint.innerHTML =
+      '<div id="asdInfoBadge">i</div>' +
+      '<div class="hintText">' +
+      '<span class="hintTitle">난시 렌즈 축 안정의 중요성</span>' +
+      '<span class="hintBody">아큐브 ASD™는 자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야를 제공합니다.</span>' +
+      '</div>';
+  }
+
+  function sync(){
+    const e = els();
+    if(!e.blinkBtn) return;
+
+    if(!isAuto()){
+      e.blinkBtn.innerText = '깜박임 진행 버튼';
+      setDefaultHint('깜박임 진행 버튼');
+      return;
+    }
+
+    if(isStable()){
+      e.blinkBtn.innerText = '자동인식 시작 버튼';
+      setSuccessHint();
+      return;
+    }
+
+    if(e.blinkBtn.innerText === '눈을 깜박여 주세요'){
+      setDefaultHint('눈을 깜박여 주세요');
+      return;
+    }
+
+    e.blinkBtn.innerText = '자동인식 시작 버튼';
+    setDefaultHint('자동인식 시작 버튼');
+  }
+
+  document.addEventListener('click', function(e){
+    if(e.target.id === 'asdBlinkBtn' && isAuto()){
+      document.getElementById('asdBlinkBtn').innerText = '눈을 깜박여 주세요';
+    }
+    setTimeout(sync, 50);
+  });
+
+  setInterval(sync, 200);
+  sync();
 })();
 </script>
 
