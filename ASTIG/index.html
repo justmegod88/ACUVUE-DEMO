@@ -2175,7 +2175,7 @@
     #blueCloseBtn:active{ transform:scale(.98); }
 
   </style>
-<style id="rmark-style">.rmark{font-size:.52em;position:relative;top:-0.42em;line-height:0;vertical-align:baseline;display:inline-block;}</style></head>
+<style id="rmark-style">.rmark{font-size:.50em;position:relative;top:-0.45em;line-height:0;vertical-align:baseline;display:inline-block;}</style></head>
 <body>
 <div id="missionBarWrap">
 <div id="missionBarHeader">아큐브<span class="rmark">®</span> 난시 렌즈 기술</div>
@@ -2775,7 +2775,7 @@
         return false;
       }
       try{
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio:false });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio:false });
         blueCameraStream = stream;
         if(blueCameraVideo){ blueCameraVideo.srcObject = stream; await blueCameraVideo.play().catch(()=>{}); }
         if(blueCameraVideoOn){ blueCameraVideoOn.srcObject = stream; await blueCameraVideoOn.play().catch(()=>{}); }
@@ -3246,7 +3246,13 @@
     }
 
     function getASDActionText(){
-      return (typeof asdMode !== 'undefined' && asdMode === 'auto') ? '자동인식 시작 버튼' : '깜박임 진행 버튼';
+      if (typeof asdMode !== 'undefined' && asdMode === 'auto'){
+        if (typeof asdAutoPromptActive !== 'undefined' && asdAutoPromptActive && typeof asdAngleValue !== 'undefined' && Math.abs(asdAngleValue) > 0){
+          return '눈을 깜박여 주세요';
+        }
+        return '자동인식 시작 버튼';
+      }
+      return '깜박임 진행 버튼';
     }
     function getASDHintBody(){
       return `<span class="blue">‘${getASDActionText()}’</span>을 눌러 회전된 축을 안정화 시켜 보세요.`;
@@ -4048,7 +4054,7 @@ function initASDPatch(){
       }
       try{
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'environment' },
+          video: { facingMode: 'user' },
           audio: false
         });
         if (asdCameraStream){
@@ -4453,5 +4459,136 @@ function initASDPatch(){
   }
 })();
 </script>
+
+<script>
+(function(){
+  function getEls(){
+    return {
+      overlay: document.getElementById('asdOverlay'),
+      autoBtn: document.getElementById('asdModeAuto'),
+      manualBtn: document.getElementById('asdModeManual'),
+      actionBtn: document.getElementById('asdBlinkBtn'),
+      hint: document.getElementById('asdHint'),
+      angleBadge: document.getElementById('asdAngleBadge'),
+      captureImage: document.getElementById('asdCaptureImage')
+    };
+  }
+
+  function setHintHTML(mode, prompt){
+    const els = getEls();
+    if(!els.hint) return;
+    const btnText = (mode === 'auto' && prompt) ? '눈을 깜박여 주세요'
+                  : (mode === 'auto') ? '자동인식 시작 버튼'
+                  : '깜박임 진행 버튼';
+    els.hint.innerHTML =
+      '<div id="asdInfoBadge">i</div>' +
+      '<div class="hintText">' +
+      '<span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span>' +
+      '<span class="hintBody"><span class="blue">‘' + btnText + '’</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span>' +
+      '</div>';
+  }
+
+  function getMode(){
+    const els = getEls();
+    if(els.autoBtn && els.autoBtn.classList.contains('active')) return 'auto';
+    return 'manual';
+  }
+
+  function isPromptActive(){
+    const els = getEls();
+    const txt = (els.actionBtn?.textContent || '').replace(/\s+/g,'').trim();
+    return txt === '눈을깜박여주세요';
+  }
+
+  function isStable(){
+    const badge = document.getElementById('asdAngleBadge');
+    return !!badge && /축\s*안정/.test(badge.textContent || '');
+  }
+
+  function syncASDLabels(){
+    const els = getEls();
+    if(!els.actionBtn || !els.hint) return;
+    const mode = getMode();
+    let prompt = isPromptActive();
+
+    if(mode !== 'auto'){
+      prompt = false;
+      els.actionBtn.textContent = '깜박임 진행 버튼';
+      setHintHTML('manual', false);
+      return;
+    }
+
+    if(isStable()){
+      prompt = false;
+      els.actionBtn.textContent = '자동인식 시작 버튼';
+      setHintHTML('auto', false);
+      return;
+    }
+
+    if(prompt){
+      els.actionBtn.textContent = '눈을 깜박여 주세요';
+      setHintHTML('auto', true);
+      return;
+    }
+
+    els.actionBtn.textContent = '자동인식 시작 버튼';
+    setHintHTML('auto', false);
+  }
+
+  function install(){
+    const els = getEls();
+    if(!els.actionBtn || !els.autoBtn || !els.manualBtn || !els.hint) return false;
+
+    // Initial sync
+    syncASDLabels();
+
+    // Mode buttons
+    els.manualBtn.addEventListener('click', function(){
+      setTimeout(syncASDLabels, 0);
+      setTimeout(syncASDLabels, 80);
+    }, true);
+
+    els.autoBtn.addEventListener('click', function(){
+      setTimeout(syncASDLabels, 0);
+      setTimeout(syncASDLabels, 80);
+    }, true);
+
+    // Action button: only auto mode changes to blink prompt immediately
+    els.actionBtn.addEventListener('click', function(){
+      if(getMode() === 'auto' && !isStable()){
+        els.actionBtn.textContent = '눈을 깜박여 주세요';
+        setHintHTML('auto', true);
+      }
+      setTimeout(syncASDLabels, 0);
+      setTimeout(syncASDLabels, 120);
+      setTimeout(syncASDLabels, 300);
+    }, true);
+
+    // Sync when ASD opens
+    const overlay = els.overlay;
+    if(overlay){
+      const mo = new MutationObserver(syncASDLabels);
+      mo.observe(overlay, { attributes:true, attributeFilter:['class','aria-hidden'] });
+    }
+
+    // Sync when angle text changes to / from "축 안정"
+    if(els.angleBadge){
+      const mo2 = new MutationObserver(syncASDLabels);
+      mo2.observe(els.angleBadge, { childList:true, characterData:true, subtree:true });
+    }
+
+    // Periodic safety sync so other legacy handlers cannot leave stale labels behind
+    setInterval(syncASDLabels, 500);
+    return true;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', install);
+  } else {
+    install();
+  }
+})();
+</script>
+
 </body>
 </html>
