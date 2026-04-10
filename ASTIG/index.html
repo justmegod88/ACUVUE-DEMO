@@ -4102,9 +4102,6 @@ function initASDPatch(){
         asdCameraOn = true;
         asdOverlay.classList.add('camera-on');
         asdCameraBtn.classList.add('active');
-        if(asdMode === 'auto'){
-          setASDPlaceholderImage();
-        }
         renderAngle();
       }catch(e){
         alert('카메라 권한을 허용해야 사용할 수 있습니다.');
@@ -4375,7 +4372,6 @@ function initASDPatch(){
         stopASDDetectLoop();
         await stopASDMiniCamera();
         asdAutoPromptActive = false;
-        setASDPlaceholderImage();
         updateModeUI();
       }
     }
@@ -4433,7 +4429,10 @@ function initASDPatch(){
       writeAngleToGlobal();
       renderAngle();
       if(asdCameraOn && asdMode === 'auto'){
+        setASDPlaceholderImage();
         await runASDAutoFlow();
+      } else {
+        setASDPlaceholderImage();
       }
     };
 
@@ -4442,6 +4441,7 @@ function initASDPatch(){
       ev.stopPropagation();
       if (asdBlinkBusy) return;
       if(asdCameraOn && asdMode === 'auto'){
+        setASDPlaceholderImage();
         await runASDAutoFlow();
         return;
       }
@@ -4477,8 +4477,7 @@ function initASDPatch(){
         asdAutoPromptActive = false;
         stopASDDetectLoop();
         await stopASDMiniCamera();
-        if(asdCameraOn) setASDPlaceholderImage();
-        else clearASDPlaceholderImage();
+        if(!asdCameraOn) clearASDPlaceholderImage();
         updateModeUI();
       });
     }
