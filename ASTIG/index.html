@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <title>ACUVUE ASTIG</title>
+  <title>ACUVUE<sup class="sup-reg">®</sup> ASTIG</title>
 
   <style>
     :root{
@@ -455,13 +455,7 @@
       box-shadow:0 6px 16px rgba(36,85,199,.16);
     }
     #pvpVisionOpen{ display:none !important; }
-    #pvpConfirm{
-      min-width:96px;
-      border:1px solid rgba(36,85,199,.92);
-      background:var(--smartfit-blue);
-      display:none;
-    }
-    #pvpConfirm:active{ transform:scale(.98); }
+#pvpConfirm:active{ transform:scale(.98); }
 
 
     /* restored classic PVP popup behavior */
@@ -704,6 +698,7 @@
     #asdOverlay.show{ display:flex; }
 
     #asdCard{
+      position:relative;
       width:min(560px, 97vw);
       border-radius:40px;
       border:1px solid rgba(15,23,42,.06);
@@ -948,6 +943,7 @@
     }
     #comfortOverlay.show{ display:flex; }
     #comfortWrap{
+      position:relative;
       width:min(470px, 96vw);
       border-radius:40px;
       overflow:hidden;
@@ -1252,12 +1248,7 @@
     .comfort-info-title{ display:block; margin-bottom:4px; font-size:16px; line-height:1.35; font-weight:900; color:#1e293b; }
     #comfortMessageCopy .blue{ color:#2563eb; font-weight:800; }
     #comfortMessageCopy .green{ color:#2563eb; font-weight:800; }
-    #comfortConfirm{
-      flex:0 0 auto; flex-shrink:0; min-width:112px; width:112px; max-width:112px; height:52px; padding:0 16px; border:none; border-radius:18px;
-      background:#0f172a; color:#fff; font-size:15px; line-height:1; font-weight:900; cursor:pointer;
-      box-shadow:0 14px 26px rgba(15,23,42,.16); box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center;
-    }
-    #comfortWrap .popup-reference-area{
+#comfortWrap .popup-reference-area{
       margin-top:0; padding:14px 24px 0 !important; background:#fff !important; font-size:10px; line-height:1.45; color:#94a3b8;
     }
     #comfortWrap .popup-reference-area::before{ display:none; }
@@ -1287,8 +1278,7 @@
       #comfortMessageCopyWrap{ gap:10px; }
       #comfortMessageCopy{ font-size:13px; line-height:1.5; }
       .comfort-info-title{ font-size:15px; }
-      #comfortConfirm{ min-width:96px; width:96px; max-width:96px; height:46px; font-size:13px; border-radius:16px; }
-      #comfortWrap .popup-reference-area{ padding:12px 16px 0 !important; font-size:9px; }
+#comfortWrap .popup-reference-area{ padding:12px 16px 0 !important; font-size:9px; }
       #comfortWrap .toric-popup-disclaimer{ padding:4px 16px 16px; font-size:9px; }
     }
 
@@ -1325,14 +1315,7 @@
       #pvpActions{
         margin-left:0;
       }
-      #pvpConfirm{
-        min-width:96px;
-        height:44px;
-        padding:0 16px;
-        font-size:13px;
-      }
-
-      #pvpSimOverlay{ padding:8px; }
+#pvpSimOverlay{ padding:8px; }
       #pvpSimWrap{ width:100%; border-radius:20px; }
       #pvpSimHead{ height:48px; padding:0 14px; }
       #pvpSimTitle{ font-size:15px; }
@@ -2106,7 +2089,7 @@
       background:#fff; border:2px solid rgba(255,255,255,.92); box-shadow:0 14px 26px rgba(0,0,0,.18); display:none;
     }
     #asdOverlay.camera-on.auto-running #asdMiniFace{ display:block; }
-    #asdMiniFaceVideo, #asdMiniFaceCanvas{
+        #asdMiniFaceVideo, #asdMiniFaceCanvas{
       position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 24%;
     }
     #asdMiniFaceLabel{
@@ -2123,11 +2106,35 @@
       width:7px; height:7px; box-shadow:0 0 0 3px rgba(59,130,246,.10);
     }
 
-</style>
+
+    .sup-reg{font-size:.5em; position:relative; top:-0.38em; margin-left:1px;}
+  
+    .popup-x-btn{
+      position:absolute;
+      top:12px;
+      right:12px;
+      width:28px;
+      height:28px;
+      border:none;
+      border-radius:999px;
+      background:rgba(15,23,42,.08);
+      color:#64748b;
+      font-size:18px;
+      line-height:1;
+      font-weight:800;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      box-shadow:inset 0 0 0 1px rgba(148,163,184,.16);
+      z-index:10;
+    }
+    .popup-x-btn:active{ transform:scale(.98); }
+  </style>
 </head>
 <body>
   <div id="missionBarWrap">
-    <div id="missionBarHeader">아큐브® 난시 렌즈 기술</div>
+    <div id="missionBarHeader">아큐브<sup class="sup-reg">®</sup> 난시 렌즈 기술</div>
     <div id="missionBar">
       <div id="missionASD" class="missionCard" role="button" tabindex="0">
         <div class="missionNo">01</div>
@@ -2150,7 +2157,7 @@
   <div id="thicknessBar" aria-hidden="true">
     <div id="thHeader"><div id="thTitle">두께</div><div id="thUnit">mm</div></div>
     <div id="gradRow">
-      <div class="tickLabel">얇음_0.0</div>
+      <div class="tickLabel">0.0</div>
       <div id="gradWrap">
         <div id="grad"></div><div id="gradShine"></div>
         <div class="mark m0"><strong>0.0</strong></div>
@@ -2159,7 +2166,7 @@
         <div class="mark m75"><strong>0.3</strong></div>
         <div class="mark m100"><strong>0.4</strong></div>
       </div>
-      <div class="tickLabel" style="text-align:left;width:46px;">0.4_두껍</div>
+      <div class="tickLabel" style="text-align:left;width:46px;">0.4</div>
     </div>
     <div id="thHint"></div>
   </div>
@@ -2188,10 +2195,11 @@
   
   <div id="asdOverlay" aria-hidden="true">
     <div id="asdCard">
+      <button id="asdCloseX" class="popup-x-btn" type="button" aria-label="닫기">×</button>
       <div id="asdHeader">
         <div id="asdHeaderTitleWrap">
           <div id="asdHeaderTitle">ASD™ 축안정화</div>
-          <div id="asdHeaderSubTitle">ACCELERATION STABLE DESIGN</div>
+          <div id="asdHeaderSubTitle">Accelerated Stabilization Design </div>
         </div>
         <button id="asdClose" type="button">X</button>
       </div>
@@ -2229,7 +2237,7 @@
       </div>
       <div id="asdControlBar">
         <button id="asdRotateBtn" class="asdActionBtn" type="button">축회전 유발</button>
-        <button id="asdBlinkBtn" class="asdActionBtn" type="button">깜박임 실행</button>
+        <button id="asdBlinkBtn" class="asdActionBtn" type="button">깜박임 진행 버튼</button>
         <button id="asdCameraBtn" class="asdActionBtn" type="button" aria-label="카메라">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z"></path>
@@ -2244,7 +2252,7 @@
           <span class="hintBody">아큐브ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</span>
         </div>
       </div>
-      <div class="toric-popup-disclaimer"><span class="disc-note">해당 시뮬레이션은 이해를 돕기 위한 데모 화면이며, 실제 시야 경험과는 차이가 있을 수 있습니다. KR_2026_233</span></div>
+      <div class="toric-popup-disclaimer"><span class="disc-note">해당 시뮬레이션은 이해를 돕기 위한 데모 화면이며, 실제 시야 경험과는 차이가 있을 수 있습니다. KR_2026_287</span></div>
     </div>
   </div>
 
@@ -2291,12 +2299,11 @@
           <div id="comfortInfoBadge">i</div>
           <div id="comfortMessageCopy"><span class="comfort-info-title">난시 렌즈 축 안정의 중요성</span>아큐브 ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</div>
         </div>
-        <button id="comfortConfirm" type="button">확인 완료</button>
-      </div>
+</div>
       <div class="popup-reference-area" style="padding:12px 16px 0; background:#fff;">
         <span class="ref-line">1. Sulley A, Hawke R, Osborn Lorenz K, et al. <em>Cont Lens Anterior Eye</em>. 2015;38(4):253–257.  2. Cripps, A. (2022). PRISM: a help and a hindrance (CPD Code: C-102818). Association of British Dispensing Opticians.</span>
       </div>
-      <div class="toric-popup-disclaimer"><span class="disc-note">해당 시뮬레이션은 이해를 돕기 위한 데모 화면이며, 실제 시야 경험과는 차이가 있을 수 있습니다. KR_2026_233</span></div>
+      <div class="toric-popup-disclaimer"><span class="disc-note">해당 시뮬레이션은 이해를 돕기 위한 데모 화면이며, 실제 시야 경험과는 차이가 있을 수 있습니다. KR_2026_287</span></div>
     </div>
   </div>
 
@@ -2408,7 +2415,7 @@
       <b>블루라이트 <span class="pct">55%</span> 차단</b>
     </div>
     <div id="blueInfoBody">
-      아큐브® MAX 원데이 난시는 
+      아큐브<sup class="sup-reg">®</sup> MAX 원데이 난시는 
       <span class="blue-highlight">블루라이트를 55% 차단하여 디지털에 노출된 눈을 보호</span>합니다.
       블루라이트 차단을 위한 <span class="tint-highlight">블루그린 틴트</span>를 확인해 주세요.
     </div>
@@ -2489,7 +2496,7 @@
         <span class="ref-line">Hammond, B. R., Jr., Fletcher, L. M., & Elliott, J. G. (2013).Glare disability, photostress recovery, and chromatic contrast: Relation to macular pigment.Investigative Ophthalmology & Visual Science, 54(1), 476–481.https://doi.org/10.1167/iovs.12-10411
 </span>
       </div>
-      <div class="toric-popup-disclaimer"><span class="disc-note">해당 시뮬레이션은 이해를 돕기 위한 데모 화면이며, 실제 시야 경험과는 차이가 있을 수 있습니다. KR_2026_264</span></div>
+      <div class="toric-popup-disclaimer"><span class="disc-note">해당 시뮬레이션은 이해를 돕기 위한 데모 화면이며, 실제 시야 경험과는 차이가 있을 수 있습니다. KR_2026_287</span></div>
     </div>
   </div>
 
@@ -2517,7 +2524,7 @@
       <img id="maxPackshot" src="MAX.png" alt="아큐브 맥스 난시 팩샷" role="button" tabindex="0" aria-label="블루라이트 기능 열기" onerror="this.style.display='none';">
     </button>
   </div>
-  <div id="globalToricDisclaimer">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_233</div>
+  <div id="globalToricDisclaimer">해당 이미지는 이해를 돕기 위한 가상 이미지 입니다. KR_2026_287</div>
 
   <script>
     const mv = document.getElementById('mv');
@@ -2528,7 +2535,11 @@
     const modeHeat = document.getElementById('modeHeat');
     const btnReset = document.getElementById('btnReset');
     const asdOverlay = document.getElementById('asdOverlay');
-    const asdClose = document.getElementById('asdClose');
+    const asdClose = 
+    document.getElementById('asdCloseX')?.addEventListener('click', ()=> closeAsd());
+    document.getElementById('comfortCloseX')?.addEventListener('click', ()=> closeComfort());
+
+    document.getElementById('asdClose');
     const pvpOverlay = document.getElementById('pvpOverlay');
     const pvpBig = document.getElementById('pvpBig');
     const pvpConfirm = document.getElementById('pvpConfirm');
@@ -2634,6 +2645,7 @@
     let asdAngle = 20;
     let asdLastDir = -1;
     let asdBlinkBusy = false;
+    let asdAutoPromptActive = false;
     let lastOrbit = null;
     let lastTarget = null;
     let defaultFov = null;
@@ -3260,12 +3272,11 @@
     }
 
     function setASDHintDefault(){
-      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span><span class="hintBody"><span class="blue">‘깜박임 실행’ 버튼</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
+      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span><span class="hintBody"><span class="blue">‘깜박임 진행 버튼’</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
     }
     function setASDHintSuccess(){
-      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈 축 안정의 중요성</span><span class="hintBody">아큐브 ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</span></div><button id="asdConfirmBtn" type="button">확인 완료</button>`;
-      document.getElementById('asdConfirmBtn')?.addEventListener('click', (e)=>{ e.stopPropagation(); closeASD(); markASDDone(true); });
-    }
+      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈 축 안정의 중요성</span><span class="hintBody">아큐브 ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</span></div>`;
+}
     function markASDDone(done){ asdDone = !!done; missionASD.classList.toggle('done', asdDone); }
     function pickASDLensSrc(){ return (currentMode === 'heat') ? 'lens2.png' : 'lens.png'; }
     function setASDLensSrc(){ if(!asdLensImg) return; asdLensImg.src = pickASDLensSrc() + '?v=' + Date.now(); }
@@ -3893,6 +3904,7 @@ function initASDPatch(){
     let asdMode = 'manual';
     let asdAngleValue = 20;
     let asdBlinkBusy = false;
+    let asdAutoPromptActive = false;
 
     function syncAngleFromGlobal(){
       if (typeof window.asdAngle === 'number') asdAngleValue = window.asdAngle;
@@ -3947,7 +3959,7 @@ function initASDPatch(){
         asdModeAuto.classList.toggle('active', asdMode === 'auto');
       }
       if(asdBlinkBtn){
-        asdBlinkBtn.textContent = (asdMode === 'manual') ? '깜박임 실행' : '자동 실행';
+        asdBlinkBtn.textContent = (asdMode === 'manual') ? '깜박임 진행 버튼' : (asdAutoPromptActive ? '눈을 깜박여 주세요' : '자동 인식 시작 버튼');
       }
       asdOverlay.classList.toggle('auto-running', asdCameraOn && asdMode === 'auto' && asdRearCaptured);
       asdOverlay.classList.toggle('auto-captured', asdCameraOn && asdMode === 'auto' && asdRearCaptured);
@@ -4016,6 +4028,7 @@ function initASDPatch(){
     function resetASDPatchedState(){
       asdMode = 'manual';
       asdRearCaptured = false;
+      asdAutoPromptActive = false;
       asdAngleValue = 20;
       writeAngleToGlobal();
       stopASDDetectLoop();
@@ -4067,6 +4080,7 @@ function initASDPatch(){
       asdOverlay.classList.remove('camera-on','auto-running','auto-captured');
       asdCameraBtn.classList.remove('active');
       asdRearCaptured = false;
+      asdAutoPromptActive = false;
       if(asdCaptureImage) asdCaptureImage.src = '';
       stopASDDetectLoop();
       stopASDMiniCamera();
@@ -4091,14 +4105,63 @@ function initASDPatch(){
       asdFaceLandmarkerReady = true;
     }
 
+    function isAndroidDevice(){
+      try{ return /Android/i.test(navigator.userAgent || ''); }catch(e){ return false; }
+    }
+
+    async function getASDMiniCameraStream(){
+      const media = navigator.mediaDevices;
+      if (!media || !media.getUserMedia) return null;
+
+      const base = { width:{ideal:320}, height:{ideal:480} };
+      const attempts = [];
+
+      if (isAndroidDevice()){
+        attempts.push({ video:{ ...base, facingMode:{ exact:'user' } }, audio:false });
+        attempts.push({ video:{ ...base, facingMode:{ ideal:'user' } }, audio:false });
+        attempts.push({ video:{ ...base }, audio:false });
+      } else {
+        attempts.push({ video:{ ...base, facingMode:'user' }, audio:false });
+      }
+
+      for (const constraints of attempts){
+        try{
+          return await media.getUserMedia(constraints);
+        }catch(err){
+          console.warn('ASD mini camera attempt failed', constraints, err);
+        }
+      }
+
+      if (isAndroidDevice() && media.enumerateDevices){
+        try{
+          const temp = await media.getUserMedia({ video:true, audio:false });
+          temp.getTracks().forEach(track => track.stop());
+          const devices = await media.enumerateDevices();
+          const front = devices.find(device => {
+            if (device.kind !== 'videoinput') return false;
+            const label = (device.label || '').toLowerCase();
+            return label.includes('front') || label.includes('user') || label.includes('selfie');
+          });
+          if (front && front.deviceId){
+            return await media.getUserMedia({
+              video:{ ...base, deviceId:{ exact: front.deviceId } },
+              audio:false
+            });
+          }
+        }catch(err){
+          console.warn('ASD mini camera enumerate fallback failed', err);
+        }
+      }
+
+      return null;
+    }
+
     async function startASDMiniCamera(){
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !asdMiniFaceVideo) return;
       try{
         await stopASDMiniCamera();
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'user', width: {ideal:320}, height: {ideal:480} },
-          audio: false
-        });
+        const stream = await getASDMiniCameraStream();
+        if (!stream) throw new Error('ASD mini front camera unavailable');
         asdMiniFaceStream = stream;
         asdMiniFaceVideo.srcObject = stream;
         await asdMiniFaceVideo.play().catch(()=>{});
@@ -4231,8 +4294,9 @@ function initASDPatch(){
       stopASDDetectLoop();
       await stopASDMiniCamera();
       asdRearCaptured = false;
+      asdAutoPromptActive = false;
       if(asdCaptureImage) asdCaptureImage.src = '';
-      const steps = [-25,-20,-15,-10,-5,5,10,15,20,25];
+      const steps = [-20,-15,-10,-5,5,10,15,20];
       asdAngleValue = steps[Math.floor(Math.random() * steps.length)];
       writeAngleToGlobal();
       renderAngle();
@@ -4273,6 +4337,7 @@ function initASDPatch(){
         asdRearCaptured = false;
         if(asdCaptureImage) asdCaptureImage.src = '';
         await startASDCamera();
+        asdAutoPromptActive = false;
         updateModeUI();
       }
     }
@@ -4321,7 +4386,7 @@ function initASDPatch(){
       ev.preventDefault();
       ev.stopPropagation();
       if (asdBlinkBusy) return;
-      const steps = [-25,-20,-15,-10,-5,5,10,15,20,25];
+      const steps = [-20,-15,-10,-5,5,10,15,20];
       let next = steps[Math.floor(Math.random() * steps.length)];
       if (next === asdAngleValue){
         next = steps[(steps.indexOf(next) + 1) % steps.length];
@@ -4361,6 +4426,7 @@ function initASDPatch(){
         ev.stopPropagation();
         asdMode = 'manual';
         asdRearCaptured = false;
+        asdAutoPromptActive = false;
         stopASDDetectLoop();
         await stopASDMiniCamera();
         if(asdCaptureImage) asdCaptureImage.src = '';
@@ -4372,6 +4438,7 @@ function initASDPatch(){
         ev.stopPropagation();
         asdMode = 'auto';
         asdRearCaptured = false;
+        asdAutoPromptActive = false;
         stopASDDetectLoop();
         await stopASDMiniCamera();
         if(asdCaptureImage) asdCaptureImage.src = '';
