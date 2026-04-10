@@ -2105,7 +2105,6 @@
       position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:none;
       background:#dfe6ef; z-index:1;
     }
-    #asdCaptureImage.placeholder{ display:block; }
     #asdOverlay.camera-on.auto-captured #asdCaptureImage{ display:block; }
     #asdOverlay.camera-on.auto-captured #asdCameraVideo{ display:none; }
 
@@ -2623,6 +2622,23 @@
     let asdLastDir = -1;
     let asdBlinkBusy = false;
     let asdAutoPromptActive = false;
+    const ASD_PLACEHOLDER_DATA = 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#eef4fb"/><stop offset="100%" stop-color="#dce7f6"/></linearGradient></defs><rect width="1200" height="1200" fill="url(#g)"/><circle cx="600" cy="600" r="360" fill="none" stroke="#7fa4df" stroke-width="6" opacity=".45"/><circle cx="280" cy="520" r="26" fill="#f7a11c"/><circle cx="920" cy="660" r="26" fill="#f7a11c"/><rect x="320" y="450" width="66" height="150" rx="33" fill="#80d4df" opacity=".35" transform="rotate(12 353 525)"/><rect x="810" y="585" width="66" height="150" rx="33" fill="#80d4df" opacity=".35" transform="rotate(12 843 660)"/><line x1="305" y1="535" x2="900" y2="640" stroke="#6f7480" stroke-width="8" stroke-dasharray="28 24" opacity=".7"/><rect x="120" y="880" width="260" height="86" rx="43" fill="white" stroke="#d6e3f1" stroke-width="4"/><circle cx="170" cy="923" r="12" fill="#2563eb"/><text x="198" y="935" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#2563eb">플레이스홀더</text></svg>`);
+    function setASDPlaceholderImage(){
+      if(!asdCaptureImage) return;
+      asdCaptureImage.onerror = function(){
+        this.onerror = null;
+        this.src = ASD_PLACEHOLDER_DATA;
+      };
+      asdCaptureImage.src = 'background.png';
+      asdRearCaptured = true;
+      asdCaptureImage.classList.add('placeholder');
+    }
+    function clearASDPlaceholderImage(){
+      if(!asdCaptureImage) return;
+      asdCaptureImage.classList.remove('placeholder');
+      asdCaptureImage.src = '';
+      asdRearCaptured = false;
+    }
     let lastOrbit = null;
     let lastTarget = null;
     let defaultFov = null;
@@ -3249,8 +3265,11 @@
     }
 
     function setASDHintDefault(){
-      const actionLabel = (asdMode === 'auto') ? '자동인식 시작 버튼' : '깜박임 진행 버튼';
-      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span><span class="hintBody"><span class="blue">‘${actionLabel}’</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
+      const cta = (asdMode === 'auto') ? '자동인식 시작 버튼' : '깜박임 진행 버튼';
+      const guide = (asdMode === 'auto')
+        ? '난시 렌즈는 축이 회전되면 시야가 흐려집니다. 자동 인식을 시작해 보세요.'
+        : '난시 렌즈는 축이 회전되면 시야가 흐려집니다.';
+      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">${guide}</span><span class="hintBody"><span class="blue">‘${cta}’</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
     }
     function setASDHintSuccess(){
       asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈 축 안정의 중요성</span><span class="hintBody">아큐브 ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</span></div><button id="asdConfirmBtn" type="button">확인 완료</button>`;
@@ -3887,25 +3906,6 @@ function initASDPatch(){
     let asdAngleValue = 20;
     let asdBlinkBusy = false;
     let asdAutoPromptActive = false;
-    const ASD_PLACEHOLDER_DATA = 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#eef4fb"/><stop offset="100%" stop-color="#dce7f6"/></linearGradient></defs><rect width="1200" height="1200" fill="url(#g)"/><circle cx="600" cy="600" r="360" fill="none" stroke="#7fa4df" stroke-width="6" opacity=".45"/><circle cx="280" cy="520" r="26" fill="#f7a11c"/><circle cx="920" cy="660" r="26" fill="#f7a11c"/><rect x="320" y="450" width="66" height="150" rx="33" fill="#80d4df" opacity=".35" transform="rotate(12 353 525)"/><rect x="810" y="585" width="66" height="150" rx="33" fill="#80d4df" opacity=".35" transform="rotate(12 843 660)"/><line x1="305" y1="535" x2="900" y2="640" stroke="#6f7480" stroke-width="8" stroke-dasharray="28 24" opacity=".7"/><rect x="120" y="880" width="260" height="86" rx="43" fill="white" stroke="#d6e3f1" stroke-width="4"/><circle cx="170" cy="923" r="12" fill="#2563eb"/><text x="198" y="935" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#2563eb">플레이스홀더</text></svg>`);
-
-    function setASDPlaceholderImage(){
-      if(!asdCaptureImage) return;
-      asdCaptureImage.onerror = function(){
-        this.onerror = null;
-        this.src = ASD_PLACEHOLDER_DATA;
-      };
-      asdCaptureImage.src = 'background.png';
-      asdRearCaptured = true;
-      asdCaptureImage.classList.add('placeholder');
-    }
-
-    function clearASDPlaceholderImage(){
-      if(!asdCaptureImage) return;
-      asdCaptureImage.classList.remove('placeholder');
-      asdCaptureImage.src = '';
-      asdRearCaptured = false;
-    }
 
     function syncAngleFromGlobal(){
       if (typeof window.asdAngle === 'number') asdAngleValue = window.asdAngle;
@@ -4028,13 +4028,12 @@ function initASDPatch(){
 
     function resetASDPatchedState(){
       asdMode = 'manual';
-      asdRearCaptured = false;
       asdAutoPromptActive = false;
       asdAngleValue = 20;
       writeAngleToGlobal();
       stopASDDetectLoop();
       stopASDMiniCamera();
-      if(asdCaptureImage) asdCaptureImage.src = '';
+      clearASDPlaceholderImage();
       renderAngle();
     }
 
@@ -4058,7 +4057,7 @@ function initASDPatch(){
         asdCameraStream = stream;
         asdCameraVideo.classList.remove('ready');
         asdCameraVideo.srcObject = stream;
-        asdCameraVideo.style.transform = 'scaleX(-1) scale(1.6)';
+        asdCameraVideo.style.transform = 'scaleX(-1)';
         asdCameraVideo.style.transformOrigin = 'center center';
         const markReady = function(){
           asdCameraVideo.classList.add('ready');
@@ -4302,8 +4301,8 @@ function initASDPatch(){
       if(!asdCameraOn) await startASDCamera();
       stopASDDetectLoop();
       await stopASDMiniCamera();
-      setASDPlaceholderImage();
       asdAutoPromptActive = true;
+      setASDPlaceholderImage();
       const steps = [-20,-15,-10,-5,5,10,15,20];
       asdAngleValue = steps[Math.floor(Math.random() * steps.length)];
       writeAngleToGlobal();
@@ -4339,8 +4338,10 @@ function initASDPatch(){
       if(asdCameraOn && asdMode === 'auto' && asdAngleValue === 0){
         stopASDDetectLoop();
         await stopASDMiniCamera();
-        asdAutoPromptActive = false;
+        asdRearCaptured = false;
         setASDPlaceholderImage();
+        await startASDCamera();
+        asdAutoPromptActive = false;
         updateModeUI();
       }
     }
@@ -4443,7 +4444,6 @@ function initASDPatch(){
         stopASDDetectLoop();
         await stopASDMiniCamera();
         if(asdCameraOn) setASDPlaceholderImage();
-        else clearASDPlaceholderImage();
         updateModeUI();
       });
     }
