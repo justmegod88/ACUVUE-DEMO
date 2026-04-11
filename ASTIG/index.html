@@ -1528,7 +1528,7 @@
       border-top:1px solid rgba(11,31,51,.08);
       display:flex;
       align-items:flex-end;
-      justify-content:space-between;
+      justify-content:flex-end;
       gap:8px;
     }
     #blueInfoPackshot{
@@ -4083,9 +4083,10 @@ function initASDPatch(){
         return;
       }
       try{
+        const useRearCamera = asdMode === 'manual';
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            facingMode: 'user',
+            facingMode: useRearCamera ? 'environment' : 'user',
             width: { ideal: 1920 },
             height: { ideal: 1080 }
           },
@@ -4097,7 +4098,7 @@ function initASDPatch(){
         asdCameraStream = stream;
         asdCameraVideo.classList.remove('ready');
         asdCameraVideo.srcObject = stream;
-        asdCameraVideo.style.transform = 'scaleX(-1) scale(1.6)';
+        asdCameraVideo.style.transform = useRearCamera ? 'scale(1.6)' : 'scaleX(-1) scale(1.6)';
         asdCameraVideo.style.transformOrigin = 'center center';
         const markReady = function(){
           asdCameraVideo.classList.add('ready');
