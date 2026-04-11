@@ -4098,11 +4098,12 @@ function initASDPatch(){
         asdCameraStream = stream;
         asdCameraVideo.classList.remove('ready');
         asdCameraVideo.srcObject = stream;
-        asdCameraVideo.style.transform = useRearCamera ? 'scale(1.6)' : 'scaleX(-1) scale(1.6)';
+        asdCameraVideo.style.transform = useRearCamera ? 'scale(1)' : 'scaleX(-1) scale(1)';
         asdCameraVideo.style.transformOrigin = 'center center';
-        const markReady = function(){
+        const markReady = async function(){
           asdCameraVideo.classList.add('ready');
-          try{ asdCameraVideo.play(); }catch(e){}
+          try{ await asdCameraVideo.play(); }catch(e){}
+          await applyRealCameraZoom(stream, 1.8);
         };
         asdCameraVideo.onloadedmetadata = markReady;
         asdCameraVideo.onloadeddata = markReady;
@@ -4151,6 +4152,33 @@ function initASDPatch(){
         numFaces: 1
       });
       asdFaceLandmarkerReady = true;
+    }
+
+
+    async function applyRealCameraZoom(stream, zoomLevel = 1.8){
+      try{
+        if(!stream || !stream.getVideoTracks) return false;
+        const track = stream.getVideoTracks()[0];
+        if(!track || !track.getCapabilities || !track.applyConstraints) return false;
+        const caps = track.getCapabilities();
+        if(!caps || typeof caps.zoom === 'undefined') return false;
+        let targetZoom = zoomLevel;
+        if (typeof caps.zoom === 'object'){
+          const min = Number.isFinite(caps.zoom.min) ? caps.zoom.min : zoomLevel;
+          const max = Number.isFinite(caps.zoom.max) ? caps.zoom.max : zoomLevel;
+          const step = Number.isFinite(caps.zoom.step) && caps.zoom.step > 0 ? caps.zoom.step : 0;
+          targetZoom = Math.min(Math.max(zoomLevel, min), max);
+          if (step){
+            targetZoom = Math.round(targetZoom / step) * step;
+            targetZoom = Math.min(Math.max(targetZoom, min), max);
+          }
+        }
+        await track.applyConstraints({ advanced:[{ zoom: targetZoom }] });
+        return true;
+      }catch(err){
+        console.warn('Real camera zoom unavailable', err);
+        return false;
+      }
     }
 
     function isAndroidDevice(){
@@ -4213,8 +4241,9 @@ function initASDPatch(){
         asdMiniFaceStream = stream;
         asdMiniFaceVideo.srcObject = stream;
         await asdMiniFaceVideo.play().catch(()=>{});
-        asdMiniFaceVideo.style.transform = 'scaleX(-1) scale(1.6)';
-        if(asdMiniFaceCanvas) asdMiniFaceCanvas.style.transform = 'scaleX(-1) scale(1.6)';
+        await applyRealCameraZoom(stream, 1.8);
+        asdMiniFaceVideo.style.transform = 'scaleX(-1) scale(1)';
+        if(asdMiniFaceCanvas) asdMiniFaceCanvas.style.transform = 'scaleX(-1) scale(1)';
       }catch(e){
         console.warn('ASD mini camera unavailable', e);
       }
