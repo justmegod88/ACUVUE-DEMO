@@ -4146,25 +4146,6 @@ function initASDPatch(){
       }
       try{
         const useRearCamera = asdMode === 'manual';
-
-        if (!useRearCamera && !isIPhoneDevice()){
-          if (asdCameraStream){
-            asdCameraStream.getTracks().forEach(track => track.stop());
-            asdCameraStream = null;
-          }
-          try{ asdCameraVideo.pause(); }catch(e){}
-          asdCameraVideo.srcObject = null;
-          asdCameraVideo.classList.remove('ready');
-          asdCameraVideo.style.display = 'none';
-          setASDPlaceholderImage();
-          await startASDMiniCamera();
-          asdCameraOn = true;
-          asdOverlay.classList.add('camera-on');
-          asdCameraBtn.classList.add('active');
-          renderAngle();
-          return;
-        }
-
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: useRearCamera ? 'environment' : 'user',
@@ -4179,7 +4160,6 @@ function initASDPatch(){
         asdCameraStream = stream;
         asdCameraVideo.classList.remove('ready');
         asdCameraVideo.srcObject = stream;
-        asdCameraVideo.style.display = 'block';
         asdCameraVideo.style.transform = useRearCamera ? 'scale(1)' : 'scaleX(-1) scale(1)';
         asdCameraVideo.style.transformOrigin = 'center center';
         const markReady = async function(){
@@ -4266,16 +4246,39 @@ function initASDPatch(){
     function isAndroidDevice(){
       try{ return /Android/i.test(navigator.userAgent || ''); }catch(e){ return false; }
     }
-
     function isIPhoneDevice(){
       try{ return /iPhone/i.test(navigator.userAgent || ''); }catch(e){ return false; }
+    }
+    function isDesktopLikeDevice(){
+      try{ return !/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent || ''); }catch(e){ return false; }
+    }
+    function needsASDNonIPhoneOptimization(){
+      return isAndroidDevice() || isDesktopLikeDevice();
+    }
+    function getASDBlinkTuning(){
+      if (needsASDNonIPhoneOptimization()){
+        return { CLOSED:0.215, OPEN:0.265, MIN_CLOSED_FRAMES:2, COOLDOWN:700, MINI_ZOOM:1.1 };
+      }
+      return { CLOSED:0.19, OPEN:0.24, MIN_CLOSED_FRAMES:1, COOLDOWN:900, MINI_ZOOM:1.8 };
+    }
+    function applyASDMiniFaceDeviceTuning(){
+      if(!asdMiniFace) return;
+      if (needsASDNonIPhoneOptimization()){
+        asdMiniFace.style.width = '132px';
+        asdMiniFace.style.height = '92px';
+      } else {
+        asdMiniFace.style.width = '';
+        asdMiniFace.style.height = '';
+      }
     }
 
     async function getASDMiniCameraStream(){
       const media = navigator.mediaDevices;
       if (!media || !media.getUserMedia) return null;
 
-      const base = { width:{ideal:320}, height:{ideal:480} };
+      const base = needsASDNonIPhoneOptimization()
+        ? { width:{ideal:640}, height:{ideal:480} }
+        : { width:{ideal:320}, height:{ideal:480} };
       const attempts = [];
 
       if (isAndroidDevice()){
@@ -4327,7 +4330,7 @@ function initASDPatch(){
         asdMiniFaceStream = stream;
         asdMiniFaceVideo.srcObject = stream;
         await asdMiniFaceVideo.play().catch(()=>{});
-        await applyRealCameraZoom(stream, 1.8);
+        await applyRealCameraZoom(stream, getASDBlinkTuning().MINI_ZOOM);
         asdMiniFaceVideo.style.transform = 'scaleX(-1) scale(1)';
         if(asdMiniFaceCanvas) asdMiniFaceCanvas.style.transform = 'scaleX(-1) scale(1)';
       }catch(e){
@@ -4361,15 +4364,17 @@ function initASDPatch(){
     function detectASDBlinkFromLandmarks(landmarks){
       const leftIdx=[33,160,158,133,153,144], rightIdx=[362,385,387,263,373,380];
       const ear = (eyeAspectRatio(landmarks,leftIdx)+eyeAspectRatio(landmarks,rightIdx))/2;
-      const now = Date.now(), CLOSED=0.19, OPEN=0.24;
+      const now = Date.now();
+      const tuning = getASDBlinkTuning();
+      const CLOSED=tuning.CLOSED, OPEN=tuning.OPEN, MIN_CLOSED_FRAMES=tuning.MIN_CLOSED_FRAMES;
       if (ear < CLOSED){
         asdClosedFrames += 1;
         asdOpenFrames = 0;
         if (asdBlinkState === 'open') asdBlinkState = 'closing';
       } else if (ear > OPEN){
         asdOpenFrames += 1;
-        if ((asdBlinkState==='closing' || asdBlinkState==='closed') && asdClosedFrames>=1 && now > asdBlinkCooldownUntil){
-          asdBlinkCooldownUntil = now + 900;
+        if ((asdBlinkState==='closing' || asdBlinkState==='closed') && asdClosedFrames>=MIN_CLOSED_FRAMES && now > asdBlinkCooldownUntil){
+          asdBlinkCooldownUntil = now + tuning.COOLDOWN;
           asdBlinkState='open';
           asdClosedFrames=0;
           asdOpenFrames=0;
@@ -4379,7 +4384,7 @@ function initASDPatch(){
         asdBlinkState='open';
         asdClosedFrames=0;
       } else {
-        if (asdBlinkState === 'closing') asdBlinkState='closed';
+        if (asdBlinkState === 'closing' || asdClosedFrames >= MIN_CLOSED_FRAMES) asdBlinkState='closed';
       }
     }
 
@@ -4453,24 +4458,7 @@ function initASDPatch(){
     }
 
     async function runASDAutoFlow(){
-      if (!asdCameraOn) {
-        await startASDCamera();
-      }
-
-      if (asdMode === 'auto' && !isIPhoneDevice()){
-        if (asdCameraStream){
-          asdCameraStream.getTracks().forEach(track => track.stop());
-          asdCameraStream = null;
-        }
-        try{ asdCameraVideo.pause(); }catch(e){}
-        asdCameraVideo.srcObject = null;
-        asdCameraVideo.classList.remove('ready');
-        asdCameraVideo.style.display = 'none';
-        asdCameraOn = true;
-        asdOverlay.classList.add('camera-on');
-        asdCameraBtn.classList.add('active');
-      }
-
+      if(!asdCameraOn) await startASDCamera();
       stopASDDetectLoop();
       await stopASDMiniCamera();
       setASDPlaceholderImage();
@@ -4624,6 +4612,7 @@ function initASDPatch(){
       stopASDMiniCamera();
       stopASDCamera();
     });
+    applyASDMiniFaceDeviceTuning();
     renderAngle();
   }
 
