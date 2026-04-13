@@ -890,16 +890,23 @@
       position:absolute; left:50%; top:52%; width:80%; height:80%;
       transform:translate(-50%,-50%) rotate(0deg);
       border-radius:999px;
-      border:4px solid rgba(88,145,220,.62);
+      border:3px solid rgba(196,224,255,.92);
       box-shadow:
-        0 0 0 1px rgba(255,255,255,.18) inset,
-        0 0 0 1px rgba(88,145,220,.22),
-        0 0 12px rgba(88,145,220,.16);
-      transition:transform .18s ease;
+        0 0 0 1px rgba(255,255,255,.42),
+        0 0 18px rgba(86,142,255,.18),
+        0 0 34px rgba(86,142,255,.14),
+        inset 0 0 20px rgba(255,255,255,.06);
+      transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease, opacity .18s ease;
+      opacity:.96;
     }
     #asdGuideCircle::before{
-      content:none;
-      display:none;
+      content:"";
+      position:absolute;
+      inset:-8px;
+      border-radius:999px;
+      border:1px solid rgba(167,208,255,.18);
+      box-shadow:0 0 22px rgba(86,142,255,.10);
+      pointer-events:none;
     }
     #asdGuideSideLeft,
     #asdGuideSideRight{
@@ -917,9 +924,11 @@
     #asdGuideSideRight{ left:81.5%; top:52%; transform:translate(-50%,-50%) rotate(0deg); }
     #asdGuideAxis{
       position:absolute; left:10%; right:10%; top:52%;
-      border-top:3px dashed rgba(68,67,73,.55);
+      border-top:4px dashed rgba(255,255,255,.96);
       transform:rotate(0deg); transform-origin:center;
-      transition:transform .18s ease;
+      transition:transform .18s ease, border-color .18s ease, filter .18s ease, opacity .18s ease;
+      opacity:.98;
+      filter:drop-shadow(0 0 8px rgba(255,255,255,.30)) drop-shadow(0 0 14px rgba(86,142,255,.10));
     }
     .asdGuideDot{
       position:absolute; width:18px; height:18px; border-radius:999px;
@@ -933,6 +942,40 @@
     #asdOverlay.asd-stable .asdGuideDot{
       background:#22c55e;
       box-shadow:0 0 0 8px rgba(34,197,94,.12), 0 4px 10px rgba(34,197,94,.30);
+    }
+    #asdOverlay.asd-stable #asdGuideCircle{
+      border-color:rgba(170,227,255,.98);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,.50),
+        0 0 18px rgba(86,142,255,.16),
+        0 0 32px rgba(86,142,255,.10),
+        inset 0 0 18px rgba(255,255,255,.08);
+    }
+    #asdStatusText{
+      position:absolute;
+      left:50%;
+      top:46%;
+      transform:translate(-50%,-50%);
+      z-index:6;
+      display:none;
+      padding:0 18px;
+      min-height:48px;
+      align-items:center;
+      justify-content:center;
+      border-radius:999px;
+      color:#ffffff;
+      font-size:18px;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-.03em;
+      white-space:nowrap;
+      text-shadow:0 0 10px rgba(86,142,255,.42), 0 2px 10px rgba(11,31,51,.18);
+      background:radial-gradient(ellipse at center, rgba(65,127,255,.28) 0%, rgba(65,127,255,.12) 45%, rgba(65,127,255,0) 72%);
+      box-shadow:0 0 26px rgba(86,142,255,.16);
+      pointer-events:none;
+    }
+    #asdOverlay.stabilizing #asdStatusText{
+      display:flex;
     }
 
     #asdHint{
@@ -1395,6 +1438,7 @@
       #asdClose{ width:36px; height:36px; font-size:18px; }
       #asdScene{ width:calc(100% - 20px); margin:0 10px; min-height:320px; border-radius:26px; }
       #asdAngleBadge{ left:14px; bottom:14px; padding:8px 12px; font-size:11px; }
+      #asdStatusText{ top:46%; font-size:16px; min-height:42px; padding:0 14px; }
       #asdControlBar{ padding:12px 10px 12px; gap:8px; }
       .asdActionBtn{ height:48px; font-size:13px; border-radius:16px; }
       #asdHint{ padding:14px 14px 14px; gap:10px; }
@@ -1816,6 +1860,13 @@
     #blueCompareWrap.night-mode #blueHotspot2,
     #blueCompareWrap.night-mode #blueHotspot1On,
     #blueCompareWrap.night-mode #blueHotspot2On{
+      display:block;
+      opacity:.95;
+    }
+    #blueCompareWrap:not(.night-mode) #blueHotspot1,
+    #blueCompareWrap:not(.night-mode) #blueHotspot2,
+    #blueCompareWrap:not(.night-mode) #blueHotspot1On,
+    #blueCompareWrap:not(.night-mode) #blueHotspot2On{
       display:none !important;
       opacity:0 !important;
     }
@@ -2108,6 +2159,7 @@
       #asdClose{ width:36px; height:36px; font-size:18px; }
       #asdScene{ width:calc(100% - 20px); margin:0 10px; min-height:320px; border-radius:26px; }
       #asdAngleBadge{ left:14px; bottom:14px; padding:8px 12px; font-size:11px; }
+      #asdStatusText{ top:46%; font-size:16px; min-height:42px; padding:0 14px; }
       #asdControlBar{ padding:12px 10px 12px; gap:8px; }
       .asdActionBtn{ height:50px; font-size:13px; border-radius:16px; }
       #asdHint{ padding:14px 14px 14px; gap:10px; }
@@ -2283,6 +2335,7 @@
 <div id="asdGuideSideLeft"></div>
 <div id="asdGuideSideRight"></div>
 <div id="asdGuideAxis"></div>
+<div id="asdStatusText">축 안정 중…</div>
 <div class="asdGuideDot" id="asdGuideDotLeft"></div>
 <div class="asdGuideDot" id="asdGuideDotRight"></div>
 </div>
@@ -3875,6 +3928,7 @@ function initASDPatch(){
     const asdMiniFaceCanvas = document.getElementById('asdMiniFaceCanvas');
     const asdGuideAxis = document.getElementById('asdGuideAxis');
     const asdGuideCircle = document.getElementById('asdGuideCircle');
+    const asdStatusText = document.getElementById('asdStatusText');
     const asdGuideDotLeft = document.getElementById('asdGuideDotLeft');
     const asdGuideDotRight = document.getElementById('asdGuideDotRight');
     const asdEyeMV = document.getElementById('asdEyeMV');
@@ -4065,7 +4119,10 @@ function initASDPatch(){
         else if (asdAngleValue < 0) asdAngleBadge.textContent = `우측 ${Math.abs(asdAngleValue)}° 회전 발생`;
         else asdAngleBadge.textContent = '축 안정';
       }
-      asdOverlay.classList.toggle('asd-stable', Math.abs(asdAngleValue) === 0);
+      const isStable = Math.abs(asdAngleValue) === 0;
+      asdOverlay.classList.toggle('asd-stable', isStable);
+      asdOverlay.classList.toggle('stabilizing', !isStable);
+      if(asdStatusText) asdStatusText.style.display = isStable ? 'none' : 'flex';
       renderGuide();
       updateModeUI();
     }
