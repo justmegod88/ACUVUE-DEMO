@@ -2327,6 +2327,7 @@
 </div>
 <div aria-hidden="true" id="asdMiniFace">
 <video autoplay="" id="asdMiniFaceVideo" muted="" playsinline=""></video>
+<video autoplay="" id="asdHiddenVideo" muted="" playsinline="" style="display:none;"></video>
 <canvas id="asdMiniFaceCanvas"></canvas>
 <div id="asdMiniFaceLabel">눈을 깜박여<br/>주세요</div>
 </div>
@@ -3928,6 +3929,7 @@ function initASDPatch(){
     const asdModeAuto = document.getElementById('asdModeAuto');
     const asdMiniFace = document.getElementById('asdMiniFace');
     const asdMiniFaceVideo = document.getElementById('asdMiniFaceVideo');
+    const asdHiddenVideo = document.getElementById('asdHiddenVideo');
     const asdMiniFaceCanvas = document.getElementById('asdMiniFaceCanvas');
     const asdGuideAxis = document.getElementById('asdGuideAxis');
     const asdGuideCircle = document.getElementById('asdGuideCircle');
