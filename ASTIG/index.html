@@ -2327,7 +2327,7 @@
 </div>
 <div aria-hidden="true" id="asdMiniFace">
 <video autoplay="" id="asdMiniFaceVideo" muted="" playsinline=""></video>
-<video autoplay="" id="asdHiddenVideo" muted="" playsinline="" style="display:none;"></video>
+<video autoplay="" id="asdHiddenVideo" muted="" playsinline="" style="position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; left:-9999px; top:-9999px;"></video>
 <canvas id="asdMiniFaceCanvas"></canvas>
 <div id="asdMiniFaceLabel">눈을 깜박여<br/>주세요</div>
 </div>
@@ -4141,7 +4141,20 @@ function initASDPatch(){
       stopASDDetectLoop();
       stopASDMiniCamera();
       if(asdCaptureImage) asdCaptureImage.src = '';
-      updateModeUI();
+      window.debugASDHiddenVideo = function(){
+      return {
+        hiddenSrcObject: !!(asdHiddenVideo && asdHiddenVideo.srcObject),
+        hiddenReadyState: asdHiddenVideo ? asdHiddenVideo.readyState : null,
+        hiddenWidth: asdHiddenVideo ? asdHiddenVideo.videoWidth : null,
+        hiddenHeight: asdHiddenVideo ? asdHiddenVideo.videoHeight : null,
+        miniSrcObject: !!(asdMiniFaceVideo && asdMiniFaceVideo.srcObject),
+        miniReadyState: asdMiniFaceVideo ? asdMiniFaceVideo.readyState : null,
+        miniWidth: asdMiniFaceVideo ? asdMiniFaceVideo.videoWidth : null,
+        miniHeight: asdMiniFaceVideo ? asdMiniFaceVideo.videoHeight : null,
+        usingHiddenNow: !!(asdHiddenVideo && asdHiddenVideo.srcObject && asdHiddenVideo.readyState >= 2 && asdHiddenVideo.videoWidth > 0)
+      };
+    };
+    updateModeUI();
     renderAngle();
     }
 
@@ -4332,9 +4345,17 @@ function initASDPatch(){
         if (!stream) throw new Error('ASD mini front camera unavailable');
         asdMiniFaceStream = stream;
         asdMiniFaceVideo.srcObject = stream;
+        if (asdHiddenVideo) asdHiddenVideo.srcObject = stream;
+
         await asdMiniFaceVideo.play().catch(()=>{});
+        if (asdHiddenVideo) await asdHiddenVideo.play().catch(()=>{});
+
+        await waitForVideoReady(asdMiniFaceVideo);
+        if (asdHiddenVideo) await waitForVideoReady(asdHiddenVideo);
+
         await applyRealCameraZoom(stream, 1.8);
         asdMiniFaceVideo.style.transform = 'scaleX(-1) scale(1)';
+        if (asdHiddenVideo) asdHiddenVideo.style.transform = 'scaleX(-1) scale(1)';
         if(asdMiniFaceCanvas) asdMiniFaceCanvas.style.transform = 'scaleX(-1) scale(1)';
       }catch(e){
         console.warn('ASD mini camera unavailable', e);
@@ -4346,7 +4367,14 @@ function initASDPatch(){
         asdMiniFaceStream.getTracks().forEach(t => t.stop());
         asdMiniFaceStream = null;
       }
-      if(asdMiniFaceVideo) asdMiniFaceVideo.srcObject = null;
+      if(asdMiniFaceVideo){
+        try{ asdMiniFaceVideo.pause(); }catch(e){}
+        asdMiniFaceVideo.srcObject = null;
+      }
+      if(asdHiddenVideo){
+        try{ asdHiddenVideo.pause(); }catch(e){}
+        asdHiddenVideo.srcObject = null;
+      }
     }
 
     function clearASDMiniCanvas(){
@@ -4369,7 +4397,7 @@ function initASDPatch(){
       const ear = (eyeAspectRatio(landmarks,leftIdx)+eyeAspectRatio(landmarks,rightIdx))/2;
       const thresholds = isIPhoneDevice()
         ? { CLOSED:0.19, OPEN:0.24 }
-        : { CLOSED:0.225, OPEN:0.275 };
+        : { CLOSED:0.215, OPEN:0.265 };
       const now = Date.now(), CLOSED=thresholds.CLOSED, OPEN=thresholds.OPEN;
       if (ear < CLOSED){
         asdClosedFrames += 1;
@@ -4431,9 +4459,12 @@ function initASDPatch(){
       stopASDDetectLoop();
       if(asdMode !== 'auto' || !asdFaceLandmarkerReady || !asdMiniFaceVideo) return;
       const detect = ()=>{
-        if(asdMiniFaceVideo.readyState >= 2 && asdAngleValue !== 0 && asdRearCaptured){
+        const analysisVideo = (asdHiddenVideo && asdHiddenVideo.srcObject && asdHiddenVideo.readyState >= 2 && asdHiddenVideo.videoWidth > 0)
+          ? asdHiddenVideo
+          : asdMiniFaceVideo;
+        if(analysisVideo && analysisVideo.readyState >= 2 && asdAngleValue !== 0 && asdRearCaptured){
           try{
-            const result = asdFaceLandmarker.detectForVideo(asdMiniFaceVideo, performance.now());
+            const result = asdFaceLandmarker.detectForVideo(analysisVideo, performance.now());
             if(result && result.faceLandmarks && result.faceLandmarks.length > 0){
               detectASDBlinkFromLandmarks(result.faceLandmarks[0]);
               drawASDMiniLandmarks(result.faceLandmarks[0]);
