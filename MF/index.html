@@ -1135,9 +1135,9 @@
 
     function renderTagButtons(activeState) {
       const tagMap = [
-        { key:'match', label:'동공≈광학부' },
-        { key:'pupilGreater', label:'동공>광학부' },
-        { key:'opticGreater', label:'동공<광학부' }
+        { key:'match', label:'동공≈광학부', sceneIndex:0 },
+        { key:'pupilGreater', label:'동공>광학부', sceneIndex:1 },
+        { key:'opticGreater', label:'동공<광학부', sceneIndex:2 }
       ];
 
       explainTags.innerHTML = '';
@@ -1148,6 +1148,7 @@
         btn.textContent = item.label;
         btn.addEventListener('click', () => {
           modalPreviewState = item.key;
+          setFallbackScene(item.sceneIndex);
           renderModalPreview();
         });
         explainTags.appendChild(btn);
@@ -1312,7 +1313,7 @@
 
     function openVisionModal() {
       modalPreviewState = getRelationState(lastPupilMM, lastOpticMM);
-      setRandomFallbackScene();
+      setFallbackScene(0);
       renderModalPreview();
       visionModal.classList.add('open');
       document.body.classList.add('page-lock');
@@ -1371,14 +1372,7 @@
     const scenePool = [
       "MF1.png",
       "MF2.png",
-      "MF3.png",
-      "img/scene4.jpg",
-      "img/scene5.jpg",
-      "img/scene6.jpg",
-      "img/scene7.jpg",
-      "img/scene8.jpg",
-      "img/scene9.jpg",
-      "img/scene10.jpg"
+      "MF3.png"
     ];
     let currentSceneIndex = 0;
 
@@ -1471,7 +1465,7 @@
       fallbackImg.style.display = 'block';
       fallbackImgBlur.style.display = 'block';
       fallbackImgNearBlur.style.display = 'block';
-      setRandomFallbackScene();
+      setFallbackScene(0);
       camBtn.setAttribute('aria-label', '카메라 켜기');
       camBtn.setAttribute('title', '카메라 켜기');
       camBtn.classList.remove('primary');
@@ -1483,7 +1477,7 @@
     });
 
     applyRegisteredMarks();
-    setRandomFallbackScene();
+    setFallbackScene(0);
     updateAll();
   </script>
 </body>
