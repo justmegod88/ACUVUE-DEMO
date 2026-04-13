@@ -832,6 +832,9 @@
     #asdBlinkBtn.prompting{
       animation: asdBlinkBtnPulse .9s ease-in-out infinite;
     }
+    #asdOverlay.auto-mode #asdBlinkBtn{
+      display:none !important;
+    }
     @keyframes asdBlinkBtnPulse{
       0%,100%{ transform:scale(1); box-shadow:0 14px 26px rgba(37,99,235,.16); }
       50%{ transform:scale(1.04); box-shadow:0 18px 32px rgba(245,158,11,.30); }
@@ -4136,7 +4139,8 @@ function initASDPatch(){
       stopASDDetectLoop();
       stopASDMiniCamera();
       if(asdCaptureImage) asdCaptureImage.src = '';
-      renderAngle();
+      updateModeUI();
+    renderAngle();
     }
 
     async function startASDCamera(){
@@ -4594,8 +4598,12 @@ function initASDPatch(){
     asdCameraBtn.onclick = async function(ev){
       ev.preventDefault();
       ev.stopPropagation();
-      if (asdCameraOn) stopASDCamera();
-      else await startASDCamera();
+      if (asdCameraOn){
+        stopASDCamera();
+      } else {
+        if (asdMode === 'auto') await runASDAutoFlow();
+        else await startASDCamera();
+      }
     };
 
     if(asdModeManual && asdModeAuto){
