@@ -4397,7 +4397,7 @@ function initASDPatch(){
       const ear = (eyeAspectRatio(landmarks,leftIdx)+eyeAspectRatio(landmarks,rightIdx))/2;
       const thresholds = isIPhoneDevice()
         ? { CLOSED:0.19, OPEN:0.24 }
-        : { CLOSED:0.215, OPEN:0.265 };
+        : { CLOSED:0.23, OPEN:0.28 };
       const now = Date.now(), CLOSED=thresholds.CLOSED, OPEN=thresholds.OPEN;
       if (ear < CLOSED){
         asdClosedFrames += 1;
