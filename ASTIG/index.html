@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
-<title>ACUVUE<sup class="reg-mark">®</sup> ASTIG - hidden-video-fix-v2</title>
+<title>ACUVUE<sup class="reg-mark">®</sup> ASTIG</title>
 <style>
     :root{
       --acuvue-blue:#005EB8;
@@ -2327,7 +2327,6 @@
 </div>
 <div aria-hidden="true" id="asdMiniFace">
 <video autoplay="" id="asdMiniFaceVideo" muted="" playsinline=""></video>
-<video autoplay="" id="asdHiddenVideo" muted="" playsinline="" style="position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; left:-9999px; top:-9999px;"></video>
 <canvas id="asdMiniFaceCanvas"></canvas>
 <div id="asdMiniFaceLabel">눈을 깜박여<br/>주세요</div>
 </div>
@@ -3929,7 +3928,6 @@ function initASDPatch(){
     const asdModeAuto = document.getElementById('asdModeAuto');
     const asdMiniFace = document.getElementById('asdMiniFace');
     const asdMiniFaceVideo = document.getElementById('asdMiniFaceVideo');
-    const asdHiddenVideo = document.getElementById('asdHiddenVideo');
     const asdMiniFaceCanvas = document.getElementById('asdMiniFaceCanvas');
     const asdGuideAxis = document.getElementById('asdGuideAxis');
     const asdGuideCircle = document.getElementById('asdGuideCircle');
@@ -4139,21 +4137,10 @@ function initASDPatch(){
       asdAngleValue = 20;
       writeAngleToGlobal();
       stopASDDetectLoop();
+      applyASDMiniFaceDeviceSizing();
       stopASDMiniCamera();
       if(asdCaptureImage) asdCaptureImage.src = '';
-      window.debugASDHiddenVideo = function(){
-      return {
-        hiddenSrcObject: !!(asdHiddenVideo && asdHiddenVideo.srcObject),
-        hiddenReadyState: asdHiddenVideo ? asdHiddenVideo.readyState : null,
-        hiddenWidth: asdHiddenVideo ? asdHiddenVideo.videoWidth : null,
-        hiddenHeight: asdHiddenVideo ? asdHiddenVideo.videoHeight : null,
-        miniSrcObject: !!(asdMiniFaceVideo && asdMiniFaceVideo.srcObject),
-        miniReadyState: asdMiniFaceVideo ? asdMiniFaceVideo.readyState : null,
-        miniWidth: asdMiniFaceVideo ? asdMiniFaceVideo.videoWidth : null,
-        miniHeight: asdMiniFaceVideo ? asdMiniFaceVideo.videoHeight : null,
-        usingHiddenNow: !!(asdHiddenVideo && asdHiddenVideo.srcObject && asdHiddenVideo.readyState >= 2 && asdHiddenVideo.videoWidth > 0)
-      };
-    };
+      applyASDMiniFaceDeviceSizing();
     updateModeUI();
     renderAngle();
     }
@@ -4290,11 +4277,24 @@ function initASDPatch(){
       try{ return /iPhone/i.test(navigator.userAgent || ''); }catch(e){ return false; }
     }
 
+    function applyASDMiniFaceDeviceSizing(){
+      if (!asdMiniFace) return;
+      if (isIPhoneDevice()){
+        asdMiniFace.style.width = '';
+        asdMiniFace.style.height = '';
+      } else {
+        asdMiniFace.style.width = '148px';
+        asdMiniFace.style.height = '104px';
+      }
+    }
+
     async function getASDMiniCameraStream(){
       const media = navigator.mediaDevices;
       if (!media || !media.getUserMedia) return null;
 
-      const base = { width:{ideal:320}, height:{ideal:480} };
+      const base = isIPhoneDevice()
+        ? { width:{ideal:320}, height:{ideal:480} }
+        : { width:{ideal:1280}, height:{ideal:720} };
       const attempts = [];
 
       if (isAndroidDevice()){
@@ -4337,37 +4337,6 @@ function initASDPatch(){
       return null;
     }
 
-
-    function waitForVideoReady(video, timeoutMs = 2500){
-      return new Promise((resolve) => {
-        if (!video) return resolve(false);
-        if (video.readyState >= 2 && video.videoWidth > 0 && video.videoHeight > 0){
-          return resolve(true);
-        }
-        let finished = false;
-        const cleanup = () => {
-          video.removeEventListener('loadedmetadata', onReady);
-          video.removeEventListener('loadeddata', onReady);
-          video.removeEventListener('canplay', onReady);
-        };
-        const finish = (ok) => {
-          if (finished) return;
-          finished = true;
-          cleanup();
-          resolve(!!ok);
-        };
-        const onReady = () => {
-          if (video.readyState >= 2 && video.videoWidth > 0 && video.videoHeight > 0){
-            finish(true);
-          }
-        };
-        video.addEventListener('loadedmetadata', onReady);
-        video.addEventListener('loadeddata', onReady);
-        video.addEventListener('canplay', onReady);
-        setTimeout(() => finish(video.readyState >= 2 && video.videoWidth > 0 && video.videoHeight > 0), timeoutMs);
-      });
-    }
-
     async function startASDMiniCamera(){
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !asdMiniFaceVideo) return;
       try{
@@ -4376,17 +4345,9 @@ function initASDPatch(){
         if (!stream) throw new Error('ASD mini front camera unavailable');
         asdMiniFaceStream = stream;
         asdMiniFaceVideo.srcObject = stream;
-        if (asdHiddenVideo) asdHiddenVideo.srcObject = stream;
-
         await asdMiniFaceVideo.play().catch(()=>{});
-        if (asdHiddenVideo) await asdHiddenVideo.play().catch(()=>{});
-
-        await waitForVideoReady(asdMiniFaceVideo);
-        if (asdHiddenVideo) await waitForVideoReady(asdHiddenVideo);
-
         await applyRealCameraZoom(stream, 1.8);
         asdMiniFaceVideo.style.transform = 'scaleX(-1) scale(1)';
-        if (asdHiddenVideo) asdHiddenVideo.style.transform = 'scaleX(-1) scale(1)';
         if(asdMiniFaceCanvas) asdMiniFaceCanvas.style.transform = 'scaleX(-1) scale(1)';
       }catch(e){
         console.warn('ASD mini camera unavailable', e);
@@ -4398,14 +4359,7 @@ function initASDPatch(){
         asdMiniFaceStream.getTracks().forEach(t => t.stop());
         asdMiniFaceStream = null;
       }
-      if(asdMiniFaceVideo){
-        try{ asdMiniFaceVideo.pause(); }catch(e){}
-        asdMiniFaceVideo.srcObject = null;
-      }
-      if(asdHiddenVideo){
-        try{ asdHiddenVideo.pause(); }catch(e){}
-        asdHiddenVideo.srcObject = null;
-      }
+      if(asdMiniFaceVideo) asdMiniFaceVideo.srcObject = null;
     }
 
     function clearASDMiniCanvas(){
@@ -4428,7 +4382,7 @@ function initASDPatch(){
       const ear = (eyeAspectRatio(landmarks,leftIdx)+eyeAspectRatio(landmarks,rightIdx))/2;
       const thresholds = isIPhoneDevice()
         ? { CLOSED:0.19, OPEN:0.24 }
-        : { CLOSED:0.215, OPEN:0.265 };
+        : { CLOSED:0.225, OPEN:0.275 };
       const now = Date.now(), CLOSED=thresholds.CLOSED, OPEN=thresholds.OPEN;
       if (ear < CLOSED){
         asdClosedFrames += 1;
@@ -4490,12 +4444,9 @@ function initASDPatch(){
       stopASDDetectLoop();
       if(asdMode !== 'auto' || !asdFaceLandmarkerReady || !asdMiniFaceVideo) return;
       const detect = ()=>{
-        const analysisVideo = (asdHiddenVideo && asdHiddenVideo.srcObject && asdHiddenVideo.readyState >= 2 && asdHiddenVideo.videoWidth > 0)
-          ? asdHiddenVideo
-          : asdMiniFaceVideo;
-        if(analysisVideo && analysisVideo.readyState >= 2 && asdAngleValue !== 0 && asdRearCaptured){
+        if(asdMiniFaceVideo.readyState >= 2 && asdAngleValue !== 0 && asdRearCaptured){
           try{
-            const result = asdFaceLandmarker.detectForVideo(analysisVideo, performance.now());
+            const result = asdFaceLandmarker.detectForVideo(asdMiniFaceVideo, performance.now());
             if(result && result.faceLandmarks && result.faceLandmarks.length > 0){
               detectASDBlinkFromLandmarks(result.faceLandmarks[0]);
               drawASDMiniLandmarks(result.faceLandmarks[0]);
