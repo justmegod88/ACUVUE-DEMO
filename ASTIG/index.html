@@ -4140,10 +4140,14 @@ function initASDPatch(){
     }
 
     async function startASDCamera(){
-      const useRearCamera = asdMode === 'manual';
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+        alert('이 브라우저에서는 카메라 기능을 지원하지 않습니다.');
+        return;
+      }
+      try{
+        const useRearCamera = asdMode === 'manual';
 
-      if (!useRearCamera && shouldUseSingleCameraAutoMode()){
-        try{
+        if (!useRearCamera && !isIPhoneDevice()){
           if (asdCameraStream){
             asdCameraStream.getTracks().forEach(track => track.stop());
             asdCameraStream = null;
@@ -4151,22 +4155,16 @@ function initASDPatch(){
           try{ asdCameraVideo.pause(); }catch(e){}
           asdCameraVideo.srcObject = null;
           asdCameraVideo.classList.remove('ready');
+          asdCameraVideo.style.display = 'none';
           setASDPlaceholderImage();
+          await startASDMiniCamera();
           asdCameraOn = true;
           asdOverlay.classList.add('camera-on');
           asdCameraBtn.classList.add('active');
           renderAngle();
-        }catch(e){
-          console.warn('ASD auto placeholder start failed', e);
+          return;
         }
-        return;
-      }
 
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-        alert('이 브라우저에서는 카메라 기능을 지원하지 않습니다.');
-        return;
-      }
-      try{
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: useRearCamera ? 'environment' : 'user',
@@ -4181,6 +4179,7 @@ function initASDPatch(){
         asdCameraStream = stream;
         asdCameraVideo.classList.remove('ready');
         asdCameraVideo.srcObject = stream;
+        asdCameraVideo.style.display = 'block';
         asdCameraVideo.style.transform = useRearCamera ? 'scale(1)' : 'scaleX(-1) scale(1)';
         asdCameraVideo.style.transformOrigin = 'center center';
         const markReady = async function(){
@@ -4267,11 +4266,9 @@ function initASDPatch(){
     function isAndroidDevice(){
       try{ return /Android/i.test(navigator.userAgent || ''); }catch(e){ return false; }
     }
+
     function isIPhoneDevice(){
       try{ return /iPhone/i.test(navigator.userAgent || ''); }catch(e){ return false; }
-    }
-    function shouldUseSingleCameraAutoMode(){
-      return !isIPhoneDevice();
     }
 
     async function getASDMiniCameraStream(){
@@ -4456,7 +4453,24 @@ function initASDPatch(){
     }
 
     async function runASDAutoFlow(){
-      if(!asdCameraOn) await startASDCamera();
+      if (!asdCameraOn) {
+        await startASDCamera();
+      }
+
+      if (asdMode === 'auto' && !isIPhoneDevice()){
+        if (asdCameraStream){
+          asdCameraStream.getTracks().forEach(track => track.stop());
+          asdCameraStream = null;
+        }
+        try{ asdCameraVideo.pause(); }catch(e){}
+        asdCameraVideo.srcObject = null;
+        asdCameraVideo.classList.remove('ready');
+        asdCameraVideo.style.display = 'none';
+        asdCameraOn = true;
+        asdOverlay.classList.add('camera-on');
+        asdCameraBtn.classList.add('active');
+      }
+
       stopASDDetectLoop();
       await stopASDMiniCamera();
       setASDPlaceholderImage();
