@@ -3955,7 +3955,7 @@ function initASDPatch(){
     let asdMiniFaceStream = null;
     let asdCameraOn = false;
     let asdRearCaptured = false;
-    let asdMode = 'manual';
+    let asdMode = 'auto';
     let asdAngleValue = 20;
     let asdBlinkBusy = false;
     let asdAutoPromptActive = false;
@@ -4128,7 +4128,7 @@ function initASDPatch(){
     }
 
     function resetASDPatchedState(){
-      asdMode = 'manual';
+      asdMode = 'auto';
       asdRearCaptured = false;
       asdAutoPromptActive = false;
       asdAngleValue = 20;
@@ -4361,7 +4361,10 @@ function initASDPatch(){
     function detectASDBlinkFromLandmarks(landmarks){
       const leftIdx=[33,160,158,133,153,144], rightIdx=[362,385,387,263,373,380];
       const ear = (eyeAspectRatio(landmarks,leftIdx)+eyeAspectRatio(landmarks,rightIdx))/2;
-      const now = Date.now(), CLOSED=0.19, OPEN=0.24;
+      const thresholds = isIPhoneDevice()
+        ? { CLOSED:0.19, OPEN:0.24 }
+        : { CLOSED:0.215, OPEN:0.265 };
+      const now = Date.now(), CLOSED=thresholds.CLOSED, OPEN=thresholds.OPEN;
       if (ear < CLOSED){
         asdClosedFrames += 1;
         asdOpenFrames = 0;
