@@ -1135,9 +1135,9 @@
 
     function renderTagButtons(activeState) {
       const tagMap = [
-        { key:'match', label:'동공≈광학부', sceneIndex:0 },
-        { key:'pupilGreater', label:'동공>광학부', sceneIndex:1 },
-        { key:'opticGreater', label:'동공<광학부', sceneIndex:2 }
+        { key:'match', label:'동공≈광학부' },
+        { key:'pupilGreater', label:'동공>광학부' },
+        { key:'opticGreater', label:'동공<광학부' }
       ];
 
       explainTags.innerHTML = '';
@@ -1148,7 +1148,11 @@
         btn.textContent = item.label;
         btn.addEventListener('click', () => {
           modalPreviewState = item.key;
-          setFallbackScene(item.sceneIndex);
+
+          if (item.key === 'match') setFallbackScene(0);
+          if (item.key === 'pupilGreater') setFallbackScene(1);
+          if (item.key === 'opticGreater') setFallbackScene(2);
+
           renderModalPreview();
         });
         explainTags.appendChild(btn);
@@ -1313,7 +1317,11 @@
 
     function openVisionModal() {
       modalPreviewState = getRelationState(lastPupilMM, lastOpticMM);
-      setFallbackScene(0);
+
+      if (modalPreviewState === 'match') setFallbackScene(0);
+      if (modalPreviewState === 'pupilGreater') setFallbackScene(1);
+      if (modalPreviewState === 'opticGreater') setFallbackScene(2);
+
       renderModalPreview();
       visionModal.classList.add('open');
       document.body.classList.add('page-lock');
@@ -1382,11 +1390,6 @@
       fallbackImg.src = scene;
       fallbackImgBlur.src = scene;
       fallbackImgNearBlur.src = scene;
-    }
-
-    function setRandomFallbackScene() {
-      const nextIndex = Math.floor(Math.random() * scenePool.length);
-      setFallbackScene(nextIndex);
     }
 
     function applyRegisteredMarks(root = document.body) {
