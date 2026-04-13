@@ -4139,48 +4139,43 @@ function initASDPatch(){
       renderAngle();
     }
 
-    async function getASDMainCameraStream(mode = 'manual'){
-      const media = navigator.mediaDevices;
-      if (!media || !media.getUserMedia) return null;
-      const useRearCamera = mode === 'manual';
-      const base = {
-        width: { ideal: 1920 },
-        height: { ideal: 1080 }
-      };
-      const attempts = useRearCamera
-        ? [
-            { video:{ ...base, facingMode:{ exact:'environment' } }, audio:false },
-            { video:{ ...base, facingMode:{ ideal:'environment' } }, audio:false },
-            { video:{ ...base, facingMode:'environment' }, audio:false },
-            { video:{ ...base }, audio:false }
-          ]
-        : [
-            { video:{ ...base, facingMode:{ exact:'user' } }, audio:false },
-            { video:{ ...base, facingMode:{ ideal:'user' } }, audio:false },
-            { video:{ ...base, facingMode:'user' }, audio:false },
-            { video:{ ...base }, audio:false }
-          ];
-
-      for (const constraints of attempts){
-        try{
-          return await media.getUserMedia(constraints);
-        }catch(err){
-          console.warn('ASD main camera attempt failed', mode, constraints, err);
-        }
-      }
-      return null;
-    }
-
     async function startASDCamera(){
+      const useRearCamera = asdMode === 'manual';
+
+      if (!useRearCamera && shouldUseSingleCameraAutoMode()){
+        try{
+          if (asdCameraStream){
+            asdCameraStream.getTracks().forEach(track => track.stop());
+            asdCameraStream = null;
+          }
+          try{ asdCameraVideo.pause(); }catch(e){}
+          asdCameraVideo.srcObject = null;
+          asdCameraVideo.classList.remove('ready');
+          setASDPlaceholderImage();
+          asdCameraOn = true;
+          asdOverlay.classList.add('camera-on');
+          asdCameraBtn.classList.add('active');
+          renderAngle();
+        }catch(e){
+          console.warn('ASD auto placeholder start failed', e);
+        }
+        return;
+      }
+
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
         alert('이 브라우저에서는 카메라 기능을 지원하지 않습니다.');
         return;
       }
       try{
-        const useRearCamera = asdMode === 'manual';
-        const stream = await getASDMainCameraStream(asdMode);
-        if (!stream) throw new Error('ASD camera unavailable');
-        if (asdCameraStream && asdCameraStream !== stream){
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: useRearCamera ? 'environment' : 'user',
+            width: { ideal: 1920 },
+            height: { ideal: 1080 }
+          },
+          audio: false
+        });
+        if (asdCameraStream){
           asdCameraStream.getTracks().forEach(track => track.stop());
         }
         asdCameraStream = stream;
@@ -4198,15 +4193,8 @@ function initASDPatch(){
         asdCameraOn = true;
         asdOverlay.classList.add('camera-on');
         asdCameraBtn.classList.add('active');
-        if (asdMode === 'manual'){
-          asdAutoPromptActive = false;
-          await stopASDMiniCamera();
-          clearASDMiniCanvas();
-          clearASDPlaceholderImage();
-        }
         renderAngle();
       }catch(e){
-        console.warn('ASD camera unavailable', e);
         alert('카메라 권한을 허용해야 사용할 수 있습니다.');
       }
     }
@@ -4279,27 +4267,83 @@ function initASDPatch(){
     function isAndroidDevice(){
       try{ return /Android/i.test(navigator.userAgent || ''); }catch(e){ return false; }
     }
+    function isIPhoneDevice(){
+      try{ return /iPhone/i.test(navigator.userAgent || ''); }catch(e){ return false; }
+    }
+    function shouldUseSingleCameraAutoMode(){
+      return !isIPhoneDevice();
+    }
+
+    async function getASDMiniCameraStream(){
+      const media = navigator.mediaDevices;
+      if (!media || !media.getUserMedia) return null;
+
+      const base = { width:{ideal:320}, height:{ideal:480} };
+      const attempts = [];
+
+      if (isAndroidDevice()){
+        attempts.push({ video:{ ...base, facingMode:{ exact:'user' } }, audio:false });
+        attempts.push({ video:{ ...base, facingMode:{ ideal:'user' } }, audio:false });
+        attempts.push({ video:{ ...base }, audio:false });
+      } else {
+        attempts.push({ video:{ ...base, facingMode:'user' }, audio:false });
+      }
+
+      for (const constraints of attempts){
+        try{
+          return await media.getUserMedia(constraints);
+        }catch(err){
+          console.warn('ASD mini camera attempt failed', constraints, err);
+        }
+      }
+
+      if (isAndroidDevice() && media.enumerateDevices){
+        try{
+          const temp = await media.getUserMedia({ video:true, audio:false });
+          temp.getTracks().forEach(track => track.stop());
+          const devices = await media.enumerateDevices();
+          const front = devices.find(device => {
+            if (device.kind !== 'videoinput') return false;
+            const label = (device.label || '').toLowerCase();
+            return label.includes('front') || label.includes('user') || label.includes('selfie');
+          });
+          if (front && front.deviceId){
+            return await media.getUserMedia({
+              video:{ ...base, deviceId:{ exact: front.deviceId } },
+              audio:false
+            });
+          }
+        }catch(err){
+          console.warn('ASD mini camera enumerate fallback failed', err);
+        }
+      }
+
+      return null;
+    }
 
     async function startASDMiniCamera(){
-      if (!asdMiniFaceVideo) return;
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !asdMiniFaceVideo) return;
       try{
-        if (!asdCameraStream) throw new Error('ASD main stream unavailable');
-        asdMiniFaceStream = asdCameraStream;
-        asdMiniFaceVideo.srcObject = asdCameraStream;
+        await stopASDMiniCamera();
+        const stream = await getASDMiniCameraStream();
+        if (!stream) throw new Error('ASD mini front camera unavailable');
+        asdMiniFaceStream = stream;
+        asdMiniFaceVideo.srcObject = stream;
         await asdMiniFaceVideo.play().catch(()=>{});
+        await applyRealCameraZoom(stream, 1.8);
         asdMiniFaceVideo.style.transform = 'scaleX(-1) scale(1)';
         if(asdMiniFaceCanvas) asdMiniFaceCanvas.style.transform = 'scaleX(-1) scale(1)';
       }catch(e){
-        console.warn('ASD mini face mirror unavailable', e);
+        console.warn('ASD mini camera unavailable', e);
       }
     }
 
     async function stopASDMiniCamera(){
-      asdMiniFaceStream = null;
-      if(asdMiniFaceVideo){
-        try{ asdMiniFaceVideo.pause(); }catch(e){}
-        asdMiniFaceVideo.srcObject = null;
+      if(asdMiniFaceStream){
+        asdMiniFaceStream.getTracks().forEach(t => t.stop());
+        asdMiniFaceStream = null;
       }
+      if(asdMiniFaceVideo) asdMiniFaceVideo.srcObject = null;
     }
 
     function clearASDMiniCanvas(){
@@ -4343,7 +4387,7 @@ function initASDPatch(){
     }
 
     function drawASDMiniLandmarks(landmarks){
-      if(!asdMiniFaceCanvas || !miniCtx) return;
+      if(!asdMiniFaceCanvas || !miniCtx || !asdRearCaptured) return;
       const rect = asdMiniFaceCanvas.getBoundingClientRect();
       const ratio = window.devicePixelRatio || 1;
       const w = Math.max(1, Math.round(rect.width * ratio));
@@ -4381,7 +4425,7 @@ function initASDPatch(){
       stopASDDetectLoop();
       if(asdMode !== 'auto' || !asdFaceLandmarkerReady || !asdMiniFaceVideo) return;
       const detect = ()=>{
-        if(asdMiniFaceVideo.readyState >= 2 && asdAngleValue !== 0 && asdAutoPromptActive){
+        if(asdMiniFaceVideo.readyState >= 2 && asdAngleValue !== 0 && asdRearCaptured){
           try{
             const result = asdFaceLandmarker.detectForVideo(asdMiniFaceVideo, performance.now());
             if(result && result.faceLandmarks && result.faceLandmarks.length > 0){
@@ -4412,23 +4456,11 @@ function initASDPatch(){
     }
 
     async function runASDAutoFlow(){
-      if(asdMode !== 'auto') asdMode = 'auto';
-      if(!asdCameraOn || !asdCameraStream){
-        await startASDCamera();
-      } else {
-        const track = asdCameraStream.getVideoTracks ? asdCameraStream.getVideoTracks()[0] : null;
-        const settings = track && track.getSettings ? track.getSettings() : {};
-        const facing = String(settings.facingMode || '').toLowerCase();
-        const usingFront = facing === 'user';
-        if(!usingFront){
-          await startASDCamera();
-        }
-      }
+      if(!asdCameraOn) await startASDCamera();
       stopASDDetectLoop();
       await stopASDMiniCamera();
-      clearASDPlaceholderImage();
+      setASDPlaceholderImage();
       asdAutoPromptActive = true;
-      asdRearCaptured = false;
       const steps = [-20,-15,-10,-5,5,10,15,20];
       asdAngleValue = steps[Math.floor(Math.random() * steps.length)];
       writeAngleToGlobal();
@@ -4522,7 +4554,7 @@ function initASDPatch(){
       writeAngleToGlobal();
       renderAngle();
       if(asdCameraOn && asdMode === 'auto'){
-        clearASDPlaceholderImage();
+        setASDPlaceholderImage();
         await runASDAutoFlow();
       }
     };
@@ -4532,7 +4564,7 @@ function initASDPatch(){
       ev.stopPropagation();
       if (asdBlinkBusy) return;
       if(asdCameraOn && asdMode === 'auto'){
-        clearASDPlaceholderImage();
+        setASDPlaceholderImage();
         await runASDAutoFlow();
         return;
       }
@@ -4568,8 +4600,7 @@ function initASDPatch(){
         asdAutoPromptActive = false;
         stopASDDetectLoop();
         await stopASDMiniCamera();
-        clearASDPlaceholderImage();
-        if(asdCameraOn) await startASDCamera();
+        if(!asdCameraOn) clearASDPlaceholderImage();
         updateModeUI();
       });
     }
