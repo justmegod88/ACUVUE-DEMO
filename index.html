@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1080, height=1920, initial-scale=1.0, user-scalable=no" />
+  <title>ACUVUE® Experience</title>
+  <style>
+    html, body{
+      margin:0;
+      padding:0;
+      height:100%;
+      background:#000;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",Arial,sans-serif;
+    }
+
+    .app{
+      width:100%;
+      max-width:1080px;
+      aspect-ratio:9 / 16;
+      background:#EEF6FD;
+      transform: scale(1.2);
+      transform-origin:center;
+      overflow:hidden;
+      display:flex;
+      justify-content:center;
+    }
+
+    .wrap{
+      width:100%;
+      max-width:800px;
+      padding:30px 20px;
+    }
+
+    .hero{
+      text-align:center;
+      margin-bottom:30px;
+    }
+
+    .hero-title{
+      font-size:42px;
+      font-weight:900;
+      color:#004A93;
+      margin-bottom:10px;
+    }
+
+    .hero-desc{
+      font-size:18px;
+      color:#5B7894;
+    }
+
+    .cards{
+      display:flex;
+      flex-direction:column;
+      gap:20px;
+    }
+
+    .card{
+      display:block;
+      text-decoration:none;
+      background:#fff;
+      border-radius:24px;
+      padding:24px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.1);
+      position:relative;
+    }
+
+    .card-title{
+      font-size:48px;
+      font-weight:900;
+      color:#004A93;
+      margin:0;
+    }
+
+    .card-sub{
+      font-size:18px;
+      color:#5B7894;
+      margin-top:10px;
+    }
+
+    .card-packshot{
+      position:absolute;
+      right:20px;
+      top:50%;
+      transform:translateY(-50%);
+      width:200px;
+    }
+
+    .card-packshot img{
+      width:100%;
+    }
+
+    .card-arrow{
+      margin-top:20px;
+      display:inline-block;
+      font-size:16px;
+      padding:14px 20px;
+      background:#005EB8;
+      color:#fff;
+      border-radius:999px;
+    }
+
+    .footer-note{
+      margin-top:20px;
+      text-align:center;
+      font-size:12px;
+      color:#7490AB;
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <div class="wrap">
+
+      <section class="hero">
+        <h1 class="hero-title">아큐브® 기술력을<br>직접 체험해 보세요</h1>
+        <p class="hero-desc">난시와 멀티포컬 기술력을 확인할 수 있습니다.</p>
+      </section>
+
+      <section class="cards">
+
+        <a class="card" href="./ASTIG/">
+          <h2 class="card-title">저녁까지<br>선명한 시야</h2>
+          <div class="card-sub">아큐브® 난시 기술력</div>
+
+          <div class="card-packshot">
+            <img src="astig.png" alt="">
+          </div>
+
+          <div class="card-arrow">체험 시작</div>
+        </a>
+
+        <a class="card" href="./MF/">
+          <h2 class="card-title">가까운 거리부터<br>먼 거리까지</h2>
+          <div class="card-sub">아큐브® 멀티포컬 기술력</div>
+
+          <div class="card-packshot">
+            <img src="mf.png" alt="">
+          </div>
+
+          <div class="card-arrow">체험 시작</div>
+        </a>
+
+      </section>
+
+      <div class="footer-note">
+        '체험 시작'을 누르면 각 체험 페이지로 이동합니다.
+      </div>
+
+    </div>
+  </main>
+</body>
+</html>
