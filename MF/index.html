@@ -637,9 +637,9 @@
       mask-image:radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 0 var(--clear-stop), rgba(0,0,0,1) var(--blur-start) 100%);
     }
     #detailPage .mask-edge-only .layer.blurred{
-      opacity:var(--edge-blur-opacity, .30);
-      -webkit-mask-image:radial-gradient(ellipse 64% 56% at 50% 58%, rgba(0,0,0,0) 0 var(--edge-clear-stop, 58%), rgba(0,0,0,.14) calc(var(--edge-clear-stop, 58%) + 6%), rgba(0,0,0,.42) var(--edge-soft-start, 76%), rgba(0,0,0,1) 100%);
-      mask-image:radial-gradient(ellipse 64% 56% at 50% 58%, rgba(0,0,0,0) 0 var(--edge-clear-stop, 58%), rgba(0,0,0,.14) calc(var(--edge-clear-stop, 58%) + 6%), rgba(0,0,0,.42) var(--edge-soft-start, 76%), rgba(0,0,0,1) 100%);
+      opacity:var(--edge-blur-opacity, .22);
+      -webkit-mask-image:radial-gradient(ellipse 82% 74% at 50% 58%, rgba(0,0,0,0) 0 var(--edge-clear-stop, 80%), rgba(0,0,0,.04) calc(var(--edge-clear-stop, 80%) + 2%), rgba(0,0,0,.16) var(--edge-soft-start, 90%), rgba(0,0,0,1) 100%);
+      mask-image:radial-gradient(ellipse 82% 74% at 50% 58%, rgba(0,0,0,0) 0 var(--edge-clear-stop, 80%), rgba(0,0,0,.04) calc(var(--edge-clear-stop, 80%) + 2%), rgba(0,0,0,.16) var(--edge-soft-start, 90%), rgba(0,0,0,1) 100%);
     }
     #detailPage .fishbowl .layer.base{filter:url(#fishbowlFilter)}
     #detailPage .explain{
@@ -1217,8 +1217,8 @@
       screen.style.setProperty('--halo-fade-end', '67%');
       screen.style.setProperty('--halo-blur', '7px');
       screen.style.setProperty('--edge-blur-opacity', '0');
-      screen.style.setProperty('--edge-clear-stop', '58%');
-      screen.style.setProperty('--edge-soft-start', '76%');
+      screen.style.setProperty('--edge-clear-stop', '80%');
+      screen.style.setProperty('--edge-soft-start', '90%');
 
       renderTagButtons(state);
       setExplainByState(state);
@@ -1228,10 +1228,10 @@
       if (!usingCamera) {
         if (state === 'pupilGreater') {
           screen.classList.add('mask-edge-only');
-          screen.style.setProperty('--blur-amt', `${8 + (strength * 5)}px`);
-          screen.style.setProperty('--edge-blur-opacity', `${0.26 + (strength * 0.16)}`);
-          screen.style.setProperty('--edge-clear-stop', `${60 - (strength * 5)}%`);
-          screen.style.setProperty('--edge-soft-start', `${76 - (strength * 4)}%`);
+          screen.style.setProperty('--blur-amt', `${6 + (strength * 3)}px`);
+          screen.style.setProperty('--edge-blur-opacity', `${0.18 + (strength * 0.08)}`);
+          screen.style.setProperty('--edge-clear-stop', `${82 - (strength * 3)}%`);
+          screen.style.setProperty('--edge-soft-start', `${91 - (strength * 2)}%`);
         }
         return;
       }
