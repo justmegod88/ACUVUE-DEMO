@@ -636,6 +636,11 @@
       -webkit-mask-image:radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 0 var(--clear-stop), rgba(0,0,0,1) var(--blur-start) 100%);
       mask-image:radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 0 var(--clear-stop), rgba(0,0,0,1) var(--blur-start) 100%);
     }
+    #detailPage .mask-edge-only .layer.blurred{
+      opacity:var(--edge-blur-opacity, .22);
+      -webkit-mask-image:radial-gradient(circle at 50% 56%, rgba(0,0,0,0) 0 var(--edge-clear-stop, 72%), rgba(0,0,0,.18) var(--edge-soft-start, 78%), rgba(0,0,0,1) 100%);
+      mask-image:radial-gradient(circle at 50% 56%, rgba(0,0,0,0) 0 var(--edge-clear-stop, 72%), rgba(0,0,0,.18) var(--edge-soft-start, 78%), rgba(0,0,0,1) 100%);
+    }
     #detailPage .fishbowl .layer.base{filter:url(#fishbowlFilter)}
     #detailPage .explain{
       border:1px solid #d9e2ee;
@@ -1190,7 +1195,7 @@
     }
 
     function updateVisionEffect(pupilMM, opticMM, forcedState = null) {
-      screen.classList.remove('mask-overall','mask-periphery','fishbowl');
+      screen.classList.remove('mask-overall','mask-periphery','mask-edge-only','fishbowl');
       const actualState = getRelationState(pupilMM, opticMM);
       const state = forcedState || actualState;
       const gap = Math.abs(pupilMM - opticMM);
@@ -1211,6 +1216,9 @@
       screen.style.setProperty('--halo-ring-end', '57%');
       screen.style.setProperty('--halo-fade-end', '67%');
       screen.style.setProperty('--halo-blur', '7px');
+      screen.style.setProperty('--edge-blur-opacity', '0');
+      screen.style.setProperty('--edge-clear-stop', '72%');
+      screen.style.setProperty('--edge-soft-start', '78%');
 
       renderTagButtons(state);
       setExplainByState(state);
@@ -1219,31 +1227,29 @@
 
       if (!usingCamera) {
         if (state === 'pupilGreater') {
-          screen.style.setProperty('--halo-opacity', `${0.45 + (strength * 0.22)}`);
-          screen.style.setProperty('--halo-inner-stop', `${34 - (strength * 3)}%`);
-          screen.style.setProperty('--halo-ring-start', `${42 - (strength * 2)}%`);
-          screen.style.setProperty('--halo-ring-mid', `${48 - (strength * 1.5)}%`);
-          screen.style.setProperty('--halo-ring-end', `${57 - (strength * 1.5)}%`);
-          screen.style.setProperty('--halo-fade-end', `${67 - (strength * 1.5)}%`);
-          screen.style.setProperty('--halo-blur', `${7 + (strength * 4)}px`);
+          screen.classList.add('mask-edge-only');
+          screen.style.setProperty('--blur-amt', `${5 + (strength * 3)}px`);
+          screen.style.setProperty('--edge-blur-opacity', `${0.16 + (strength * 0.12)}`);
+          screen.style.setProperty('--edge-clear-stop', `${74 - (strength * 4)}%`);
+          screen.style.setProperty('--edge-soft-start', `${80 - (strength * 3)}%`);
         }
         return;
       }
 
       if (state === 'pupilGreater') {
         screen.classList.add('mask-periphery');
-        screen.style.setProperty('--blur-amt', `${12 + (strength * 10)}px`);
-        screen.style.setProperty('--blur-opacity', `${0.52 + (strength * 0.28)}`);
-        screen.style.setProperty('--clear-stop', `${58 - (strength * 8)}%`);
-        screen.style.setProperty('--blur-start', `${72 - (strength * 6)}%`);
-        screen.style.setProperty('--near-blur-amt', `${11 + (strength * 10)}px`);
-        screen.style.setProperty('--near-blur-opacity', `${0.58 + (strength * 0.22)}`);
+        screen.style.setProperty('--blur-amt', `${15 + (strength * 12)}px`);
+        screen.style.setProperty('--blur-opacity', `${0.62 + (strength * 0.26)}`);
+        screen.style.setProperty('--clear-stop', `${56 - (strength * 9)}%`);
+        screen.style.setProperty('--blur-start', `${69 - (strength * 7)}%`);
+        screen.style.setProperty('--near-blur-amt', `${14 + (strength * 12)}px`);
+        screen.style.setProperty('--near-blur-opacity', `${0.68 + (strength * 0.18)}`);
         return;
       }
 
       screen.classList.add('mask-overall');
-      screen.style.setProperty('--blur-amt', `${10 + (strength * 12)}px`);
-      screen.style.setProperty('--blur-opacity', `${0.35 + (strength * 0.45)}`);
+      screen.style.setProperty('--blur-amt', `${13 + (strength * 14)}px`);
+      screen.style.setProperty('--blur-opacity', `${0.48 + (strength * 0.40)}`);
     }
 
     function renderModalPreview() {
