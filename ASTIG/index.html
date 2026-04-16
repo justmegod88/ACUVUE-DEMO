@@ -3999,23 +3999,20 @@ function initASDPatch(){
       window.asdAngle = asdAngleValue;
     }
     function getBlur(){
-      const a = Math.abs(asdAngleValue);
-      if (a>=25) return 8;
-      if (a>=20) return 6.4;
-      if (a>=15) return 5.1;
-      if (a>=10) return 3.8;
-      if (a>=5) return 2.2;
-      return 0;
+      const a = Math.max(0, Math.min(25, Math.abs(asdAngleValue)));
+      if (a >= 25) return 5.8;
+      if (a >= 20) return 4.8;
+      if (a >= 15) return 3.8;
+      if (a >= 10) return 2.7;
+      if (a >= 5) return 1.2;
+      return 0.25;
     }
     function applyCameraFilter(){
       if (!asdCameraVideo) return;
       const blur = getBlur();
-      const liveFilter = Math.abs(asdAngleValue) === 0
-        ? 'blur(0px) saturate(1.02) brightness(1.02)'
-        : `blur(${blur.toFixed(2)}px) saturate(.92)`;
-      const capturedFilter = Math.abs(asdAngleValue) === 0
-        ? 'blur(0px) saturate(1.02) brightness(1.02)'
-        : `blur(${(blur + 0.8).toFixed(2)}px) saturate(.92) brightness(${Math.max(0.8, 1 - Math.abs(asdAngleValue) * 0.006).toFixed(2)})`;
+      const brightness = Math.max(0.92, 1 - Math.abs(asdAngleValue) * 0.0025).toFixed(2);
+      const liveFilter = `blur(${blur.toFixed(2)}px) saturate(.96) brightness(${brightness})`;
+      const capturedFilter = `blur(${blur.toFixed(2)}px) saturate(.96) brightness(${brightness})`;
 
       if (asdCaptureImage){
         asdCaptureImage.style.filter = capturedFilter;
