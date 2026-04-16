@@ -870,11 +870,15 @@
       width:170px;
       height:170px;
       border-radius:50%;
-      border:6px dashed rgba(255,255,255,.95);
-      box-shadow:0 0 0 2px rgba(255,255,255,.18), 0 4px 18px rgba(0,0,0,.10);
+      border:7px dashed #ffffff;
+      box-shadow:
+        0 0 0 3px rgba(255,255,255,.28),
+        0 0 24px rgba(255,255,255,.38),
+        0 6px 18px rgba(0,0,0,.12);
+      background:transparent;
       display:none;
       pointer-events:none;
-      z-index:4;
+      z-index:20 !important;
     }
     #detailPage .focusRing.paper{
       left:44%;
@@ -1716,6 +1720,7 @@
 </script>
 
 
+
 <script>
   function goBackMainPage(event){
     if(event) event.stopPropagation();
@@ -1738,22 +1743,47 @@
       const activeTag = document.querySelector('#detailPage .tagBtn.active');
       const text = activeTag ? activeTag.textContent.replace(/\s+/g,'').trim() : '';
 
-      paper.style.display = (text === '동공>광학부') ? 'block' : 'none';
-      building.style.display = (text === '동공<광학부') ? 'block' : 'none';
+      paper.style.display = 'none';
+      building.style.display = 'none';
+
+      if(text === '동공>광학부'){
+        paper.style.display = 'block';
+      }else if(text === '동공<광학부'){
+        building.style.display = 'block';
+      }
     }
 
     function bindFocusRingUpdates(){
       document.querySelectorAll('#detailPage .tagBtn').forEach((btn)=>{
         btn.addEventListener('click', function(){
-          requestAnimationFrame(updateFocusRings);
+          setTimeout(updateFocusRings, 0);
         });
       });
+
+      const detailPage = document.getElementById('detailPage');
+      const visionModal = document.getElementById('visionModal');
       const openBtn = document.getElementById('openVisionBtn');
+
       if(openBtn){
         openBtn.addEventListener('click', function(){
-          requestAnimationFrame(updateFocusRings);
+          setTimeout(updateFocusRings, 50);
         });
       }
+
+      if(visionModal){
+        const observer = new MutationObserver(function(){
+          setTimeout(updateFocusRings, 0);
+        });
+        observer.observe(visionModal, { attributes:true, attributeFilter:['class','style'] });
+      }
+
+      if(detailPage){
+        const observer2 = new MutationObserver(function(){
+          setTimeout(updateFocusRings, 0);
+        });
+        observer2.observe(detailPage, { attributes:true, subtree:true, attributeFilter:['class'] });
+      }
+
       updateFocusRings();
     }
 
@@ -1764,6 +1794,7 @@
     }
   })();
 </script>
+
 
 </body>
 </html>
