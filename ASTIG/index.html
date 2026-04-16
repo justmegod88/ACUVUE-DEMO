@@ -2261,9 +2261,6 @@
   
 .reg-mark{font-size:.42em;line-height:0;position:relative;top:-0.78em;display:inline-block;margin-left:.02em;vertical-align:baseline;}
 
-#missionBarWrap{
-  position:fixed;
-}
 #homeBtnMain{
   position:absolute;
   top:14px;
@@ -2271,17 +2268,17 @@
   width:46px;
   height:46px;
   border-radius:16px;
-  border:1px solid rgba(255,255,255,.28);
-  background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.22);
+  background:rgba(255,255,255,.14);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  box-shadow:0 8px 22px rgba(0,0,0,.14), inset 0 1px 0 rgba(255,255,255,.22);
+  box-shadow:0 8px 22px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.18);
   display:flex;
   align-items:center;
   justify-content:center;
   cursor:pointer;
   z-index:65;
-  transition:transform .12s ease, background .18s ease, opacity .18s ease;
+  transition:transform .12s ease, background .18s ease;
   -webkit-tap-highlight-color: transparent;
 }
 #homeBtnMain svg{
@@ -2292,9 +2289,9 @@
 }
 #homeBtnMain:active{
   transform:scale(.97);
-  background:rgba(255,255,255,.24);
+  background:rgba(255,255,255,.22);
 }
-#homeBtnMain.is-hidden{
+body.popup-open #homeBtnMain{
   display:none !important;
 }
 #missionBarHeader{
@@ -4734,7 +4731,6 @@ function initASDPatch(){
 })();
 </script>
 
-
 <script>
 function goHomeMain(event){
   if(event) event.stopPropagation();
@@ -4744,30 +4740,26 @@ function goHomeMain(event){
 (function(){
   const popupIds = ['asdOverlay','comfortOverlay','pvpSimOverlay','blueSimOverlay'];
 
-  function updateHomeButtonVisibility(){
-    const homeBtn = document.getElementById('homeBtnMain');
-    if(!homeBtn) return;
-
-    const shouldHide = popupIds.some((id) => {
+  function updatePopupOpenClass(){
+    const isOpen = popupIds.some((id) => {
       const el = document.getElementById(id);
       return !!(el && el.classList.contains('show'));
     });
-
-    homeBtn.classList.toggle('is-hidden', shouldHide);
+    document.body.classList.toggle('popup-open', isOpen);
   }
 
   function initHomeButtonWatcher(){
-    updateHomeButtonVisibility();
+    updatePopupOpenClass();
 
     popupIds.forEach((id) => {
       const el = document.getElementById(id);
       if(!el) return;
-      const observer = new MutationObserver(updateHomeButtonVisibility);
+      const observer = new MutationObserver(updatePopupOpenClass);
       observer.observe(el, { attributes: true, attributeFilter: ['class'] });
     });
 
     document.addEventListener('click', function(){
-      requestAnimationFrame(updateHomeButtonVisibility);
+      requestAnimationFrame(updatePopupOpenClass);
     });
   }
 
@@ -4778,7 +4770,6 @@ function goHomeMain(event){
   }
 })();
 </script>
-
 
 </body>
 </html>
