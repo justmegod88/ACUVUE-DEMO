@@ -4362,6 +4362,9 @@ function initASDPatch(){
       if (isIPhoneDevice()){
         asdMiniFace.style.width = '';
         asdMiniFace.style.height = '';
+      } else if (isAndroidDevice()){
+        asdMiniFace.style.width = '124px';
+        asdMiniFace.style.height = '132px';
       } else {
         asdMiniFace.style.width = '148px';
         asdMiniFace.style.height = '104px';
@@ -4372,17 +4375,52 @@ function initASDPatch(){
       const media = navigator.mediaDevices;
       if (!media || !media.getUserMedia) return null;
 
-      const base = isIPhoneDevice()
-        ? { width:{ideal:320}, height:{ideal:480} }
-        : { width:{ideal:1280}, height:{ideal:720} };
       const attempts = [];
 
-      if (isAndroidDevice()){
-        attempts.push({ video:{ ...base, facingMode:{ exact:'user' } }, audio:false });
-        attempts.push({ video:{ ...base, facingMode:{ ideal:'user' } }, audio:false });
-        attempts.push({ video:{ ...base }, audio:false });
+      if (isIPhoneDevice()){
+        const base = {
+          width:{ ideal:320 },
+          height:{ ideal:480 },
+          facingMode:'user',
+          frameRate:{ ideal:24, max:30 }
+        };
+        attempts.push({ video:base, audio:false });
+      } else if (isAndroidDevice()){
+        const portraitBase = {
+          width:{ ideal:720 },
+          height:{ ideal:960 },
+          aspectRatio:{ ideal:0.75 },
+          frameRate:{ ideal:24, max:30 }
+        };
+        const squareBase = {
+          width:{ ideal:960 },
+          height:{ ideal:960 },
+          aspectRatio:{ ideal:1 },
+          frameRate:{ ideal:24, max:30 }
+        };
+        const legacyBase = {
+          width:{ ideal:960 },
+          height:{ ideal:720 },
+          aspectRatio:{ ideal:1.3333333333 },
+          frameRate:{ ideal:24, max:30 }
+        };
+
+        attempts.push({ video:{ ...portraitBase, facingMode:{ exact:'user' } }, audio:false });
+        attempts.push({ video:{ ...portraitBase, facingMode:{ ideal:'user' } }, audio:false });
+        attempts.push({ video:{ ...squareBase, facingMode:{ exact:'user' } }, audio:false });
+        attempts.push({ video:{ ...squareBase, facingMode:{ ideal:'user' } }, audio:false });
+        attempts.push({ video:{ ...legacyBase, facingMode:{ ideal:'user' } }, audio:false });
+        attempts.push({ video:{ ...portraitBase }, audio:false });
+        attempts.push({ video:{ ...squareBase }, audio:false });
+        attempts.push({ video:{ ...legacyBase }, audio:false });
       } else {
-        attempts.push({ video:{ ...base, facingMode:'user' }, audio:false });
+        const base = {
+          width:{ ideal:1280 },
+          height:{ ideal:720 },
+          facingMode:'user',
+          frameRate:{ ideal:24, max:30 }
+        };
+        attempts.push({ video:base, audio:false });
       }
 
       for (const constraints of attempts){
@@ -4404,10 +4442,26 @@ function initASDPatch(){
             return label.includes('front') || label.includes('user') || label.includes('selfie');
           });
           if (front && front.deviceId){
-            return await media.getUserMedia({
-              video:{ ...base, deviceId:{ exact: front.deviceId } },
-              audio:false
-            });
+            const fallbackPortrait = {
+              width:{ ideal:720 },
+              height:{ ideal:960 },
+              aspectRatio:{ ideal:0.75 },
+              frameRate:{ ideal:24, max:30 },
+              deviceId:{ exact: front.deviceId }
+            };
+            const fallbackSquare = {
+              width:{ ideal:960 },
+              height:{ ideal:960 },
+              aspectRatio:{ ideal:1 },
+              frameRate:{ ideal:24, max:30 },
+              deviceId:{ exact: front.deviceId }
+            };
+            try{
+              return await media.getUserMedia({ video:fallbackPortrait, audio:false });
+            }catch(err){
+              console.warn('ASD mini camera portrait device fallback failed', err);
+            }
+            return await media.getUserMedia({ video:fallbackSquare, audio:false });
           }
         }catch(err){
           console.warn('ASD mini camera enumerate fallback failed', err);
@@ -4426,9 +4480,13 @@ function initASDPatch(){
         asdMiniFaceStream = stream;
         asdMiniFaceVideo.srcObject = stream;
         await asdMiniFaceVideo.play().catch(()=>{});
-        await applyRealCameraZoom(stream, 1.8);
+        await applyRealCameraZoom(stream, isAndroidDevice() ? 1.15 : 1.8);
         asdMiniFaceVideo.style.transform = 'scaleX(-1) scale(1)';
-        if(asdMiniFaceCanvas) asdMiniFaceCanvas.style.transform = 'scaleX(-1) scale(1)';
+        asdMiniFaceVideo.style.objectPosition = isAndroidDevice() ? 'center 18%' : 'center 24%';
+        if(asdMiniFaceCanvas){
+          asdMiniFaceCanvas.style.transform = 'scaleX(-1) scale(1)';
+          asdMiniFaceCanvas.style.objectPosition = isAndroidDevice() ? 'center 18%' : 'center 24%';
+        }
       }catch(e){
         console.warn('ASD mini camera unavailable', e);
       }
@@ -4462,7 +4520,9 @@ function initASDPatch(){
       const ear = (eyeAspectRatio(landmarks,leftIdx)+eyeAspectRatio(landmarks,rightIdx))/2;
       const thresholds = isIPhoneDevice()
         ? { CLOSED:0.19, OPEN:0.24 }
-        : { CLOSED:0.225, OPEN:0.275 };
+        : (isAndroidDevice()
+            ? { CLOSED:0.205, OPEN:0.255 }
+            : { CLOSED:0.225, OPEN:0.275 });
       const now = Date.now(), CLOSED=thresholds.CLOSED, OPEN=thresholds.OPEN;
       if (ear < CLOSED){
         asdClosedFrames += 1;
@@ -4471,7 +4531,7 @@ function initASDPatch(){
       } else if (ear > OPEN){
         asdOpenFrames += 1;
         if ((asdBlinkState==='closing' || asdBlinkState==='closed') && asdClosedFrames>=1 && now > asdBlinkCooldownUntil){
-          asdBlinkCooldownUntil = now + 900;
+          asdBlinkCooldownUntil = now + (isAndroidDevice() ? 650 : 900);
           asdBlinkState='open';
           asdClosedFrames=0;
           asdOpenFrames=0;
