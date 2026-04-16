@@ -3397,7 +3397,7 @@ body.popup-open #homeBtnMain{
     }
 
     function setASDHintDefault(){
-      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span><span class="hintBody"><span class="blue">‘눈 깜박임’</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
+      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.<sup class="reg-mark">1</sup></span><span class="hintBody"><span class="blue">‘눈 깜박임’</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
     }
     function setASDHintSuccess(){
       asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈 축 안정의 중요성</span><span class="hintBody">아큐브 ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</span></div><button id="asdConfirmBtn" type="button">확인 완료</button>`;
@@ -4121,7 +4121,7 @@ function initASDPatch(){
         setASDHintSuccess();
       } else {
         const guideLabel = getASDGuideLabel();
-        asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span><span class="hintBody"><span class="blue">${guideLabel}</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
+        asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.<sup class="reg-mark">1</sup></span><span class="hintBody"><span class="blue">${guideLabel}</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
       }
     }
     function updateModeUI(){
