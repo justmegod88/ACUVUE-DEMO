@@ -1859,7 +1859,17 @@
       .blueIconModeBtn svg{ width:22px; height:22px; }
     }
 
-    #blueCompareWrap.night-mode #blueHotspot1,
+    
+    /* blue hotspots removed per request */
+    #blueHotspot1,
+    #blueHotspot2,
+    #blueHotspot1On,
+    #blueHotspot2On{
+      display:none !important;
+      opacity:0 !important;
+      box-shadow:none !important;
+    }
+#blueCompareWrap.night-mode #blueHotspot1,
     #blueCompareWrap.night-mode #blueHotspot2,
     #blueCompareWrap.night-mode #blueHotspot1On,
     #blueCompareWrap.night-mode #blueHotspot2On{
@@ -2351,7 +2361,7 @@
 </div>
 <div id="asdControlBar">
 <button class="asdActionBtn" id="asdRotateBtn" type="button">축회전 유발</button>
-<button class="asdActionBtn" id="asdBlinkBtn" type="button">깜박임 진행 버튼</button>
+<button class="asdActionBtn" id="asdBlinkBtn" type="button">눈 깜박임</button>
 <button aria-label="카메라" class="asdActionBtn" id="asdCameraBtn" type="button">
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.1" viewbox="0 0 24 24">
 <path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z"></path>
@@ -3324,7 +3334,7 @@
     }
 
     function setASDHintDefault(){
-      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span><span class="hintBody"><span class="blue">‘깜박임 진행 버튼’</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
+      asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.</span><span class="hintBody"><span class="blue">‘눈 깜박임’</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
     }
     function setASDHintSuccess(){
       asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈 축 안정의 중요성</span><span class="hintBody">아큐브 ASD™는 <span class="green"><span style="color:#2563eb;font-weight:600;">자연스러운 눈 깜박임으로 렌즈 움직임을 안정화하여 선명한 시야</span></span>를 제공합니다.</span></div><button id="asdConfirmBtn" type="button">확인 완료</button>`;
@@ -4030,13 +4040,13 @@ function initASDPatch(){
     }
     function getASDBlinkButtonLabel(){
       const isStable = Math.abs(asdAngleValue) === 0;
-      if(!asdCameraOn) return '깜박임 진행 버튼';
+      if(!asdCameraOn) return '눈 깜박임';
       if(asdMode === 'auto'){
-        if(isStable) return '자동인식 시작';
+        if(isStable) return '시작';
         if(asdAutoPromptActive) return '눈을 깜박여 주세요';
-        return '자동인식 시작 버튼';
+        return '시작';
       }
-      return '깜박임 진행 버튼';
+      return '눈 깜박임';
     }
     function getASDGuideLabel(){
       const label = getASDBlinkButtonLabel();
