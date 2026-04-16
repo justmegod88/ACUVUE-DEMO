@@ -791,12 +791,91 @@
         margin-top:10px;
       }
     }
-  </style>
+  
+    .top-title-box,
+    #detailPage .brand{
+      position:relative;
+    }
+
+    .page-home-btn{
+      position:absolute;
+      top:50%;
+      right:14px;
+      transform:translateY(-50%);
+      width:46px;
+      height:46px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.24);
+      background:rgba(255,255,255,.16);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      box-shadow:0 8px 22px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      z-index:5;
+      transition:transform .12s ease, background .18s ease;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .page-home-btn svg{
+      width:22px;
+      height:22px;
+      stroke:#fff;
+      fill:none;
+      stroke-width:2.2;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+      display:block;
+      pointer-events:none;
+    }
+    .page-home-btn:active{
+      transform:translateY(-50%) scale(.97);
+      background:rgba(255,255,255,.24);
+    }
+
+    @media (max-width:720px){
+      .page-home-btn{
+        right:10px;
+        width:42px;
+        height:42px;
+        border-radius:14px;
+      }
+      .page-home-btn svg{
+        width:20px;
+        height:20px;
+      }
+
+      #detailPage .modalCard{
+        padding:16px 14px 14px;
+      }
+      #detailPage .screen{
+        min-height:auto;
+        aspect-ratio:1.42 / 1;
+      }
+      #detailPage .screen video,
+      #detailPage .screen img{
+        object-fit:cover;
+        object-position:center center;
+      }
+      #detailPage .visionGrid{
+        gap:10px;
+      }
+    }
+
+</style>
 </head>
 <body>
   <section id="mainPage" class="page active">
     <div class="wrap">
-      <div class="top-title-box">아큐브 멀티포컬 기술력</div>
+      <div class="top-title-box">아큐브 멀티포컬 기술력
+      <button class="page-home-btn" type="button" aria-label="홈으로 이동" onclick="goMainHome(event)">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 10.5L12 3l9 7.5"></path>
+          <path d="M5.5 9.5V21h13V9.5"></path>
+        </svg>
+      </button>
+      </div>
 
       <div class="top-cards">
         <div class="menu-card" id="card1">
@@ -862,7 +941,14 @@
       </svg>
 
       <section class="hero">
-        <div class="brand">아큐브 183개 동공 사이즈별 광학부</div>
+        <div class="brand">아큐브 183개 동공 사이즈별 광학부
+        <button class="page-home-btn" type="button" aria-label="홈으로 이동" onclick="goMainHome(event)">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 10.5L12 3l9 7.5"></path>
+            <path d="M5.5 9.5V21h13V9.5"></path>
+          </svg>
+        </button>
+        </div>
         <h1 class="heroTitle">
           <span class="accent">원용도수</span>와 <span class="accent">가입도</span>에 따라 달라지는 <span class="accent">동공</span>.
           그래서 멀티포컬은 <span class="accent">광학부 사이즈</span>가 중요합니다.
@@ -1544,5 +1630,13 @@
     setFallbackScene(0);
     updateAll();
   </script>
+
+<script>
+  function goMainHome(event){
+    if(event) event.stopPropagation();
+    window.location.href = "/ACUVUE-DEMO/index.html";
+  }
+</script>
+
 </body>
 </html>
