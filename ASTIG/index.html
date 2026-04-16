@@ -2261,38 +2261,75 @@
   
 .reg-mark{font-size:.42em;line-height:0;position:relative;top:-0.78em;display:inline-block;margin-left:.02em;vertical-align:baseline;}
 
-#homeBtn {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(6px);
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
+#missionBarWrap{
+  position:fixed;
 }
-#homeBtn:active {
-  background: rgba(255,255,255,0.25);
+#homeBtnMain{
+  position:absolute;
+  top:14px;
+  right:16px;
+  width:46px;
+  height:46px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.28);
+  background:rgba(255,255,255,.16);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:0 8px 22px rgba(0,0,0,.14), inset 0 1px 0 rgba(255,255,255,.22);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  z-index:65;
+  transition:transform .12s ease, background .18s ease, opacity .18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+#homeBtnMain svg{
+  width:22px;
+  height:22px;
+  display:block;
+  stroke:#ffffff;
+}
+#homeBtnMain:active{
+  transform:scale(.97);
+  background:rgba(255,255,255,.24);
+}
+#homeBtnMain.is-hidden{
+  display:none !important;
+}
+#missionBarHeader{
+  padding-right:72px;
+}
+@media (max-width:560px){
+  #homeBtnMain{
+    top:11px;
+    right:12px;
+    width:42px;
+    height:42px;
+    border-radius:14px;
+  }
+  #homeBtnMain svg{
+    width:20px;
+    height:20px;
+  }
+  #missionBarHeader{
+    padding-right:62px;
+  }
 }
 
 </style>
 </head>
 <body>
+<div id="missionBarWrap">
+<div id="missionBarHeader">아큐브<sup class="reg-mark">®</sup> 난시 렌즈 기술</div>
 
-<button id="homeBtn" onclick="goHome()">
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+<button id="homeBtnMain" aria-label="홈으로 이동" onclick="goHomeMain(event)">
+  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <path d="M3 10.5L12 3l9 7.5"></path>
-    <path d="M5 9.5V21h14V9.5"></path>
+    <path d="M5.5 9.5V21h13V9.5"></path>
   </svg>
 </button>
 
-<div id="missionBarWrap">
-<div id="missionBarHeader">아큐브<sup class="reg-mark">®</sup> 난시 렌즈 기술</div>
 <div id="missionBar">
 <div class="missionCard" id="missionASD" role="button" tabindex="0">
 <div class="missionNo">01</div>
@@ -2606,18 +2643,8 @@
 <div class="toric-popup-disclaimer"><span class="disc-note">해당 시뮬레이션은 이해를 돕기 위한 데모 화면이며, 실제 시야 경험과는 차이가 있을 수 있습니다. KR_2026_287</span></div>
 </div>
 </div>
-<script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" type="module">
-function goHome(){
-  window.location.href = "index.html";
-}
-
-</script>
-<script nomodule="" src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js">
-function goHome(){
-  window.location.href = "index.html";
-}
-
-</script>
+<script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" type="module"></script>
+<script nomodule="" src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
 <model-viewer camera-controls="" camera-orbit="0deg 100deg 2.6m" camera-target="0m 0.015m 0m" environment-image="neutral" exposure="1.35" id="mv" shadow-intensity="0" src="lens_clear.glb" tone-mapping="aces" touch-action="pan-y">
 </model-viewer>
 <div id="bottomBtns">
@@ -3959,12 +3986,7 @@ function goHome(){
       else if(tutTop.style.display === 'block') showTut(3);
       positionComfortInteractiveElements(0);
     });
-  
-function goHome(){
-  window.location.href = "index.html";
-}
-
-</script>
+  </script>
 <script>
 (function(){
   
@@ -4710,11 +4732,76 @@ function initASDPatch(){
     initASDPatch();
   }
 })();
+</script>
 
-function goHome(){
-  window.location.href = "index.html";
+<script>
+function goHomeMain(event){
+  if(event) event.stopPropagation();
+  window.location.href = window.location.origin + '/';
 }
 
+(function(){
+  const popupIds = [
+    'asdOverlay',
+    'comfortOverlay',
+    'pvpSimOverlay',
+    'blueSimOverlay'
+  ];
+
+  function isVisible(el){
+    if(!el) return false;
+    const style = window.getComputedStyle(el);
+    return style.display !== 'none' && style.visibility !== 'hidden' && parseFloat(style.opacity || '1') > 0;
+  }
+
+  function updateHomeButtonVisibility(){
+    const homeBtn = document.getElementById('homeBtnMain');
+    if(!homeBtn) return;
+
+    let shouldHide = false;
+
+    for(const id of popupIds){
+      const el = document.getElementById(id);
+      if(el && el.classList.contains('show') && isVisible(el)){
+        shouldHide = true;
+        break;
+      }
+    }
+
+    if(!shouldHide){
+      const asdCard = document.getElementById('asdCard');
+      const comfortWrap = document.getElementById('comfortWrap');
+      const pvpSimWrap = document.getElementById('pvpSimWrap');
+      const blueSimWrap = document.getElementById('blueSimWrap');
+      if(isVisible(asdCard) || isVisible(comfortWrap) || isVisible(pvpSimWrap) || isVisible(blueSimWrap)){
+        shouldHide = true;
+      }
+    }
+
+    homeBtn.classList.toggle('is-hidden', shouldHide);
+  }
+
+  function initHomeButtonWatcher(){
+    updateHomeButtonVisibility();
+    const observer = new MutationObserver(updateHomeButtonVisibility);
+    observer.observe(document.body, {
+      attributes: true,
+      subtree: true,
+      attributeFilter: ['class', 'style']
+    });
+    window.addEventListener('resize', updateHomeButtonVisibility);
+    document.addEventListener('click', function(){
+      requestAnimationFrame(updateHomeButtonVisibility);
+    });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initHomeButtonWatcher);
+  }else{
+    initHomeButtonWatcher();
+  }
+})();
 </script>
+
 </body>
 </html>
