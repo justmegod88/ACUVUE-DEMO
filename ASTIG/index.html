@@ -747,7 +747,7 @@
       min-width:0;
       flex:1 1 auto;
       text-align:left;
-      padding-top:2px;
+      padding-top:6px;
     }
     #asdHeaderTitle{ font-size:24px; line-height:1.14; font-weight:900; color:#1e293b; letter-spacing:-.03em; }
     #asdHeaderSubTitle{ margin-top:4px; font-size:11px; line-height:1.2; color:#94a3b8; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
@@ -986,7 +986,7 @@
     }
     #asdInfoBadge{
       width:36px; height:36px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex:0 0 auto;
-      margin-top:2px; font-size:16px; font-weight:900; color:#3b82f6; background:#eaf3ff;
+      margin-top:6px; font-size:16px; font-weight:900; color:#3b82f6; background:#eaf3ff;
     }
     #asdHint button{
       flex:0 0 auto; flex-shrink:0; min-width:112px; width:112px; max-width:112px; height:52px; padding:0 16px; border:none; border-radius:18px;
@@ -1329,7 +1329,7 @@
     }
     #comfortInfoBadge{
       width:36px; height:36px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex:0 0 auto;
-      margin-top:2px; font-size:16px; font-weight:900; color:#3b82f6; background:#eaf3ff;
+      margin-top:6px; font-size:16px; font-weight:900; color:#3b82f6; background:#eaf3ff;
     }
     #comfortMessageCopyWrap{ flex:1 1 auto; min-width:0; display:flex; gap:14px; }
     #comfortMessageCopy{ flex:1 1 auto; min-width:0; font-size:14px; line-height:1.6; font-weight:500; letter-spacing:-.02em; color:#475569; word-break:keep-all; }
@@ -2022,7 +2022,7 @@
     }
     #blueSimInfoBadge{
       width:36px; height:36px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex:0 0 auto;
-      margin-top:2px; font-size:16px; font-weight:900; color:#3b82f6; background:#eaf3ff;
+      margin-top:6px; font-size:16px; font-weight:900; color:#3b82f6; background:#eaf3ff;
     }
     #blueSimMessageCopy{
       flex:1 1 auto;
@@ -2263,7 +2263,7 @@
 
 #homeBtnMain{
   position:absolute;
-  top:2px;
+  top:6px;
   right:16px;
   width:46px;
   height:46px;
@@ -2295,11 +2295,14 @@ body.popup-open #homeBtnMain{
   display:none !important;
 }
 #missionBarHeader{
+  position:relative;
+  text-align:center;
+  padding-left:72px;
   padding-right:72px;
 }
 @media (max-width:560px){
   #homeBtnMain{
-    top:2px;
+    top:6px;
     right:12px;
     width:42px;
     height:42px;
@@ -2310,11 +2313,18 @@ body.popup-open #homeBtnMain{
     height:20px;
   }
   #missionBarHeader{
+    padding-left:62px;
     padding-right:62px;
   }
 }
 
+
+
+
+
 </style>
+
+
 </head>
 <body>
 <div id="missionBarWrap">
