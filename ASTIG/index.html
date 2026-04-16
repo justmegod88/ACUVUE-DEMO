@@ -4734,6 +4734,7 @@ function initASDPatch(){
 })();
 </script>
 
+
 <script>
 function goHomeMain(event){
   if(event) event.stopPropagation();
@@ -4741,55 +4742,30 @@ function goHomeMain(event){
 }
 
 (function(){
-  const popupIds = [
-    'asdOverlay',
-    'comfortOverlay',
-    'pvpSimOverlay',
-    'blueSimOverlay'
-  ];
-
-  function isVisible(el){
-    if(!el) return false;
-    const style = window.getComputedStyle(el);
-    return style.display !== 'none' && style.visibility !== 'hidden' && parseFloat(style.opacity || '1') > 0;
-  }
+  const popupIds = ['asdOverlay','comfortOverlay','pvpSimOverlay','blueSimOverlay'];
 
   function updateHomeButtonVisibility(){
     const homeBtn = document.getElementById('homeBtnMain');
     if(!homeBtn) return;
 
-    let shouldHide = false;
-
-    for(const id of popupIds){
+    const shouldHide = popupIds.some((id) => {
       const el = document.getElementById(id);
-      if(el && el.classList.contains('show') && isVisible(el)){
-        shouldHide = true;
-        break;
-      }
-    }
-
-    if(!shouldHide){
-      const asdCard = document.getElementById('asdCard');
-      const comfortWrap = document.getElementById('comfortWrap');
-      const pvpSimWrap = document.getElementById('pvpSimWrap');
-      const blueSimWrap = document.getElementById('blueSimWrap');
-      if(isVisible(asdCard) || isVisible(comfortWrap) || isVisible(pvpSimWrap) || isVisible(blueSimWrap)){
-        shouldHide = true;
-      }
-    }
+      return !!(el && el.classList.contains('show'));
+    });
 
     homeBtn.classList.toggle('is-hidden', shouldHide);
   }
 
   function initHomeButtonWatcher(){
     updateHomeButtonVisibility();
-    const observer = new MutationObserver(updateHomeButtonVisibility);
-    observer.observe(document.body, {
-      attributes: true,
-      subtree: true,
-      attributeFilter: ['class', 'style']
+
+    popupIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if(!el) return;
+      const observer = new MutationObserver(updateHomeButtonVisibility);
+      observer.observe(el, { attributes: true, attributeFilter: ['class'] });
     });
-    window.addEventListener('resize', updateHomeButtonVisibility);
+
     document.addEventListener('click', function(){
       requestAnimationFrame(updateHomeButtonVisibility);
     });
@@ -4802,6 +4778,7 @@ function goHomeMain(event){
   }
 })();
 </script>
+
 
 </body>
 </html>
