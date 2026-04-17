@@ -1740,9 +1740,12 @@
     if(!paper || !building) return;
 
     const state = (typeof modalPreviewState !== 'undefined' && modalPreviewState) ? modalPreviewState : '';
+    const isCameraOn = !!stream;
 
     paper.style.display = 'none';
     building.style.display = 'none';
+
+    if(isCameraOn) return;
 
     if(state === 'pupilGreater'){
       paper.style.display = 'block';
