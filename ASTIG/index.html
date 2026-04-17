@@ -4379,12 +4379,27 @@ function initASDPatch(){
         asdMiniFace.style.width = '';
         asdMiniFace.style.height = '';
       } else if (isAndroidDevice()){
-        asdMiniFace.style.width = '116px';
-        asdMiniFace.style.height = '100px';
+        asdMiniFace.style.width = '124px';
+        asdMiniFace.style.height = '132px';
       } else {
         asdMiniFace.style.width = '148px';
         asdMiniFace.style.height = '104px';
       }
+    }
+
+    function shouldRotateASDAndroidPreview(video){
+      if (!isAndroidDevice() || !video) return false;
+      const vw = video.videoWidth || 0;
+      const vh = video.videoHeight || 0;
+      if (!vw || !vh) return false;
+      const portraitScreen = window.innerHeight >= window.innerWidth;
+      const landscapeBuffer = vw > vh;
+      return portraitScreen && landscapeBuffer;
+    }
+
+    function normalizeASDLandmarksForPreview(landmarks, rotated){
+      if (!rotated || !Array.isArray(landmarks)) return landmarks;
+      return landmarks.map(p => ({ ...p, x: p.y, y: 1 - p.x }));
     }
 
     async function getASDMiniCameraStream(){
@@ -4536,42 +4551,29 @@ function initASDPatch(){
       const horizontal = 2*pointDistance(p1,p4);
       return horizontal ? vertical/horizontal : 0;
     }
-
-    function shouldRotateASDDetectSource(video){
-      if (!isAndroidDevice() || !video) return false;
-      const vw = video.videoWidth || 0;
-      const vh = video.videoHeight || 0;
-      const portraitScreen = window.innerHeight >= window.innerWidth;
-      const landscapeBuffer = vw > vh;
-      return !!(portraitScreen && landscapeBuffer);
-    }
-
-    function mapASDLandmarksToPreview(landmarks){
-      if (!Array.isArray(landmarks)) return landmarks;
-      if (!shouldRotateASDDetectSource(asdMiniFaceVideo)) return landmarks;
-      return landmarks.map(p => ({ ...p, x: p.y, y: 1 - p.x }));
-    }
     function detectASDBlinkFromLandmarks(landmarks){
       const leftIdx=[33,160,158,133,153,144], rightIdx=[362,385,387,263,373,380];
       const ear = (eyeAspectRatio(landmarks,leftIdx)+eyeAspectRatio(landmarks,rightIdx))/2;
       if (!Number.isFinite(ear) || ear <= 0) return;
 
-      if (!detectASDBlinkFromLandmarks.baseEar){
-        detectASDBlinkFromLandmarks.baseEar = ear;
+      let CLOSED, OPEN;
+      if (isIPhoneDevice()){
+        CLOSED = 0.19; OPEN = 0.24;
+      } else if (isAndroidDevice()){
+        if (!detectASDBlinkFromLandmarks.androidBaseEar){
+          detectASDBlinkFromLandmarks.androidBaseEar = ear;
+        } else {
+          detectASDBlinkFromLandmarks.androidBaseEar =
+            detectASDBlinkFromLandmarks.androidBaseEar * 0.92 + ear * 0.08;
+        }
+        const baseEar = detectASDBlinkFromLandmarks.androidBaseEar || ear;
+        CLOSED = Math.max(0.205, baseEar * 0.72);
+        OPEN   = Math.max(0.255, baseEar * 0.86);
       } else {
-        const follow = isAndroidDevice() ? 0.08 : 0.05;
-        detectASDBlinkFromLandmarks.baseEar =
-          detectASDBlinkFromLandmarks.baseEar * (1 - follow) + ear * follow;
+        CLOSED = 0.225; OPEN = 0.275;
       }
 
-      const baseEar = detectASDBlinkFromLandmarks.baseEar || ear;
-      const thresholds = isIPhoneDevice()
-        ? { CLOSED: Math.max(0.19, baseEar * 0.79), OPEN: Math.max(0.24, baseEar * 0.92) }
-        : (isAndroidDevice()
-            ? { CLOSED: Math.max(0.16, baseEar * 0.72), OPEN: Math.max(0.21, baseEar * 0.86) }
-            : { CLOSED: Math.max(0.20, baseEar * 0.78), OPEN: Math.max(0.25, baseEar * 0.90) });
-
-      const now = Date.now(), CLOSED=thresholds.CLOSED, OPEN=thresholds.OPEN;
+      const now = Date.now();
       if (ear < CLOSED){
         asdClosedFrames += 1;
         asdOpenFrames = 0;
@@ -4626,7 +4628,7 @@ function initASDPatch(){
       asdBlinkState = 'open';
       asdClosedFrames = 0;
       asdOpenFrames = 0;
-      detectASDBlinkFromLandmarks.baseEar = null;
+      detectASDBlinkFromLandmarks.androidBaseEar = null;
     }
 
     async function runASDDetectLoop(){
@@ -4640,37 +4642,32 @@ function initASDPatch(){
         if(asdMiniFaceVideo.readyState >= 2 && asdAngleValue !== 0 && asdRearCaptured){
           try{
             let detectSource = asdMiniFaceVideo;
+            let rotatedForAndroid = false;
 
-            if (isAndroidDevice()){
+            if (shouldRotateASDAndroidPreview(asdMiniFaceVideo) && detectCtx){
               const vw = asdMiniFaceVideo.videoWidth || 0;
               const vh = asdMiniFaceVideo.videoHeight || 0;
-              const portraitScreen = window.innerHeight >= window.innerWidth;
-              const landscapeBuffer = vw > vh;
-
-              if (portraitScreen && landscapeBuffer && detectCtx){
-                detectCanvas.width = vh;
-                detectCanvas.height = vw;
-                detectCtx.save();
-                detectCtx.clearRect(0,0,detectCanvas.width,detectCanvas.height);
-                detectCtx.translate(detectCanvas.width / 2, detectCanvas.height / 2);
-                detectCtx.rotate(Math.PI / 2);
-                detectCtx.drawImage(asdMiniFaceVideo, -vw / 2, -vh / 2, vw, vh);
-                detectCtx.restore();
-                detectSource = detectCanvas;
-              }
+              detectCanvas.width = vh;
+              detectCanvas.height = vw;
+              detectCtx.save();
+              detectCtx.clearRect(0,0,detectCanvas.width,detectCanvas.height);
+              detectCtx.translate(detectCanvas.width / 2, detectCanvas.height / 2);
+              detectCtx.rotate(Math.PI / 2);
+              detectCtx.drawImage(asdMiniFaceVideo, -vw / 2, -vh / 2, vw, vh);
+              detectCtx.restore();
+              detectSource = detectCanvas;
+              rotatedForAndroid = true;
             }
 
             const result = asdFaceLandmarker.detectForVideo(detectSource, performance.now());
             if(result && result.faceLandmarks && result.faceLandmarks.length > 0){
-              const rawLandmarks = result.faceLandmarks[0];
-              detectASDBlinkFromLandmarks(rawLandmarks);
-              drawASDMiniLandmarks(mapASDLandmarksToPreview(rawLandmarks));
+              const previewLandmarks = normalizeASDLandmarksForPreview(result.faceLandmarks[0], rotatedForAndroid);
+              detectASDBlinkFromLandmarks(previewLandmarks);
+              drawASDMiniLandmarks(previewLandmarks);
             } else {
               clearASDMiniCanvas();
             }
-          }catch(e){
-            clearASDMiniCanvas();
-          }
+          }catch(e){ clearASDMiniCanvas(); }
         } else {
           clearASDMiniCanvas();
         }
