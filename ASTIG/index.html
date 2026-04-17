@@ -2207,12 +2207,12 @@
     }
 
     #asdMiniFace{
-      position:absolute; right:14px; top:14px; z-index:8; width:112px; height:78px; border-radius:20px; overflow:hidden;
+      position:absolute; right:14px; top:14px; z-index:8; width:116px; height:88px; border-radius:20px; overflow:hidden;
       background:#fff; border:2px solid rgba(255,255,255,.92); box-shadow:0 14px 26px rgba(0,0,0,.18); display:none;
     }
     #asdOverlay.camera-on.auto-running #asdMiniFace{ display:block; }
         #asdMiniFaceVideo, #asdMiniFaceCanvas{
-      position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 24%;
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 28%;
     }
     #asdMiniFaceLabel{
       position:absolute; left:6px; right:6px; bottom:6px; background:linear-gradient(180deg,#FFB84A,#FFA61F);
@@ -4379,8 +4379,8 @@ function initASDPatch(){
         asdMiniFace.style.width = '';
         asdMiniFace.style.height = '';
       } else if (isAndroidDevice()){
-        asdMiniFace.style.width = '116px';
-        asdMiniFace.style.height = '100px';
+        asdMiniFace.style.width = '124px';
+        asdMiniFace.style.height = '132px';
       } else {
         asdMiniFace.style.width = '148px';
         asdMiniFace.style.height = '104px';
@@ -4536,21 +4536,6 @@ function initASDPatch(){
       const horizontal = 2*pointDistance(p1,p4);
       return horizontal ? vertical/horizontal : 0;
     }
-
-    function shouldRotateASDDetectSource(video){
-      if (!isAndroidDevice() || !video) return false;
-      const vw = video.videoWidth || 0;
-      const vh = video.videoHeight || 0;
-      const portraitScreen = window.innerHeight >= window.innerWidth;
-      const landscapeBuffer = vw > vh;
-      return !!(portraitScreen && landscapeBuffer);
-    }
-
-    function mapASDLandmarksToPreview(landmarks){
-      if (!Array.isArray(landmarks)) return landmarks;
-      if (!shouldRotateASDDetectSource(asdMiniFaceVideo)) return landmarks;
-      return landmarks.map(p => ({ ...p, x: p.y, y: 1 - p.x }));
-    }
     function detectASDBlinkFromLandmarks(landmarks){
       const leftIdx=[33,160,158,133,153,144], rightIdx=[362,385,387,263,373,380];
       const ear = (eyeAspectRatio(landmarks,leftIdx)+eyeAspectRatio(landmarks,rightIdx))/2;
@@ -4662,9 +4647,8 @@ function initASDPatch(){
 
             const result = asdFaceLandmarker.detectForVideo(detectSource, performance.now());
             if(result && result.faceLandmarks && result.faceLandmarks.length > 0){
-              const rawLandmarks = result.faceLandmarks[0];
-              detectASDBlinkFromLandmarks(rawLandmarks);
-              drawASDMiniLandmarks(mapASDLandmarksToPreview(rawLandmarks));
+              detectASDBlinkFromLandmarks(result.faceLandmarks[0]);
+              drawASDMiniLandmarks(result.faceLandmarks[0]);
             } else {
               clearASDMiniCanvas();
             }
