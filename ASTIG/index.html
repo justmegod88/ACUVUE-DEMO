@@ -2325,6 +2325,17 @@ body.popup-open #homeBtnMain{
 </style>
 
 
+
+    <style id="pvp-image-fix">
+    .pvp-image-container img{
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        border-radius:12px;
+        display:block;
+    }
+    </style>
+    
 </head>
 <body>
 <div id="missionBarWrap">
@@ -4130,8 +4141,13 @@ function initASDPatch(){
       if(Math.abs(asdAngleValue) === 0){
         setASDHintSuccess();
       } else {
-        const guideLabel = getASDGuideLabel();
-        asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.<sup class="reg-mark">1</sup></span><span class="hintBody"><span class="blue">${guideLabel}</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
+        const isAutoPrompt = asdMode === 'auto' && asdCameraOn && asdAutoPromptActive;
+        if(isAutoPrompt){
+          asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.<sup class="reg-mark">1</sup></span><span class="hintBody"><span class="blue">카메라를 보고 눈을 깜박여</span> 회전된 축을 안정화 시켜보세요.</span></div>`;
+        } else {
+          const guideLabel = getASDGuideLabel();
+          asdHint.innerHTML = `<div id="asdInfoBadge">i</div><div class="hintText"><span class="hintTitle">난시 렌즈는 축이 회전되면 시야가 흐려집니다.<sup class="reg-mark">1</sup></span><span class="hintBody"><span class="blue">${guideLabel}</span>을 눌러 회전된 축을 안정화 시켜 보세요.</span></div>`;
+        }
       }
     }
     function updateModeUI(){
