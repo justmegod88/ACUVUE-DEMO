@@ -2207,12 +2207,12 @@
     }
 
     #asdMiniFace{
-      position:absolute; right:14px; top:14px; z-index:8; width:112px; height:78px; border-radius:20px; overflow:hidden;
+      position:absolute; right:14px; top:14px; z-index:8; width:116px; height:88px; border-radius:20px; overflow:hidden;
       background:#fff; border:2px solid rgba(255,255,255,.92); box-shadow:0 14px 26px rgba(0,0,0,.18); display:none;
     }
     #asdOverlay.camera-on.auto-running #asdMiniFace{ display:block; }
         #asdMiniFaceVideo, #asdMiniFaceCanvas{
-      position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 24%;
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 28%;
     }
     #asdMiniFaceLabel{
       position:absolute; left:6px; right:6px; bottom:6px; background:linear-gradient(180deg,#FFB84A,#FFA61F);
@@ -4494,14 +4494,19 @@ function initASDPatch(){
         const stream = await getASDMiniCameraStream();
         if (!stream) throw new Error('ASD mini front camera unavailable');
         asdMiniFaceStream = stream;
+        asdMiniFaceVideo.setAttribute('autoplay','');
+        asdMiniFaceVideo.setAttribute('muted','');
+        asdMiniFaceVideo.setAttribute('playsinline','');
+        asdMiniFaceVideo.muted = true;
+        asdMiniFaceVideo.playsInline = true;
         asdMiniFaceVideo.srcObject = stream;
         await asdMiniFaceVideo.play().catch(()=>{});
-        await applyRealCameraZoom(stream, isAndroidDevice() ? 1.15 : 1.8);
+        await applyRealCameraZoom(stream, isAndroidDevice() ? 1.0 : 1.8);
         asdMiniFaceVideo.style.transform = 'scaleX(-1) scale(1)';
-        asdMiniFaceVideo.style.objectPosition = isAndroidDevice() ? 'center 18%' : 'center 24%';
+        asdMiniFaceVideo.style.objectPosition = isAndroidDevice() ? 'center 28%' : 'center 24%';
         if(asdMiniFaceCanvas){
           asdMiniFaceCanvas.style.transform = 'scaleX(-1) scale(1)';
-          asdMiniFaceCanvas.style.objectPosition = isAndroidDevice() ? 'center 18%' : 'center 24%';
+          asdMiniFaceCanvas.style.objectPosition = isAndroidDevice() ? 'center 28%' : 'center 24%';
         }
       }catch(e){
         console.warn('ASD mini camera unavailable', e);
@@ -4534,11 +4539,23 @@ function initASDPatch(){
     function detectASDBlinkFromLandmarks(landmarks){
       const leftIdx=[33,160,158,133,153,144], rightIdx=[362,385,387,263,373,380];
       const ear = (eyeAspectRatio(landmarks,leftIdx)+eyeAspectRatio(landmarks,rightIdx))/2;
+      if (!Number.isFinite(ear) || ear <= 0) return;
+
+      if (!detectASDBlinkFromLandmarks.baseEar){
+        detectASDBlinkFromLandmarks.baseEar = ear;
+      } else {
+        const follow = isAndroidDevice() ? 0.08 : 0.05;
+        detectASDBlinkFromLandmarks.baseEar =
+          detectASDBlinkFromLandmarks.baseEar * (1 - follow) + ear * follow;
+      }
+
+      const baseEar = detectASDBlinkFromLandmarks.baseEar || ear;
       const thresholds = isIPhoneDevice()
-        ? { CLOSED:0.19, OPEN:0.24 }
+        ? { CLOSED: Math.max(0.19, baseEar * 0.79), OPEN: Math.max(0.24, baseEar * 0.92) }
         : (isAndroidDevice()
-            ? { CLOSED:0.205, OPEN:0.255 }
-            : { CLOSED:0.225, OPEN:0.275 });
+            ? { CLOSED: Math.max(0.16, baseEar * 0.72), OPEN: Math.max(0.21, baseEar * 0.86) }
+            : { CLOSED: Math.max(0.20, baseEar * 0.78), OPEN: Math.max(0.25, baseEar * 0.90) });
+
       const now = Date.now(), CLOSED=thresholds.CLOSED, OPEN=thresholds.OPEN;
       if (ear < CLOSED){
         asdClosedFrames += 1;
@@ -4594,22 +4611,50 @@ function initASDPatch(){
       asdBlinkState = 'open';
       asdClosedFrames = 0;
       asdOpenFrames = 0;
+      detectASDBlinkFromLandmarks.baseEar = null;
     }
 
     async function runASDDetectLoop(){
       stopASDDetectLoop();
       if(asdMode !== 'auto' || !asdFaceLandmarkerReady || !asdMiniFaceVideo) return;
+
+      const detectCanvas = document.createElement('canvas');
+      const detectCtx = detectCanvas.getContext('2d', { willReadFrequently:true });
+
       const detect = ()=>{
         if(asdMiniFaceVideo.readyState >= 2 && asdAngleValue !== 0 && asdRearCaptured){
           try{
-            const result = asdFaceLandmarker.detectForVideo(asdMiniFaceVideo, performance.now());
+            let detectSource = asdMiniFaceVideo;
+
+            if (isAndroidDevice()){
+              const vw = asdMiniFaceVideo.videoWidth || 0;
+              const vh = asdMiniFaceVideo.videoHeight || 0;
+              const portraitScreen = window.innerHeight >= window.innerWidth;
+              const landscapeBuffer = vw > vh;
+
+              if (portraitScreen && landscapeBuffer && detectCtx){
+                detectCanvas.width = vh;
+                detectCanvas.height = vw;
+                detectCtx.save();
+                detectCtx.clearRect(0,0,detectCanvas.width,detectCanvas.height);
+                detectCtx.translate(detectCanvas.width / 2, detectCanvas.height / 2);
+                detectCtx.rotate(Math.PI / 2);
+                detectCtx.drawImage(asdMiniFaceVideo, -vw / 2, -vh / 2, vw, vh);
+                detectCtx.restore();
+                detectSource = detectCanvas;
+              }
+            }
+
+            const result = asdFaceLandmarker.detectForVideo(detectSource, performance.now());
             if(result && result.faceLandmarks && result.faceLandmarks.length > 0){
               detectASDBlinkFromLandmarks(result.faceLandmarks[0]);
               drawASDMiniLandmarks(result.faceLandmarks[0]);
             } else {
               clearASDMiniCanvas();
             }
-          }catch(e){ clearASDMiniCanvas(); }
+          }catch(e){
+            clearASDMiniCanvas();
+          }
         } else {
           clearASDMiniCanvas();
         }
