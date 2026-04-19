@@ -1724,14 +1724,21 @@
 <script>
   function goBackMainPage(event){
     if(event) event.stopPropagation();
-    const mainPage = document.getElementById('mainPage');
-    const detailPage = document.getElementById('detailPage');
-    if(mainPage && detailPage){
-      detailPage.classList.remove('active');
-      detailPage.setAttribute('aria-hidden','true');
-      mainPage.classList.add('active');
-      window.scrollTo({top:0, behavior:'auto'});
+
+    if(location.hash === '#card1'){
+      history.replaceState(null, '', location.pathname + location.search);
+      window.dispatchEvent(new HashChangeEvent('hashchange'));
+    }else{
+      const mainPage = document.getElementById('mainPage');
+      const detailPage = document.getElementById('detailPage');
+      if(mainPage && detailPage){
+        detailPage.classList.remove('active');
+        detailPage.setAttribute('aria-hidden','true');
+        mainPage.classList.add('active');
+      }
     }
+
+    window.scrollTo({top:0, behavior:'auto'});
   }
 
   function updateFocusRingsByState(){
