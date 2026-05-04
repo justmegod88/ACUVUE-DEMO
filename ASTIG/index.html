@@ -5148,33 +5148,57 @@ function goHomeMain(event){
   }
 })();
 </script>
+
+
 <script>
-window.addEventListener("load", () => {
-  const params = new URLSearchParams(window.location.search);
-  const mode = params.get("mode");
+/* Direct-link launcher: added only for ?mode=asd/prism/blue */
+(function(){
+  function openDirectMode(){
+    const params = new URLSearchParams(window.location.search);
+    const mode = (params.get('mode') || params.get('demo') || '').toLowerCase();
+    if(!mode) return;
 
-  if (!mode) return;
+    setTimeout(function(){
+      if(mode === 'asd'){
+        if(typeof window.openASD === 'function') window.openASD();
+        const asd = document.getElementById('asdOverlay');
+        if(asd){
+          asd.classList.add('show');
+          asd.setAttribute('aria-hidden','false');
+        }
+        const mission = document.getElementById('missionASD');
+        if(mission && typeof mission.onclick === 'function') mission.onclick(new Event('click'));
+        return;
+      }
 
-  setTimeout(() => {
-    // ASD
-    if (mode === "asd") {
-      if (typeof openASDOverlay === "function") openASDOverlay();
-      else if (typeof openASD === "function") openASD();
-    }
+      if(mode === 'prism'){
+        if(typeof window.openComfort === 'function') window.openComfort();
+        const comfort = document.getElementById('comfortOverlay');
+        if(comfort){
+          comfort.classList.add('show');
+          comfort.setAttribute('aria-hidden','false');
+        }
+        return;
+      }
 
-    // 프리즘
-    if (mode === "prism") {
-      if (typeof openComfortOverlay === "function") openComfortOverlay();
-      else if (typeof openPrism === "function") openPrism();
-    }
+      if(mode === 'blue'){
+        if(typeof window.openBlueSimulator === 'function') window.openBlueSimulator();
+        const blue = document.getElementById('blueSimOverlay');
+        if(blue){
+          blue.classList.add('show');
+          blue.setAttribute('aria-hidden','false');
+        }
+        return;
+      }
+    }, 450);
+  }
 
-    // 블루라이트
-    if (mode === "blue") {
-      if (typeof openBlueSimOverlay === "function") openBlueSimOverlay();
-      else if (typeof openBlueLight === "function") openBlueLight();
-    }
-  }, 300);
-});
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', openDirectMode);
+  }else{
+    openDirectMode();
+  }
+})();
 </script>
 </body>
 </html>
