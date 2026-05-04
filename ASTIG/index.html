@@ -4268,6 +4268,9 @@ function initASDPatch(){
       // is shifted slightly down and to the right.
       const modelGlowShiftX = asdCameraOn ? 0 : 1.6;
       const modelGlowShiftY = asdCameraOn ? 0 : 2.7;
+      // 2026-05-04 model-only tuning: keep the upper glows in place,
+      // and move only the lower activation-zone glows slightly downward.
+      const modelLowerGlowExtraY = asdCameraOn ? 0 : 2.4;
       const rad = (asdAngleValue || 0) * Math.PI / 180;
       const cos = Math.cos(rad);
       const sin = Math.sin(rad);
@@ -4295,8 +4298,9 @@ function initASDPatch(){
       points.forEach((pt, idx) => {
         const zone = asdActiveZones[idx];
         if(!zone) return;
+        const lowerGlowShiftY = (!asdCameraOn && pt.dy > 0) ? modelLowerGlowExtraY : 0;
         zone.style.left = `${pt.x + pt.dx + modelGlowShiftX}%`;
-        zone.style.top = `${pt.y + pt.dy + modelGlowShiftY}%`;
+        zone.style.top = `${pt.y + pt.dy + modelGlowShiftY + lowerGlowShiftY}%`;
         zone.style.transform = `translate(-50%,-50%) rotate(${asdAngleValue || 0}deg)`;
       });
     }
