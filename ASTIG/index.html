@@ -4720,7 +4720,7 @@ function initASDPatch(){
       if(asdMode !== 'auto') return;
 
       /* First press in auto mode: turn on rear preview only. */
-      if (!asdCameraOn || !asdCameraStream || asdRearCaptured){
+      if (!asdCameraOn || !asdCameraStream){
         await startASDCamera();
         return;
       }
@@ -4755,7 +4755,7 @@ function initASDPatch(){
       await stopASDMiniCamera();
       asdCameraOn = true;
       asdAutoPromptActive = true;
-      asdOverlay.classList.add('camera-on');
+      asdOverlay.classList.add('camera-on','auto-running','auto-captured');
       asdCameraBtn.classList.add('active');
 
       const steps = [-20,-15,-10,-5,5,10,15,20];
@@ -4765,7 +4765,7 @@ function initASDPatch(){
       updateModeUI();
 
       /* iOS/iPadOS needs a short release gap when switching rear -> front. */
-      await asdWait(220);
+      await asdWait(520);
 
       /* 4) Start the same front mini-camera used by the 22번 file, then attach detection. */
       await startASDMiniCamera();
@@ -4872,7 +4872,6 @@ function initASDPatch(){
       ev.stopPropagation();
       if (asdBlinkBusy) return;
       if(asdCameraOn && asdMode === 'auto'){
-        setASDPlaceholderImage();
         await runASDAutoFlow();
         return;
       }
