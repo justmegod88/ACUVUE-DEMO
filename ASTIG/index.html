@@ -5148,6 +5148,33 @@ function goHomeMain(event){
   }
 })();
 </script>
+<script>
+window.addEventListener("load", () => {
+  const params = new URLSearchParams(window.location.search);
+  const mode = params.get("mode");
 
+  if (!mode) return;
+
+  setTimeout(() => {
+    // ASD
+    if (mode === "asd") {
+      if (typeof openASDOverlay === "function") openASDOverlay();
+      else if (typeof openASD === "function") openASD();
+    }
+
+    // 프리즘
+    if (mode === "prism") {
+      if (typeof openComfortOverlay === "function") openComfortOverlay();
+      else if (typeof openPrism === "function") openPrism();
+    }
+
+    // 블루라이트
+    if (mode === "blue") {
+      if (typeof openBlueSimOverlay === "function") openBlueSimOverlay();
+      else if (typeof openBlueLight === "function") openBlueLight();
+    }
+  }, 300);
+});
+</script>
 </body>
 </html>
