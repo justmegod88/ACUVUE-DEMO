@@ -2229,7 +2229,7 @@
     }
 
 
-    /* ASD activation zone glow: 4 eyelid-contact stabilization zones */
+    /* ASD activation zone glow: invisible hit-spots only; no extra visible circles */
     #asdActiveZones{
       position:absolute;
       inset:0;
@@ -2239,74 +2239,70 @@
     }
     .asdActiveZone{
       position:absolute;
-      width:34px;
-      height:34px;
+      width:58px;
+      height:38px;
       border-radius:999px;
       transform:translate(-50%,-50%);
-      opacity:.62;
-      background:
-        radial-gradient(circle at 36% 30%, rgba(255,255,255,.96) 0%, rgba(255,255,255,.70) 18%, rgba(119,226,255,.42) 36%, rgba(0,94,184,.10) 68%, rgba(0,94,184,0) 100%);
-      border:1px solid rgba(180,232,255,.58);
-      box-shadow:
-        0 0 0 1px rgba(255,255,255,.26),
-        0 0 12px rgba(96,190,255,.26),
-        inset 0 0 10px rgba(255,255,255,.34);
-      filter:saturate(1.08);
-      transition:left .18s ease, top .18s ease, opacity .18s ease, transform .18s ease, box-shadow .18s ease;
+      opacity:0;
+      background:transparent;
+      border:none;
+      box-shadow:none;
+      filter:none;
+      mix-blend-mode:screen;
+      transition:left .18s ease, top .18s ease, transform .18s ease;
     }
     .asdActiveZone::before{
       content:"";
       position:absolute;
-      inset:-7px;
-      border-radius:inherit;
-      background:radial-gradient(circle, rgba(0,191,255,.22) 0%, rgba(0,191,255,.10) 38%, rgba(0,191,255,0) 72%);
-      opacity:.42;
-      filter:blur(2px);
-      transform:scale(.92);
+      inset:-16px;
+      border-radius:999px;
+      opacity:0;
+      background:
+        radial-gradient(ellipse at 50% 50%, rgba(255,255,255,.96) 0%, rgba(185,238,255,.72) 18%, rgba(90,198,255,.34) 42%, rgba(0,94,184,.10) 62%, rgba(0,94,184,0) 78%);
+      filter:blur(4px);
+      transform:scale(.75);
     }
     .asdActiveZone::after{
       content:"";
       position:absolute;
-      left:26%; top:22%;
-      width:9px; height:9px;
+      inset:-4px;
       border-radius:999px;
-      background:rgba(255,255,255,.86);
-      filter:blur(.2px);
-      opacity:.72;
+      opacity:0;
+      background:radial-gradient(circle at 50% 50%, rgba(255,255,255,.90) 0%, rgba(255,255,255,.55) 14%, rgba(255,255,255,0) 42%);
+      filter:blur(.8px);
+      transform:scale(.70);
     }
     #asdOverlay.asd-active-flash .asdActiveZone{
-      animation:asdActiveZoneFlash .72s cubic-bezier(.18,.9,.24,1) both;
+      animation:asdActiveZoneFlash .42s cubic-bezier(.18,.9,.24,1) both;
+      animation-delay:0s !important;
     }
-    #asdOverlay.asd-active-flash .asdActiveZone:nth-child(2){ animation-delay:.04s; }
-    #asdOverlay.asd-active-flash .asdActiveZone:nth-child(3){ animation-delay:.08s; }
-    #asdOverlay.asd-active-flash .asdActiveZone:nth-child(4){ animation-delay:.12s; }
+    #asdOverlay.asd-active-flash .asdActiveZone::before{
+      animation:asdActiveZoneGlowCore .42s cubic-bezier(.18,.9,.24,1) both;
+      animation-delay:0s !important;
+    }
+    #asdOverlay.asd-active-flash .asdActiveZone::after{
+      animation:asdActiveZoneSpark .42s cubic-bezier(.18,.9,.24,1) both;
+      animation-delay:0s !important;
+    }
     @keyframes asdActiveZoneFlash{
-      0%{
-        opacity:.54;
-        transform:translate(-50%,-50%) scale(.92);
-        box-shadow:0 0 0 1px rgba(255,255,255,.24), 0 0 12px rgba(96,190,255,.22), inset 0 0 10px rgba(255,255,255,.30);
-      }
-      38%{
-        opacity:1;
-        transform:translate(-50%,-50%) scale(1.32);
-        box-shadow:
-          0 0 0 7px rgba(255,255,255,.14),
-          0 0 18px rgba(255,255,255,.78),
-          0 0 30px rgba(0,200,255,.58),
-          0 0 48px rgba(0,94,184,.36),
-          inset 0 0 16px rgba(255,255,255,.76);
-      }
-      100%{
-        opacity:.68;
-        transform:translate(-50%,-50%) scale(1);
-        box-shadow:0 0 0 1px rgba(255,255,255,.26), 0 0 12px rgba(96,190,255,.26), inset 0 0 10px rgba(255,255,255,.34);
-      }
+      0%{ opacity:0; transform:translate(-50%,-50%) scale(.82); }
+      30%{ opacity:1; transform:translate(-50%,-50%) scale(1.05); }
+      100%{ opacity:0; transform:translate(-50%,-50%) scale(1.24); }
+    }
+    @keyframes asdActiveZoneGlowCore{
+      0%{ opacity:0; transform:scale(.70); }
+      28%{ opacity:1; transform:scale(1.12); }
+      100%{ opacity:0; transform:scale(1.36); }
+    }
+    @keyframes asdActiveZoneSpark{
+      0%{ opacity:0; transform:scale(.62); }
+      22%{ opacity:.95; transform:scale(1.00); }
+      100%{ opacity:0; transform:scale(1.22); }
     }
     #asdOverlay.camera-on #asdActiveZones .asdActiveZone{
-      width:30px;
-      height:30px;
-      opacity:.58;
-      mix-blend-mode:screen;
+      width:54px;
+      height:36px;
+      opacity:0;
     }
 
 
@@ -4123,12 +4119,12 @@ function initASDPatch(){
     const asdHint = document.getElementById('asdHint');
     const miniCtx = asdMiniFaceCanvas ? asdMiniFaceCanvas.getContext('2d') : null;
     const asdActiveZones = Array.from(document.querySelectorAll('#asdActiveZones .asdActiveZone'));
-    const asdActiveZoneBase = [
-      { x:36, y:29 },
-      { x:73, y:42 },
-      { x:28, y:55 },
-      { x:65, y:72 }
-    ];
+    /* Activation-zone sparkle follows the existing left/right ASD bars.
+       It is NOT fixed screen coordinates: each glow is calculated from the
+       current bar center and lens-axis rotation, then placed at the upper/lower
+       part of each bar. */
+    const ASD_ACTIVE_BAR_RADIUS = 31.2;
+    const ASD_ACTIVE_BAR_OFFSET = 7.3;
 
 
     if(!missionASD || !asdOverlay || !asdRotateBtn || !asdBlinkBtn || !asdCameraBtn || !asdCameraVideo || !asdLensImg || !asdAngleBadge){
@@ -4270,15 +4266,32 @@ function initASDPatch(){
       const rad = (asdAngleValue || 0) * Math.PI / 180;
       const cos = Math.cos(rad);
       const sin = Math.sin(rad);
-      asdActiveZoneBase.forEach((pt, idx) => {
+
+      // The cyan ASD bars sit left/right on the lens axis.
+      const leftBar = {
+        x: centerX - ASD_ACTIVE_BAR_RADIUS * cos,
+        y: centerY - ASD_ACTIVE_BAR_RADIUS * sin
+      };
+      const rightBar = {
+        x: centerX + ASD_ACTIVE_BAR_RADIUS * cos,
+        y: centerY + ASD_ACTIVE_BAR_RADIUS * sin
+      };
+
+      // Local vertical direction of each bar = perpendicular to the current axis.
+      const perpX = -sin;
+      const perpY = cos;
+      const points = [
+        { ...leftBar,  dx: -perpX * ASD_ACTIVE_BAR_OFFSET, dy: -perpY * ASD_ACTIVE_BAR_OFFSET },
+        { ...leftBar,  dx:  perpX * ASD_ACTIVE_BAR_OFFSET, dy:  perpY * ASD_ACTIVE_BAR_OFFSET },
+        { ...rightBar, dx: -perpX * ASD_ACTIVE_BAR_OFFSET, dy: -perpY * ASD_ACTIVE_BAR_OFFSET },
+        { ...rightBar, dx:  perpX * ASD_ACTIVE_BAR_OFFSET, dy:  perpY * ASD_ACTIVE_BAR_OFFSET }
+      ];
+
+      points.forEach((pt, idx) => {
         const zone = asdActiveZones[idx];
         if(!zone) return;
-        const dx = pt.x - centerX;
-        const dy = pt.y - centerY;
-        const x = centerX + dx * cos - dy * sin;
-        const y = centerY + dx * sin + dy * cos;
-        zone.style.left = `${x}%`;
-        zone.style.top = `${y}%`;
+        zone.style.left = `${pt.x + pt.dx}%`;
+        zone.style.top = `${pt.y + pt.dy}%`;
         zone.style.transform = `translate(-50%,-50%) rotate(${asdAngleValue || 0}deg)`;
       });
     }
@@ -4884,7 +4897,7 @@ function initASDPatch(){
           { transform:'translateY(110%)', opacity:0 }
         ], { duration:260, easing:'ease-in-out' });
       }
-      window.setTimeout(triggerASDActiveZoneGlow, 205);
+      window.setTimeout(triggerASDActiveZoneGlow, 252);
     }
 
     async function applyBlinkStep(){
