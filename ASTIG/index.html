@@ -4263,6 +4263,11 @@ function initASDPatch(){
       if(!asdActiveZones || !asdActiveZones.length) return;
       const centerX = 50;
       const centerY = 52;
+      // 2026-05-04 fix: model-only glow alignment.
+      // Camera manual/auto positions are already correct, so only the non-camera model view
+      // is shifted slightly down and to the right.
+      const modelGlowShiftX = asdCameraOn ? 0 : 1.6;
+      const modelGlowShiftY = asdCameraOn ? 0 : 2.2;
       const rad = (asdAngleValue || 0) * Math.PI / 180;
       const cos = Math.cos(rad);
       const sin = Math.sin(rad);
@@ -4290,8 +4295,8 @@ function initASDPatch(){
       points.forEach((pt, idx) => {
         const zone = asdActiveZones[idx];
         if(!zone) return;
-        zone.style.left = `${pt.x + pt.dx}%`;
-        zone.style.top = `${pt.y + pt.dy}%`;
+        zone.style.left = `${pt.x + pt.dx + modelGlowShiftX}%`;
+        zone.style.top = `${pt.y + pt.dy + modelGlowShiftY}%`;
         zone.style.transform = `translate(-50%,-50%) rotate(${asdAngleValue || 0}deg)`;
       });
     }
