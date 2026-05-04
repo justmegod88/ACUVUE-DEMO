@@ -4802,10 +4802,18 @@ function initASDPatch(){
       writeAngleToGlobal();
       renderAngle();
       if(asdCameraOn && asdMode === 'auto' && asdAngleValue === 0){
+        /* Auto mode recovery:
+           once the axis is stable, stop the front mini blink camera and
+           immediately return to the rear-camera live preview for the next capture.
+           This preserves the existing ASD blur/axis/blink behavior and only changes
+           the post-stabilization camera handoff. */
         stopASDDetectLoop();
         await stopASDMiniCamera();
         asdAutoPromptActive = false;
+        asdRearCaptured = false;
+        clearASDPlaceholderImage();
         updateModeUI();
+        await startASDCamera();
       }
     }
 
