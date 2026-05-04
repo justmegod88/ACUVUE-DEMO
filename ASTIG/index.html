@@ -5168,6 +5168,16 @@ function goHomeMain(event){
         }
         const mission = document.getElementById('missionASD');
         if(mission && typeof mission.onclick === 'function') mission.onclick(new Event('click'));
+
+        // ASD direct link: open directly in the real camera version.
+        // Other ASD/model/prism/blue functions are unchanged.
+        setTimeout(function(){
+          const cameraBtn = document.getElementById('asdCameraBtn');
+          const overlay = document.getElementById('asdOverlay');
+          if(cameraBtn && overlay && !overlay.classList.contains('camera-on')){
+            cameraBtn.click();
+          }
+        }, 350);
         return;
       }
 
