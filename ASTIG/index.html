@@ -2229,6 +2229,87 @@
     }
 
 
+    /* ASD activation zone glow: 4 eyelid-contact stabilization zones */
+    #asdActiveZones{
+      position:absolute;
+      inset:0;
+      z-index:6;
+      pointer-events:none;
+      display:block;
+    }
+    .asdActiveZone{
+      position:absolute;
+      width:34px;
+      height:34px;
+      border-radius:999px;
+      transform:translate(-50%,-50%);
+      opacity:.62;
+      background:
+        radial-gradient(circle at 36% 30%, rgba(255,255,255,.96) 0%, rgba(255,255,255,.70) 18%, rgba(119,226,255,.42) 36%, rgba(0,94,184,.10) 68%, rgba(0,94,184,0) 100%);
+      border:1px solid rgba(180,232,255,.58);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,.26),
+        0 0 12px rgba(96,190,255,.26),
+        inset 0 0 10px rgba(255,255,255,.34);
+      filter:saturate(1.08);
+      transition:left .18s ease, top .18s ease, opacity .18s ease, transform .18s ease, box-shadow .18s ease;
+    }
+    .asdActiveZone::before{
+      content:"";
+      position:absolute;
+      inset:-7px;
+      border-radius:inherit;
+      background:radial-gradient(circle, rgba(0,191,255,.22) 0%, rgba(0,191,255,.10) 38%, rgba(0,191,255,0) 72%);
+      opacity:.42;
+      filter:blur(2px);
+      transform:scale(.92);
+    }
+    .asdActiveZone::after{
+      content:"";
+      position:absolute;
+      left:26%; top:22%;
+      width:9px; height:9px;
+      border-radius:999px;
+      background:rgba(255,255,255,.86);
+      filter:blur(.2px);
+      opacity:.72;
+    }
+    #asdOverlay.asd-active-flash .asdActiveZone{
+      animation:asdActiveZoneFlash .72s cubic-bezier(.18,.9,.24,1) both;
+    }
+    #asdOverlay.asd-active-flash .asdActiveZone:nth-child(2){ animation-delay:.04s; }
+    #asdOverlay.asd-active-flash .asdActiveZone:nth-child(3){ animation-delay:.08s; }
+    #asdOverlay.asd-active-flash .asdActiveZone:nth-child(4){ animation-delay:.12s; }
+    @keyframes asdActiveZoneFlash{
+      0%{
+        opacity:.54;
+        transform:translate(-50%,-50%) scale(.92);
+        box-shadow:0 0 0 1px rgba(255,255,255,.24), 0 0 12px rgba(96,190,255,.22), inset 0 0 10px rgba(255,255,255,.30);
+      }
+      38%{
+        opacity:1;
+        transform:translate(-50%,-50%) scale(1.32);
+        box-shadow:
+          0 0 0 7px rgba(255,255,255,.14),
+          0 0 18px rgba(255,255,255,.78),
+          0 0 30px rgba(0,200,255,.58),
+          0 0 48px rgba(0,94,184,.36),
+          inset 0 0 16px rgba(255,255,255,.76);
+      }
+      100%{
+        opacity:.68;
+        transform:translate(-50%,-50%) scale(1);
+        box-shadow:0 0 0 1px rgba(255,255,255,.26), 0 0 12px rgba(96,190,255,.26), inset 0 0 10px rgba(255,255,255,.34);
+      }
+    }
+    #asdOverlay.camera-on #asdActiveZones .asdActiveZone{
+      width:30px;
+      height:30px;
+      opacity:.58;
+      mix-blend-mode:screen;
+    }
+
+
     /* requested popup button cleanup */
     #asdConfirmBtn,
     #comfortConfirm,
@@ -2434,6 +2515,13 @@ body.popup-open #homeBtnMain{
 <div id="asdStatusText">축 안정 중…</div>
 <div class="asdGuideDot" id="asdGuideDotLeft"></div>
 <div class="asdGuideDot" id="asdGuideDotRight"></div>
+
+</div>
+<div aria-hidden="true" id="asdActiveZones">
+<div class="asdActiveZone" data-zone="0"></div>
+<div class="asdActiveZone" data-zone="1"></div>
+<div class="asdActiveZone" data-zone="2"></div>
+<div class="asdActiveZone" data-zone="3"></div>
 </div>
 <div id="asdLensRim"></div>
 <img alt="Lens overlay" id="asdLensImg" onerror="this.style.display='none'; document.getElementById('asdHint').innerHTML='&lt;div id=&quot;asdInfoBadge&quot;&gt;i&lt;/div&gt;&lt;div class=&quot;hintText&quot;&gt;&lt;span class=&quot;hintTitle&quot;&gt;파일을 확인해 주세요.&lt;/span&gt;&lt;span class=&quot;hintBody&quot;&gt;&lt;span class=&quot;blue&quot;&gt;lens.png / lens2.png&lt;/span&gt; 파일을 같은 폴더에 넣어주세요.&lt;/span&gt;&lt;/div&gt;';" src="lens.png"/>
@@ -3431,9 +3519,8 @@ body.popup-open #homeBtnMain{
       if(!asdLensImg) return;
       asdLensImg.style.transform = `translate(calc(-50% + ${extraX}px + var(--irisX, 0px)), calc(-50% + var(--irisY, 0px))) rotate(${asdAngle}deg)`;
       if(asdAngleBadge){
-        const effectiveASDAngle = (typeof window.asdAngle === 'number') ? window.asdAngle : asdAngle;
-        if(effectiveASDAngle > 0) asdAngleBadge.textContent = `좌측 ${effectiveASDAngle}° 회전 발생`;
-        else if(effectiveASDAngle < 0) asdAngleBadge.textContent = `우측 ${Math.abs(effectiveASDAngle)}° 회전 발생`;
+        if(asdAngle > 0) asdAngleBadge.textContent = `좌측${asdAngle}° 회전 발생`;
+        else if(asdAngle < 0) asdAngleBadge.textContent = `우측${Math.abs(asdAngle)}° 회전 발생`;
         else asdAngleBadge.textContent = `축 안정`;
       }
     }
@@ -4035,6 +4122,14 @@ function initASDPatch(){
     const asdAngleBadge = document.getElementById('asdAngleBadge');
     const asdHint = document.getElementById('asdHint');
     const miniCtx = asdMiniFaceCanvas ? asdMiniFaceCanvas.getContext('2d') : null;
+    const asdActiveZones = Array.from(document.querySelectorAll('#asdActiveZones .asdActiveZone'));
+    const asdActiveZoneBase = [
+      { x:36, y:29 },
+      { x:73, y:42 },
+      { x:28, y:55 },
+      { x:65, y:72 }
+    ];
+
 
     if(!missionASD || !asdOverlay || !asdRotateBtn || !asdBlinkBtn || !asdCameraBtn || !asdCameraVideo || !asdLensImg || !asdAngleBadge){
       return;
@@ -4125,6 +4220,7 @@ function initASDPatch(){
     }
     function getASDBlinkButtonLabel(){
       const isStable = Math.abs(asdAngleValue) === 0;
+      if(!asdCameraOn && asdMode === 'auto') return '시작';
       if(!asdCameraOn) return '눈 깜박임';
       if(asdMode === 'auto'){
         if(isStable) return '시작';
@@ -4164,6 +4260,38 @@ function initASDPatch(){
       asdOverlay.classList.toggle('auto-captured', asdCameraOn && asdMode === 'auto' && asdRearCaptured);
       refreshHint();
       applyCameraFilter();
+    }
+
+
+    function updateASDActiveZones(){
+      if(!asdActiveZones || !asdActiveZones.length) return;
+      const centerX = 50;
+      const centerY = 52;
+      const rad = (asdAngleValue || 0) * Math.PI / 180;
+      const cos = Math.cos(rad);
+      const sin = Math.sin(rad);
+      asdActiveZoneBase.forEach((pt, idx) => {
+        const zone = asdActiveZones[idx];
+        if(!zone) return;
+        const dx = pt.x - centerX;
+        const dy = pt.y - centerY;
+        const x = centerX + dx * cos - dy * sin;
+        const y = centerY + dx * sin + dy * cos;
+        zone.style.left = `${x}%`;
+        zone.style.top = `${y}%`;
+        zone.style.transform = `translate(-50%,-50%) rotate(${asdAngleValue || 0}deg)`;
+      });
+    }
+
+    function triggerASDActiveZoneGlow(){
+      if(!asdOverlay) return;
+      asdOverlay.classList.remove('asd-active-flash');
+      void asdOverlay.offsetWidth;
+      asdOverlay.classList.add('asd-active-flash');
+      window.clearTimeout(triggerASDActiveZoneGlow._timer);
+      triggerASDActiveZoneGlow._timer = window.setTimeout(() => {
+        asdOverlay.classList.remove('asd-active-flash');
+      }, 920);
     }
 
     function renderGuide(){
@@ -4206,6 +4334,7 @@ function initASDPatch(){
         asdGuideSideRight.style.top = `${rightCyanY}%`;
         asdGuideSideRight.style.transform = `translate(-50%,-50%) rotate(${asdAngleValue}deg)`;
       }
+      updateASDActiveZones();
     }
 
     function renderAngle(){
@@ -4225,13 +4354,6 @@ function initASDPatch(){
       if(asdStatusText) asdStatusText.style.display = isStable ? 'none' : 'flex';
       renderGuide();
       updateModeUI();
-      // Keep the lower-left badge in sync with the actual rotated axis.
-      // Some original ASD routines also write this badge, so the patched value is re-applied last.
-      if (asdAngleBadge){
-        if (asdAngleValue > 0) asdAngleBadge.textContent = `좌측 ${asdAngleValue}° 회전 발생`;
-        else if (asdAngleValue < 0) asdAngleBadge.textContent = `우측 ${Math.abs(asdAngleValue)}° 회전 발생`;
-        else asdAngleBadge.textContent = '축 안정';
-      }
     }
 
     function resetASDPatchedState(){
@@ -4255,28 +4377,23 @@ function initASDPatch(){
         return;
       }
       try{
-        /*
-          ASD camera rule
-          - manual: rear camera live preview, same as the original manual camera flow
-          - auto before START: rear camera live preview only, so the user can point at a real scene
-          - auto after START: the rear frame is captured, rear stream stops, front mini camera handles blink detection
-        */
         const useRearCamera = (asdMode === 'manual' || asdMode === 'auto');
 
-        stopASDDetectLoop();
-        if (asdMode === 'auto'){
-          await stopASDMiniCamera();
+        if(asdMode === 'auto'){
           asdRearCaptured = false;
           asdAutoPromptActive = false;
           clearASDPlaceholderImage();
+          asdOverlay.classList.remove('auto-captured','auto-running');
+          stopASDDetectLoop();
+          await stopASDMiniCamera();
+          clearASDMiniCanvas();
         }
 
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            facingMode: useRearCamera ? { ideal:'environment' } : 'user',
+            facingMode: useRearCamera ? { ideal:'environment' } : { ideal:'user' },
             width: { ideal: 1920 },
-            height: { ideal: 1080 },
-            frameRate: { ideal: 24, max: 30 }
+            height: { ideal: 1080 }
           },
           audio: false
         });
@@ -4289,13 +4406,10 @@ function initASDPatch(){
         asdCameraVideo.style.display = 'block';
         asdCameraVideo.style.transform = useRearCamera ? 'scale(1)' : 'scaleX(-1) scale(1)';
         asdCameraVideo.style.transformOrigin = 'center center';
-        asdCameraVideo.style.objectPosition = 'center center';
-
         const markReady = async function(){
           asdCameraVideo.classList.add('ready');
           try{ await asdCameraVideo.play(); }catch(e){}
-          /* Keep rear capture at natural scale. Front mini blink camera keeps its own zoom logic. */
-          await applyRealCameraZoom(stream, useRearCamera ? 1.0 : 1.8);
+          await applyRealCameraZoom(stream, 1.8);
         };
         asdCameraVideo.onloadedmetadata = markReady;
         asdCameraVideo.onloadeddata = markReady;
@@ -4685,68 +4799,51 @@ function initASDPatch(){
     }
 
     function captureASDRearFrame(){
-      if(!asdCameraVideo || !asdCameraVideo.videoWidth || !asdCaptureImage) return;
+      if(!asdCameraVideo || !asdCameraVideo.videoWidth || !asdCaptureImage) return false;
       const c = document.createElement('canvas');
       c.width = asdCameraVideo.videoWidth;
       c.height = asdCameraVideo.videoHeight;
       const x = c.getContext('2d');
       x.drawImage(asdCameraVideo, 0, 0);
       asdCaptureImage.src = c.toDataURL('image/jpeg', .92);
+      asdCaptureImage.classList.remove('placeholder');
       asdRearCaptured = true;
       updateModeUI();
+      return true;
     }
 
-    function waitForASDVideoReady(video, timeoutMs = 2600){
-      return new Promise(resolve => {
-        if(!video) return resolve(false);
-        if(video.readyState >= 2 && video.videoWidth && video.videoHeight) return resolve(true);
-        let done = false;
-        const finish = (ok) => {
-          if(done) return;
-          done = true;
-          clearTimeout(timer);
-          video.removeEventListener('loadedmetadata', onReady);
-          video.removeEventListener('loadeddata', onReady);
-          video.removeEventListener('canplay', onReady);
-          resolve(ok);
+    function waitForASDRearFrameReady(timeoutMs = 1800){
+      return new Promise((resolve) => {
+        if(!asdCameraVideo) return resolve(false);
+        if(asdCameraVideo.videoWidth && asdCameraVideo.videoHeight) return resolve(true);
+        const started = performance.now();
+        const check = () => {
+          if(asdCameraVideo.videoWidth && asdCameraVideo.videoHeight) return resolve(true);
+          if(performance.now() - started > timeoutMs) return resolve(false);
+          requestAnimationFrame(check);
         };
-        const onReady = () => {
-          if(video.readyState >= 2 && video.videoWidth && video.videoHeight) finish(true);
-        };
-        const timer = setTimeout(() => finish(false), timeoutMs);
-        video.addEventListener('loadedmetadata', onReady);
-        video.addEventListener('loadeddata', onReady);
-        video.addEventListener('canplay', onReady);
+        check();
       });
     }
 
-    function asdWait(ms){
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
     async function runASDAutoFlow(){
-      if(asdMode !== 'auto') return;
+      if (asdMode !== 'auto') return;
+      if (asdRearCaptured && asdAutoPromptActive){
+        updateModeUI();
+        return;
+      }
 
-      /* First press in auto mode: turn on rear preview only. */
-      if (!asdCameraOn || !asdCameraStream){
+      if (!asdCameraOn || !asdCameraStream) {
         await startASDCamera();
+      }
+
+      await waitForASDRearFrameReady();
+      const captured = captureASDRearFrame();
+      if(!captured){
+        alert('후방 카메라 화면을 불러온 뒤 다시 시작해 주세요.');
         return;
       }
 
-      const ready = await waitForASDVideoReady(asdCameraVideo);
-      if(!ready){
-        alert('후방 카메라 화면이 준비된 뒤 다시 시작을 눌러 주세요.');
-        return;
-      }
-
-      /* 1) Capture current rear-camera frame as the simulation background. */
-      captureASDRearFrame();
-      if(!asdRearCaptured){
-        alert('화면 캡쳐에 실패했습니다. 다시 시도해 주세요.');
-        return;
-      }
-
-      /* 2) Stop rear stream completely before starting the original front blink camera. */
       if (asdCameraStream){
         asdCameraStream.getTracks().forEach(track => track.stop());
         asdCameraStream = null;
@@ -4755,35 +4852,20 @@ function initASDPatch(){
       asdCameraVideo.srcObject = null;
       asdCameraVideo.classList.remove('ready');
       asdCameraVideo.style.display = 'none';
-      asdCameraVideo.onloadedmetadata = null;
-      asdCameraVideo.onloadeddata = null;
-
-      /* 3) Immediately switch UI to captured-image + front-eye prompt. */
-      stopASDDetectLoop();
-      await stopASDMiniCamera();
       asdCameraOn = true;
-      asdAutoPromptActive = true;
-      asdOverlay.classList.add('camera-on','auto-running','auto-captured');
+      asdOverlay.classList.add('camera-on','auto-captured');
       asdCameraBtn.classList.add('active');
 
+      stopASDDetectLoop();
+      await stopASDMiniCamera();
+      asdAutoPromptActive = true;
       const steps = [-15,-10,10,15];
       asdAngleValue = steps[Math.floor(Math.random() * steps.length)];
       writeAngleToGlobal();
       renderAngle();
-      updateModeUI();
-
-      /* iOS/iPadOS needs a short release gap when switching rear -> front. */
-      await asdWait(520);
-
-      /* 4) Start the same front mini-camera used by the 22번 file, then attach detection. */
+      await ensureASDFaceLandmarker();
       await startASDMiniCamera();
-      updateModeUI();
-      try{
-        await ensureASDFaceLandmarker();
-        runASDDetectLoop();
-      }catch(e){
-        console.warn('ASD face landmarker unavailable', e);
-      }
+      runASDDetectLoop();
       updateModeUI();
     }
 
@@ -4802,6 +4884,7 @@ function initASDPatch(){
           { transform:'translateY(110%)', opacity:0 }
         ], { duration:260, easing:'ease-in-out' });
       }
+      window.setTimeout(triggerASDActiveZoneGlow, 205);
     }
 
     async function applyBlinkStep(){
@@ -4810,11 +4893,6 @@ function initASDPatch(){
       writeAngleToGlobal();
       renderAngle();
       if(asdCameraOn && asdMode === 'auto' && asdAngleValue === 0){
-        /* Auto mode recovery:
-           once the axis is stable, stop the front mini blink camera and
-           immediately return to the rear-camera live preview for the next capture.
-           This preserves the existing ASD blur/axis/blink behavior and only changes
-           the post-stabilization camera handoff. */
         stopASDDetectLoop();
         await stopASDMiniCamera();
         asdAutoPromptActive = false;
@@ -4877,9 +4955,8 @@ function initASDPatch(){
       asdAngleValue = next;
       writeAngleToGlobal();
       renderAngle();
-      if(asdCameraOn && asdMode === 'auto' && !asdRearCaptured){
-        // Keep rear preview as-is. The START button will capture the scene.
-        updateModeUI();
+      if(asdCameraOn && asdMode === 'auto'){
+        await runASDAutoFlow();
       }
     };
 
@@ -4887,7 +4964,8 @@ function initASDPatch(){
       ev.preventDefault();
       ev.stopPropagation();
       if (asdBlinkBusy) return;
-      if(asdCameraOn && asdMode === 'auto'){
+      if(asdMode === 'auto'){
+        if(asdRearCaptured && asdAutoPromptActive) return;
         await runASDAutoFlow();
         return;
       }
@@ -4926,8 +5004,9 @@ function initASDPatch(){
         asdAutoPromptActive = false;
         stopASDDetectLoop();
         await stopASDMiniCamera();
-        if(!asdCameraOn) clearASDPlaceholderImage();
-        else await startASDCamera();
+        clearASDPlaceholderImage();
+        asdRearCaptured = false;
+        if(asdCameraOn) await startASDCamera();
         updateModeUI();
       });
     }
