@@ -4124,7 +4124,6 @@ function initASDPatch(){
     }
     function getASDBlinkButtonLabel(){
       const isStable = Math.abs(asdAngleValue) === 0;
-      if(!asdCameraOn && asdMode === 'auto') return '시작';
       if(!asdCameraOn) return '눈 깜박임';
       if(asdMode === 'auto'){
         if(isStable) return '시작';
@@ -4248,23 +4247,28 @@ function initASDPatch(){
         return;
       }
       try{
+        /*
+          ASD camera rule
+          - manual: rear camera live preview, same as the original manual camera flow
+          - auto before START: rear camera live preview only, so the user can point at a real scene
+          - auto after START: the rear frame is captured, rear stream stops, front mini camera handles blink detection
+        */
         const useRearCamera = (asdMode === 'manual' || asdMode === 'auto');
 
-        if(asdMode === 'auto'){
+        stopASDDetectLoop();
+        if (asdMode === 'auto'){
+          await stopASDMiniCamera();
           asdRearCaptured = false;
           asdAutoPromptActive = false;
           clearASDPlaceholderImage();
-          asdOverlay.classList.remove('auto-captured','auto-running');
-          stopASDDetectLoop();
-          await stopASDMiniCamera();
-          clearASDMiniCanvas();
         }
 
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            facingMode: useRearCamera ? { ideal:'environment' } : { ideal:'user' },
+            facingMode: useRearCamera ? { ideal:'environment' } : 'user',
             width: { ideal: 1920 },
-            height: { ideal: 1080 }
+            height: { ideal: 1080 },
+            frameRate: { ideal: 24, max: 30 }
           },
           audio: false
         });
@@ -4277,10 +4281,13 @@ function initASDPatch(){
         asdCameraVideo.style.display = 'block';
         asdCameraVideo.style.transform = useRearCamera ? 'scale(1)' : 'scaleX(-1) scale(1)';
         asdCameraVideo.style.transformOrigin = 'center center';
+        asdCameraVideo.style.objectPosition = 'center center';
+
         const markReady = async function(){
           asdCameraVideo.classList.add('ready');
           try{ await asdCameraVideo.play(); }catch(e){}
-          await applyRealCameraZoom(stream, 1.8);
+          /* Keep rear capture at natural scale. Front mini blink camera keeps its own zoom logic. */
+          await applyRealCameraZoom(stream, useRearCamera ? 1.0 : 1.8);
         };
         asdCameraVideo.onloadedmetadata = markReady;
         asdCameraVideo.onloadeddata = markReady;
@@ -4670,51 +4677,64 @@ function initASDPatch(){
     }
 
     function captureASDRearFrame(){
-      if(!asdCameraVideo || !asdCameraVideo.videoWidth || !asdCaptureImage) return false;
+      if(!asdCameraVideo || !asdCameraVideo.videoWidth || !asdCaptureImage) return;
       const c = document.createElement('canvas');
       c.width = asdCameraVideo.videoWidth;
       c.height = asdCameraVideo.videoHeight;
       const x = c.getContext('2d');
       x.drawImage(asdCameraVideo, 0, 0);
       asdCaptureImage.src = c.toDataURL('image/jpeg', .92);
-      asdCaptureImage.classList.remove('placeholder');
       asdRearCaptured = true;
       updateModeUI();
-      return true;
     }
 
-    function waitForASDRearFrameReady(timeoutMs = 1800){
-      return new Promise((resolve) => {
-        if(!asdCameraVideo) return resolve(false);
-        if(asdCameraVideo.videoWidth && asdCameraVideo.videoHeight) return resolve(true);
-        const started = performance.now();
-        const check = () => {
-          if(asdCameraVideo.videoWidth && asdCameraVideo.videoHeight) return resolve(true);
-          if(performance.now() - started > timeoutMs) return resolve(false);
-          requestAnimationFrame(check);
+    function waitForASDVideoReady(video, timeoutMs = 2600){
+      return new Promise(resolve => {
+        if(!video) return resolve(false);
+        if(video.readyState >= 2 && video.videoWidth && video.videoHeight) return resolve(true);
+        let done = false;
+        const finish = (ok) => {
+          if(done) return;
+          done = true;
+          clearTimeout(timer);
+          video.removeEventListener('loadedmetadata', onReady);
+          video.removeEventListener('loadeddata', onReady);
+          video.removeEventListener('canplay', onReady);
+          resolve(ok);
         };
-        check();
+        const onReady = () => {
+          if(video.readyState >= 2 && video.videoWidth && video.videoHeight) finish(true);
+        };
+        const timer = setTimeout(() => finish(false), timeoutMs);
+        video.addEventListener('loadedmetadata', onReady);
+        video.addEventListener('loadeddata', onReady);
+        video.addEventListener('canplay', onReady);
       });
     }
 
     async function runASDAutoFlow(){
-      if (asdMode !== 'auto') return;
-      if (asdRearCaptured && asdAutoPromptActive){
-        updateModeUI();
-        return;
-      }
+      if(asdMode !== 'auto') return;
 
-      if (!asdCameraOn || !asdCameraStream) {
+      /* If the rear preview is not active yet, turn it on first and let the user aim the rear camera. */
+      if (!asdCameraOn || !asdCameraStream || asdRearCaptured){
         await startASDCamera();
-      }
-
-      await waitForASDRearFrameReady();
-      const captured = captureASDRearFrame();
-      if(!captured){
-        alert('후방 카메라 화면을 불러온 뒤 다시 시작해 주세요.');
         return;
       }
 
+      const ready = await waitForASDVideoReady(asdCameraVideo);
+      if(!ready){
+        alert('후방 카메라 화면이 준비된 뒤 다시 시작을 눌러 주세요.');
+        return;
+      }
+
+      /* 1) Capture current rear-camera frame as the simulation background. */
+      captureASDRearFrame();
+      if(!asdRearCaptured){
+        alert('화면 캡쳐에 실패했습니다. 다시 시도해 주세요.');
+        return;
+      }
+
+      /* 2) Stop the rear stream completely before starting the front blink camera. */
       if (asdCameraStream){
         asdCameraStream.getTracks().forEach(track => track.stop());
         asdCameraStream = null;
@@ -4724,9 +4744,10 @@ function initASDPatch(){
       asdCameraVideo.classList.remove('ready');
       asdCameraVideo.style.display = 'none';
       asdCameraOn = true;
-      asdOverlay.classList.add('camera-on','auto-captured');
+      asdOverlay.classList.add('camera-on');
       asdCameraBtn.classList.add('active');
 
+      /* 3) Keep the original random axis + blur rendering, then run front-camera blink detection. */
       stopASDDetectLoop();
       await stopASDMiniCamera();
       asdAutoPromptActive = true;
@@ -4822,8 +4843,9 @@ function initASDPatch(){
       asdAngleValue = next;
       writeAngleToGlobal();
       renderAngle();
-      if(asdCameraOn && asdMode === 'auto'){
-        await runASDAutoFlow();
+      if(asdCameraOn && asdMode === 'auto' && !asdRearCaptured){
+        // Keep rear preview as-is. The START button will capture the scene.
+        updateModeUI();
       }
     };
 
@@ -4831,8 +4853,8 @@ function initASDPatch(){
       ev.preventDefault();
       ev.stopPropagation();
       if (asdBlinkBusy) return;
-      if(asdMode === 'auto'){
-        if(asdRearCaptured && asdAutoPromptActive) return;
+      if(asdCameraOn && asdMode === 'auto'){
+        setASDPlaceholderImage();
         await runASDAutoFlow();
         return;
       }
@@ -4871,9 +4893,8 @@ function initASDPatch(){
         asdAutoPromptActive = false;
         stopASDDetectLoop();
         await stopASDMiniCamera();
-        clearASDPlaceholderImage();
-        asdRearCaptured = false;
-        if(asdCameraOn) await startASDCamera();
+        if(!asdCameraOn) clearASDPlaceholderImage();
+        else await startASDCamera();
         updateModeUI();
       });
     }
