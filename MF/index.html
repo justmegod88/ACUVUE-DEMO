@@ -1794,7 +1794,19 @@
     }
   })();
 </script>
+<script>
+window.addEventListener("load", () => {
+  const params = new URLSearchParams(window.location.search);
+  const mode = params.get("mode");
 
+  if (mode === "183") {
+    setTimeout(() => {
+      const card = document.getElementById("card1");
+      if (card) card.click();
+    }, 300);
+  }
+});
+</script>
 
 
 </body>
