@@ -3431,8 +3431,9 @@ body.popup-open #homeBtnMain{
       if(!asdLensImg) return;
       asdLensImg.style.transform = `translate(calc(-50% + ${extraX}px + var(--irisX, 0px)), calc(-50% + var(--irisY, 0px))) rotate(${asdAngle}deg)`;
       if(asdAngleBadge){
-        if(asdAngle > 0) asdAngleBadge.textContent = `좌측${asdAngle}° 회전 발생`;
-        else if(asdAngle < 0) asdAngleBadge.textContent = `우측${Math.abs(asdAngle)}° 회전 발생`;
+        const effectiveASDAngle = (typeof window.asdAngle === 'number') ? window.asdAngle : asdAngle;
+        if(effectiveASDAngle > 0) asdAngleBadge.textContent = `좌측 ${effectiveASDAngle}° 회전 발생`;
+        else if(effectiveASDAngle < 0) asdAngleBadge.textContent = `우측 ${Math.abs(effectiveASDAngle)}° 회전 발생`;
         else asdAngleBadge.textContent = `축 안정`;
       }
     }
@@ -4053,7 +4054,7 @@ function initASDPatch(){
     let asdCameraOn = false;
     let asdRearCaptured = false;
     let asdMode = 'auto';
-    let asdAngleValue = 20;
+    let asdAngleValue = 15;
     let asdBlinkBusy = false;
     let asdAutoPromptActive = false;
     const ASD_PLACEHOLDER_DATA = 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#eef4fb"/><stop offset="100%" stop-color="#dce7f6"/></linearGradient></defs><rect width="1200" height="1200" fill="url(#g)"/><circle cx="600" cy="600" r="360" fill="none" stroke="#7fa4df" stroke-width="6" opacity=".45"/><circle cx="280" cy="520" r="26" fill="#f7a11c"/><circle cx="920" cy="660" r="26" fill="#f7a11c"/><rect x="320" y="450" width="66" height="150" rx="33" fill="#80d4df" opacity=".35" transform="rotate(12 353 525)"/><rect x="810" y="585" width="66" height="150" rx="33" fill="#80d4df" opacity=".35" transform="rotate(12 843 660)"/><line x1="305" y1="535" x2="900" y2="640" stroke="#6f7480" stroke-width="8" stroke-dasharray="28 24" opacity=".7"/><rect x="120" y="880" width="260" height="86" rx="43" fill="white" stroke="#d6e3f1" stroke-width="4"/><circle cx="170" cy="923" r="12" fill="#2563eb"/><text x="198" y="935" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#2563eb">이미지 로드 실패</text></svg>`);
@@ -4224,13 +4225,20 @@ function initASDPatch(){
       if(asdStatusText) asdStatusText.style.display = isStable ? 'none' : 'flex';
       renderGuide();
       updateModeUI();
+      // Keep the lower-left badge in sync with the actual rotated axis.
+      // Some original ASD routines also write this badge, so the patched value is re-applied last.
+      if (asdAngleBadge){
+        if (asdAngleValue > 0) asdAngleBadge.textContent = `좌측 ${asdAngleValue}° 회전 발생`;
+        else if (asdAngleValue < 0) asdAngleBadge.textContent = `우측 ${Math.abs(asdAngleValue)}° 회전 발생`;
+        else asdAngleBadge.textContent = '축 안정';
+      }
     }
 
     function resetASDPatchedState(){
       asdMode = 'auto';
       asdRearCaptured = false;
       asdAutoPromptActive = false;
-      asdAngleValue = 20;
+      asdAngleValue = 15;
       writeAngleToGlobal();
       stopASDDetectLoop();
       applyASDMiniFaceDeviceSizing();
@@ -4758,7 +4766,7 @@ function initASDPatch(){
       asdOverlay.classList.add('camera-on','auto-running','auto-captured');
       asdCameraBtn.classList.add('active');
 
-      const steps = [-20,-15,-10,-5,5,10,15,20];
+      const steps = [-15,-10,10,15];
       asdAngleValue = steps[Math.floor(Math.random() * steps.length)];
       writeAngleToGlobal();
       renderAngle();
@@ -4861,7 +4869,7 @@ function initASDPatch(){
       ev.preventDefault();
       ev.stopPropagation();
       if (asdBlinkBusy) return;
-      const steps = [-20,-15,-10,-5,5,10,15,20];
+      const steps = [-15,-10,10,15];
       let next = steps[Math.floor(Math.random() * steps.length)];
       if (next === asdAngleValue){
         next = steps[(steps.indexOf(next) + 1) % steps.length];
