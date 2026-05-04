@@ -4712,10 +4712,14 @@ function initASDPatch(){
       });
     }
 
+    function asdWait(ms){
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     async function runASDAutoFlow(){
       if(asdMode !== 'auto') return;
 
-      /* If the rear preview is not active yet, turn it on first and let the user aim the rear camera. */
+      /* First press in auto mode: turn on rear preview only. */
       if (!asdCameraOn || !asdCameraStream || asdRearCaptured){
         await startASDCamera();
         return;
@@ -4734,7 +4738,7 @@ function initASDPatch(){
         return;
       }
 
-      /* 2) Stop the rear stream completely before starting the front blink camera. */
+      /* 2) Stop rear stream completely before starting the original front blink camera. */
       if (asdCameraStream){
         asdCameraStream.getTracks().forEach(track => track.stop());
         asdCameraStream = null;
@@ -4743,21 +4747,35 @@ function initASDPatch(){
       asdCameraVideo.srcObject = null;
       asdCameraVideo.classList.remove('ready');
       asdCameraVideo.style.display = 'none';
+      asdCameraVideo.onloadedmetadata = null;
+      asdCameraVideo.onloadeddata = null;
+
+      /* 3) Immediately switch UI to captured-image + front-eye prompt. */
+      stopASDDetectLoop();
+      await stopASDMiniCamera();
       asdCameraOn = true;
+      asdAutoPromptActive = true;
       asdOverlay.classList.add('camera-on');
       asdCameraBtn.classList.add('active');
 
-      /* 3) Keep the original random axis + blur rendering, then run front-camera blink detection. */
-      stopASDDetectLoop();
-      await stopASDMiniCamera();
-      asdAutoPromptActive = true;
       const steps = [-20,-15,-10,-5,5,10,15,20];
       asdAngleValue = steps[Math.floor(Math.random() * steps.length)];
       writeAngleToGlobal();
       renderAngle();
-      await ensureASDFaceLandmarker();
+      updateModeUI();
+
+      /* iOS/iPadOS needs a short release gap when switching rear -> front. */
+      await asdWait(220);
+
+      /* 4) Start the same front mini-camera used by the 22번 file, then attach detection. */
       await startASDMiniCamera();
-      runASDDetectLoop();
+      updateModeUI();
+      try{
+        await ensureASDFaceLandmarker();
+        runASDDetectLoop();
+      }catch(e){
+        console.warn('ASD face landmarker unavailable', e);
+      }
       updateModeUI();
     }
 
