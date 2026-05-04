@@ -765,7 +765,7 @@
     }
     #asdUpperLid{
       position:absolute; inset:0; width:100%; height:100%; display:block; pointer-events:none;
-      object-fit:cover; transform: scale(1.55) translateY(43px); transform-origin:center; z-index:3;
+      object-fit:cover; transform: scale(1.55) translateY(3px); transform-origin:center; z-index:3;
       filter: drop-shadow(0 2px 10px rgba(0,0,0,.18));
     }
     #asdLensImg{
@@ -1129,7 +1129,7 @@
       position:absolute; inset:0; width:100%; height:100%; object-fit:cover; clip-path:none;
     }
     #comfortScene.camera-on.mode-on .comfort-camera-half.top{
-      opacity:.34; filter:blur(1.2px); transform:translateY(26px); -webkit-transform:translateY(26px);
+      opacity:.34; filter:blur(1.2px); transform:translateY(-14px); -webkit-transform:translateY(-14px);
     }
     #comfortScene.camera-on.mode-on .comfort-camera-half.top::after{
       content:""; position:absolute; inset:0; pointer-events:none;
@@ -1478,7 +1478,7 @@
       transform-origin:center bottom;
     }
     #maxPackshot.active{
-      transform:translateX(-50%) translateY(34px) scale(1.04) !important;
+      transform:translateX(-50%) translateY(-6px) scale(1.04) !important;
       filter:drop-shadow(0 18px 28px rgba(0,94,184,.20)) !important;
     }
 
@@ -1590,7 +1590,7 @@
       display:block;
       mix-blend-mode:multiply;
       filter:drop-shadow(0 10px 18px rgba(11,31,51,.10));
-      transform:translateY(44px);
+      transform:translateY(4px);
       pointer-events:none;
       user-select:none;
     }
@@ -1637,7 +1637,7 @@
 
     @media (max-width:560px){
       #maxPackshot{ top:-82px; width:108px; max-width:108px; }
-      #maxPackshot.active{ transform:translateX(-50%) translateY(36px) scale(1.02) !important; }
+      #maxPackshot.active{ transform:translateX(-50%) translateY(-4px) scale(1.02) !important; }
       #blueInfo{
         left:12px;
         right:12px;
@@ -1662,7 +1662,7 @@
       }
       #blueInfoPackshot{
         width:82px;
-        transform:translateY(42px);
+        transform:translateY(2px);
       }
       #blueInfoMission .confirm{
         min-width:96px;
@@ -1849,7 +1849,7 @@
     #blueNightBtn{ background:#6C5CE7; color:#fff; }
     .blueIconModeBtn.active{
       box-shadow:0 12px 26px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.28), 0 0 0 2px rgba(255,255,255,.92), 0 0 0 3px rgba(36,85,199,.22);
-      transform:translateY(39px);
+      transform:translateY(-1px);
     }
     .blueIconModeBtn:not(.active){ opacity:.88; filter:saturate(.92); }
     .blueIconModeBtn:active{ transform:scale(.97); }
@@ -4268,9 +4268,8 @@ function initASDPatch(){
       // is shifted slightly down and to the right.
       const modelGlowShiftX = asdCameraOn ? 0 : 1.6;
       const modelGlowShiftY = asdCameraOn ? 0 : 2.7;
-      // 2026-05-04 model-only tuning: keep the upper glows in place,
-      // and move only the lower activation-zone glows slightly downward.
-      const modelLowerGlowExtraY = asdCameraOn ? 0 : 2.4;
+      // Model view only: keep upper glow as-is and lower only the bottom glow points.
+      const modelLowerGlowExtraY = asdCameraOn ? 0 : 5.2;
       const rad = (asdAngleValue || 0) * Math.PI / 180;
       const cos = Math.cos(rad);
       const sin = Math.sin(rad);
@@ -4298,9 +4297,9 @@ function initASDPatch(){
       points.forEach((pt, idx) => {
         const zone = asdActiveZones[idx];
         if(!zone) return;
-        const lowerGlowShiftY = (!asdCameraOn && pt.dy > 0) ? modelLowerGlowExtraY : 0;
+        const isBottomGlow = idx === 1 || idx === 3;
         zone.style.left = `${pt.x + pt.dx + modelGlowShiftX}%`;
-        zone.style.top = `${pt.y + pt.dy + modelGlowShiftY + lowerGlowShiftY}%`;
+        zone.style.top = `${pt.y + pt.dy + modelGlowShiftY + (isBottomGlow ? modelLowerGlowExtraY : 0)}%`;
         zone.style.transform = `translate(-50%,-50%) rotate(${asdAngleValue || 0}deg)`;
       });
     }
