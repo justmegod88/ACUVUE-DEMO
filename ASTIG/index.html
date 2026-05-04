@@ -4124,6 +4124,7 @@ function initASDPatch(){
     }
     function getASDBlinkButtonLabel(){
       const isStable = Math.abs(asdAngleValue) === 0;
+      if(!asdCameraOn && asdMode === 'auto') return '시작';
       if(!asdCameraOn) return '눈 깜박임';
       if(asdMode === 'auto'){
         if(isStable) return '시작';
@@ -4247,29 +4248,21 @@ function initASDPatch(){
         return;
       }
       try{
-        const useRearCamera = asdMode === 'manual';
+        const useRearCamera = (asdMode === 'manual' || asdMode === 'auto');
 
-        if (!useRearCamera && !isIPhoneDevice()){
-          if (asdCameraStream){
-            asdCameraStream.getTracks().forEach(track => track.stop());
-            asdCameraStream = null;
-          }
-          try{ asdCameraVideo.pause(); }catch(e){}
-          asdCameraVideo.srcObject = null;
-          asdCameraVideo.classList.remove('ready');
-          asdCameraVideo.style.display = 'none';
-          setASDPlaceholderImage();
-          await startASDMiniCamera();
-          asdCameraOn = true;
-          asdOverlay.classList.add('camera-on');
-          asdCameraBtn.classList.add('active');
-          renderAngle();
-          return;
+        if(asdMode === 'auto'){
+          asdRearCaptured = false;
+          asdAutoPromptActive = false;
+          clearASDPlaceholderImage();
+          asdOverlay.classList.remove('auto-captured','auto-running');
+          stopASDDetectLoop();
+          await stopASDMiniCamera();
+          clearASDMiniCanvas();
         }
 
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            facingMode: useRearCamera ? 'environment' : 'user',
+            facingMode: useRearCamera ? { ideal:'environment' } : { ideal:'user' },
             width: { ideal: 1920 },
             height: { ideal: 1080 }
           },
@@ -4677,39 +4670,65 @@ function initASDPatch(){
     }
 
     function captureASDRearFrame(){
-      if(!asdCameraVideo || !asdCameraVideo.videoWidth || !asdCaptureImage) return;
+      if(!asdCameraVideo || !asdCameraVideo.videoWidth || !asdCaptureImage) return false;
       const c = document.createElement('canvas');
       c.width = asdCameraVideo.videoWidth;
       c.height = asdCameraVideo.videoHeight;
       const x = c.getContext('2d');
       x.drawImage(asdCameraVideo, 0, 0);
       asdCaptureImage.src = c.toDataURL('image/jpeg', .92);
+      asdCaptureImage.classList.remove('placeholder');
       asdRearCaptured = true;
       updateModeUI();
+      return true;
+    }
+
+    function waitForASDRearFrameReady(timeoutMs = 1800){
+      return new Promise((resolve) => {
+        if(!asdCameraVideo) return resolve(false);
+        if(asdCameraVideo.videoWidth && asdCameraVideo.videoHeight) return resolve(true);
+        const started = performance.now();
+        const check = () => {
+          if(asdCameraVideo.videoWidth && asdCameraVideo.videoHeight) return resolve(true);
+          if(performance.now() - started > timeoutMs) return resolve(false);
+          requestAnimationFrame(check);
+        };
+        check();
+      });
     }
 
     async function runASDAutoFlow(){
-      if (!asdCameraOn) {
+      if (asdMode !== 'auto') return;
+      if (asdRearCaptured && asdAutoPromptActive){
+        updateModeUI();
+        return;
+      }
+
+      if (!asdCameraOn || !asdCameraStream) {
         await startASDCamera();
       }
 
-      if (asdMode === 'auto' && !isIPhoneDevice()){
-        if (asdCameraStream){
-          asdCameraStream.getTracks().forEach(track => track.stop());
-          asdCameraStream = null;
-        }
-        try{ asdCameraVideo.pause(); }catch(e){}
-        asdCameraVideo.srcObject = null;
-        asdCameraVideo.classList.remove('ready');
-        asdCameraVideo.style.display = 'none';
-        asdCameraOn = true;
-        asdOverlay.classList.add('camera-on');
-        asdCameraBtn.classList.add('active');
+      await waitForASDRearFrameReady();
+      const captured = captureASDRearFrame();
+      if(!captured){
+        alert('후방 카메라 화면을 불러온 뒤 다시 시작해 주세요.');
+        return;
       }
+
+      if (asdCameraStream){
+        asdCameraStream.getTracks().forEach(track => track.stop());
+        asdCameraStream = null;
+      }
+      try{ asdCameraVideo.pause(); }catch(e){}
+      asdCameraVideo.srcObject = null;
+      asdCameraVideo.classList.remove('ready');
+      asdCameraVideo.style.display = 'none';
+      asdCameraOn = true;
+      asdOverlay.classList.add('camera-on','auto-captured');
+      asdCameraBtn.classList.add('active');
 
       stopASDDetectLoop();
       await stopASDMiniCamera();
-      setASDPlaceholderImage();
       asdAutoPromptActive = true;
       const steps = [-20,-15,-10,-5,5,10,15,20];
       asdAngleValue = steps[Math.floor(Math.random() * steps.length)];
@@ -4804,7 +4823,6 @@ function initASDPatch(){
       writeAngleToGlobal();
       renderAngle();
       if(asdCameraOn && asdMode === 'auto'){
-        setASDPlaceholderImage();
         await runASDAutoFlow();
       }
     };
@@ -4813,8 +4831,8 @@ function initASDPatch(){
       ev.preventDefault();
       ev.stopPropagation();
       if (asdBlinkBusy) return;
-      if(asdCameraOn && asdMode === 'auto'){
-        setASDPlaceholderImage();
+      if(asdMode === 'auto'){
+        if(asdRearCaptured && asdAutoPromptActive) return;
         await runASDAutoFlow();
         return;
       }
@@ -4830,8 +4848,7 @@ function initASDPatch(){
       if (asdCameraOn){
         stopASDCamera();
       } else {
-        if (asdMode === 'auto') await runASDAutoFlow();
-        else await startASDCamera();
+        await startASDCamera();
       }
     };
 
@@ -4854,7 +4871,9 @@ function initASDPatch(){
         asdAutoPromptActive = false;
         stopASDDetectLoop();
         await stopASDMiniCamera();
-        if(!asdCameraOn) clearASDPlaceholderImage();
+        clearASDPlaceholderImage();
+        asdRearCaptured = false;
+        if(asdCameraOn) await startASDCamera();
         updateModeUI();
       });
     }
