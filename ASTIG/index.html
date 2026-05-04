@@ -633,7 +633,7 @@
 
     @keyframes pvpHydrationPulse{
       0%{ opacity:.68; transform:scale(.98); filter:blur(8px); }
-      42%{ opacity:1; transform:scale(1.04); filter:blur(4px); }
+      42%{ opacity:1; transform:scale(1.04); filter:blur(2.2px); }
       100%{ opacity:.96; transform:scale(1.02); filter:blur(5px); }
     }
     @keyframes pvpDryBreak{
@@ -2239,8 +2239,8 @@
     }
     .asdActiveZone{
       position:absolute;
-      width:58px;
-      height:38px;
+      width:29px;
+      height:19px;
       border-radius:999px;
       transform:translate(-50%,-50%);
       opacity:0;
@@ -2254,7 +2254,7 @@
     .asdActiveZone::before{
       content:"";
       position:absolute;
-      inset:-16px;
+      inset:-8px;
       border-radius:999px;
       opacity:0;
       background:
@@ -2265,23 +2265,23 @@
     .asdActiveZone::after{
       content:"";
       position:absolute;
-      inset:-4px;
+      inset:-2px;
       border-radius:999px;
       opacity:0;
       background:radial-gradient(circle at 50% 50%, rgba(255,255,255,.90) 0%, rgba(255,255,255,.55) 14%, rgba(255,255,255,0) 42%);
-      filter:blur(.8px);
+      filter:blur(.45px);
       transform:scale(.70);
     }
     #asdOverlay.asd-active-flash .asdActiveZone{
-      animation:asdActiveZoneFlash .42s cubic-bezier(.18,.9,.24,1) both;
+      animation:asdActiveZoneFlash .24s cubic-bezier(.18,.9,.24,1) both;
       animation-delay:0s !important;
     }
     #asdOverlay.asd-active-flash .asdActiveZone::before{
-      animation:asdActiveZoneGlowCore .42s cubic-bezier(.18,.9,.24,1) both;
+      animation:asdActiveZoneGlowCore .24s cubic-bezier(.18,.9,.24,1) both;
       animation-delay:0s !important;
     }
     #asdOverlay.asd-active-flash .asdActiveZone::after{
-      animation:asdActiveZoneSpark .42s cubic-bezier(.18,.9,.24,1) both;
+      animation:asdActiveZoneSpark .24s cubic-bezier(.18,.9,.24,1) both;
       animation-delay:0s !important;
     }
     @keyframes asdActiveZoneFlash{
@@ -2300,8 +2300,8 @@
       100%{ opacity:0; transform:scale(1.22); }
     }
     #asdOverlay.camera-on #asdActiveZones .asdActiveZone{
-      width:54px;
-      height:36px;
+      width:27px;
+      height:18px;
       opacity:0;
     }
 
@@ -4144,7 +4144,7 @@ function initASDPatch(){
     let asdMiniFaceStream = null;
     let asdCameraOn = false;
     let asdRearCaptured = false;
-    let asdMode = 'auto';
+    let asdMode = 'manual';
     let asdAngleValue = 15;
     let asdBlinkBusy = false;
     let asdAutoPromptActive = false;
@@ -4304,7 +4304,7 @@ function initASDPatch(){
       window.clearTimeout(triggerASDActiveZoneGlow._timer);
       triggerASDActiveZoneGlow._timer = window.setTimeout(() => {
         asdOverlay.classList.remove('asd-active-flash');
-      }, 920);
+      }, 380);
     }
 
     function renderGuide(){
@@ -4370,7 +4370,7 @@ function initASDPatch(){
     }
 
     function resetASDPatchedState(){
-      asdMode = 'auto';
+      asdMode = 'manual';
       asdRearCaptured = false;
       asdAutoPromptActive = false;
       asdAngleValue = 15;
@@ -4422,7 +4422,7 @@ function initASDPatch(){
         const markReady = async function(){
           asdCameraVideo.classList.add('ready');
           try{ await asdCameraVideo.play(); }catch(e){}
-          await applyRealCameraZoom(stream, 1.8);
+          await applyRealCameraZoom(stream, useRearCamera ? 1 : 1.8);
         };
         asdCameraVideo.onloadedmetadata = markReady;
         asdCameraVideo.onloadeddata = markReady;
@@ -4897,7 +4897,7 @@ function initASDPatch(){
           { transform:'translateY(110%)', opacity:0 }
         ], { duration:260, easing:'ease-in-out' });
       }
-      window.setTimeout(triggerASDActiveZoneGlow, 252);
+      window.setTimeout(triggerASDActiveZoneGlow, 155);
     }
 
     async function applyBlinkStep(){
@@ -4993,8 +4993,19 @@ function initASDPatch(){
       ev.stopPropagation();
       if (asdCameraOn){
         stopASDCamera();
+        asdMode = 'manual';
+        asdRearCaptured = false;
+        asdAutoPromptActive = false;
+        clearASDPlaceholderImage();
+        updateModeUI();
       } else {
+        // 실제 카메라 버전: 후방 1배율 미리보기로 시작
+        asdMode = 'auto';
+        asdRearCaptured = false;
+        asdAutoPromptActive = false;
+        clearASDPlaceholderImage();
         await startASDCamera();
+        updateModeUI();
       }
     };
 
@@ -5004,10 +5015,11 @@ function initASDPatch(){
         ev.stopPropagation();
         asdMode = 'manual';
         asdAutoPromptActive = false;
+        asdRearCaptured = false;
         stopASDDetectLoop();
         await stopASDMiniCamera();
         clearASDPlaceholderImage();
-        if(asdCameraOn) await startASDCamera();
+        if(asdCameraOn) stopASDCamera();
         updateModeUI();
       });
       asdModeAuto.addEventListener('click', async function(ev){
@@ -5023,6 +5035,40 @@ function initASDPatch(){
         updateModeUI();
       });
     }
+
+
+    // 원래 모형 버전 / 실제 카메라 버전 분리: 기존 하위 리스너가 먼저 동작하지 않도록 캡처 단계에서 처리
+    asdBlinkBtn.addEventListener('click', async function(ev){
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+      if (asdBlinkBusy) return;
+      if(asdMode === 'auto'){
+        if(asdRearCaptured && asdAutoPromptActive) return;
+        await runASDAutoFlow();
+        return;
+      }
+      asdBlinkBusy = true;
+      playASDBlinkAnimation();
+      await applyBlinkStep();
+      setTimeout(function(){ asdBlinkBusy = false; }, 245);
+    }, true);
+
+    asdRotateBtn.addEventListener('click', async function(ev){
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+      if (asdBlinkBusy) return;
+      const steps = [-15,-10,10,15];
+      let next = steps[Math.floor(Math.random() * steps.length)];
+      if (next === asdAngleValue){
+        next = steps[(steps.indexOf(next) + 1) % steps.length];
+      }
+      asdAngleValue = next;
+      writeAngleToGlobal();
+      renderAngle();
+      if(asdCameraOn && asdMode === 'auto'){
+        await runASDAutoFlow();
+      }
+    }, true);
 
     window.addEventListener('beforeunload', function(){
       stopASDDetectLoop();
