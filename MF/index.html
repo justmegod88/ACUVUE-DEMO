@@ -1794,20 +1794,38 @@
     }
   })();
 </script>
-<script>
-window.addEventListener("load", () => {
-  const params = new URLSearchParams(window.location.search);
-  const mode = params.get("mode");
 
-  if (mode === "183") {
-    setTimeout(() => {
-      const card = document.getElementById("card1");
-      if (card) card.click();
+
+
+
+<script>
+/* Direct-link launcher: added only for ?mode=183 */
+(function(){
+  function openDirectMode(){
+    const params = new URLSearchParams(window.location.search);
+    const mode = (params.get('mode') || params.get('demo') || '').toLowerCase();
+    if(mode !== '183') return;
+
+    setTimeout(function(){
+      location.hash = 'card1';
+      const mainPage = document.getElementById('mainPage');
+      const detailPage = document.getElementById('detailPage');
+      if(mainPage && detailPage){
+        mainPage.classList.remove('active');
+        detailPage.classList.add('active');
+        detailPage.setAttribute('aria-hidden','false');
+      }
+      const card = document.getElementById('card1');
+      if(card) card.click();
     }, 300);
   }
-});
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', openDirectMode);
+  }else{
+    openDirectMode();
+  }
+})();
 </script>
-
-
 </body>
 </html>
